@@ -136,6 +136,62 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         tintColor.SetFloat("_TintColorMode", 0);
         tintColor.SetColor("_TintColor", new Color(0.25f, 1f, 0.25f, 1f));
 
+        var tintMap = new Material(shader);
+        tintMap.SetFloat("_TintAreaMode", 1);
+        tintMap.SetFloat("_TintColorMode", 1);
+        tintMap.SetTexture("_TintMap", CreateCompileTexture(FilterMode.Point));
+
+        var tintMap2DArray = new Material(shader);
+        tintMap2DArray.SetFloat("_TintAreaMode", 1);
+        tintMap2DArray.SetFloat("_TintColorMode", 3);
+
+        var tintMap3D = new Material(shader);
+        tintMap3D.SetFloat("_TintAreaMode", 1);
+        tintMap3D.SetFloat("_TintColorMode", 2);
+
+        var tintMapRandomRow = new Material(shader);
+        tintMapRandomRow.SetFloat("_TintAreaMode", 1);
+        tintMapRandomRow.SetFloat("_TintColorMode", 3);
+        tintMapRandomRow.SetFloat("_TintMapRandomRowSelectionEnabled", 1);
+        tintMapRandomRow.SetFloat("_TintMapRandomRowCoord", 1);
+        tintMapRandomRow.SetFloat("_TintMapRowCount", 2);
+
+        var tintRim = new Material(shader);
+        tintRim.SetFloat("_TintAreaMode", 2);
+        tintRim.SetFloat("_TintColorMode", 0);
+        tintRim.SetColor("_TintColor", new Color(0.25f, 1f, 0.25f, 1f));
+
+        var flowBase = new Material(shader);
+        flowBase.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
+        flowBase.SetFloat("_FlowMapTarget", 1);
+
+        var flowTint = new Material(shader);
+        flowTint.SetFloat("_TintAreaMode", 1);
+        flowTint.SetFloat("_TintColorMode", 1);
+        flowTint.SetTexture("_TintMap", CreateCompileTexture(FilterMode.Point));
+        flowTint.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
+        flowTint.SetFloat("_FlowMapTarget", 2);
+
+        var parallax2DBase = new Material(shader);
+        parallax2DBase.SetTexture("_ParallaxMap", CreateCompileTexture(FilterMode.Point));
+        parallax2DBase.SetFloat("_ParallaxMapMode", 0);
+        parallax2DBase.SetFloat("_ParallaxMapTarget", 1);
+
+        var parallax2DArrayTint = new Material(shader);
+        parallax2DArrayTint.SetFloat("_ParallaxMapMode", 1);
+        parallax2DArrayTint.SetFloat("_ParallaxMapTarget", 2);
+
+        var parallax3D = new Material(shader);
+        parallax3D.SetFloat("_ParallaxMapMode", 2);
+        parallax3D.SetFloat("_ParallaxMapTarget", 1);
+
+        var greyscale = new Material(shader);
+        greyscale.SetFloat("_ColorCorrectionMode", 1);
+
+        var gradientMap = new Material(shader);
+        gradientMap.SetFloat("_ColorCorrectionMode", 2);
+        gradientMap.SetTexture("_GradientMap", CreateCompileTexture(FilterMode.Bilinear));
+
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
@@ -179,6 +235,18 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             alphaTest,
             alphaModulate,
             tintColor,
+            tintMap,
+            tintMap2DArray,
+            tintMap3D,
+            tintMapRandomRow,
+            tintRim,
+            flowBase,
+            flowTint,
+            parallax2DBase,
+            parallax2DArrayTint,
+            parallax3D,
+            greyscale,
+            gradientMap,
             vertexColor,
             baseMap2DArray,
             baseMap3D,

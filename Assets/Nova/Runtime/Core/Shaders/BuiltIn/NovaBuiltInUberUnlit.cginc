@@ -60,6 +60,15 @@ float2 NovaApplyBaseMirror(float2 uv)
     #endif
 }
 
+float2 NovaRotateUV(float2 uv, half angle, half2 offsets)
+{
+    half angleCos = cos(angle);
+    half angleSin = sin(angle);
+    half2x2 rotateMatrix = half2x2(angleCos, -angleSin, angleSin, angleCos);
+    half2 uvOffsets = 0.5h - offsets;
+    return mul(uv - uvOffsets, rotateMatrix) + uvOffsets;
+}
+
 half NovaBaseMapProgress(
     half progress,
     half sliceCount,
@@ -77,6 +86,30 @@ half NovaBaseMapProgress(
         return NovaFlipBookBlendingProgressWithRandomRow(progress, sliceCount, rowCount, randomValue);
         #else
         return NovaFlipBookBlendingProgress(progress, sliceCount);
+        #endif
+    #else
+    return 0.0h;
+    #endif
+}
+
+half NovaTintMapProgress(
+    half progress2DArray,
+    half progress3D,
+    half sliceCount,
+    half rowCount,
+    half randomValue)
+{
+    #if defined(_TINT_MAP_MODE_2D_ARRAY)
+        #if defined(_TINT_MAP_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookProgressWithRandomRow(progress2DArray, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookProgress(progress2DArray, sliceCount);
+        #endif
+    #elif defined(_TINT_MAP_3D_ENABLED)
+        #if defined(_TINT_MAP_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookBlendingProgressWithRandomRow(progress3D, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookBlendingProgress(progress3D, sliceCount);
         #endif
     #else
     return 0.0h;
@@ -129,6 +162,44 @@ void NovaApplyBaseMapTone(
         color.rgb = result;
         #endif
     #endif
+}
+
+half2 NovaFlowMapUvOffset(half4 flowSrc, half channelsX, half channelsY, half intensity)
+{
+    half2 flow = half2(NovaSelectChannel(flowSrc, channelsX), NovaSelectChannel(flowSrc, channelsY));
+    return (flow * 2.0h - 1.0h) * intensity;
+}
+
+half NovaLuminance(half3 color)
+{
+    return dot(color, half3(0.298912h, 0.586611h, 0.114478h));
+}
+
+half NovaRimValue(half rim, half progress, half sharpness, half inverse)
+{
+    if (inverse >= 0.5h)
+    {
+        rim = 1.0h - rim;
+    }
+
+    progress = min(1.0h, progress);
+    half width = 1.0h - min(1.0h, sharpness);
+    half start = lerp(-width, 1.0h, progress);
+    half end = lerp(0.0h, 1.0h + width, progress);
+    return smoothstep(start, end, rim);
+}
+
+void NovaApplyTintColor(inout half4 color, half4 tintColor, half blendRate)
+{
+    color *= lerp(half4(1.0h, 1.0h, 1.0h, 1.0h), tintColor, saturate(blendRate));
+}
+
+half2 NovaParallaxOffset(half height, half strength, half3 viewDirTS)
+{
+    half scale = lerp(0.0h, 0.1h, saturate(strength));
+    half3 view = normalize(viewDirTS);
+    view.z += 0.42h;
+    return view.xy / max(abs(view.z), 0.0001h) * (-height * scale);
 }
 
 #endif

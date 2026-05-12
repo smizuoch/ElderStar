@@ -199,6 +199,257 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         Assert.That(color.b, Is.GreaterThan(color.r + 0.1f), color.ToString());
     }
 
+    [Test]
+    public void UberUnlitTintMapAffectsOutput()
+    {
+        var baseTexture = CreateSolidTexture(Color.white);
+        var tintTexture = CreateSolidTexture(new Color(0.08f, 0.9f, 0.08f, 1f));
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_TintAreaMode", 1);
+                material.SetFloat("_TintColorMode", 1);
+                material.SetTexture("_TintMap", tintTexture);
+                material.SetFloat("_TintBlendRate", 1);
+            },
+            ownedObjects: new UnityEngine.Object[] { baseTexture, tintTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.2f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.2f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitTintMap2DArrayAffectsOutput()
+    {
+        var baseTexture = CreateSolidTexture(Color.white);
+        var tintTexture = CreateTexture2DArray(
+            new Color(0.9f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.85f, 0.05f, 1f),
+            new Color(0.05f, 0.05f, 0.85f, 1f));
+
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_TintAreaMode", 1);
+                material.SetFloat("_TintColorMode", 3);
+                material.SetTexture("_TintMap2DArray", tintTexture);
+                material.SetFloat("_TintMapProgress", 0.45f);
+                material.SetFloat("_TintMapSliceCount", tintTexture.depth);
+                material.SetFloat("_TintBlendRate", 1);
+            },
+            ownedObjects: new UnityEngine.Object[] { baseTexture, tintTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.15f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.15f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitTintMap3DAffectsOutput()
+    {
+        var baseTexture = CreateSolidTexture(Color.white);
+        var tintTexture = CreateTexture3D(
+            new Color(0.9f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.85f, 0.05f, 1f),
+            new Color(0.05f, 0.05f, 0.85f, 1f));
+
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_TintAreaMode", 1);
+                material.SetFloat("_TintColorMode", 2);
+                material.SetTexture("_TintMap3D", tintTexture);
+                material.SetFloat("_TintMap3DProgress", 0.45f);
+                material.SetFloat("_TintMapSliceCount", tintTexture.depth);
+                material.SetFloat("_TintBlendRate", 1);
+            },
+            ownedObjects: new UnityEngine.Object[] { baseTexture, tintTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.12f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.12f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitTintMapRandomRowSelectionAffectsOutput()
+    {
+        var baseTexture = CreateSolidTexture(Color.white);
+        var tintTexture = CreateTexture2DArray(
+            new Color(0.85f, 0.05f, 0.05f, 1f),
+            new Color(0.9f, 0.08f, 0.05f, 1f),
+            new Color(0.05f, 0.82f, 0.05f, 1f),
+            new Color(0.05f, 0.9f, 0.05f, 1f));
+
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_TintAreaMode", 1);
+                material.SetFloat("_TintColorMode", 3);
+                material.SetTexture("_TintMap2DArray", tintTexture);
+                material.SetFloat("_TintMapProgress", 0.1f);
+                material.SetFloat("_TintMapSliceCount", tintTexture.depth);
+                material.SetFloat("_TintMapRandomRowSelectionEnabled", 1);
+                material.SetFloat("_TintMapRandomRowCoord", 1);
+                material.SetFloat("_TintMapRowCount", 2);
+                material.SetFloat("_TintBlendRate", 1);
+            },
+            mesh: CreateQuad(Color.white, customCoord1: new Vector4(1.2f, 0f, 0f, 0f)),
+            ownedObjects: new UnityEngine.Object[] { baseTexture, tintTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.15f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.15f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitTintRimAffectsOutput()
+    {
+        var baseTexture = CreateSolidTexture(Color.white);
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_TintAreaMode", 2);
+                material.SetFloat("_TintColorMode", 0);
+                material.SetColor("_TintColor", new Color(0.08f, 0.9f, 0.08f, 1f));
+                material.SetFloat("_TintBlendRate", 1);
+                material.SetFloat("_TintRimProgress", 0.5f);
+                material.SetFloat("_TintRimSharpness", 1f);
+                material.SetFloat("_InverseTintRim", 1f);
+            },
+            ownedObjects: new UnityEngine.Object[] { baseTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.2f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.2f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitFlowMapOffsetsBaseSampling()
+    {
+        var baseTexture = CreateHorizontalSplitTexture(
+            new Color(0.85f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.85f, 0.05f, 1f),
+            rightColorStartX: TextureSize - 1);
+        var flowTexture = CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f));
+
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetTexture("_FlowMap", flowTexture);
+                material.SetFloat("_FlowMapTarget", 1);
+                material.SetFloat("_FlowMapChannelsX", 0);
+                material.SetFloat("_FlowMapChannelsY", 1);
+                material.SetFloat("_FlowIntensity", 0.4f);
+            },
+            ownedObjects: new UnityEngine.Object[] { baseTexture, flowTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.15f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitFlowMapOffsetsTintSampling()
+    {
+        var baseTexture = CreateSolidTexture(Color.white);
+        var tintTexture = CreateHorizontalSplitTexture(
+            new Color(0.85f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.85f, 0.05f, 1f),
+            rightColorStartX: TextureSize - 1);
+        var flowTexture = CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f));
+
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_TintAreaMode", 1);
+                material.SetFloat("_TintColorMode", 1);
+                material.SetTexture("_TintMap", tintTexture);
+                material.SetFloat("_TintBlendRate", 1);
+                material.SetTexture("_FlowMap", flowTexture);
+                material.SetFloat("_FlowMapTarget", 2);
+                material.SetFloat("_FlowMapChannelsX", 0);
+                material.SetFloat("_FlowMapChannelsY", 1);
+                material.SetFloat("_FlowIntensity", 0.4f);
+            },
+            ownedObjects: new UnityEngine.Object[] { baseTexture, tintTexture, flowTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.15f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitParallax2DOffsetsBaseSampling()
+    {
+        var baseTexture = CreateHorizontalSplitTexture(
+            new Color(0.85f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.85f, 0.05f, 1f),
+            rightColorStartX: TextureSize / 2);
+        var parallaxTexture = CreateSolidTexture(new Color(1f, 1f, 1f, 1f));
+
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetTexture("_ParallaxMap", parallaxTexture);
+                material.SetFloat("_ParallaxMapMode", 0);
+                material.SetFloat("_ParallaxMapTarget", 1);
+                material.SetFloat("_ParallaxMapChannel", 0);
+                material.SetFloat("_ParallaxStrength", 1f);
+            },
+            mesh: CreateQuad(Color.white, skewForParallax: true),
+            ownedObjects: new UnityEngine.Object[] { baseTexture, parallaxTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.1f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitGreyscaleAffectsOutput()
+    {
+        var texture = CreateSolidTexture(new Color(0.9f, 0.05f, 0.05f, 1f));
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", texture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_ColorCorrectionMode", 1);
+            },
+            ownedObjects: new UnityEngine.Object[] { texture });
+
+        Assert.That(Mathf.Abs(color.r - color.g), Is.LessThan(0.08f), color.ToString());
+        Assert.That(Mathf.Abs(color.g - color.b), Is.LessThan(0.08f), color.ToString());
+    }
+
+    [Test]
+    public void UberUnlitGradientMapAffectsOutput()
+    {
+        var baseTexture = CreateSolidTexture(new Color(0.05f, 0.85f, 0.05f, 1f));
+        var gradientTexture = CreateHorizontalSplitTexture(
+            new Color(0.85f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.05f, 0.85f, 1f),
+            rightColorStartX: TextureSize / 2);
+
+        var color = RenderUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", baseTexture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_ColorCorrectionMode", 2);
+                material.SetTexture("_GradientMap", gradientTexture);
+            },
+            ownedObjects: new UnityEngine.Object[] { baseTexture, gradientTexture });
+
+        Assert.That(color.b, Is.GreaterThan(color.r + 0.15f), color.ToString());
+        Assert.That(color.b, Is.GreaterThan(color.g + 0.05f), color.ToString());
+    }
+
     private static Color RenderUberUnlit(
         Color baseMapColor,
         Color tintColor,
@@ -301,6 +552,23 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         return texture;
     }
 
+    private static Texture2D CreateHorizontalSplitTexture(Color leftColor, Color rightColor, int rightColorStartX)
+    {
+        var texture = new Texture2D(TextureSize, TextureSize, TextureFormat.RGBA32, false);
+        texture.filterMode = FilterMode.Point;
+        texture.wrapMode = TextureWrapMode.Clamp;
+        for (var y = 0; y < TextureSize; y++)
+        {
+            for (var x = 0; x < TextureSize; x++)
+            {
+                texture.SetPixel(x, y, x >= rightColorStartX ? rightColor : leftColor);
+            }
+        }
+
+        texture.Apply();
+        return texture;
+    }
+
     private static Texture2DArray CreateTexture2DArray(params Color[] sliceColors)
     {
         var texture = new Texture2DArray(TextureSize, TextureSize, sliceColors.Length, TextureFormat.RGBA32, false);
@@ -336,15 +604,15 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         return texture;
     }
 
-    private static Mesh CreateQuad(Color vertexColor, Vector4? customCoord1 = null, Vector4? customCoord2 = null)
+    private static Mesh CreateQuad(Color vertexColor, Vector4? customCoord1 = null, Vector4? customCoord2 = null, bool skewForParallax = false)
     {
         var mesh = new Mesh { name = "NovaBuiltInUberUnlitSmokeQuad" };
         mesh.vertices = new[]
         {
-            new Vector3(-0.5f, -0.5f, 0f),
-            new Vector3(0.5f, -0.5f, 0f),
-            new Vector3(0.5f, 0.5f, 0f),
-            new Vector3(-0.5f, 0.5f, 0f),
+            new Vector3(-0.5f, -0.5f, skewForParallax ? -0.2f : 0f),
+            new Vector3(0.5f, -0.5f, skewForParallax ? 0.2f : 0f),
+            new Vector3(0.5f, 0.5f, skewForParallax ? 0.2f : 0f),
+            new Vector3(-0.5f, 0.5f, skewForParallax ? -0.2f : 0f),
         };
         mesh.uv = new[]
         {
@@ -356,6 +624,9 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         mesh.colors = Enumerable.Repeat(vertexColor, 4).ToArray();
         mesh.SetUVs(1, Enumerable.Repeat(customCoord1 ?? Vector4.zero, 4).ToList());
         mesh.SetUVs(2, Enumerable.Repeat(customCoord2 ?? Vector4.zero, 4).ToList());
+        mesh.normals = Enumerable.Repeat(Vector3.back, 4).ToArray();
+        var tangent = skewForParallax ? new Vector4(0.45f, 0f, 0.89f, 1f) : new Vector4(1f, 0f, 0f, 1f);
+        mesh.tangents = Enumerable.Repeat(tangent, 4).ToArray();
         mesh.triangles = new[] { 0, 2, 1, 0, 3, 2 };
         mesh.RecalculateBounds();
         return mesh;

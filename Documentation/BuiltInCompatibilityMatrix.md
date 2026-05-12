@@ -244,3 +244,32 @@ Phase 4.2A compatibility annotations:
 - Mirror sampling is a compatibility surface only in this phase. The Built-in port manually mirrors UVs when the preserved mirror keywords are enabled; exact sampler-state filtering and wrap parity remains for later visual validation.
 - Random row selection is shader-side compatible with the original custom-coordinate numeric layout. The test uses mesh UV channels to provide deterministic coordinates and does not claim full Particle System Custom Vertex Streams parity.
 - The following `Nova/Particles/UberUnlit` features remain Pending: flow map, parallax map, tint map expansion, tint rim expansion, greyscale/gradient map, fade/dissolve alpha transition, second alpha transition texture, emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.2B Verification Status
+
+Phase 4.2B expands only `Nova/Particles/UberUnlit` texture/tint/color-correction features on the Built-in `ForwardBase` path. It does not implement alpha transition, dissolve transition, second alpha transition texture, emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, additional passes, UI shaders, Lit shaders, distortion runtime, optimizer behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Tint map 2D | Passed | Passed | `_TINT_MAP_ENABLED` samples `_TintMap` and applies original-style tint blending with `_TintBlendRate`. |
+| Tint map 2D array | Passed | Passed | `_TINT_MAP_MODE_2D_ARRAY` samples `_TintMap2DArray` with `_TintMapProgress`, `_TintMapSliceCount`, and the same flip-book frame helper used for base maps. |
+| Tint map 3D | Passed | Passed | `_TINT_MAP_3D_ENABLED` samples `_TintMap3D` using `_TintMap3DProgress` and flip-book blending progress. |
+| Tint map random row selection | Passed | Passed | `_TINT_MAP_RANDOM_ROW_SELECTION_ENABLED` uses `_TintMapRowCount` and `_TintMapRandomRowCoord`. The smoke test supplies deterministic mesh `TEXCOORD1.x`; full Particle System Custom Vertex Streams parity remains unclaimed. |
+| Tint rim | Passed | Passed | `_TINT_AREA_RIM` uses Built-in world normal and view direction helpers with `_TintRimProgress`, `_TintRimSharpness`, and `_InverseTintRim`. View-vector math is an approximation of the original URP helper path. |
+| Flow map target base | Passed | Passed | `_FLOW_MAP_TARGET_BASE` samples `_FlowMap`, selects `_FlowMapChannelsX/Y`, applies `_FlowIntensity`, and offsets base map UVs. |
+| Flow map target tint | Passed | Passed | `_FLOW_MAP_TARGET_TINT` offsets tint map UVs when tint map sampling is active. Emission and alpha-transition flow targets remain pending because those feature groups are not implemented in this phase. |
+| Parallax map 2D target base | Passed | Passed | `_PARALLAX_MAP_MODE_2D` with `_PARALLAX_MAP_TARGET_BASE` samples `_ParallaxMap`, selects `_ParallaxMapChannel`, and applies a Built-in tangent-space one-step offset. This is Approximate because the Built-in path uses local tangent/view helpers and the smoke uses a deterministic test tangent rather than validating full particle tangent stream parity. |
+| Greyscale | Passed | Passed | `_GREYSCALE_ENABLED` applies the original luminance coefficients to RGB. |
+| Gradient map | Passed | Passed | `_GRADIENT_MAP_ENABLED` samples `_GradientMap` at luminance on the U axis. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes tint color/map/2D array/3D/random row/rim, flow base/tint, parallax 2D/2D array/3D target base/tint, greyscale, and gradient keywords. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UberUnlitTintMapAffectsOutput`, `UberUnlitTintMap2DArrayAffectsOutput`, `UberUnlitTintMap3DAffectsOutput`, `UberUnlitTintMapRandomRowSelectionAffectsOutput`, `UberUnlitTintRimAffectsOutput`, `UberUnlitFlowMapOffsetsBaseSampling`, `UberUnlitFlowMapOffsetsTintSampling`, `UberUnlitParallax2DOffsetsBaseSampling`, `UberUnlitGreyscaleAffectsOutput`, and `UberUnlitGradientMapAffectsOutput`. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans Built-in runtime/editor/package files and excludes the untracked `NovaShader/` reference directory. |
+
+Phase 4.2B compatibility annotations:
+
+- Tint map 2D, tint map 2D array, tint map 3D, tint map random row selection, tint rim, flow target base, flow target tint, greyscale, and gradient map are implemented for `Nova/Particles/UberUnlit` Built-in `ForwardBase`.
+- Tint rim is Approximate at the view-helper level because Built-in normal/view setup differs from URP. The feature has deterministic PlayMode smoke coverage but not final visual parity coverage.
+- Parallax 2D target base is Approximate. It uses a one-step tangent-space offset compatible with Built-in helpers; 2D array and 3D parallax runtime behavior are preserved as compile/keyword compatibility only and remain Pending for runtime completion.
+- Flow targets for emission and alpha transition remain Pending because emission and alpha transition are explicitly out of Phase 4.2B scope.
+- Random row selection tests use mesh UV channels to represent custom coordinates and do not claim full Particle System Custom Vertex Streams parity.
+- The following `Nova/Particles/UberUnlit` features remain Pending: fade/dissolve alpha transition, second alpha transition texture, emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
