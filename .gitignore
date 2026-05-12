@@ -67,6 +67,10 @@ ExportedObj/
 # Unity3D generated file on crash reports
 sysinfo.txt
 
+# Unity case sensitivity probe files
+/CaseSensitiveTest
+/casesensitivetest
+
 # Mono auto generated files
 mono_crash.*
 

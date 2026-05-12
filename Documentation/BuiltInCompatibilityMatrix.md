@@ -126,3 +126,18 @@ Triangulation points:
 - Add keyword toggle tests before porting editor post processors.
 - Add shader compile permutations before replacing fake shader bodies.
 - Add first visual smoke for UberUnlit before porting lit or distortion.
+
+## Phase 1.5 Verification Status
+
+Verified on May 12, 2026 with Windows Unity launched from WSL through `Scripts/run-all-unity-editmode-tests.sh`.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| WSL-to-Windows EditMode runner | Passed | Passed | Scripts stage a temporary Windows-side project mirror because Windows Unity cannot open the WSL case-sensitive filesystem as a project. Result XML and editor logs are written under `Logs/Unity/<version>/`. |
+| Package/editor/API surface tests | Passed | Passed | Existing Phase 1 checks remain green for no runtime URP references, shader discovery, property names, and custom editor declarations. |
+| Shader property count and representative type tests | Passed | Passed | Counts match the Phase 0 inventory for all six skeleton shaders; representative texture, color, float, and range-compatible properties are verified. |
+| Custom editor type loadability | Passed | Passed | The five original `Nova.Editor.Core.Scripts.*GUI` type names compile and load as `ShaderGUI` stubs. |
+| Shader import/compiler diagnostics | Passed | Passed | All six fake skeleton shaders import with no blocking compiler diagnostics. This is a Phase 1.5 skeleton check only, not runtime rendering completion. |
+| Forbidden runtime URP/RenderGraph scan | Passed | Passed | Runtime source and runtime asmdef scan found no `UnityEngine.Rendering.Universal`, `UnityEngine.Rendering.RenderGraphModule`, `com.unity.render-pipelines.universal`, `Unity.RenderPipelines.Universal`, or runtime asmdef `GUID:` references. |
+
+Phase 1.5 does not mark any runtime shader feature complete. It verifies only the package/editor/API surface, shader discovery, property inventory, custom editor type loadability, no runtime URP/RenderGraph references, and import/compiler diagnostics for the fake Built-in shader skeleton.
