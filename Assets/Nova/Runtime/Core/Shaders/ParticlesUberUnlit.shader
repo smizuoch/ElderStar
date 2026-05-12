@@ -301,15 +301,44 @@ Shader "Nova/Particles/UberUnlit"
             #pragma shader_feature_local _CASTING_PUNCTUAL_LIGHT_SHADOW
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
+            #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
 
             NOVA_DECLARE_TEX2D(_BaseMap);
+            NOVA_DECLARE_TEX2D_ARRAY(_BaseMap2DArray);
+            float4 _BaseMap2DArray_ST;
+            NOVA_DECLARE_TEX3D(_BaseMap3D);
+
             fixed4 _TintColor;
             fixed _Cutoff;
+            half _BaseMapProgress;
+            half _BaseMapProgressCoord;
+            half _BaseMapSliceCount;
+            half _BaseMapRandomRowCoord;
+            half _BaseMapRowCount;
+            half _BaseMapChannel;
+            half _BaseMapToneChannel;
+            half4 _BaseMapToneHighlightsColor;
+            half4 _BaseMapToneMidtonesColor;
+            half4 _BaseMapToneShadowsColor;
+            half _BaseMapToneHighlights;
+            half _BaseMapToneMidtones;
+            half _BaseMapToneShadows;
+            half _BaseMapToneHighlightsCoord;
+            half _BaseMapToneMidtonesCoord;
+            half _BaseMapToneShadowsCoord;
+            half4 _BaseMapToneBrightsColor;
+            half4 _BaseMapToneDarktonesColor;
+            half _BaseMapToneBrights;
+            half _BaseMapToneDarktones;
+            half _BaseMapToneBrightsCoord;
+            half _BaseMapToneDarktonesCoord;
 
             struct appdata
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float4 customCoord1 : TEXCOORD1;
+                float4 customCoord2 : TEXCOORD2;
                 fixed4 color : COLOR;
             };
 
@@ -317,6 +346,9 @@ Shader "Nova/Particles/UberUnlit"
             {
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
+                half baseMapProgress : TEXCOORD1;
+                float4 customCoord1 : TEXCOORD2;
+                float4 customCoord2 : TEXCOORD3;
                 fixed4 color : COLOR;
             };
 
@@ -324,14 +356,51 @@ Shader "Nova/Particles/UberUnlit"
             {
                 v2f o;
                 o.vertex = NovaObjectToClipPos(v.vertex);
+                o.customCoord1 = v.customCoord1;
+                o.customCoord2 = v.customCoord2;
+                half progress = _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2);
+                half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
+                o.baseMapProgress = NovaBaseMapProgress(progress, _BaseMapSliceCount, _BaseMapRowCount, randomValue);
+                #if defined(_BASE_MAP_MODE_2D_ARRAY)
+                o.uv = NovaTransformUV(v.uv, _BaseMap2DArray_ST);
+                #elif defined(_BASE_MAP_MODE_3D)
+                o.uv = NovaTransformUV(v.uv, _BaseMap3D_ST);
+                #else
                 o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
+                #endif
                 o.color = v.color;
                 return o;
             }
 
+            half4 SampleBaseMap(float2 uv, half progress)
+            {
+                uv = NovaApplyBaseMirror(uv);
+                #if defined(_BASE_MAP_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_BaseMap2DArray, uv, progress);
+                #elif defined(_BASE_MAP_MODE_3D)
+                return NOVA_SAMPLE_TEX3D_LOD(_BaseMap3D, float3(uv, progress), 0.0);
+                #else
+                return NOVA_SAMPLE_TEX2D(_BaseMap, uv);
+                #endif
+            }
+
             fixed4 frag(v2f i) : SV_Target
             {
-                fixed4 color = NOVA_SAMPLE_TEX2D(_BaseMap, i.uv);
+                half4 color = SampleBaseMap(i.uv, i.baseMapProgress);
+                NovaApplyBaseMapChannel(color, _BaseMapChannel);
+                NovaApplyBaseMapTone(
+                    color,
+                    _BaseMapToneChannel,
+                    _BaseMapToneShadowsColor,
+                    _BaseMapToneMidtonesColor,
+                    _BaseMapToneHighlightsColor,
+                    _BaseMapToneShadows + NovaGetCustomCoord(_BaseMapToneShadowsCoord, i.customCoord1, i.customCoord2),
+                    _BaseMapToneMidtones + NovaGetCustomCoord(_BaseMapToneMidtonesCoord, i.customCoord1, i.customCoord2),
+                    _BaseMapToneHighlights + NovaGetCustomCoord(_BaseMapToneHighlightsCoord, i.customCoord1, i.customCoord2),
+                    _BaseMapToneDarktonesColor,
+                    _BaseMapToneBrightsColor,
+                    _BaseMapToneDarktones + NovaGetCustomCoord(_BaseMapToneDarktonesCoord, i.customCoord1, i.customCoord2),
+                    _BaseMapToneBrights + NovaGetCustomCoord(_BaseMapToneBrightsCoord, i.customCoord1, i.customCoord2));
 
                 #if defined(_TINT_AREA_ALL) && defined(_TINT_COLOR_ENABLED)
                 color *= _TintColor;

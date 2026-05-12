@@ -219,3 +219,28 @@ Phase 4.1 compatibility annotations:
 - Vertex color multiplication is implemented for the default path. Vertex alpha as transition progress remains a preserved keyword surface until alpha transition support is ported.
 - Alpha clipping is implemented for `_ALPHATEST_ENABLED` and `_Cutoff`; alpha transition, dissolve, luminance/rim transparency, soft particles, and depth fade remain Pending.
 - The following `Nova/Particles/UberUnlit` features remain Pending: base map 2D array, base map 3D, random row selection, channel extraction, tritone/pentone, flow map, parallax map, greyscale/gradient map, fade/dissolve alpha transition, second alpha transition texture, emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.2A Verification Status
+
+Phase 4.2A expands only `Nova/Particles/UberUnlit` base texture handling on the Phase 4.1 Built-in forward path. It does not implement flow map, parallax map, tint map expansion, alpha transitions, emission, transparency, soft particles, depth fade, vertex deformation, additional passes, UI shaders, Lit shaders, distortion runtime, optimizer behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Base map 2D array | Passed | Passed | `_BASE_MAP_MODE_2D_ARRAY` samples `_BaseMap2DArray` using original-compatible flip-book progress and `_BaseMapSliceCount`. PlayMode smoke renders a deterministic solid-color slice. |
+| Base map 3D | Passed | Passed | `_BASE_MAP_MODE_3D` samples `_BaseMap3D` using original-compatible flip-book blending progress. PlayMode smoke renders a deterministic 3D layer. |
+| Base map channel extraction | Passed | Passed | `_BASE_MAP_CHANNEL_ENABLED` follows the original `BaseMapChannel` rule: `0` preserves RGB, `1/2/3` select red/green/blue and write that value to RGB while preserving alpha. |
+| Base map random row selection | Passed | Passed | `_BASE_MAP_RANDOM_ROW_SELECTION_ENABLED` implements the original row/frame math for 2D array and 3D modes. The smoke test uses mesh `TEXCOORD1.x` as `CustomCoord.Coord1X`; full particle Custom Vertex Streams parity remains unclaimed. |
+| Tritone mode | Passed | Passed | `_BASE_MAP_TONE_MODE_TRITONE` applies the original shadow/midtone/highlight interpolation and `_BaseMapToneChannel` selection. |
+| Pentone mode | Passed | Passed | `_BASE_MAP_TONE_MODE_PENTONE` applies the original shadow/darktone/midtone/bright/highlight interpolation and `_BaseMapToneChannel` selection. |
+| Mirror sampler keywords | Passed | Passed | Existing mirror keywords are preserved. Phase 4.2A uses manual mirrored UVs for the base map instead of relying on backend-specific Built-in sampler-state syntax, so sampler filtering parity remains Approximate. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage now includes 2D array, 3D, channel, random row, tritone, pentone, and point/linear/trilinear mirror keyword states. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UberUnlitRendersBaseMap2DArray`, `UberUnlitRendersBaseMap3D`, `UberUnlitBaseMapChannelExtractionAffectsOutput`, `UberUnlitBaseMapRandomRowSelectionAffectsOutput`, `UberUnlitTritoneAffectsOutput`, and `UberUnlitPentoneAffectsOutput`. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation continues to scan Built-in runtime/editor/package files and exclude the untracked `NovaShader/` reference directory. |
+
+Phase 4.2A compatibility annotations:
+
+- Base map 2D array, base map 3D, channel extraction, random row shader math, tritone, and pentone are implemented for `Nova/Particles/UberUnlit` Built-in `ForwardBase`.
+- 2D array and 3D support remain Approximate at the platform level because texture array and 3D texture availability depends on the target backend, but the tested Unity editor paths pass.
+- Mirror sampling is a compatibility surface only in this phase. The Built-in port manually mirrors UVs when the preserved mirror keywords are enabled; exact sampler-state filtering and wrap parity remains for later visual validation.
+- Random row selection is shader-side compatible with the original custom-coordinate numeric layout. The test uses mesh UV channels to provide deterministic coordinates and does not claim full Particle System Custom Vertex Streams parity.
+- The following `Nova/Particles/UberUnlit` features remain Pending: flow map, parallax map, tint map expansion, tint rim expansion, greyscale/gradient map, fade/dissolve alpha transition, second alpha transition texture, emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.

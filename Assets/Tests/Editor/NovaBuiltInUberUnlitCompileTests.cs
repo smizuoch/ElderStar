@@ -72,6 +72,12 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             }
             finally
             {
+                var ownedBaseMap = material.GetTexture("_BaseMap");
+                if (ownedBaseMap != null && ownedBaseMap.name == "NovaBuiltInCompileTexture")
+                {
+                    UnityEngine.Object.DestroyImmediate(ownedBaseMap);
+                }
+
                 UnityEngine.Object.DestroyImmediate(material);
             }
         }
@@ -133,7 +139,67 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
-        return new[] { defaultMaterial, baseMap2D, alphaTest, alphaModulate, tintColor, vertexColor };
+        var baseMap2DArray = new Material(shader);
+        baseMap2DArray.SetFloat("_BaseMapMode", 1);
+
+        var baseMap3D = new Material(shader);
+        baseMap3D.SetFloat("_BaseMapMode", 2);
+
+        var channel = new Material(shader);
+        channel.SetFloat("_BaseMapChannel", 2);
+
+        var randomRow = new Material(shader);
+        randomRow.SetFloat("_BaseMapMode", 1);
+        randomRow.SetFloat("_BaseMapRandomRowSelectionEnabled", 1);
+        randomRow.SetFloat("_BaseMapRandomRowCoord", 1);
+        randomRow.SetFloat("_BaseMapRowCount", 2);
+
+        var tritone = new Material(shader);
+        tritone.SetFloat("_BaseMapToneMode", 1);
+
+        var pentone = new Material(shader);
+        pentone.SetFloat("_BaseMapToneMode", 2);
+
+        var pointMirror = new Material(shader);
+        pointMirror.SetFloat("_BaseMapMirrorSampling", 1);
+        pointMirror.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Point));
+
+        var linearMirror = new Material(shader);
+        linearMirror.SetFloat("_BaseMapMirrorSampling", 1);
+        linearMirror.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Bilinear));
+
+        var trilinearMirror = new Material(shader);
+        trilinearMirror.SetFloat("_BaseMapMirrorSampling", 1);
+        trilinearMirror.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Trilinear));
+
+        return new[]
+        {
+            defaultMaterial,
+            baseMap2D,
+            alphaTest,
+            alphaModulate,
+            tintColor,
+            vertexColor,
+            baseMap2DArray,
+            baseMap3D,
+            channel,
+            randomRow,
+            tritone,
+            pentone,
+            pointMirror,
+            linearMirror,
+            trilinearMirror
+        };
+    }
+
+    private static Texture2D CreateCompileTexture(FilterMode filterMode)
+    {
+        var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+        texture.name = "NovaBuiltInCompileTexture";
+        texture.filterMode = filterMode;
+        texture.SetPixel(0, 0, Color.white);
+        texture.Apply();
+        return texture;
     }
 
     private static void SetupUberUnlit(Material material)
