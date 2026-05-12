@@ -320,6 +320,11 @@ Shader "Nova/Particles/UberUnlit"
             NOVA_DECLARE_TEX2D_ARRAY(_AlphaTransitionMapSecondTexture2DArray);
             float4 _AlphaTransitionMapSecondTexture2DArray_ST;
             NOVA_DECLARE_TEX3D(_AlphaTransitionMapSecondTexture3D);
+            NOVA_DECLARE_TEX2D(_EmissionMap);
+            NOVA_DECLARE_TEX2D_ARRAY(_EmissionMap2DArray);
+            float4 _EmissionMap2DArray_ST;
+            NOVA_DECLARE_TEX3D(_EmissionMap3D);
+            NOVA_DECLARE_TEX2D(_EmissionColorRamp);
             NOVA_DECLARE_TEX2D(_ParallaxMap);
             NOVA_DECLARE_TEX2D_ARRAY(_ParallaxMap2DArray);
             float4 _ParallaxMap2DArray_ST;
@@ -327,6 +332,7 @@ Shader "Nova/Particles/UberUnlit"
             NOVA_DECLARE_TEX2D(_GradientMap);
 
             fixed4 _TintColor;
+            fixed4 _EmissionColor;
             fixed _Cutoff;
             half _BaseMapProgress;
             half _BaseMapProgressCoord;
@@ -406,6 +412,20 @@ Shader "Nova/Particles/UberUnlit"
             half _AlphaTransitionMapRowCount;
             half _AlphaTransitionMapSecondTextureRandomRowCoord;
             half _AlphaTransitionMapSecondTextureRowCount;
+            half _EmissionMapProgress;
+            half _EmissionMapProgressCoord;
+            half _EmissionMapOffsetXCoord;
+            half _EmissionMapOffsetYCoord;
+            half _EmissionMapRotation;
+            half _EmissionMapRotationCoord;
+            half4 _EmissionMapRotationOffsets;
+            half _EmissionMapChannelsX;
+            half _EmissionMapSliceCount;
+            half _EmissionIntensity;
+            half _EmissionIntensityCoord;
+            half _KeepEdgeTransparency;
+            half _EmissionMapRandomRowCoord;
+            half _EmissionMapRowCount;
             half _ParallaxMapProgress;
             half _ParallaxMapProgressCoord;
             half _ParallaxMapOffsetXCoord;
@@ -438,6 +458,7 @@ Shader "Nova/Particles/UberUnlit"
                 float3 parallaxUvAndProgress : TEXCOORD5;
                 float4 alphaTransitionUvAndProgress : TEXCOORD6;
                 float3 alphaTransitionSecondUvAndProgress : TEXCOORD7;
+                float3 emissionUvAndProgress : TEXCOORD13;
                 float4 customCoord1 : TEXCOORD8;
                 float4 customCoord2 : TEXCOORD9;
                 float3 normalWS : TEXCOORD10;
@@ -490,7 +511,7 @@ Shader "Nova/Particles/UberUnlit"
                 half tintRandomValue = NovaGetCustomCoord(_TintMapRandomRowCoord, v.customCoord1, v.customCoord2);
                 o.tintMapProgress = NovaTintMapProgress(tintProgress2DArray, tintProgress3D, _TintMapSliceCount, _TintMapRowCount, tintRandomValue);
                 o.flowUv = v.uv;
-                #if defined(_FLOW_MAP_ENABLED) || defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
+                #if defined(_FLOW_MAP_ENABLED) || defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_EMISSION) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
                 if (_FlowMapRotation > 0.0h || _FlowMapRotationCoord > 0.0h)
                 {
                     half flowAngle = _FlowMapRotation + NovaGetCustomCoord(_FlowMapRotationCoord, v.customCoord1, v.customCoord2);
@@ -541,6 +562,29 @@ Shader "Nova/Particles/UberUnlit"
                     half alphaSecondRandomValue = NovaGetCustomCoord(_AlphaTransitionMapSecondTextureRandomRowCoord, v.customCoord1, v.customCoord2);
                     o.alphaTransitionSecondUvAndProgress = float3(alphaTransitionSecondUv, NovaAlphaTransitionSecondMapProgress(alphaSecondMapProgress, _AlphaTransitionMapSecondTextureSliceCount, _AlphaTransitionMapSecondTextureRowCount, alphaSecondRandomValue));
                     #endif
+                #endif
+                o.emissionUvAndProgress = float3(v.uv, 0.0h);
+                #if defined(_EMISSION_AREA_MAP)
+                float2 emissionUv = v.uv;
+                if (_EmissionMapRotation > 0.0h || _EmissionMapRotationCoord > 0.0h)
+                {
+                    half emissionAngle = _EmissionMapRotation + NovaGetCustomCoord(_EmissionMapRotationCoord, v.customCoord1, v.customCoord2);
+                    emissionUv = NovaRotateUV(emissionUv, emissionAngle * 6.2831853h, _EmissionMapRotationOffsets.xy);
+                }
+                    #if defined(_EMISSION_MAP_MODE_2D_ARRAY)
+                    emissionUv = NovaTransformUV(emissionUv, _EmissionMap2DArray_ST);
+                    #elif defined(_EMISSION_MAP_MODE_3D)
+                    emissionUv = NovaTransformUV(emissionUv, _EmissionMap3D_ST);
+                    #else
+                    emissionUv = NovaTransformUV(emissionUv, _EmissionMap_ST);
+                    #endif
+                emissionUv.x += NovaGetCustomCoord(_EmissionMapOffsetXCoord, v.customCoord1, v.customCoord2);
+                emissionUv.y += NovaGetCustomCoord(_EmissionMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                half emissionMapProgress = _EmissionMapProgress + NovaGetCustomCoord(_EmissionMapProgressCoord, v.customCoord1, v.customCoord2);
+                half emissionRandomValue = NovaGetCustomCoord(_EmissionMapRandomRowCoord, v.customCoord1, v.customCoord2);
+                o.emissionUvAndProgress = float3(
+                    emissionUv,
+                    NovaEmissionMapProgress(emissionMapProgress, _EmissionMapSliceCount, _EmissionMapRowCount, emissionRandomValue));
                 #endif
                 o.parallaxUvAndProgress = float3(v.uv, 0.0h);
                 #if defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT)
@@ -636,14 +680,62 @@ Shader "Nova/Particles/UberUnlit"
                 #endif
             }
 
+            half4 SampleEmissionMap(float2 uv, half progress)
+            {
+                #if defined(_EMISSION_MAP_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_EmissionMap2DArray, uv, progress);
+                #elif defined(_EMISSION_MAP_MODE_3D)
+                return NOVA_SAMPLE_TEX3D_LOD(_EmissionMap3D, float3(uv, progress), 0.0);
+                #elif defined(_EMISSION_MAP_MODE_2D)
+                return NOVA_SAMPLE_TEX2D(_EmissionMap, uv);
+                #else
+                return half4(0.0h, 0.0h, 0.0h, 1.0h);
+                #endif
+            }
+
+            void ApplyEmissionColor(inout half4 color, half4 emissionMap, half emissionIntensityParameter)
+            {
+                const half texCompErrorMargin = 0.004h;
+                half emissionIntensity = 0.0h;
+                half emissionColorRampU = 0.0h;
+
+                #if defined(_EMISSION_AREA_ALL)
+                emissionIntensity = 1.0h;
+                #elif defined(_EMISSION_AREA_MAP)
+                half emissionMapValue = NovaSelectChannel(emissionMap, _EmissionMapChannelsX);
+                    #if defined(_EMISSION_COLOR_COLOR) || defined(_EMISSION_COLOR_BASECOLOR)
+                    emissionIntensity = emissionMapValue;
+                    #elif defined(_EMISSION_COLOR_MAP)
+                    emissionIntensity = step(texCompErrorMargin, emissionMapValue);
+                    emissionColorRampU = emissionMapValue;
+                    #endif
+                #elif defined(_EMISSION_AREA_ALPHA)
+                emissionIntensity = step(texCompErrorMargin, 1.0h - color.a);
+                emissionColorRampU = color.a;
+                color.a = _KeepEdgeTransparency >= 0.5h ? color.a : step(texCompErrorMargin, color.a);
+                #endif
+
+                half3 emissionColor = half3(0.0h, 0.0h, 0.0h);
+                #if defined(_EMISSION_COLOR_COLOR)
+                emissionColor = _EmissionColor.rgb;
+                #elif defined(_EMISSION_COLOR_BASECOLOR)
+                emissionColor = color.rgb;
+                #elif defined(_EMISSION_COLOR_MAP)
+                emissionColor = NOVA_SAMPLE_TEX2D(_EmissionColorRamp, half2(emissionColorRampU, 0.5h)).rgb;
+                #endif
+
+                color.rgb += emissionColor * emissionIntensity * emissionIntensityParameter;
+            }
+
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 baseUv = i.uv;
                 float2 tintUv = i.tintUv;
                 float2 alphaTransitionUv = i.alphaTransitionUvAndProgress.xy;
                 float2 alphaTransitionSecondUv = i.alphaTransitionSecondUvAndProgress.xy;
+                float2 emissionUv = i.emissionUvAndProgress.xy;
 
-                #if defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
+                #if defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_EMISSION) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
                 half flowIntensity = _FlowIntensity + NovaGetCustomCoord(_FlowIntensityCoord, i.customCoord1, i.customCoord2);
                 half2 flowOffset = NovaFlowMapUvOffset(NOVA_SAMPLE_TEX2D(_FlowMap, i.flowUv), _FlowMapChannelsX, _FlowMapChannelsY, flowIntensity);
                     #if defined(_FLOW_MAP_TARGET_BASE)
@@ -651,6 +743,9 @@ Shader "Nova/Particles/UberUnlit"
                     #endif
                     #if defined(_FLOW_MAP_TARGET_TINT)
                     tintUv += flowOffset;
+                    #endif
+                    #if defined(_FLOW_MAP_TARGET_EMISSION)
+                    emissionUv += flowOffset;
                     #endif
                     #if defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
                     alphaTransitionUv += flowOffset;
@@ -738,6 +833,11 @@ Shader "Nova/Particles/UberUnlit"
                 color.rgb *= i.color.rgb;
                 #else
                 color *= i.color;
+                #endif
+
+                #if defined(_EMISSION_AREA_ALL) || defined(_EMISSION_AREA_MAP) || defined(_EMISSION_AREA_ALPHA)
+                half emissionIntensity = _EmissionIntensity + NovaGetCustomCoord(_EmissionIntensityCoord, i.customCoord1, i.customCoord2);
+                ApplyEmissionColor(color, SampleEmissionMap(emissionUv, i.emissionUvAndProgress.z), emissionIntensity);
                 #endif
 
                 #ifdef _ALPHATEST_ENABLED

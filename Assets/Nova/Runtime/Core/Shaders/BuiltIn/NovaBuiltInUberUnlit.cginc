@@ -162,6 +162,29 @@ half NovaAlphaTransitionSecondMapProgress(
     #endif
 }
 
+half NovaEmissionMapProgress(
+    half progress,
+    half sliceCount,
+    half rowCount,
+    half randomValue)
+{
+    #if defined(_EMISSION_MAP_MODE_2D_ARRAY)
+        #if defined(_EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookProgressWithRandomRow(progress, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookProgress(progress, sliceCount);
+        #endif
+    #elif defined(_EMISSION_MAP_MODE_3D)
+        #if defined(_EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookBlendingProgressWithRandomRow(progress, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookBlendingProgress(progress, sliceCount);
+        #endif
+    #else
+    return 0.0h;
+    #endif
+}
+
 void NovaApplyBaseMapChannel(inout half4 color, half channel)
 {
     #if defined(_BASE_MAP_CHANNEL_ENABLED)
