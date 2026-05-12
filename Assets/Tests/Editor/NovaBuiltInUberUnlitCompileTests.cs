@@ -40,8 +40,12 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("ZTest [_ZTest]"));
         Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInCore.cginc"));
         Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInTexture.cginc"));
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInDepth.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
+        Assert.That(shaderText, Does.Contain("NovaComputeScreenPos"));
         Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_BaseMap"));
+        Assert.That(shaderText, Does.Contain("NovaSoftParticleFactor"));
+        Assert.That(shaderText, Does.Contain("NovaDepthFadeFactor"));
         Assert.That(shaderText, Does.Contain("_TintColor"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(shaderText, Does.Contain("clip("));
@@ -339,6 +343,83 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         combinedTransparency.SetFloat("_RimTransparencyEnabled", 1);
         combinedTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
 
+        var softParticles = new Material(shader);
+        softParticles.SetFloat("_RenderType", 2);
+        softParticles.SetFloat("_SoftParticlesEnabled", 1);
+        softParticles.SetFloat("_SoftParticlesIntensity", 1);
+
+        var softParticlesAlphaTest = new Material(shader);
+        softParticlesAlphaTest.SetFloat("_RenderType", 1);
+        softParticlesAlphaTest.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesAlphaTest.SetFloat("_SoftParticlesIntensity", 1);
+        softParticlesAlphaTest.SetFloat("_Cutoff", 0.5f);
+
+        var softParticlesAlphaTransition = new Material(shader);
+        softParticlesAlphaTransition.SetFloat("_RenderType", 2);
+        softParticlesAlphaTransition.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesAlphaTransition.SetFloat("_SoftParticlesIntensity", 1);
+        softParticlesAlphaTransition.SetFloat("_AlphaTransitionMode", 1);
+        softParticlesAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        softParticlesAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var softParticlesEmission = new Material(shader);
+        softParticlesEmission.SetFloat("_RenderType", 2);
+        softParticlesEmission.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesEmission.SetFloat("_SoftParticlesIntensity", 1);
+        softParticlesEmission.SetFloat("_EmissionAreaType", 1);
+        softParticlesEmission.SetFloat("_EmissionColorType", 0);
+        softParticlesEmission.SetColor("_EmissionColor", Color.green);
+
+        var softParticlesTransparency = new Material(shader);
+        softParticlesTransparency.SetFloat("_RenderType", 2);
+        softParticlesTransparency.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesTransparency.SetFloat("_SoftParticlesIntensity", 1);
+        softParticlesTransparency.SetFloat("_RimTransparencyEnabled", 1);
+
+        var depthFade = new Material(shader);
+        depthFade.SetFloat("_RenderType", 2);
+        depthFade.SetFloat("_DepthFadeEnabled", 1);
+        depthFade.SetFloat("_DepthFadeNear", 1.5f);
+        depthFade.SetFloat("_DepthFadeFar", 3f);
+        depthFade.SetFloat("_DepthFadeWidth", 0.5f);
+
+        var depthFadeAlphaTransition = new Material(shader);
+        depthFadeAlphaTransition.SetFloat("_RenderType", 2);
+        depthFadeAlphaTransition.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeAlphaTransition.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeAlphaTransition.SetFloat("_DepthFadeFar", 3f);
+        depthFadeAlphaTransition.SetFloat("_DepthFadeWidth", 0.5f);
+        depthFadeAlphaTransition.SetFloat("_AlphaTransitionMode", 1);
+        depthFadeAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        depthFadeAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var depthFadeEmission = new Material(shader);
+        depthFadeEmission.SetFloat("_RenderType", 2);
+        depthFadeEmission.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeEmission.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeEmission.SetFloat("_DepthFadeFar", 3f);
+        depthFadeEmission.SetFloat("_DepthFadeWidth", 0.5f);
+        depthFadeEmission.SetFloat("_EmissionAreaType", 1);
+        depthFadeEmission.SetFloat("_EmissionColorType", 0);
+        depthFadeEmission.SetColor("_EmissionColor", Color.green);
+
+        var depthFadeTransparency = new Material(shader);
+        depthFadeTransparency.SetFloat("_RenderType", 2);
+        depthFadeTransparency.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeTransparency.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeTransparency.SetFloat("_DepthFadeFar", 3f);
+        depthFadeTransparency.SetFloat("_DepthFadeWidth", 0.5f);
+        depthFadeTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var combinedDepthFeatures = new Material(shader);
+        combinedDepthFeatures.SetFloat("_RenderType", 2);
+        combinedDepthFeatures.SetFloat("_SoftParticlesEnabled", 1);
+        combinedDepthFeatures.SetFloat("_SoftParticlesIntensity", 1);
+        combinedDepthFeatures.SetFloat("_DepthFadeEnabled", 1);
+        combinedDepthFeatures.SetFloat("_DepthFadeNear", 1.5f);
+        combinedDepthFeatures.SetFloat("_DepthFadeFar", 3f);
+        combinedDepthFeatures.SetFloat("_DepthFadeWidth", 0.5f);
+
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
@@ -418,6 +499,16 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             rimTransparency,
             luminanceTransparency,
             combinedTransparency,
+            softParticles,
+            softParticlesAlphaTest,
+            softParticlesAlphaTransition,
+            softParticlesEmission,
+            softParticlesTransparency,
+            depthFade,
+            depthFadeAlphaTransition,
+            depthFadeEmission,
+            depthFadeTransparency,
+            combinedDepthFeatures,
             vertexColor,
             baseMap2DArray,
             baseMap3D,

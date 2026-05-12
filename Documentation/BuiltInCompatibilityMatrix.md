@@ -361,3 +361,29 @@ Phase 4.4A compatibility annotations:
 - Luminance transparency is implemented with the original call order: after base/tint/color-correction, vertex color, and emission, and before alpha test and alpha modulation.
 - Combined rim plus luminance transparency applies both alpha multipliers; it does not replace alpha transition or keep-edge transparency behavior.
 - The following `Nova/Particles/UberUnlit` features remain Pending: soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.4B Verification Status
+
+Phase 4.4B expands only `Nova/Particles/UberUnlit` soft particles and depth fade on the Built-in `ForwardBase` path. It does not implement vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, Picking, UI UberUnlit, Lit, Distortion runtime, optimizer/replacer runtime behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Soft particles | Passed | Passed | `_SOFT_PARTICLES_ENABLED` samples Built-in `_CameraDepthTexture`, compares scene eye depth with fragment eye depth, and multiplies final alpha using the original `(sceneDepth - particleDepth) / _SoftParticlesIntensity` factor. |
+| Soft particles intensity | Passed | Passed | `_SoftParticlesIntensity` controls the attenuation denominator. Higher intensity produces stronger fade near scene depth; very small values are clamped defensively to avoid division by zero. |
+| Built-in camera depth texture requirement | Passed | Passed | Depth-dependent PlayMode smokes explicitly set `camera.depthTextureMode |= DepthTextureMode.Depth` and include a depth-writing opaque `Standard` surface behind the transparent particle surface for deterministic camera depth generation. |
+| Depth fade | Passed | Passed | `_DEPTH_FADE_ENABLED` multiplies final alpha by the original view-depth range factor based on fragment eye depth. The original shader does not sample scene depth for this factor; the Built-in path keeps that semantic while sharing the local depth helper data path. |
+| Depth fade near/far/width | Passed | Passed | `_DepthFadeNear`, `_DepthFadeFar`, and `_DepthFadeWidth` shape the range and falloff using the original `min(depth - near, far - depth) / width` rule. |
+| Combined soft particles and depth fade | Passed | Passed | When both keywords are active, both alpha factors are applied multiplicatively after rim/luminance transparency and before alpha test/modulation. |
+| Interaction with alpha transition, emission, and transparency | Passed | Passed | Added smokes verify alpha transition remains effective with a depth feature, and emission/luminance transparency output remains non-empty while soft particles attenuate it. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes `_SOFT_PARTICLES_ENABLED`, `_DEPTH_FADE_ENABLED`, both together, soft particles with alpha test/alpha transition/emission/transparency, and depth fade with alpha transition/emission/transparency. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UberUnlitSoftParticlesRequireCameraDepthTexture`, `UberUnlitSoftParticlesFadeNearSceneDepth`, `UberUnlitSoftParticlesIntensityAffectsOutput`, `UberUnlitSoftParticlesDoNotAffectWhenDepthFar`, `UberUnlitDepthFadeAffectsOutput`, `UberUnlitDepthFadeNearFarAffectOutput`, `UberUnlitDepthFadeWidthAffectsFalloff`, `UberUnlitDepthFadeDoesNotBreakBaseAlpha`, `UberUnlitSoftParticlesAndDepthFadeCanCombine`, `UberUnlitDepthFeaturesPreserveAlphaTransition`, and `UberUnlitDepthFeaturesPreserveEmissionAndTransparency`. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans Built-in runtime/editor/package files and excludes the untracked `NovaShader/` reference directory. |
+
+Phase 4.4B compatibility annotations:
+
+- Soft particles, soft particles intensity, depth fade, depth fade near/far/width, and combined soft particles plus depth fade are implemented for `Nova/Particles/UberUnlit` Built-in `ForwardBase`.
+- Soft particles are Approximate because Built-in camera depth texture generation differs from URP. Cameras using this feature must enable depth texture generation, and a depth-writing opaque surface must participate in the camera depth texture for the fade to have scene depth input.
+- The Built-in depth helper now handles orthographic camera depth conversion explicitly because Built-in raw depth texture values differ from the original URP sampling path. Final pixel parity remains a visual-regression task.
+- Depth fade preserves the original view-depth semantics rather than inventing a scene-depth intersection fade; `_CameraDepthTexture` is still required for soft particles and is enabled in the shared depth-feature test scenes.
+- Combined depth features multiply their alpha factors conservatively and do not replace alpha transition, emission keep-edge transparency, rim transparency, luminance transparency, alpha test, or alpha modulation behavior.
+- The following `Nova/Particles/UberUnlit` features remain Pending: vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
