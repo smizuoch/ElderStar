@@ -301,6 +301,7 @@ Shader "Nova/Particles/UberUnlit"
             #pragma shader_feature_local _CASTING_PUNCTUAL_LIGHT_SHADOW
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
+            #include "BuiltIn/NovaBuiltInDepth.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
 
             NOVA_DECLARE_TEX2D(_BaseMap);
@@ -436,6 +437,10 @@ Shader "Nova/Particles/UberUnlit"
             half _LuminanceTransparencySharpness;
             half _LuminanceTransparencySharpnessCoord;
             half _InverseLuminanceTransparency;
+            half _SoftParticlesIntensity;
+            half _DepthFadeNear;
+            half _DepthFadeFar;
+            half _DepthFadeWidth;
             half _ParallaxMapProgress;
             half _ParallaxMapProgressCoord;
             half _ParallaxMapOffsetXCoord;
@@ -474,6 +479,7 @@ Shader "Nova/Particles/UberUnlit"
                 float3 normalWS : TEXCOORD10;
                 float3 viewDirWS : TEXCOORD11;
                 float3 viewDirTS : TEXCOORD12;
+                float4 screenPosition : TEXCOORD14;
                 fixed4 color : COLOR;
             };
 
@@ -481,6 +487,8 @@ Shader "Nova/Particles/UberUnlit"
             {
                 v2f o;
                 o.vertex = NovaObjectToClipPos(v.vertex);
+                o.screenPosition = NovaComputeScreenPos(o.vertex);
+                o.screenPosition.z = -UnityObjectToViewPos(v.vertex).z;
                 o.customCoord1 = v.customCoord1;
                 o.customCoord2 = v.customCoord2;
                 float3 positionWS = NovaObjectToWorld(v.vertex.xyz);
@@ -868,6 +876,14 @@ Shader "Nova/Particles/UberUnlit"
                     _LuminanceTransparencyProgress + NovaGetCustomCoord(_LuminanceTransparencyProgressCoord, i.customCoord1, i.customCoord2),
                     _LuminanceTransparencySharpness + NovaGetCustomCoord(_LuminanceTransparencySharpnessCoord, i.customCoord1, i.customCoord2),
                     _InverseLuminanceTransparency);
+                #endif
+
+                #if defined(_SOFT_PARTICLES_ENABLED)
+                color.a *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity);
+                #endif
+
+                #if defined(_DEPTH_FADE_ENABLED)
+                color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.screenPosition);
                 #endif
 
                 #ifdef _ALPHATEST_ENABLED
