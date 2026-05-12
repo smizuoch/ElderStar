@@ -304,3 +304,34 @@ Phase 4.3A compatibility annotations:
 - Second alpha transition texture support is runtime-verified only for 2D in Phase 4.3A. Second texture 2D array, second texture 3D, and second texture random row selection keep keyword/property/compile compatibility and remain Pending for deterministic runtime completion.
 - Random row selection tests use mesh UV channels to represent custom coordinates and do not claim full Particle System Custom Vertex Streams parity.
 - The following `Nova/Particles/UberUnlit` features remain Pending: emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.3B Verification Status
+
+Phase 4.3B expands only `Nova/Particles/UberUnlit` emission behavior on the Built-in `ForwardBase` path. It does not implement rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, additional passes, UI shaders, Lit shaders, distortion runtime, optimizer behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Emission area all | Passed | Passed | `_EMISSION_AREA_ALL` adds emission across the rendered surface using `_EmissionIntensity` and the selected emission color source. |
+| Emission area alpha | Passed | Passed | `_EMISSION_AREA_ALPHA` follows the original edge rule: emission is driven by `1 - alpha`, with texture-compression margin handling. |
+| Emission area map | Passed | Passed | `_EMISSION_AREA_MAP` samples the emission map signal and preserves `_EmissionMapChannelsX` channel selection. |
+| Emission map 2D | Passed | Passed | `_EMISSION_MAP_MODE_2D` samples `_EmissionMap` with offset, rotation, and channel selection through the Built-in helper path. |
+| Emission map 2D array | Passed | Passed | `_EMISSION_MAP_MODE_2D_ARRAY` samples `_EmissionMap2DArray` using `_EmissionMapProgress`, `_EmissionMapSliceCount`, and flip-book frame selection. |
+| Emission map 3D | Passed | Passed | `_EMISSION_MAP_MODE_3D` samples `_EmissionMap3D` using flip-book blending progress. Texture 3D availability remains platform-dependent. |
+| Emission map random row selection | Passed | Passed | `_EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED` uses `_EmissionMapRowCount` and `_EmissionMapRandomRowCoord`. The smoke test supplies deterministic mesh `TEXCOORD1.x`; full Particle System Custom Vertex Streams parity remains unclaimed. |
+| Emission color from base color | Passed | Passed | `_EMISSION_COLOR_BASECOLOR` derives emission from the current post-base/tint/color-correction RGB, matching the original emission call order. |
+| Emission color from explicit color | Passed | Passed | `_EMISSION_COLOR_COLOR` uses `_EmissionColor.rgb` and `_EmissionIntensity`. |
+| Emission color map/ramp | Passed | Passed | `_EMISSION_COLOR_MAP` samples `_EmissionColorRamp` at the emission-map or alpha-derived signal, matching the original ramp semantics for covered area modes. |
+| Emission intensity | Passed | Passed | `_EmissionIntensity` and `_EmissionIntensityCoord` scale the final emission contribution. |
+| Keep edge transparency | Passed | Passed | `_KeepEdgeTransparency` preserves alpha for edge emission when enabled and hardens nonzero alpha when disabled, matching the original shader rule. |
+| Flow map target emission | Passed | Passed | `_FLOW_MAP_TARGET_EMISSION` offsets only emission-map UVs with the existing flow-map offset path. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes emission area all/alpha/map, emission color color/base/ramp, emission map 2D/2D array/3D/random row, and flow target emission keywords. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UberUnlitEmissionAreaAllAffectsOutput`, `UberUnlitEmissionAreaAlphaUsesAlpha`, `UberUnlitEmissionAreaMapMasksEmission`, `UberUnlitEmissionMap2DAffectsOutput`, `UberUnlitEmissionMap2DArrayAffectsOutput`, `UberUnlitEmissionMap3DAffectsOutput`, `UberUnlitEmissionMapRandomRowSelectionAffectsOutput`, `UberUnlitEmissionColorFromBaseColorAffectsOutput`, `UberUnlitEmissionColorFromExplicitColorAffectsOutput`, `UberUnlitEmissionColorMapOrRampAffectsOutput`, `UberUnlitEmissionIntensityAffectsOutput`, `UberUnlitKeepEdgeTransparencyPreservesTransparentEdges`, and `UberUnlitFlowMapOffsetsEmissionSampling`. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans Built-in runtime/editor/package files and excludes the untracked `NovaShader/` reference directory. |
+
+Phase 4.3B compatibility annotations:
+
+- Emission area all, emission area alpha, emission area map, emission map 2D, emission map 2D array, emission map 3D, emission map random row selection, emission color from base color, emission color from `_EmissionColor`, emission color ramp, emission intensity, keep-edge transparency, and flow target emission are implemented for `Nova/Particles/UberUnlit` Built-in `ForwardBase`.
+- 2D array and 3D emission-map support remain Approximate at the platform level because texture array and 3D texture availability depends on the target backend, but the tested Unity editor paths pass.
+- Emission color from base color is applied after base/tint/color-correction and vertex color, matching the original `fragUnlit` call order before alpha clip and alpha modulation.
+- Random row selection tests use mesh UV channels to represent custom coordinates and do not claim full Particle System Custom Vertex Streams parity.
+- The following `Nova/Particles/UberUnlit` features remain Pending: rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.

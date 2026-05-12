@@ -274,6 +274,61 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         flowAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
         flowAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
 
+        var emissionAreaAll = new Material(shader);
+        emissionAreaAll.SetFloat("_EmissionAreaType", 1);
+        emissionAreaAll.SetFloat("_EmissionColorType", 0);
+        emissionAreaAll.SetColor("_EmissionColor", Color.green);
+
+        var emissionAreaAlpha = new Material(shader);
+        emissionAreaAlpha.SetFloat("_EmissionAreaType", 3);
+        emissionAreaAlpha.SetFloat("_EmissionColorType", 0);
+        emissionAreaAlpha.SetColor("_EmissionColor", Color.green);
+
+        var emissionAreaMap = new Material(shader);
+        emissionAreaMap.SetFloat("_EmissionAreaType", 2);
+        emissionAreaMap.SetFloat("_EmissionColorType", 0);
+        emissionAreaMap.SetFloat("_EmissionMapMode", 0);
+        emissionAreaMap.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
+
+        var emissionColorBase = new Material(shader);
+        emissionColorBase.SetFloat("_EmissionAreaType", 1);
+        emissionColorBase.SetFloat("_EmissionColorType", 1);
+
+        var emissionColorRamp = new Material(shader);
+        emissionColorRamp.SetFloat("_EmissionAreaType", 2);
+        emissionColorRamp.SetFloat("_EmissionColorType", 2);
+        emissionColorRamp.SetFloat("_EmissionMapMode", 0);
+        emissionColorRamp.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
+        emissionColorRamp.SetTexture("_EmissionColorRamp", CreateCompileTexture(FilterMode.Bilinear));
+
+        var emissionMap2DArray = new Material(shader);
+        emissionMap2DArray.SetFloat("_EmissionAreaType", 2);
+        emissionMap2DArray.SetFloat("_EmissionColorType", 0);
+        emissionMap2DArray.SetFloat("_EmissionMapMode", 1);
+        emissionMap2DArray.SetFloat("_EmissionMapSliceCount", 2);
+
+        var emissionMap3D = new Material(shader);
+        emissionMap3D.SetFloat("_EmissionAreaType", 2);
+        emissionMap3D.SetFloat("_EmissionColorType", 0);
+        emissionMap3D.SetFloat("_EmissionMapMode", 2);
+        emissionMap3D.SetFloat("_EmissionMapSliceCount", 2);
+
+        var emissionMapRandomRow = new Material(shader);
+        emissionMapRandomRow.SetFloat("_EmissionAreaType", 2);
+        emissionMapRandomRow.SetFloat("_EmissionColorType", 0);
+        emissionMapRandomRow.SetFloat("_EmissionMapMode", 1);
+        emissionMapRandomRow.SetFloat("_EmissionMapRandomRowSelectionEnabled", 1);
+        emissionMapRandomRow.SetFloat("_EmissionMapRandomRowCoord", 1);
+        emissionMapRandomRow.SetFloat("_EmissionMapRowCount", 2);
+
+        var flowEmission = new Material(shader);
+        flowEmission.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
+        flowEmission.SetFloat("_FlowMapTarget", 8);
+        flowEmission.SetFloat("_EmissionAreaType", 2);
+        flowEmission.SetFloat("_EmissionColorType", 0);
+        flowEmission.SetFloat("_EmissionMapMode", 0);
+        flowEmission.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
+
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
@@ -341,6 +396,15 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             secondAlphaTransitionRandomRow,
             vertexAlphaTransition,
             flowAlphaTransition,
+            emissionAreaAll,
+            emissionAreaAlpha,
+            emissionAreaMap,
+            emissionColorBase,
+            emissionColorRamp,
+            emissionMap2DArray,
+            emissionMap3D,
+            emissionMapRandomRow,
+            flowEmission,
             vertexColor,
             baseMap2DArray,
             baseMap3D,
