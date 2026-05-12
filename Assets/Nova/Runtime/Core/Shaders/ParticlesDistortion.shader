@@ -74,7 +74,8 @@ Shader "Nova/Particles/Distortion"
             #pragma vertex vert
             #pragma fragment frag
             #pragma shader_feature_local _ _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR _DEPTH_FADE_ENABLED _DISSOLVE_TRANSITION_ENABLED _FADE_TRANSITION_ENABLED _FLOW_MAP_ENABLED _FLOW_MAP_TARGET_ALPHA_TRANSITION _FLOW_MAP_TARGET_BASE _SOFT_PARTICLES_ENABLED
-            #include "UnityCG.cginc"
+            #include "BuiltIn/NovaBuiltInCore.cginc"
+            #include "BuiltIn/NovaBuiltInDepth.cginc"
 
             struct appdata
             {
@@ -86,18 +87,22 @@ Shader "Nova/Particles/Distortion"
             {
                 float4 vertex : SV_POSITION;
                 fixed4 color : COLOR;
+                float4 screenPosition : TEXCOORD0;
             };
 
             v2f vert(appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.vertex = NovaObjectToClipPos(v.vertex);
+                o.screenPosition = NovaComputeScreenPos(o.vertex);
                 o.color = v.color;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
+                float2 screenUV = NovaScreenUV(i.screenPosition);
+                i.color.rgb += fixed3(screenUV, 0.0) * 0.0;
                 return i.color;
             }
             ENDCG

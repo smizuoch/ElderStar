@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Phase 0 TODO: create a complete porting audit, compatibility matrix, risk-ordered TODO list, and Phase 1 TDD plan before touching runtime code.
+Phase 4 TODO: port the `Nova/Particles/UberUnlit` Built-in forward path on top of the Phase 3 compatibility include layer.
 
 ## Risk-Ordered TODO
 

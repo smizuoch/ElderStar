@@ -32,6 +32,21 @@ Phase 0 records expected compatibility only. Implementation status is Pending fo
 | `Nova/Particles/UberLit` | `UniversalForward`, `SceneSelectionPass`, `Picking`, `DepthNormals`, `DepthOnly`, `ShadowCaster` | Built-in forward lit approximation plus shadow caster | Approximate | `UniversalFragmentPBR`, URP light loops, Forward+, probe volumes, and URP shadow data have no exact Built-in equivalent. |
 | `Nova/UIParticles/UberLit` | `UniversalForward` with UI stencil/clip | Built-in UI-compatible lit approximation | Approximate | Same lit limitations as UberLit plus UI clipping/stencil constraints. |
 
+## Built-in Shader Compatibility Layer
+
+Phase 3 adds local Built-in include scaffolding under `Assets/Nova/Runtime/Core/Shaders/BuiltIn/`. These files are verified for import/compile smoke only. They intentionally do not mark particle rendering, lit rendering, UI rendering, distortion runtime, optimized shader generation, or visual parity complete.
+
+| Feature | Include surface | Implementation status | Runtime status | Notes |
+| --- | --- | --- | --- | --- |
+| Transform helpers | `NovaBuiltInCore.cginc` | Verified | Pending | Provides object/world/clip transforms, normal/tangent conversion, bitangent generation, view direction, safe normalize, and screen-position helpers through Built-in matrices and `UnityCG.cginc`. Feature shaders have not yet ported their full vertex data paths. |
+| Texture helpers | `NovaBuiltInTexture.cginc` | Verified | Pending | Provides compile-safe 2D, 2D array, 3D, UV transform, channel selection, and mirror-UV helper surface. Mirror sampler visual parity and flip-book feature behavior remain for later phases. |
+| Depth and screen helpers | `NovaBuiltInDepth.cginc` | Verified | Pending | Provides camera depth declaration/sampling, linear eye depth, soft-particle factor, depth-fade factor, and screen UV helpers. Cameras must provide a Built-in camera depth texture for runtime depth-dependent behavior. Final soft-particle and depth-fade behavior remains for feature phases. |
+| Fog helpers | `NovaBuiltInFog.cginc` | Verified | Pending | Wraps Built-in fog macros for future shader passes. No target shader has real fog integration yet. |
+| Instancing helpers | `NovaBuiltInInstancing.cginc` | Verified | Pending | Wraps Built-in instance ID setup/transfer macros only. Mesh/particle instancing feature behavior remains unimplemented. |
+| Shadow caster helpers | `NovaBuiltInShadow.cginc` | Verified | Pending | Provides a compile-safe Built-in ShadowCaster clip-position helper. Bias and per-light behavior are Built-in approximations and not parity with the original shadow constants. |
+| Lighting scaffolding | `NovaBuiltInLighting.cginc` | Verified | Pending | Provides main-light direction/color access, ambient sampling, and placeholder surface data for future Lit work. Full UberLit shading remains Phase 6 and no original PBR parity is claimed. |
+| UI helpers | `NovaBuiltInUI.cginc` | Verified | Pending | Provides local access to Built-in UI clipping support while preserving stencil-compatible properties in target shaders. Full UI shader behavior remains later phases. |
+
 ## Common Shader Features
 
 | Feature | Original dependency | Built-in target | Expected status | Reason / fallback |
@@ -162,3 +177,22 @@ Phase 2 compatibility annotations:
 - Material setup and post-processor keyword behavior are Exact for the representative editor rules covered by EditMode tests.
 - Optimizer and replacer behavior is still Pending except for public API discovery.
 - Runtime rendering rows above remain Pending/Approximate/Unsupported as previously documented; no visual baseline or runtime shader feature is complete in Phase 2.
+
+## Phase 3 Verification Status
+
+Phase 3 creates a local Built-in shader compatibility include layer and compile smoke coverage for that layer. It does not implement real UberUnlit, UI UberUnlit, UberLit, UI UberLit, distortion runtime, CommandBuffer distortion, optimized shader generation behavior, PlayMode behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Local Built-in include files | Passed | Passed | Core, texture, depth, fog, instancing, lighting, shadow, and UI include files exist under the runtime shader directory and contain no runtime dependency on the original pipeline package. |
+| Include smoke shader diagnostics | Passed | Passed | Hidden test shaders import the local includes and query shader compiler diagnostics for blocking include, macro, sampler, texture, and syntax failures. |
+| Target shader skeleton integration | Passed | Passed | Six preserved shader names include the local Built-in core layer and use `NovaObjectToClipPos`; fake color output remains intentionally unchanged. |
+| Forbidden runtime shader token scan | Passed | Passed | Static scan is scoped to `Assets/Nova/Runtime/Core/Shaders` and excludes the untracked original reference directory. |
+| Material/editor API regression | Passed | Passed | Phase 1.5 and Phase 2 property, keyword, custom editor, material setup, and optimizer/replacer API discovery tests remain green. |
+
+Phase 3 compatibility annotations:
+
+- Include/API scaffolding is implemented and compile-verified; runtime visual features remain Pending or Approximate as documented above.
+- Depth helpers require a camera depth texture when future feature passes consume soft particles or depth fade.
+- Texture array and 3D texture helpers are smoke-compiled, but platform-specific visual behavior and feature math are still unverified.
+- Shadow and lighting helpers are intentionally minimal Built-in surfaces for later passes, not original lighting or shadow parity.

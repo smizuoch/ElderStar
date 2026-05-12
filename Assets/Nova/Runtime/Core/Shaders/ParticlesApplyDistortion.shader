@@ -17,7 +17,7 @@ Shader "Hidden/Nova/Particles/ApplyDistortion"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+            #include "BuiltIn/NovaBuiltInCore.cginc"
 
             struct appdata
             {
@@ -34,7 +34,7 @@ Shader "Hidden/Nova/Particles/ApplyDistortion"
             v2f vert(appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.vertex = NovaObjectToClipPos(v.vertex);
                 o.color = v.color;
                 return o;
             }
