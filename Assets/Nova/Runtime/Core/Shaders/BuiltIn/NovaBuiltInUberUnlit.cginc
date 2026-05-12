@@ -116,6 +116,52 @@ half NovaTintMapProgress(
     #endif
 }
 
+half NovaAlphaTransitionMapProgress(
+    half progress,
+    half sliceCount,
+    half rowCount,
+    half randomValue)
+{
+    #if defined(_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY)
+        #if defined(_ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookProgressWithRandomRow(progress, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookProgress(progress, sliceCount);
+        #endif
+    #elif defined(_ALPHA_TRANSITION_MAP_MODE_3D)
+        #if defined(_ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookBlendingProgressWithRandomRow(progress, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookBlendingProgress(progress, sliceCount);
+        #endif
+    #else
+    return 0.0h;
+    #endif
+}
+
+half NovaAlphaTransitionSecondMapProgress(
+    half progress,
+    half sliceCount,
+    half rowCount,
+    half randomValue)
+{
+    #if defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY)
+        #if defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookProgressWithRandomRow(progress, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookProgress(progress, sliceCount);
+        #endif
+    #elif defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D)
+        #if defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_RANDOM_ROW_SELECTION_ENABLED)
+        return NovaFlipBookBlendingProgressWithRandomRow(progress, sliceCount, rowCount, randomValue);
+        #else
+        return NovaFlipBookBlendingProgress(progress, sliceCount);
+        #endif
+    #else
+    return 0.0h;
+    #endif
+}
+
 void NovaApplyBaseMapChannel(inout half4 color, half channel)
 {
     #if defined(_BASE_MAP_CHANNEL_ENABLED)
@@ -192,6 +238,45 @@ half NovaRimValue(half rim, half progress, half sharpness, half inverse)
 void NovaApplyTintColor(inout half4 color, half4 tintColor, half blendRate)
 {
     color *= lerp(half4(1.0h, 1.0h, 1.0h, 1.0h), tintColor, saturate(blendRate));
+}
+
+void NovaModulateAlphaTransitionProgress(inout half progress, half vertexAlpha)
+{
+    #ifdef _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
+    progress += 1.0h - vertexAlpha;
+    #endif
+    progress = min(1.0h, progress);
+}
+
+half NovaApplyAlphaTransitionProgress(half transitionAlpha, half transitionProgress, half dissolveSharpness)
+{
+    #ifdef _FADE_TRANSITION_ENABLED
+    transitionProgress = (transitionProgress * 2.0h - 1.0h) * -1.0h;
+    return saturate(transitionAlpha + transitionProgress);
+    #elif defined(_DISSOLVE_TRANSITION_ENABLED)
+    half dissolveWidth = lerp(0.5h, 0.0001h, saturate(dissolveSharpness));
+    transitionProgress = lerp(-dissolveWidth, 1.0h + dissolveWidth, saturate(transitionProgress));
+    return smoothstep(transitionProgress - dissolveWidth, transitionProgress + dissolveWidth, transitionAlpha);
+    #else
+    return 1.0h;
+    #endif
+}
+
+half NovaAlphaTransitionFactor(half4 map, half channel, half transitionProgress, half dissolveSharpness)
+{
+    half transitionAlpha = NovaSelectChannel(map, channel);
+    return NovaApplyAlphaTransitionProgress(transitionAlpha, transitionProgress, dissolveSharpness);
+}
+
+half NovaBlendAlphaTransitionFactors(half mainAlpha, half secondAlpha)
+{
+    #if defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE)
+    return (mainAlpha + secondAlpha) * 0.5h;
+    #elif defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY)
+    return mainAlpha * secondAlpha;
+    #else
+    return mainAlpha;
+    #endif
 }
 
 half2 NovaParallaxOffset(half height, half strength, half3 viewDirTS)

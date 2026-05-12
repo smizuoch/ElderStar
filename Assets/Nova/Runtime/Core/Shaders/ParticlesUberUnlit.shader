@@ -312,6 +312,14 @@ Shader "Nova/Particles/UberUnlit"
             float4 _TintMap2DArray_ST;
             NOVA_DECLARE_TEX3D(_TintMap3D);
             NOVA_DECLARE_TEX2D(_FlowMap);
+            NOVA_DECLARE_TEX2D(_AlphaTransitionMap);
+            NOVA_DECLARE_TEX2D_ARRAY(_AlphaTransitionMap2DArray);
+            float4 _AlphaTransitionMap2DArray_ST;
+            NOVA_DECLARE_TEX3D(_AlphaTransitionMap3D);
+            NOVA_DECLARE_TEX2D(_AlphaTransitionMapSecondTexture);
+            NOVA_DECLARE_TEX2D_ARRAY(_AlphaTransitionMapSecondTexture2DArray);
+            float4 _AlphaTransitionMapSecondTexture2DArray_ST;
+            NOVA_DECLARE_TEX3D(_AlphaTransitionMapSecondTexture3D);
             NOVA_DECLARE_TEX2D(_ParallaxMap);
             NOVA_DECLARE_TEX2D_ARRAY(_ParallaxMap2DArray);
             float4 _ParallaxMap2DArray_ST;
@@ -370,6 +378,34 @@ Shader "Nova/Particles/UberUnlit"
             half _FlowMapChannelsY;
             half _FlowIntensity;
             half _FlowIntensityCoord;
+            half _AlphaTransitionMapProgress;
+            half _AlphaTransitionMapProgressCoord;
+            half _AlphaTransitionMapOffsetXCoord;
+            half _AlphaTransitionMapOffsetYCoord;
+            half _AlphaTransitionMapRotation;
+            half _AlphaTransitionMapRotationCoord;
+            half4 _AlphaTransitionMapRotationOffsets;
+            half _AlphaTransitionMapChannelsX;
+            half _AlphaTransitionMapSliceCount;
+            half _AlphaTransitionProgress;
+            half _AlphaTransitionProgressCoord;
+            half _DissolveSharpness;
+            half _AlphaTransitionMapSecondTextureProgress;
+            half _AlphaTransitionMapSecondTextureProgressCoord;
+            half _AlphaTransitionMapSecondTextureOffsetXCoord;
+            half _AlphaTransitionMapSecondTextureOffsetYCoord;
+            half _AlphaTransitionMapSecondTextureRotation;
+            half _AlphaTransitionMapSecondTextureRotationCoord;
+            half4 _AlphaTransitionMapSecondTextureRotationOffsets;
+            half _AlphaTransitionMapSecondTextureChannelsX;
+            half _AlphaTransitionMapSecondTextureSliceCount;
+            half _AlphaTransitionProgressSecondTexture;
+            half _AlphaTransitionProgressCoordSecondTexture;
+            half _DissolveSharpnessSecondTexture;
+            half _AlphaTransitionMapRandomRowCoord;
+            half _AlphaTransitionMapRowCount;
+            half _AlphaTransitionMapSecondTextureRandomRowCoord;
+            half _AlphaTransitionMapSecondTextureRowCount;
             half _ParallaxMapProgress;
             half _ParallaxMapProgressCoord;
             half _ParallaxMapOffsetXCoord;
@@ -400,11 +436,13 @@ Shader "Nova/Particles/UberUnlit"
                 half tintMapProgress : TEXCOORD3;
                 float2 flowUv : TEXCOORD4;
                 float3 parallaxUvAndProgress : TEXCOORD5;
-                float4 customCoord1 : TEXCOORD6;
-                float4 customCoord2 : TEXCOORD7;
-                float3 normalWS : TEXCOORD8;
-                float3 viewDirWS : TEXCOORD9;
-                float3 viewDirTS : TEXCOORD10;
+                float4 alphaTransitionUvAndProgress : TEXCOORD6;
+                float3 alphaTransitionSecondUvAndProgress : TEXCOORD7;
+                float4 customCoord1 : TEXCOORD8;
+                float4 customCoord2 : TEXCOORD9;
+                float3 normalWS : TEXCOORD10;
+                float3 viewDirWS : TEXCOORD11;
+                float3 viewDirTS : TEXCOORD12;
                 fixed4 color : COLOR;
             };
 
@@ -452,7 +490,7 @@ Shader "Nova/Particles/UberUnlit"
                 half tintRandomValue = NovaGetCustomCoord(_TintMapRandomRowCoord, v.customCoord1, v.customCoord2);
                 o.tintMapProgress = NovaTintMapProgress(tintProgress2DArray, tintProgress3D, _TintMapSliceCount, _TintMapRowCount, tintRandomValue);
                 o.flowUv = v.uv;
-                #if defined(_FLOW_MAP_ENABLED) || defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT)
+                #if defined(_FLOW_MAP_ENABLED) || defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
                 if (_FlowMapRotation > 0.0h || _FlowMapRotationCoord > 0.0h)
                 {
                     half flowAngle = _FlowMapRotation + NovaGetCustomCoord(_FlowMapRotationCoord, v.customCoord1, v.customCoord2);
@@ -461,6 +499,48 @@ Shader "Nova/Particles/UberUnlit"
                 o.flowUv = NovaTransformUV(o.flowUv, _FlowMap_ST);
                 o.flowUv.x += NovaGetCustomCoord(_FlowMapOffsetXCoord, v.customCoord1, v.customCoord2);
                 o.flowUv.y += NovaGetCustomCoord(_FlowMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                #endif
+                o.alphaTransitionUvAndProgress = float4(v.uv, 0.0h, 0.0h);
+                o.alphaTransitionSecondUvAndProgress = float3(v.uv, 0.0h);
+                #if defined(_FADE_TRANSITION_ENABLED) || defined(_DISSOLVE_TRANSITION_ENABLED)
+                float2 alphaTransitionUv = v.uv;
+                if (_AlphaTransitionMapRotation > 0.0h || _AlphaTransitionMapRotationCoord > 0.0h)
+                {
+                    half alphaAngle = _AlphaTransitionMapRotation + NovaGetCustomCoord(_AlphaTransitionMapRotationCoord, v.customCoord1, v.customCoord2);
+                    alphaTransitionUv = NovaRotateUV(alphaTransitionUv, alphaAngle * 6.2831853h, _AlphaTransitionMapRotationOffsets.xy);
+                }
+                    #if defined(_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY)
+                    alphaTransitionUv = NovaTransformUV(alphaTransitionUv, _AlphaTransitionMap2DArray_ST);
+                    #elif defined(_ALPHA_TRANSITION_MAP_MODE_3D)
+                    alphaTransitionUv = NovaTransformUV(alphaTransitionUv, _AlphaTransitionMap3D_ST);
+                    #else
+                    alphaTransitionUv = NovaTransformUV(alphaTransitionUv, _AlphaTransitionMap_ST);
+                    #endif
+                alphaTransitionUv.x += NovaGetCustomCoord(_AlphaTransitionMapOffsetXCoord, v.customCoord1, v.customCoord2);
+                alphaTransitionUv.y += NovaGetCustomCoord(_AlphaTransitionMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                half alphaMapProgress = _AlphaTransitionMapProgress + NovaGetCustomCoord(_AlphaTransitionMapProgressCoord, v.customCoord1, v.customCoord2);
+                half alphaRandomValue = NovaGetCustomCoord(_AlphaTransitionMapRandomRowCoord, v.customCoord1, v.customCoord2);
+                o.alphaTransitionUvAndProgress = float4(alphaTransitionUv, NovaAlphaTransitionMapProgress(alphaMapProgress, _AlphaTransitionMapSliceCount, _AlphaTransitionMapRowCount, alphaRandomValue), 0.0h);
+                    #if defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE) || defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY)
+                    float2 alphaTransitionSecondUv = v.uv;
+                    if (_AlphaTransitionMapSecondTextureRotation > 0.0h || _AlphaTransitionMapSecondTextureRotationCoord > 0.0h)
+                    {
+                        half alphaSecondAngle = _AlphaTransitionMapSecondTextureRotation + NovaGetCustomCoord(_AlphaTransitionMapSecondTextureRotationCoord, v.customCoord1, v.customCoord2);
+                        alphaTransitionSecondUv = NovaRotateUV(alphaTransitionSecondUv, alphaSecondAngle * 6.2831853h, _AlphaTransitionMapSecondTextureRotationOffsets.xy);
+                    }
+                        #if defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY)
+                        alphaTransitionSecondUv = NovaTransformUV(alphaTransitionSecondUv, _AlphaTransitionMapSecondTexture2DArray_ST);
+                        #elif defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D)
+                        alphaTransitionSecondUv = NovaTransformUV(alphaTransitionSecondUv, _AlphaTransitionMapSecondTexture3D_ST);
+                        #else
+                        alphaTransitionSecondUv = NovaTransformUV(alphaTransitionSecondUv, _AlphaTransitionMapSecondTexture_ST);
+                        #endif
+                    alphaTransitionSecondUv.x += NovaGetCustomCoord(_AlphaTransitionMapSecondTextureOffsetXCoord, v.customCoord1, v.customCoord2);
+                    alphaTransitionSecondUv.y += NovaGetCustomCoord(_AlphaTransitionMapSecondTextureOffsetYCoord, v.customCoord1, v.customCoord2);
+                    half alphaSecondMapProgress = _AlphaTransitionMapSecondTextureProgress + NovaGetCustomCoord(_AlphaTransitionMapSecondTextureProgressCoord, v.customCoord1, v.customCoord2);
+                    half alphaSecondRandomValue = NovaGetCustomCoord(_AlphaTransitionMapSecondTextureRandomRowCoord, v.customCoord1, v.customCoord2);
+                    o.alphaTransitionSecondUvAndProgress = float3(alphaTransitionSecondUv, NovaAlphaTransitionSecondMapProgress(alphaSecondMapProgress, _AlphaTransitionMapSecondTextureSliceCount, _AlphaTransitionMapSecondTextureRowCount, alphaSecondRandomValue));
+                    #endif
                 #endif
                 o.parallaxUvAndProgress = float3(v.uv, 0.0h);
                 #if defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT)
@@ -517,6 +597,32 @@ Shader "Nova/Particles/UberUnlit"
                 #endif
             }
 
+            half4 SampleAlphaTransitionMap(float2 uv, half progress)
+            {
+                #if defined(_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_AlphaTransitionMap2DArray, uv, progress);
+                #elif defined(_ALPHA_TRANSITION_MAP_MODE_3D)
+                return NOVA_SAMPLE_TEX3D_LOD(_AlphaTransitionMap3D, float3(uv, progress), 0.0);
+                #elif defined(_ALPHA_TRANSITION_MAP_MODE_2D)
+                return NOVA_SAMPLE_TEX2D(_AlphaTransitionMap, uv);
+                #else
+                return half4(0.0h, 0.0h, 0.0h, 1.0h);
+                #endif
+            }
+
+            half4 SampleAlphaTransitionSecondMap(float2 uv, half progress)
+            {
+                #if defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_AlphaTransitionMapSecondTexture2DArray, uv, progress);
+                #elif defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D)
+                return NOVA_SAMPLE_TEX3D_LOD(_AlphaTransitionMapSecondTexture3D, float3(uv, progress), 0.0);
+                #elif defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D)
+                return NOVA_SAMPLE_TEX2D(_AlphaTransitionMapSecondTexture, uv);
+                #else
+                return half4(0.0h, 0.0h, 0.0h, 1.0h);
+                #endif
+            }
+
             half4 SampleParallaxMap(float2 uv, half progress)
             {
                 #if defined(_PARALLAX_MAP_MODE_2D_ARRAY)
@@ -534,8 +640,10 @@ Shader "Nova/Particles/UberUnlit"
             {
                 float2 baseUv = i.uv;
                 float2 tintUv = i.tintUv;
+                float2 alphaTransitionUv = i.alphaTransitionUvAndProgress.xy;
+                float2 alphaTransitionSecondUv = i.alphaTransitionSecondUvAndProgress.xy;
 
-                #if defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT)
+                #if defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
                 half flowIntensity = _FlowIntensity + NovaGetCustomCoord(_FlowIntensityCoord, i.customCoord1, i.customCoord2);
                 half2 flowOffset = NovaFlowMapUvOffset(NOVA_SAMPLE_TEX2D(_FlowMap, i.flowUv), _FlowMapChannelsX, _FlowMapChannelsY, flowIntensity);
                     #if defined(_FLOW_MAP_TARGET_BASE)
@@ -543,6 +651,10 @@ Shader "Nova/Particles/UberUnlit"
                     #endif
                     #if defined(_FLOW_MAP_TARGET_TINT)
                     tintUv += flowOffset;
+                    #endif
+                    #if defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
+                    alphaTransitionUv += flowOffset;
+                    alphaTransitionSecondUv += flowOffset;
                     #endif
                 #endif
 
@@ -599,6 +711,27 @@ Shader "Nova/Particles/UberUnlit"
                 color.rgb = half3(luminance, luminance, luminance);
                 #elif defined(_GRADIENT_MAP_ENABLED)
                 color.rgb = NOVA_SAMPLE_TEX2D(_GradientMap, half2(NovaLuminance(color.rgb), 0.5h)).rgb;
+                #endif
+
+                #if defined(_FADE_TRANSITION_ENABLED) || defined(_DISSOLVE_TRANSITION_ENABLED)
+                half alphaTransitionProgress = _AlphaTransitionProgress + NovaGetCustomCoord(_AlphaTransitionProgressCoord, i.customCoord1, i.customCoord2);
+                NovaModulateAlphaTransitionProgress(alphaTransitionProgress, i.color.a);
+                half transitionAlpha = NovaAlphaTransitionFactor(
+                    SampleAlphaTransitionMap(alphaTransitionUv, i.alphaTransitionUvAndProgress.z),
+                    _AlphaTransitionMapChannelsX,
+                    alphaTransitionProgress,
+                    _DissolveSharpness);
+                    #if defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE) || defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY)
+                    half alphaTransitionProgressSecond = _AlphaTransitionProgressSecondTexture + NovaGetCustomCoord(_AlphaTransitionProgressCoordSecondTexture, i.customCoord1, i.customCoord2);
+                    NovaModulateAlphaTransitionProgress(alphaTransitionProgressSecond, i.color.a);
+                    half transitionAlphaSecond = NovaAlphaTransitionFactor(
+                        SampleAlphaTransitionSecondMap(alphaTransitionSecondUv, i.alphaTransitionSecondUvAndProgress.z),
+                        _AlphaTransitionMapSecondTextureChannelsX,
+                        alphaTransitionProgressSecond,
+                        _DissolveSharpnessSecondTexture);
+                    transitionAlpha = NovaBlendAlphaTransitionFactors(transitionAlpha, transitionAlphaSecond);
+                    #endif
+                color.a *= transitionAlpha;
                 #endif
 
                 #if defined(_VERTEX_ALPHA_AS_TRANSITION_PROGRESS)

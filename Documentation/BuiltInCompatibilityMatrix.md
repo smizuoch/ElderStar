@@ -273,3 +273,34 @@ Phase 4.2B compatibility annotations:
 - Flow targets for emission and alpha transition remain Pending because emission and alpha transition are explicitly out of Phase 4.2B scope.
 - Random row selection tests use mesh UV channels to represent custom coordinates and do not claim full Particle System Custom Vertex Streams parity.
 - The following `Nova/Particles/UberUnlit` features remain Pending: fade/dissolve alpha transition, second alpha transition texture, emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.3A Verification Status
+
+Phase 4.3A expands only `Nova/Particles/UberUnlit` alpha transition behavior on the Built-in `ForwardBase` path. It does not implement emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, additional passes, UI shaders, Lit shaders, distortion runtime, optimizer behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Fade alpha transition | Passed | Passed | `_FADE_TRANSITION_ENABLED` applies original-compatible fade progress math using `_AlphaTransitionProgress`, custom progress coordinates, and optional vertex alpha progress modulation. |
+| Dissolve alpha transition | Passed | Passed | `_DISSOLVE_TRANSITION_ENABLED` samples the alpha transition map signal and applies `_DissolveSharpness` through the original smoothstep-width formula. |
+| Alpha transition map 2D | Passed | Passed | `_ALPHA_TRANSITION_MAP_MODE_2D` samples `_AlphaTransitionMap`, applies channel selection, offset, rotation, and transition progress where the Built-in helper surface supports them. |
+| Alpha transition map 2D array | Passed | Passed | `_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY` samples `_AlphaTransitionMap2DArray` using `_AlphaTransitionMapProgress`, `_AlphaTransitionMapSliceCount`, and flip-book frame selection. |
+| Alpha transition map 3D | Passed | Passed | `_ALPHA_TRANSITION_MAP_MODE_3D` samples `_AlphaTransitionMap3D` using flip-book blending progress. Texture 3D availability remains platform-dependent. |
+| Alpha transition random row selection | Passed | Passed | `_ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED` uses `_AlphaTransitionMapRowCount` and `_AlphaTransitionMapRandomRowCoord`. The smoke test supplies deterministic mesh `TEXCOORD1.x`; full Particle System Custom Vertex Streams parity remains unclaimed. |
+| Second alpha transition texture 2D | Passed | Passed | `_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D` samples `_AlphaTransitionMapSecondTexture` and combines it with the primary transition map. |
+| Second texture average blend | Passed | Passed | `_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE` averages the primary and second transition alpha factors. |
+| Second texture multiply blend | Passed | Passed | `_ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY` multiplies the primary and second transition alpha factors. |
+| Second alpha transition texture 2D array / 3D | Pending | Pending | Keyword and property compatibility are preserved and compile-covered, but deterministic runtime smokes were not stable enough for this phase. Runtime completion remains pending rather than over-claimed. |
+| Second alpha transition random row selection | Pending | Pending | Keyword and property compatibility are preserved and compile-covered. Runtime row-selection behavior for the second texture remains pending with the second 2D array/3D runtime paths. |
+| Vertex alpha as transition progress | Passed | Passed | `_VERTEX_ALPHA_AS_TRANSITION_PROGRESS` follows the original rule: vertex alpha adds inverse progress for alpha transitions while vertex RGB still multiplies color and vertex alpha is not double-applied to final alpha. |
+| Flow map target alpha transition | Passed | Passed | `_FLOW_MAP_TARGET_ALPHA_TRANSITION` offsets alpha transition UVs using the existing Built-in flow map logic without changing base or tint UVs for this target. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes fade, dissolve, alpha transition 2D/2D array/3D/random row, second texture 2D/2D array/3D/random row keywords, average/multiply blend keywords, vertex-alpha progress, and flow target alpha transition. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UberUnlitFadeAlphaTransitionAffectsOutput`, `UberUnlitDissolveAlphaTransitionClipsOrAttenuatesOutput`, `UberUnlitAlphaTransitionMap2DAffectsOutput`, `UberUnlitAlphaTransitionMap2DArrayAffectsOutput`, `UberUnlitAlphaTransitionMap3DAffectsOutput`, `UberUnlitAlphaTransitionRandomRowSelectionAffectsOutput`, `UberUnlitSecondAlphaTransitionTextureAverageAffectsOutput`, `UberUnlitSecondAlphaTransitionTextureMultiplyAffectsOutput`, `UberUnlitVertexAlphaCanDriveTransitionProgress`, and `UberUnlitFlowMapOffsetsAlphaTransitionSampling`. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans Built-in runtime/editor/package files and excludes the untracked `NovaShader/` reference directory. |
+
+Phase 4.3A compatibility annotations:
+
+- Fade transition, dissolve transition, alpha transition map 2D, alpha transition map 2D array, alpha transition map 3D, alpha transition random row selection, second alpha transition texture 2D, second texture average/multiply blending, vertex alpha transition progress, and flow target alpha transition are implemented for `Nova/Particles/UberUnlit` Built-in `ForwardBase`.
+- 2D array and 3D transition-map support remain Approximate at the platform level because texture array and 3D texture availability depends on the target backend, but the tested Unity editor paths pass for the primary transition map.
+- Second alpha transition texture support is runtime-verified only for 2D in Phase 4.3A. Second texture 2D array, second texture 3D, and second texture random row selection keep keyword/property/compile compatibility and remain Pending for deterministic runtime completion.
+- Random row selection tests use mesh UV channels to represent custom coordinates and do not claim full Particle System Custom Vertex Streams parity.
+- The following `Nova/Particles/UberUnlit` features remain Pending: emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.

@@ -192,6 +192,88 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         gradientMap.SetFloat("_ColorCorrectionMode", 2);
         gradientMap.SetTexture("_GradientMap", CreateCompileTexture(FilterMode.Bilinear));
 
+        var fadeTransition = new Material(shader);
+        fadeTransition.SetFloat("_AlphaTransitionMode", 1);
+        fadeTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        fadeTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var dissolveTransition = new Material(shader);
+        dissolveTransition.SetFloat("_AlphaTransitionMode", 2);
+        dissolveTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        dissolveTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var alphaTransition2DArray = new Material(shader);
+        alphaTransition2DArray.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransition2DArray.SetFloat("_AlphaTransitionMapMode", 1);
+        alphaTransition2DArray.SetFloat("_AlphaTransitionMapSliceCount", 2);
+
+        var alphaTransition3D = new Material(shader);
+        alphaTransition3D.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransition3D.SetFloat("_AlphaTransitionMapMode", 2);
+        alphaTransition3D.SetFloat("_AlphaTransitionMapSliceCount", 2);
+
+        var alphaTransitionRandomRow = new Material(shader);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapMode", 1);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapRandomRowSelectionEnabled", 1);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapRandomRowCoord", 1);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapRowCount", 2);
+
+        var secondAlphaTransitionAverage = new Material(shader);
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransitionAverage.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 0);
+        secondAlphaTransitionAverage.SetTexture("_AlphaTransitionMapSecondTexture", CreateCompileTexture(FilterMode.Point));
+
+        var secondAlphaTransitionMultiply = new Material(shader);
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransitionMultiply.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionSecondTextureBlendMode", 2);
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 0);
+        secondAlphaTransitionMultiply.SetTexture("_AlphaTransitionMapSecondTexture", CreateCompileTexture(FilterMode.Point));
+
+        var secondAlphaTransition2DArray = new Material(shader);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransition2DArray.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 1);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMapSecondTextureSliceCount", 2);
+
+        var secondAlphaTransition3D = new Material(shader);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransition3D.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 2);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMapSecondTextureSliceCount", 2);
+
+        var secondAlphaTransitionRandomRow = new Material(shader);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransitionRandomRow.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureRandomRowSelectionEnabled", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureRandomRowCoord", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureRowCount", 2);
+
+        var vertexAlphaTransition = new Material(shader);
+        vertexAlphaTransition.SetFloat("_VertexAlphaMode", 1);
+        vertexAlphaTransition.SetFloat("_AlphaTransitionMode", 1);
+        vertexAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        vertexAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var flowAlphaTransition = new Material(shader);
+        flowAlphaTransition.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
+        flowAlphaTransition.SetFloat("_FlowMapTarget", 4);
+        flowAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        flowAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        flowAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
@@ -247,6 +329,18 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             parallax3D,
             greyscale,
             gradientMap,
+            fadeTransition,
+            dissolveTransition,
+            alphaTransition2DArray,
+            alphaTransition3D,
+            alphaTransitionRandomRow,
+            secondAlphaTransitionAverage,
+            secondAlphaTransitionMultiply,
+            secondAlphaTransition2DArray,
+            secondAlphaTransition3D,
+            secondAlphaTransitionRandomRow,
+            vertexAlphaTransition,
+            flowAlphaTransition,
             vertexColor,
             baseMap2DArray,
             baseMap3D,
