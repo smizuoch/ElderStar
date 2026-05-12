@@ -307,6 +307,24 @@ Shader "Nova/Particles/UberUnlit"
             NOVA_DECLARE_TEX2D_ARRAY(_BaseMap2DArray);
             float4 _BaseMap2DArray_ST;
             NOVA_DECLARE_TEX3D(_BaseMap3D);
+            NOVA_DECLARE_TEX2D(_TintMap);
+            NOVA_DECLARE_TEX2D_ARRAY(_TintMap2DArray);
+            float4 _TintMap2DArray_ST;
+            NOVA_DECLARE_TEX3D(_TintMap3D);
+            NOVA_DECLARE_TEX2D(_FlowMap);
+            NOVA_DECLARE_TEX2D(_AlphaTransitionMap);
+            NOVA_DECLARE_TEX2D_ARRAY(_AlphaTransitionMap2DArray);
+            float4 _AlphaTransitionMap2DArray_ST;
+            NOVA_DECLARE_TEX3D(_AlphaTransitionMap3D);
+            NOVA_DECLARE_TEX2D(_AlphaTransitionMapSecondTexture);
+            NOVA_DECLARE_TEX2D_ARRAY(_AlphaTransitionMapSecondTexture2DArray);
+            float4 _AlphaTransitionMapSecondTexture2DArray_ST;
+            NOVA_DECLARE_TEX3D(_AlphaTransitionMapSecondTexture3D);
+            NOVA_DECLARE_TEX2D(_ParallaxMap);
+            NOVA_DECLARE_TEX2D_ARRAY(_ParallaxMap2DArray);
+            float4 _ParallaxMap2DArray_ST;
+            NOVA_DECLARE_TEX3D(_ParallaxMap3D);
+            NOVA_DECLARE_TEX2D(_GradientMap);
 
             fixed4 _TintColor;
             fixed _Cutoff;
@@ -332,10 +350,77 @@ Shader "Nova/Particles/UberUnlit"
             half _BaseMapToneDarktones;
             half _BaseMapToneBrightsCoord;
             half _BaseMapToneDarktonesCoord;
+            half _TintMap3DProgress;
+            half _TintMap3DProgressCoord;
+            half _TintMapProgress;
+            half _TintMapProgressCoord;
+            half _TintMapSliceCount;
+            half _TintMapOffsetXCoord;
+            half _TintMapOffsetYCoord;
+            half _TintBlendRate;
+            half _TintBlendRateCoord;
+            half _TintRimProgress;
+            half _TintRimProgressCoord;
+            half _TintRimSharpness;
+            half _TintRimSharpnessCoord;
+            half _InverseTintRim;
+            half _TintMapRandomRowCoord;
+            half _TintMapRowCount;
+            half _TintMapRotation;
+            half _TintMapRotationCoord;
+            half4 _TintMapRotationOffsets;
+            half _FlowMapOffsetXCoord;
+            half _FlowMapOffsetYCoord;
+            half _FlowMapRotation;
+            half _FlowMapRotationCoord;
+            half4 _FlowMapRotationOffsets;
+            half _FlowMapChannelsX;
+            half _FlowMapChannelsY;
+            half _FlowIntensity;
+            half _FlowIntensityCoord;
+            half _AlphaTransitionMapProgress;
+            half _AlphaTransitionMapProgressCoord;
+            half _AlphaTransitionMapOffsetXCoord;
+            half _AlphaTransitionMapOffsetYCoord;
+            half _AlphaTransitionMapRotation;
+            half _AlphaTransitionMapRotationCoord;
+            half4 _AlphaTransitionMapRotationOffsets;
+            half _AlphaTransitionMapChannelsX;
+            half _AlphaTransitionMapSliceCount;
+            half _AlphaTransitionProgress;
+            half _AlphaTransitionProgressCoord;
+            half _DissolveSharpness;
+            half _AlphaTransitionMapSecondTextureProgress;
+            half _AlphaTransitionMapSecondTextureProgressCoord;
+            half _AlphaTransitionMapSecondTextureOffsetXCoord;
+            half _AlphaTransitionMapSecondTextureOffsetYCoord;
+            half _AlphaTransitionMapSecondTextureRotation;
+            half _AlphaTransitionMapSecondTextureRotationCoord;
+            half4 _AlphaTransitionMapSecondTextureRotationOffsets;
+            half _AlphaTransitionMapSecondTextureChannelsX;
+            half _AlphaTransitionMapSecondTextureSliceCount;
+            half _AlphaTransitionProgressSecondTexture;
+            half _AlphaTransitionProgressCoordSecondTexture;
+            half _DissolveSharpnessSecondTexture;
+            half _AlphaTransitionMapRandomRowCoord;
+            half _AlphaTransitionMapRowCount;
+            half _AlphaTransitionMapSecondTextureRandomRowCoord;
+            half _AlphaTransitionMapSecondTextureRowCount;
+            half _ParallaxMapProgress;
+            half _ParallaxMapProgressCoord;
+            half _ParallaxMapOffsetXCoord;
+            half _ParallaxMapOffsetYCoord;
+            half _ParallaxMapChannel;
+            half _ParallaxMapSliceCount;
+            half _ParallaxStrength;
+            half _ParallaxMapRandomRowCoord;
+            half _ParallaxMapRowCount;
 
             struct appdata
             {
                 float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 tangent : TANGENT;
                 float2 uv : TEXCOORD0;
                 float4 customCoord1 : TEXCOORD1;
                 float4 customCoord2 : TEXCOORD2;
@@ -347,8 +432,17 @@ Shader "Nova/Particles/UberUnlit"
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 half baseMapProgress : TEXCOORD1;
-                float4 customCoord1 : TEXCOORD2;
-                float4 customCoord2 : TEXCOORD3;
+                float2 tintUv : TEXCOORD2;
+                half tintMapProgress : TEXCOORD3;
+                float2 flowUv : TEXCOORD4;
+                float3 parallaxUvAndProgress : TEXCOORD5;
+                float4 alphaTransitionUvAndProgress : TEXCOORD6;
+                float3 alphaTransitionSecondUvAndProgress : TEXCOORD7;
+                float4 customCoord1 : TEXCOORD8;
+                float4 customCoord2 : TEXCOORD9;
+                float3 normalWS : TEXCOORD10;
+                float3 viewDirWS : TEXCOORD11;
+                float3 viewDirTS : TEXCOORD12;
                 fixed4 color : COLOR;
             };
 
@@ -358,6 +452,12 @@ Shader "Nova/Particles/UberUnlit"
                 o.vertex = NovaObjectToClipPos(v.vertex);
                 o.customCoord1 = v.customCoord1;
                 o.customCoord2 = v.customCoord2;
+                float3 positionWS = NovaObjectToWorld(v.vertex.xyz);
+                o.normalWS = NovaObjectToWorldNormal(v.normal);
+                o.viewDirWS = NovaWorldSpaceViewDir(positionWS);
+                float3 tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
+                float3 bitangentWS = NovaCreateBitangent(o.normalWS, tangentWS, v.tangent.w);
+                o.viewDirTS = float3(dot(o.viewDirWS, tangentWS), dot(o.viewDirWS, bitangentWS), dot(o.viewDirWS, o.normalWS));
                 half progress = _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2);
                 half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
                 o.baseMapProgress = NovaBaseMapProgress(progress, _BaseMapSliceCount, _BaseMapRowCount, randomValue);
@@ -367,6 +467,106 @@ Shader "Nova/Particles/UberUnlit"
                 o.uv = NovaTransformUV(v.uv, _BaseMap3D_ST);
                 #else
                 o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
+                #endif
+                o.tintUv = v.uv;
+                #if defined(_TINT_MAP_ENABLED) || defined(_TINT_MAP_MODE_2D_ARRAY) || defined(_TINT_MAP_3D_ENABLED)
+                if (_TintMapRotation > 0.0h || _TintMapRotationCoord > 0.0h)
+                {
+                    half tintAngle = _TintMapRotation + NovaGetCustomCoord(_TintMapRotationCoord, v.customCoord1, v.customCoord2);
+                    o.tintUv = NovaRotateUV(o.tintUv, tintAngle * 6.2831853h, _TintMapRotationOffsets.xy);
+                }
+                    #if defined(_TINT_MAP_MODE_2D_ARRAY)
+                    o.tintUv = NovaTransformUV(o.tintUv, _TintMap2DArray_ST);
+                    #elif defined(_TINT_MAP_3D_ENABLED)
+                    o.tintUv = NovaTransformUV(o.tintUv, _TintMap3D_ST);
+                    #else
+                    o.tintUv = NovaTransformUV(o.tintUv, _TintMap_ST);
+                    #endif
+                o.tintUv.x += NovaGetCustomCoord(_TintMapOffsetXCoord, v.customCoord1, v.customCoord2);
+                o.tintUv.y += NovaGetCustomCoord(_TintMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                #endif
+                half tintProgress2DArray = _TintMapProgress + NovaGetCustomCoord(_TintMapProgressCoord, v.customCoord1, v.customCoord2);
+                half tintProgress3D = _TintMap3DProgress + NovaGetCustomCoord(_TintMap3DProgressCoord, v.customCoord1, v.customCoord2);
+                half tintRandomValue = NovaGetCustomCoord(_TintMapRandomRowCoord, v.customCoord1, v.customCoord2);
+                o.tintMapProgress = NovaTintMapProgress(tintProgress2DArray, tintProgress3D, _TintMapSliceCount, _TintMapRowCount, tintRandomValue);
+                o.flowUv = v.uv;
+                #if defined(_FLOW_MAP_ENABLED) || defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
+                if (_FlowMapRotation > 0.0h || _FlowMapRotationCoord > 0.0h)
+                {
+                    half flowAngle = _FlowMapRotation + NovaGetCustomCoord(_FlowMapRotationCoord, v.customCoord1, v.customCoord2);
+                    o.flowUv = NovaRotateUV(o.flowUv, flowAngle * 6.2831853h, _FlowMapRotationOffsets.xy);
+                }
+                o.flowUv = NovaTransformUV(o.flowUv, _FlowMap_ST);
+                o.flowUv.x += NovaGetCustomCoord(_FlowMapOffsetXCoord, v.customCoord1, v.customCoord2);
+                o.flowUv.y += NovaGetCustomCoord(_FlowMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                #endif
+                o.alphaTransitionUvAndProgress = float4(v.uv, 0.0h, 0.0h);
+                o.alphaTransitionSecondUvAndProgress = float3(v.uv, 0.0h);
+                #if defined(_FADE_TRANSITION_ENABLED) || defined(_DISSOLVE_TRANSITION_ENABLED)
+                float2 alphaTransitionUv = v.uv;
+                if (_AlphaTransitionMapRotation > 0.0h || _AlphaTransitionMapRotationCoord > 0.0h)
+                {
+                    half alphaAngle = _AlphaTransitionMapRotation + NovaGetCustomCoord(_AlphaTransitionMapRotationCoord, v.customCoord1, v.customCoord2);
+                    alphaTransitionUv = NovaRotateUV(alphaTransitionUv, alphaAngle * 6.2831853h, _AlphaTransitionMapRotationOffsets.xy);
+                }
+                    #if defined(_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY)
+                    alphaTransitionUv = NovaTransformUV(alphaTransitionUv, _AlphaTransitionMap2DArray_ST);
+                    #elif defined(_ALPHA_TRANSITION_MAP_MODE_3D)
+                    alphaTransitionUv = NovaTransformUV(alphaTransitionUv, _AlphaTransitionMap3D_ST);
+                    #else
+                    alphaTransitionUv = NovaTransformUV(alphaTransitionUv, _AlphaTransitionMap_ST);
+                    #endif
+                alphaTransitionUv.x += NovaGetCustomCoord(_AlphaTransitionMapOffsetXCoord, v.customCoord1, v.customCoord2);
+                alphaTransitionUv.y += NovaGetCustomCoord(_AlphaTransitionMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                half alphaMapProgress = _AlphaTransitionMapProgress + NovaGetCustomCoord(_AlphaTransitionMapProgressCoord, v.customCoord1, v.customCoord2);
+                half alphaRandomValue = NovaGetCustomCoord(_AlphaTransitionMapRandomRowCoord, v.customCoord1, v.customCoord2);
+                o.alphaTransitionUvAndProgress = float4(alphaTransitionUv, NovaAlphaTransitionMapProgress(alphaMapProgress, _AlphaTransitionMapSliceCount, _AlphaTransitionMapRowCount, alphaRandomValue), 0.0h);
+                    #if defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE) || defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY)
+                    float2 alphaTransitionSecondUv = v.uv;
+                    if (_AlphaTransitionMapSecondTextureRotation > 0.0h || _AlphaTransitionMapSecondTextureRotationCoord > 0.0h)
+                    {
+                        half alphaSecondAngle = _AlphaTransitionMapSecondTextureRotation + NovaGetCustomCoord(_AlphaTransitionMapSecondTextureRotationCoord, v.customCoord1, v.customCoord2);
+                        alphaTransitionSecondUv = NovaRotateUV(alphaTransitionSecondUv, alphaSecondAngle * 6.2831853h, _AlphaTransitionMapSecondTextureRotationOffsets.xy);
+                    }
+                        #if defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY)
+                        alphaTransitionSecondUv = NovaTransformUV(alphaTransitionSecondUv, _AlphaTransitionMapSecondTexture2DArray_ST);
+                        #elif defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D)
+                        alphaTransitionSecondUv = NovaTransformUV(alphaTransitionSecondUv, _AlphaTransitionMapSecondTexture3D_ST);
+                        #else
+                        alphaTransitionSecondUv = NovaTransformUV(alphaTransitionSecondUv, _AlphaTransitionMapSecondTexture_ST);
+                        #endif
+                    alphaTransitionSecondUv.x += NovaGetCustomCoord(_AlphaTransitionMapSecondTextureOffsetXCoord, v.customCoord1, v.customCoord2);
+                    alphaTransitionSecondUv.y += NovaGetCustomCoord(_AlphaTransitionMapSecondTextureOffsetYCoord, v.customCoord1, v.customCoord2);
+                    half alphaSecondMapProgress = _AlphaTransitionMapSecondTextureProgress + NovaGetCustomCoord(_AlphaTransitionMapSecondTextureProgressCoord, v.customCoord1, v.customCoord2);
+                    half alphaSecondRandomValue = NovaGetCustomCoord(_AlphaTransitionMapSecondTextureRandomRowCoord, v.customCoord1, v.customCoord2);
+                    o.alphaTransitionSecondUvAndProgress = float3(alphaTransitionSecondUv, NovaAlphaTransitionSecondMapProgress(alphaSecondMapProgress, _AlphaTransitionMapSecondTextureSliceCount, _AlphaTransitionMapSecondTextureRowCount, alphaSecondRandomValue));
+                    #endif
+                #endif
+                o.parallaxUvAndProgress = float3(v.uv, 0.0h);
+                #if defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT)
+                    #if defined(_PARALLAX_MAP_MODE_2D_ARRAY)
+                    o.parallaxUvAndProgress.xy = NovaTransformUV(v.uv, _ParallaxMap2DArray_ST);
+                    #elif defined(_PARALLAX_MAP_MODE_3D)
+                    o.parallaxUvAndProgress.xy = NovaTransformUV(v.uv, _ParallaxMap3D_ST);
+                    #else
+                    o.parallaxUvAndProgress.xy = NovaTransformUV(v.uv, _ParallaxMap_ST);
+                    #endif
+                o.parallaxUvAndProgress.x += NovaGetCustomCoord(_ParallaxMapOffsetXCoord, v.customCoord1, v.customCoord2);
+                o.parallaxUvAndProgress.y += NovaGetCustomCoord(_ParallaxMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                half parallaxProgress = _ParallaxMapProgress + NovaGetCustomCoord(_ParallaxMapProgressCoord, v.customCoord1, v.customCoord2);
+                    #if defined(_PARALLAX_MAP_MODE_2D_ARRAY)
+                        #if defined(_PARALLAX_MAP_RANDOM_ROW_SELECTION_ENABLED)
+                        o.parallaxUvAndProgress.z = NovaFlipBookProgressWithRandomRow(parallaxProgress, _ParallaxMapSliceCount, _ParallaxMapRowCount, NovaGetCustomCoord(_ParallaxMapRandomRowCoord, v.customCoord1, v.customCoord2));
+                        #else
+                        o.parallaxUvAndProgress.z = NovaFlipBookProgress(parallaxProgress, _ParallaxMapSliceCount);
+                        #endif
+                    #elif defined(_PARALLAX_MAP_MODE_3D)
+                        #if defined(_PARALLAX_MAP_RANDOM_ROW_SELECTION_ENABLED)
+                        o.parallaxUvAndProgress.z = NovaFlipBookBlendingProgressWithRandomRow(parallaxProgress, _ParallaxMapSliceCount, _ParallaxMapRowCount, NovaGetCustomCoord(_ParallaxMapRandomRowCoord, v.customCoord1, v.customCoord2));
+                        #else
+                        o.parallaxUvAndProgress.z = NovaFlipBookBlendingProgress(parallaxProgress, _ParallaxMapSliceCount);
+                        #endif
+                    #endif
                 #endif
                 o.color = v.color;
                 return o;
@@ -384,9 +584,93 @@ Shader "Nova/Particles/UberUnlit"
                 #endif
             }
 
+            half4 SampleTintMap(float2 uv, half progress)
+            {
+                #if defined(_TINT_MAP_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_TintMap2DArray, uv, progress);
+                #elif defined(_TINT_MAP_3D_ENABLED)
+                return NOVA_SAMPLE_TEX3D_LOD(_TintMap3D, float3(uv, progress), 0.0);
+                #elif defined(_TINT_MAP_ENABLED)
+                return NOVA_SAMPLE_TEX2D(_TintMap, uv);
+                #else
+                return half4(1.0h, 1.0h, 1.0h, 1.0h);
+                #endif
+            }
+
+            half4 SampleAlphaTransitionMap(float2 uv, half progress)
+            {
+                #if defined(_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_AlphaTransitionMap2DArray, uv, progress);
+                #elif defined(_ALPHA_TRANSITION_MAP_MODE_3D)
+                return NOVA_SAMPLE_TEX3D_LOD(_AlphaTransitionMap3D, float3(uv, progress), 0.0);
+                #elif defined(_ALPHA_TRANSITION_MAP_MODE_2D)
+                return NOVA_SAMPLE_TEX2D(_AlphaTransitionMap, uv);
+                #else
+                return half4(0.0h, 0.0h, 0.0h, 1.0h);
+                #endif
+            }
+
+            half4 SampleAlphaTransitionSecondMap(float2 uv, half progress)
+            {
+                #if defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_AlphaTransitionMapSecondTexture2DArray, uv, progress);
+                #elif defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D)
+                return NOVA_SAMPLE_TEX3D_LOD(_AlphaTransitionMapSecondTexture3D, float3(uv, progress), 0.0);
+                #elif defined(_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D)
+                return NOVA_SAMPLE_TEX2D(_AlphaTransitionMapSecondTexture, uv);
+                #else
+                return half4(0.0h, 0.0h, 0.0h, 1.0h);
+                #endif
+            }
+
+            half4 SampleParallaxMap(float2 uv, half progress)
+            {
+                #if defined(_PARALLAX_MAP_MODE_2D_ARRAY)
+                return NOVA_SAMPLE_TEX2D_ARRAY(_ParallaxMap2DArray, uv, progress);
+                #elif defined(_PARALLAX_MAP_MODE_3D)
+                return NOVA_SAMPLE_TEX3D_LOD(_ParallaxMap3D, float3(uv, progress), 0.0);
+                #elif defined(_PARALLAX_MAP_MODE_2D)
+                return NOVA_SAMPLE_TEX2D(_ParallaxMap, uv);
+                #else
+                return half4(0.0h, 0.0h, 0.0h, 1.0h);
+                #endif
+            }
+
             fixed4 frag(v2f i) : SV_Target
             {
-                half4 color = SampleBaseMap(i.uv, i.baseMapProgress);
+                float2 baseUv = i.uv;
+                float2 tintUv = i.tintUv;
+                float2 alphaTransitionUv = i.alphaTransitionUvAndProgress.xy;
+                float2 alphaTransitionSecondUv = i.alphaTransitionSecondUvAndProgress.xy;
+
+                #if defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_TINT) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
+                half flowIntensity = _FlowIntensity + NovaGetCustomCoord(_FlowIntensityCoord, i.customCoord1, i.customCoord2);
+                half2 flowOffset = NovaFlowMapUvOffset(NOVA_SAMPLE_TEX2D(_FlowMap, i.flowUv), _FlowMapChannelsX, _FlowMapChannelsY, flowIntensity);
+                    #if defined(_FLOW_MAP_TARGET_BASE)
+                    baseUv += flowOffset;
+                    #endif
+                    #if defined(_FLOW_MAP_TARGET_TINT)
+                    tintUv += flowOffset;
+                    #endif
+                    #if defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
+                    alphaTransitionUv += flowOffset;
+                    alphaTransitionSecondUv += flowOffset;
+                    #endif
+                #endif
+
+                #if defined(_PARALLAX_MAP_MODE_2D) && (defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT))
+                half4 parallaxMap = SampleParallaxMap(i.parallaxUvAndProgress.xy, i.parallaxUvAndProgress.z);
+                half parallaxHeight = NovaSelectChannel(parallaxMap, _ParallaxMapChannel);
+                half2 parallaxOffset = NovaParallaxOffset(parallaxHeight, _ParallaxStrength, i.viewDirTS);
+                    #if defined(_PARALLAX_MAP_TARGET_BASE)
+                    baseUv += parallaxOffset;
+                    #endif
+                    #if defined(_PARALLAX_MAP_TARGET_TINT)
+                    tintUv += parallaxOffset;
+                    #endif
+                #endif
+
+                half4 color = SampleBaseMap(baseUv, i.baseMapProgress);
                 NovaApplyBaseMapChannel(color, _BaseMapChannel);
                 NovaApplyBaseMapTone(
                     color,
@@ -402,8 +686,52 @@ Shader "Nova/Particles/UberUnlit"
                     _BaseMapToneDarktones + NovaGetCustomCoord(_BaseMapToneDarktonesCoord, i.customCoord1, i.customCoord2),
                     _BaseMapToneBrights + NovaGetCustomCoord(_BaseMapToneBrightsCoord, i.customCoord1, i.customCoord2));
 
-                #if defined(_TINT_AREA_ALL) && defined(_TINT_COLOR_ENABLED)
-                color *= _TintColor;
+                #if defined(_TINT_AREA_ALL) || defined(_TINT_AREA_RIM)
+                half tintBlendRate = _TintBlendRate + NovaGetCustomCoord(_TintBlendRateCoord, i.customCoord1, i.customCoord2);
+                    #if defined(_TINT_AREA_RIM)
+                    half3 normalWS = NovaSafeNormalize(i.normalWS);
+                    half3 viewDirWS = NovaSafeNormalize(i.viewDirWS);
+                    half rim = 1.0h - abs(dot(normalWS, viewDirWS));
+                    half tintRim = NovaRimValue(
+                        rim,
+                        _TintRimProgress + NovaGetCustomCoord(_TintRimProgressCoord, i.customCoord1, i.customCoord2),
+                        _TintRimSharpness + NovaGetCustomCoord(_TintRimSharpnessCoord, i.customCoord1, i.customCoord2),
+                        _InverseTintRim);
+                    tintBlendRate *= _TintBlendRate * tintRim;
+                    #endif
+                    #if defined(_TINT_COLOR_ENABLED)
+                    NovaApplyTintColor(color, _TintColor, tintBlendRate);
+                    #elif defined(_TINT_MAP_ENABLED) || defined(_TINT_MAP_MODE_2D_ARRAY) || defined(_TINT_MAP_3D_ENABLED)
+                    NovaApplyTintColor(color, SampleTintMap(tintUv, i.tintMapProgress), tintBlendRate);
+                    #endif
+                #endif
+
+                #if defined(_GREYSCALE_ENABLED)
+                half luminance = NovaLuminance(color.rgb);
+                color.rgb = half3(luminance, luminance, luminance);
+                #elif defined(_GRADIENT_MAP_ENABLED)
+                color.rgb = NOVA_SAMPLE_TEX2D(_GradientMap, half2(NovaLuminance(color.rgb), 0.5h)).rgb;
+                #endif
+
+                #if defined(_FADE_TRANSITION_ENABLED) || defined(_DISSOLVE_TRANSITION_ENABLED)
+                half alphaTransitionProgress = _AlphaTransitionProgress + NovaGetCustomCoord(_AlphaTransitionProgressCoord, i.customCoord1, i.customCoord2);
+                NovaModulateAlphaTransitionProgress(alphaTransitionProgress, i.color.a);
+                half transitionAlpha = NovaAlphaTransitionFactor(
+                    SampleAlphaTransitionMap(alphaTransitionUv, i.alphaTransitionUvAndProgress.z),
+                    _AlphaTransitionMapChannelsX,
+                    alphaTransitionProgress,
+                    _DissolveSharpness);
+                    #if defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE) || defined(_ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY)
+                    half alphaTransitionProgressSecond = _AlphaTransitionProgressSecondTexture + NovaGetCustomCoord(_AlphaTransitionProgressCoordSecondTexture, i.customCoord1, i.customCoord2);
+                    NovaModulateAlphaTransitionProgress(alphaTransitionProgressSecond, i.color.a);
+                    half transitionAlphaSecond = NovaAlphaTransitionFactor(
+                        SampleAlphaTransitionSecondMap(alphaTransitionSecondUv, i.alphaTransitionSecondUvAndProgress.z),
+                        _AlphaTransitionMapSecondTextureChannelsX,
+                        alphaTransitionProgressSecond,
+                        _DissolveSharpnessSecondTexture);
+                    transitionAlpha = NovaBlendAlphaTransitionFactors(transitionAlpha, transitionAlphaSecond);
+                    #endif
+                color.a *= transitionAlpha;
                 #endif
 
                 #if defined(_VERTEX_ALPHA_AS_TRANSITION_PROGRESS)
