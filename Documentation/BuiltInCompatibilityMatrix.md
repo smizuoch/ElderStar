@@ -335,3 +335,29 @@ Phase 4.3B compatibility annotations:
 - Emission color from base color is applied after base/tint/color-correction and vertex color, matching the original `fragUnlit` call order before alpha clip and alpha modulation.
 - Random row selection tests use mesh UV channels to represent custom coordinates and do not claim full Particle System Custom Vertex Streams parity.
 - The following `Nova/Particles/UberUnlit` features remain Pending: rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.4A Verification Status
+
+Phase 4.4A expands only `Nova/Particles/UberUnlit` rim and luminance transparency behavior on the Built-in `ForwardBase` path. It does not implement soft particles, depth fade, vertex deformation, additional passes, UI shaders, Lit shaders, distortion runtime, optimizer behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Rim transparency | Passed | Passed | `_TRANSPARENCY_BY_RIM` multiplies final alpha using the original progress/sharpness shaping after emission and before alpha test/modulation. The rim input uses the Built-in world normal/view direction approximation. |
+| Inverse rim transparency | Passed | Passed | `_InverseRimTransparency` flips the rim input before shaping, matching the original helper semantics. |
+| Rim transparency progress and sharpness | Passed | Passed | `_RimTransparencyProgress`, `_RimTransparencyProgressCoord`, `_RimTransparencySharpness`, and `_RimTransparencySharpnessCoord` are applied through the same shaping helper used by the original shader. |
+| Luminance transparency | Passed | Passed | `_TRANSPARENCY_BY_LUMINANCE` derives luminance from the current RGB after base, tint, color correction, vertex color, and emission, then multiplies final alpha. |
+| Inverse luminance transparency | Passed | Passed | `_InverseLuminanceTransparency` flips luminance before shaping, matching the original helper semantics. |
+| Luminance transparency progress and sharpness | Passed | Passed | `_LuminanceTransparencyProgress`, `_LuminanceTransparencyProgressCoord`, `_LuminanceTransparencySharpness`, and `_LuminanceTransparencySharpnessCoord` are applied through the same shaping helper as rim transparency. |
+| Combined rim and luminance transparency | Passed | Passed | When both transparency keywords are enabled, both alpha factors are applied multiplicatively in original-compatible order. |
+| Interaction with previous features | Passed | Passed | Existing base map, tint, alpha transition, and emission smokes remain green; an added smoke combines luminance transparency with base/tint/alpha-transition/emission output. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes `_TRANSPARENCY_BY_RIM`, `_TRANSPARENCY_BY_LUMINANCE`, and both keywords enabled together. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UberUnlitRimTransparencyAffectsOutput`, `UberUnlitInverseRimTransparencyInvertsEffect`, `UberUnlitRimTransparencyProgressAffectsOutput`, `UberUnlitRimTransparencySharpnessAffectsFalloff`, `UberUnlitLuminanceTransparencyAffectsOutput`, `UberUnlitInverseLuminanceTransparencyInvertsEffect`, `UberUnlitLuminanceTransparencyProgressAffectsOutput`, `UberUnlitLuminanceTransparencySharpnessAffectsOutput`, and `UberUnlitRimAndLuminanceTransparencyCanCombine`. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans Built-in runtime/editor/package files and excludes the untracked `NovaShader/` reference directory. |
+
+Phase 4.4A compatibility annotations:
+
+- Rim transparency, inverse rim transparency, rim progress/sharpness, luminance transparency, inverse luminance transparency, luminance progress/sharpness, and combined rim plus luminance transparency are implemented for `Nova/Particles/UberUnlit` Built-in `ForwardBase`.
+- Rim transparency is Approximate because Built-in world normal/view direction interpolation differs from the original URP helper path. The implementation preserves the original alpha-factor math but does not claim pixel-perfect rim parity.
+- Luminance transparency is implemented with the original call order: after base/tint/color-correction, vertex color, and emission, and before alpha test and alpha modulation.
+- Combined rim plus luminance transparency applies both alpha multipliers; it does not replace alpha transition or keep-edge transparency behavior.
+- The following `Nova/Particles/UberUnlit` features remain Pending: soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.

@@ -426,6 +426,16 @@ Shader "Nova/Particles/UberUnlit"
             half _KeepEdgeTransparency;
             half _EmissionMapRandomRowCoord;
             half _EmissionMapRowCount;
+            half _RimTransparencyProgress;
+            half _RimTransparencyProgressCoord;
+            half _RimTransparencySharpness;
+            half _RimTransparencySharpnessCoord;
+            half _InverseRimTransparency;
+            half _LuminanceTransparencyProgress;
+            half _LuminanceTransparencyProgressCoord;
+            half _LuminanceTransparencySharpness;
+            half _LuminanceTransparencySharpnessCoord;
+            half _InverseLuminanceTransparency;
             half _ParallaxMapProgress;
             half _ParallaxMapProgressCoord;
             half _ParallaxMapOffsetXCoord;
@@ -838,6 +848,26 @@ Shader "Nova/Particles/UberUnlit"
                 #if defined(_EMISSION_AREA_ALL) || defined(_EMISSION_AREA_MAP) || defined(_EMISSION_AREA_ALPHA)
                 half emissionIntensity = _EmissionIntensity + NovaGetCustomCoord(_EmissionIntensityCoord, i.customCoord1, i.customCoord2);
                 ApplyEmissionColor(color, SampleEmissionMap(emissionUv, i.emissionUvAndProgress.z), emissionIntensity);
+                #endif
+
+                #if defined(_TRANSPARENCY_BY_RIM)
+                half3 transparencyNormalWS = NovaSafeNormalize(i.normalWS);
+                half3 transparencyViewDirWS = NovaSafeNormalize(i.viewDirWS);
+                half rimDot = abs(dot(transparencyNormalWS, transparencyViewDirWS));
+                NovaApplyRimTransparency(
+                    color,
+                    rimDot,
+                    _RimTransparencyProgress + NovaGetCustomCoord(_RimTransparencyProgressCoord, i.customCoord1, i.customCoord2),
+                    _RimTransparencySharpness + NovaGetCustomCoord(_RimTransparencySharpnessCoord, i.customCoord1, i.customCoord2),
+                    _InverseRimTransparency);
+                #endif
+
+                #if defined(_TRANSPARENCY_BY_LUMINANCE)
+                NovaApplyLuminanceTransparency(
+                    color,
+                    _LuminanceTransparencyProgress + NovaGetCustomCoord(_LuminanceTransparencyProgressCoord, i.customCoord1, i.customCoord2),
+                    _LuminanceTransparencySharpness + NovaGetCustomCoord(_LuminanceTransparencySharpnessCoord, i.customCoord1, i.customCoord2),
+                    _InverseLuminanceTransparency);
                 #endif
 
                 #ifdef _ALPHATEST_ENABLED

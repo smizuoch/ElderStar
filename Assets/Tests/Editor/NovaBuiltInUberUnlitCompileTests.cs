@@ -329,6 +329,16 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         flowEmission.SetFloat("_EmissionMapMode", 0);
         flowEmission.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
 
+        var rimTransparency = new Material(shader);
+        rimTransparency.SetFloat("_RimTransparencyEnabled", 1);
+
+        var luminanceTransparency = new Material(shader);
+        luminanceTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var combinedTransparency = new Material(shader);
+        combinedTransparency.SetFloat("_RimTransparencyEnabled", 1);
+        combinedTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
@@ -405,6 +415,9 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             emissionMap3D,
             emissionMapRandomRow,
             flowEmission,
+            rimTransparency,
+            luminanceTransparency,
+            combinedTransparency,
             vertexColor,
             baseMap2DArray,
             baseMap3D,
