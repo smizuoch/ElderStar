@@ -196,3 +196,26 @@ Phase 3 compatibility annotations:
 - Depth helpers require a camera depth texture when future feature passes consume soft particles or depth fade.
 - Texture array and 3D texture helpers are smoke-compiled, but platform-specific visual behavior and feature math are still unverified.
 - Shadow and lighting helpers are intentionally minimal Built-in surfaces for later passes, not original lighting or shadow parity.
+
+## Phase 4.1 Verification Status
+
+Phase 4.1 begins `Nova/Particles/UberUnlit` only. It replaces the fake forward color output with a minimal Built-in `ForwardBase` unlit path. This phase does not complete the full UberUnlit feature set, UI shaders, Lit shaders, distortion, optimizer/replacer behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| `Nova/Particles/UberUnlit` forward pass | Passed | Passed | Primary pass uses Built-in `ForwardBase`, local Built-in includes, object-to-clip transform, UV0, vertex color, `_BaseMap` 2D sampling, material blend/depth/cull/z-test properties, and preserved `CustomEditor`. |
+| Base map 2D smoke | Passed | Passed | PlayMode render-to-texture smoke verifies a solid `_BaseMap` 2D texture affects the center pixel. 2D array and 3D base-map modes remain pending. |
+| Tint color smoke | Passed | Passed | PlayMode smoke uses the material setup path to enable `_TINT_AREA_ALL` and `_TINT_COLOR_ENABLED`, then verifies `_TintColor` changes output. Tint maps, tint rim, tint flip-book modes, and tint flow/parallax targets remain pending. |
+| Vertex color smoke | Passed | Passed | PlayMode smoke verifies mesh vertex color multiplies the minimal forward output. `_VERTEX_ALPHA_AS_TRANSITION_PROGRESS` is preserved as a compile surface only in this phase. |
+| Alpha test smoke | Passed | Passed | PlayMode smoke verifies `_ALPHATEST_ENABLED` clips below `_Cutoff`. Fade/dissolve alpha transitions and second transition textures remain pending. |
+| Render state regression | Passed | Passed | Phase 2 material setup tests remain green for `_RenderType`, `_TransparentBlendMode`, `_Cull`, `_QueueOffset`, `_BlendSrc`, `_BlendDst`, `_ZWrite`, `_ZWriteOverride`, and `_ZTest`. |
+| Shader compiler diagnostics | Passed | Passed | Representative default, base 2D, alpha test, alpha modulate, tint color, and vertex color material states have no blocking shader compiler diagnostics. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans `Assets/Nova/Runtime`, `Assets/Nova/Editor`, `Assets/Nova/package.json`, and `Packages/manifest.json`; it excludes the untracked `NovaShader/` reference directory. |
+
+Phase 4.1 compatibility annotations:
+
+- `Nova/Particles/UberUnlit` base 2D forward rendering is now implemented for the minimal unlit path only.
+- The implemented tint path is limited to `_TINT_AREA_ALL` with `_TINT_COLOR_ENABLED`, matching the original material setup combination for single tint color. Rim tint and tint texture modes are still Pending.
+- Vertex color multiplication is implemented for the default path. Vertex alpha as transition progress remains a preserved keyword surface until alpha transition support is ported.
+- Alpha clipping is implemented for `_ALPHATEST_ENABLED` and `_Cutoff`; alpha transition, dissolve, luminance/rim transparency, soft particles, and depth fade remain Pending.
+- The following `Nova/Particles/UberUnlit` features remain Pending: base map 2D array, base map 3D, random row selection, channel extraction, tritone/pentone, flow map, parallax map, greyscale/gradient map, fade/dissolve alpha transition, second alpha transition texture, emission, rim transparency, luminance transparency, soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
