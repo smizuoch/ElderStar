@@ -258,6 +258,20 @@ half NovaRimValue(half rim, half progress, half sharpness, half inverse)
     return smoothstep(start, end, rim);
 }
 
+void NovaApplyRimTransparency(inout half4 color, half rimDot, half progress, half sharpness, half inverse)
+{
+    #ifdef _TRANSPARENCY_BY_RIM
+    color.a *= NovaRimValue(rimDot, progress, sharpness, inverse);
+    #endif
+}
+
+void NovaApplyLuminanceTransparency(inout half4 color, half progress, half sharpness, half inverse)
+{
+    #ifdef _TRANSPARENCY_BY_LUMINANCE
+    color.a *= NovaRimValue(NovaLuminance(color.rgb), progress, sharpness, inverse);
+    #endif
+}
+
 void NovaApplyTintColor(inout half4 color, half4 tintColor, half blendRate)
 {
     color *= lerp(half4(1.0h, 1.0h, 1.0h, 1.0h), tintColor, saturate(blendRate));

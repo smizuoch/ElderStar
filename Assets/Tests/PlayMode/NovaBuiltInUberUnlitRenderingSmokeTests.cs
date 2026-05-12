@@ -845,6 +845,123 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         Assert.That(color.g, Is.GreaterThan(color.r + 0.12f), color.ToString());
     }
 
+    [Test]
+    public void UberUnlitRimTransparencyAffectsOutput()
+    {
+        var disabled = RenderRimTransparency(false, inverse: false, progress: 0.5f, sharpness: 0.5f, Vector3.right);
+        var enabled = RenderRimTransparency(true, inverse: false, progress: 0.5f, sharpness: 0.5f, Vector3.right);
+
+        Assert.That(disabled.r, Is.GreaterThan(enabled.r + 0.25f), $"Disabled {disabled}, enabled {enabled}");
+    }
+
+    [Test]
+    public void UberUnlitInverseRimTransparencyInvertsEffect()
+    {
+        var normal = RenderRimTransparency(true, inverse: false, progress: 0.5f, sharpness: 0.5f, Vector3.right);
+        var inverse = RenderRimTransparency(true, inverse: true, progress: 0.5f, sharpness: 0.5f, Vector3.right);
+
+        Assert.That(inverse.r, Is.GreaterThan(normal.r + 0.25f), $"Normal {normal}, inverse {inverse}");
+    }
+
+    [Test]
+    public void UberUnlitRimTransparencyProgressAffectsOutput()
+    {
+        var normal = new Vector3(0.866f, 0f, -0.5f).normalized;
+        var lowProgress = RenderRimTransparency(true, inverse: false, progress: 0.2f, sharpness: 0.5f, normal);
+        var highProgress = RenderRimTransparency(true, inverse: false, progress: 0.8f, sharpness: 0.5f, normal);
+
+        Assert.That(lowProgress.r, Is.GreaterThan(highProgress.r + 0.20f), $"Low {lowProgress}, high {highProgress}");
+    }
+
+    [Test]
+    public void UberUnlitRimTransparencySharpnessAffectsFalloff()
+    {
+        var normal = new Vector3(0.848f, 0f, -0.53f).normalized;
+        var soft = RenderRimTransparency(true, inverse: false, progress: 0.5f, sharpness: 0f, normal);
+        var sharp = RenderRimTransparency(true, inverse: false, progress: 0.5f, sharpness: 0.95f, normal);
+
+        Assert.That(sharp.r, Is.GreaterThan(soft.r + 0.10f), $"Soft {soft}, sharp {sharp}");
+    }
+
+    [Test]
+    public void UberUnlitLuminanceTransparencyAffectsOutput()
+    {
+        var samples = RenderLuminanceTransparencySamples(inverse: false, progress: 0.5f, sharpness: 0.5f);
+
+        Assert.That(samples[1].r, Is.GreaterThan(samples[0].r + 0.30f), $"Dark {samples[0]}, bright {samples[1]}");
+    }
+
+    [Test]
+    public void UberUnlitInverseLuminanceTransparencyInvertsEffect()
+    {
+        var samples = RenderLuminanceTransparencySamples(inverse: true, progress: 0.5f, sharpness: 0.5f);
+
+        Assert.That(samples[0].r, Is.GreaterThan(samples[1].r + 0.12f), $"Dark {samples[0]}, bright {samples[1]}");
+    }
+
+    [Test]
+    public void UberUnlitLuminanceTransparencyProgressAffectsOutput()
+    {
+        var lowProgress = RenderLuminanceTransparency(new Color(0.5f, 0.5f, 0.5f, 1f), inverse: false, progress: 0.2f, sharpness: 0.5f);
+        var highProgress = RenderLuminanceTransparency(new Color(0.5f, 0.5f, 0.5f, 1f), inverse: false, progress: 0.8f, sharpness: 0.5f);
+
+        Assert.That(lowProgress.r, Is.GreaterThan(highProgress.r + 0.20f), $"Low {lowProgress}, high {highProgress}");
+    }
+
+    [Test]
+    public void UberUnlitLuminanceTransparencySharpnessAffectsOutput()
+    {
+        var soft = RenderLuminanceTransparency(new Color(0.53f, 0.53f, 0.53f, 1f), inverse: false, progress: 0.5f, sharpness: 0f);
+        var sharp = RenderLuminanceTransparency(new Color(0.53f, 0.53f, 0.53f, 1f), inverse: false, progress: 0.5f, sharpness: 0.95f);
+
+        Assert.That(sharp.r, Is.GreaterThan(soft.r + 0.08f), $"Soft {soft}, sharp {sharp}");
+    }
+
+    [Test]
+    public void UberUnlitRimAndLuminanceTransparencyCanCombine()
+    {
+        var normal = new Vector3(0.866f, 0f, -0.5f).normalized;
+        var disabled = RenderCombinedTransparency(rim: false, luminance: false, normal);
+        var rimOnly = RenderCombinedTransparency(rim: true, luminance: false, normal);
+        var luminanceOnly = RenderCombinedTransparency(rim: false, luminance: true, normal);
+        var combined = RenderCombinedTransparency(rim: true, luminance: true, normal);
+
+        Assert.That(disabled.r, Is.GreaterThan(combined.r + 0.15f), $"Disabled {disabled}, combined {combined}");
+        Assert.That(rimOnly.r, Is.GreaterThan(combined.r + 0.08f), $"Rim {rimOnly}, combined {combined}");
+        Assert.That(luminanceOnly.r, Is.GreaterThan(combined.r + 0.08f), $"Luminance {luminanceOnly}, combined {combined}");
+    }
+
+    [Test]
+    public void UberUnlitTransparencyKeepsBaseTintAlphaTransitionAndEmissionUsable()
+    {
+        var transitionTexture = CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f));
+        var color = RenderUberUnlit(
+            material =>
+            {
+                ConfigureAlphaTransition(material, 2, 0.45f, 0, m =>
+                {
+                    m.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.35f, 0.35f, 0.35f, 1f)));
+                    m.SetTexture("_AlphaTransitionMap", transitionTexture);
+                    m.SetFloat("_TintAreaMode", 1);
+                    m.SetFloat("_TintColorMode", 0);
+                    m.SetColor("_TintColor", new Color(0.2f, 0.9f, 0.2f, 1f));
+                    m.SetFloat("_EmissionAreaType", 1);
+                    m.SetFloat("_EmissionColorType", 0);
+                    m.SetColor("_EmissionColor", new Color(0f, 0.4f, 0f, 1f));
+                    m.SetFloat("_EmissionIntensity", 0.8f);
+                    m.SetFloat("_LuminanceTransparencyEnabled", 1f);
+                    m.SetFloat("_LuminanceTransparencyProgress", 0.2f);
+                    m.SetFloat("_LuminanceTransparencySharpness", 0.5f);
+                });
+            },
+            background: Color.black,
+            ownedObjects: new UnityEngine.Object[] { transitionTexture });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.15f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.15f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(0.18f), color.ToString());
+    }
+
     private static Color RenderUberUnlit(
         Color baseMapColor,
         Color tintColor,
@@ -1026,6 +1143,85 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         }
     }
 
+    private static Color RenderRimTransparency(bool enabled, bool inverse, float progress, float sharpness, Vector3 normal)
+    {
+        return RenderUberUnlit(
+            material =>
+            {
+                material.SetFloat("_RenderType", 2);
+                material.SetFloat("_TransparentBlendMode", 0);
+                material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_RimTransparencyEnabled", enabled ? 1f : 0f);
+                material.SetFloat("_InverseRimTransparency", inverse ? 1f : 0f);
+                material.SetFloat("_RimTransparencyProgress", progress);
+                material.SetFloat("_RimTransparencySharpness", sharpness);
+            },
+            mesh: CreateQuad(Color.white, normal: normal),
+            background: Color.black);
+    }
+
+    private static Color[] RenderLuminanceTransparencySamples(bool inverse, float progress, float sharpness)
+    {
+        var texture = CreateHorizontalSplitTexture(
+            new Color(0.35f, 0.35f, 0.35f, 1f),
+            Color.white,
+            rightColorStartX: TextureSize / 2);
+
+        return RenderUberUnlitSamples(
+            material =>
+            {
+                material.SetFloat("_RenderType", 2);
+                material.SetFloat("_TransparentBlendMode", 0);
+                material.SetTexture("_BaseMap", texture);
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_LuminanceTransparencyEnabled", 1f);
+                material.SetFloat("_InverseLuminanceTransparency", inverse ? 1f : 0f);
+                material.SetFloat("_LuminanceTransparencyProgress", progress);
+                material.SetFloat("_LuminanceTransparencySharpness", sharpness);
+            },
+            new[] { new Vector2(0.25f, 0.5f), new Vector2(0.75f, 0.5f) },
+            background: Color.black,
+            ownedObjects: new UnityEngine.Object[] { texture });
+    }
+
+    private static Color RenderLuminanceTransparency(Color baseColor, bool inverse, float progress, float sharpness)
+    {
+        return RenderUberUnlit(
+            material =>
+            {
+                material.SetFloat("_RenderType", 2);
+                material.SetFloat("_TransparentBlendMode", 0);
+                material.SetTexture("_BaseMap", CreateSolidTexture(baseColor));
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_LuminanceTransparencyEnabled", 1f);
+                material.SetFloat("_InverseLuminanceTransparency", inverse ? 1f : 0f);
+                material.SetFloat("_LuminanceTransparencyProgress", progress);
+                material.SetFloat("_LuminanceTransparencySharpness", sharpness);
+            },
+            background: Color.black);
+    }
+
+    private static Color RenderCombinedTransparency(bool rim, bool luminance, Vector3 normal)
+    {
+        return RenderUberUnlit(
+            material =>
+            {
+                material.SetFloat("_RenderType", 2);
+                material.SetFloat("_TransparentBlendMode", 0);
+                material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)));
+                material.SetFloat("_BaseMapMode", 0);
+                material.SetFloat("_RimTransparencyEnabled", rim ? 1f : 0f);
+                material.SetFloat("_RimTransparencyProgress", 0.5f);
+                material.SetFloat("_RimTransparencySharpness", 0f);
+                material.SetFloat("_LuminanceTransparencyEnabled", luminance ? 1f : 0f);
+                material.SetFloat("_LuminanceTransparencyProgress", 0.5f);
+                material.SetFloat("_LuminanceTransparencySharpness", 0f);
+            },
+            mesh: CreateQuad(Color.white, normal: normal),
+            background: Color.black);
+    }
+
     private static Texture2D CreateSolidTexture(Color color)
     {
         var texture = new Texture2D(TextureSize, TextureSize, TextureFormat.RGBA32, false);
@@ -1088,7 +1284,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         return texture;
     }
 
-    private static Mesh CreateQuad(Color vertexColor, Vector4? customCoord1 = null, Vector4? customCoord2 = null, bool skewForParallax = false)
+    private static Mesh CreateQuad(Color vertexColor, Vector4? customCoord1 = null, Vector4? customCoord2 = null, bool skewForParallax = false, Vector3? normal = null)
     {
         var mesh = new Mesh { name = "NovaBuiltInUberUnlitSmokeQuad" };
         mesh.vertices = new[]
@@ -1108,7 +1304,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         mesh.colors = Enumerable.Repeat(vertexColor, 4).ToArray();
         mesh.SetUVs(1, Enumerable.Repeat(customCoord1 ?? Vector4.zero, 4).ToList());
         mesh.SetUVs(2, Enumerable.Repeat(customCoord2 ?? Vector4.zero, 4).ToList());
-        mesh.normals = Enumerable.Repeat(Vector3.back, 4).ToArray();
+        mesh.normals = Enumerable.Repeat((normal ?? Vector3.back).normalized, 4).ToArray();
         var tangent = skewForParallax ? new Vector4(0.45f, 0f, 0.89f, 1f) : new Vector4(1f, 0f, 0f, 1f);
         mesh.tangents = Enumerable.Repeat(tangent, 4).ToArray();
         mesh.triangles = new[] { 0, 2, 1, 0, 3, 2 };
