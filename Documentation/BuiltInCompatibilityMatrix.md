@@ -141,3 +141,24 @@ Verified on May 12, 2026 with Windows Unity launched from WSL through `Scripts/r
 | Forbidden runtime URP/RenderGraph scan | Passed | Passed | Runtime source and runtime asmdef scan found no `UnityEngine.Rendering.Universal`, `UnityEngine.Rendering.RenderGraphModule`, `com.unity.render-pipelines.universal`, `Unity.RenderPipelines.Universal`, or runtime asmdef `GUID:` references. |
 
 Phase 1.5 does not mark any runtime shader feature complete. It verifies only the package/editor/API surface, shader discovery, property inventory, custom editor type loadability, no runtime URP/RenderGraph references, and import/compiler diagnostics for the fake Built-in shader skeleton.
+
+## Phase 2 Verification Status
+
+Phase 2 preserves shader/material/editor API behavior before replacing the fake shader bodies. It does not implement Built-in rendering, visual parity, distortion runtime, UberUnlit runtime features, Lit runtime features, or UI rendering behavior.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Shader keyword inventory | Passed | Passed | Target shaders declare the audited keyword surface. UI shaders declare `UNITY_UI_CLIP_RECT` and intentionally omit non-UI ShadowCaster-only keywords; UI UberLit also omits `EVALUATE_SH_MIXED` and `EVALUATE_SH_VERTEX`. |
+| Material render state setup | Passed | Passed | Editor-side setup preserves/applies `_RenderType`, `_TransparentBlendMode`, `_Cull`, `_QueueOffset`, `_BlendSrc`, `_BlendDst`, `_ZWrite`, `_ZWriteOverride`, and `_ZTest` for representative opaque, cutout, transparent, additive, and multiply cases. |
+| Feature keyword setup | Passed | Passed | Representative unlit, lit, distortion, and UI material properties toggle the preserved material keywords through the same post-processor path used by the `ShaderGUI` classes. Runtime shader math remains Pending. |
+| Custom editor surface | Passed | Passed | Original `Nova.Editor.Core.Scripts.*GUI` class names remain loadable as `ShaderGUI` types and route validation/assignment through material setup. |
+| Material post-processors | Passed | Passed | Public setup entry points are preserved for distortion, UberUnlit, and UberLit. UI shaders reuse the Uber setup path while preserving stencil and `_ColorMask` properties. |
+| Optimizer/replacer public API surface | Passed | Passed | `OptionalShaderPass`, `OptimizedShaderGenerator.Generate`, `OptimizedShaderReplacer.Replace`, and replacer settings are discoverable only as API-preservation stubs. Generation/replacement behavior remains Pending for the optimizer phase. |
+| Shader import/compiler diagnostics | Passed | Passed | Fake shader bodies still compile after keyword declaration additions. This is not runtime feature completion. |
+
+Phase 2 compatibility annotations:
+
+- Keyword preservation is Exact for the audited public surface, including URP-only compatibility keywords that currently have no Built-in runtime effect.
+- Material setup and post-processor keyword behavior are Exact for the representative editor rules covered by EditMode tests.
+- Optimizer and replacer behavior is still Pending except for public API discovery.
+- Runtime rendering rows above remain Pending/Approximate/Unsupported as previously documented; no visual baseline or runtime shader feature is complete in Phase 2.

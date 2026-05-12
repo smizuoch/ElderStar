@@ -73,6 +73,7 @@ Shader "Nova/Particles/Distortion"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma shader_feature_local _ _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR _DEPTH_FADE_ENABLED _DISSOLVE_TRANSITION_ENABLED _FADE_TRANSITION_ENABLED _FLOW_MAP_ENABLED _FLOW_MAP_TARGET_ALPHA_TRANSITION _FLOW_MAP_TARGET_BASE _SOFT_PARTICLES_ENABLED
             #include "UnityCG.cginc"
 
             struct appdata
