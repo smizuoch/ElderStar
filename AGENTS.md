@@ -14,11 +14,14 @@ The goal is the most complete functional port possible. When exact behavior is i
   - Make the smallest change to pass.
   - Refactor only while tests are green.
 - Do not remove material properties, shader keywords, or public editor APIs unless the porting spec explicitly says so.
+- Preserve original NOVA shader names; do not rename Built-in shaders to a `NovaBuiltIn/...` namespace.
 - Preserve original NOVA material property names whenever possible.
+- Preserve original NOVA custom editor class names and shader `CustomEditor` declarations.
 - Do not silently change golden images.
 - Do not update visual baselines unless explicitly instructed.
+- Use small commits, and commit only while the targeted tests are green.
 - Do not push, merge, rebase, delete branches, or rewrite history without explicit user approval.
-- Do not introduce a runtime dependency on `com.unity.render-pipelines.universal` in the Built-in package.
+- Do not introduce a runtime dependency on `com.unity.render-pipelines.universal`, URP assemblies, or RenderGraph APIs in the Built-in package.
 - Do not treat a compile-only shader as complete. Compile success is only T0/T1.
 
 ## Required workflow
