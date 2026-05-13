@@ -51,6 +51,15 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("NovaApplyBaseMapChannel"));
         Assert.That(shaderText, Does.Contain("NovaApplyBaseMapTone"));
         Assert.That(shaderText, Does.Contain("NovaApplyTintColor"));
+        Assert.That(shaderText, Does.Contain("SampleTintMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_TintMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D_ARRAY(_TintMap2DArray"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX3D_LOD(_TintMap3D"));
+        Assert.That(shaderText, Does.Contain("NovaFlowMapUvOffset"));
+        Assert.That(shaderText, Does.Contain("SampleParallaxMap"));
+        Assert.That(shaderText, Does.Contain("NovaParallaxOffset"));
+        Assert.That(shaderText, Does.Contain("NovaLuminance"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_GradientMap"));
         Assert.That(shaderText, Does.Contain("NovaUIClipAlpha"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(shaderText, Does.Contain("clip("));
@@ -106,6 +115,33 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("_BASE_SAMPLER_STATE_TRILINEAR_MIRROR"));
         Assert.That(shaderText, Does.Contain("NovaApplyBaseMirror"));
         Assert.That(shaderText, Does.Contain("NovaBaseMapProgress"));
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitPhase52BTintFlowParallaxColorKeywordsStayUiScoped()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("_TINT_COLOR_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_TINT_MAP_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_TINT_MAP_MODE_2D_ARRAY"));
+        Assert.That(shaderText, Does.Contain("_TINT_MAP_3D_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_TINT_MAP_RANDOM_ROW_SELECTION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_TINT_AREA_ALL"));
+        Assert.That(shaderText, Does.Contain("_TINT_AREA_RIM"));
+        Assert.That(shaderText, Does.Contain("_FLOW_MAP_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_FLOW_MAP_TARGET_BASE"));
+        Assert.That(shaderText, Does.Contain("_FLOW_MAP_TARGET_TINT"));
+        Assert.That(shaderText, Does.Contain("_PARALLAX_MAP_MODE_2D"));
+        Assert.That(shaderText, Does.Contain("_PARALLAX_MAP_MODE_2D_ARRAY"));
+        Assert.That(shaderText, Does.Contain("_PARALLAX_MAP_MODE_3D"));
+        Assert.That(shaderText, Does.Contain("_PARALLAX_MAP_TARGET_BASE"));
+        Assert.That(shaderText, Does.Contain("_PARALLAX_MAP_TARGET_TINT"));
+        Assert.That(shaderText, Does.Contain("_GREYSCALE_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_GRADIENT_MAP_ENABLED"));
+        Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
+        Assert.That(shaderText, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
+        Assert.That(shaderText, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
     }
 
     [Test]
@@ -224,6 +260,87 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         tintColor.SetFloat("_TintColorMode", 0);
         tintColor.SetColor("_TintColor", new Color(0.25f, 1f, 0.25f, 1f));
 
+        var tintMap = new Material(shader);
+        tintMap.SetFloat("_TintAreaMode", 1);
+        tintMap.SetFloat("_TintColorMode", 1);
+        tintMap.SetTexture("_TintMap", CreateCompileTexture());
+
+        var tintMap2DArray = new Material(shader);
+        tintMap2DArray.SetFloat("_TintAreaMode", 1);
+        tintMap2DArray.SetFloat("_TintColorMode", 3);
+        tintMap2DArray.SetFloat("_TintMapSliceCount", 2);
+        tintMap2DArray.SetTexture("_TintMap2DArray", CreateCompileTexture2DArray());
+
+        var tintMap3D = new Material(shader);
+        tintMap3D.SetFloat("_TintAreaMode", 1);
+        tintMap3D.SetFloat("_TintColorMode", 2);
+        tintMap3D.SetFloat("_TintMapSliceCount", 2);
+        tintMap3D.SetTexture("_TintMap3D", CreateCompileTexture3D());
+
+        var tintMapRandomRow = new Material(shader);
+        tintMapRandomRow.SetFloat("_TintAreaMode", 1);
+        tintMapRandomRow.SetFloat("_TintColorMode", 3);
+        tintMapRandomRow.SetFloat("_TintMapSliceCount", 4);
+        tintMapRandomRow.SetFloat("_TintMapRandomRowSelectionEnabled", 1);
+        tintMapRandomRow.SetFloat("_TintMapRandomRowCoord", 1);
+        tintMapRandomRow.SetFloat("_TintMapRowCount", 2);
+        tintMapRandomRow.SetTexture("_TintMap2DArray", CreateCompileTexture2DArray(4));
+
+        var tintRim = new Material(shader);
+        tintRim.SetFloat("_TintAreaMode", 2);
+        tintRim.SetFloat("_TintColorMode", 0);
+        tintRim.SetColor("_TintColor", new Color(0.25f, 1f, 0.25f, 1f));
+
+        var flowBase = new Material(shader);
+        flowBase.SetTexture("_FlowMap", CreateCompileTexture());
+        flowBase.SetFloat("_FlowMapTarget", 1);
+
+        var flowTint = new Material(shader);
+        flowTint.SetFloat("_TintAreaMode", 1);
+        flowTint.SetFloat("_TintColorMode", 1);
+        flowTint.SetTexture("_TintMap", CreateCompileTexture());
+        flowTint.SetTexture("_FlowMap", CreateCompileTexture());
+        flowTint.SetFloat("_FlowMapTarget", 2);
+
+        var parallax2DBase = new Material(shader);
+        parallax2DBase.SetTexture("_ParallaxMap", CreateCompileTexture());
+        parallax2DBase.SetFloat("_ParallaxMapMode", 0);
+        parallax2DBase.SetFloat("_ParallaxMapTarget", 1);
+
+        var parallax2DArrayTint = new Material(shader);
+        parallax2DArrayTint.SetFloat("_ParallaxMapMode", 1);
+        parallax2DArrayTint.SetFloat("_ParallaxMapTarget", 2);
+        parallax2DArrayTint.SetFloat("_ParallaxMapSliceCount", 2);
+        parallax2DArrayTint.SetTexture("_ParallaxMap2DArray", CreateCompileTexture2DArray());
+
+        var parallax3D = new Material(shader);
+        parallax3D.SetFloat("_ParallaxMapMode", 2);
+        parallax3D.SetFloat("_ParallaxMapTarget", 1);
+        parallax3D.SetFloat("_ParallaxMapSliceCount", 2);
+        parallax3D.SetTexture("_ParallaxMap3D", CreateCompileTexture3D());
+
+        var greyscale = new Material(shader);
+        greyscale.SetFloat("_ColorCorrectionMode", 1);
+
+        var gradientMap = new Material(shader);
+        gradientMap.SetFloat("_ColorCorrectionMode", 2);
+        gradientMap.SetTexture("_GradientMap", CreateCompileTexture(FilterMode.Bilinear));
+
+        var tintFlowClipRect = new Material(shader);
+        tintFlowClipRect.SetFloat("_TintAreaMode", 1);
+        tintFlowClipRect.SetFloat("_TintColorMode", 1);
+        tintFlowClipRect.SetTexture("_TintMap", CreateCompileTexture());
+        tintFlowClipRect.SetTexture("_FlowMap", CreateCompileTexture());
+        tintFlowClipRect.SetFloat("_FlowMapTarget", 2);
+        tintFlowClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        tintFlowClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var gradientAlphaTest = new Material(shader);
+        gradientAlphaTest.SetFloat("_RenderType", 1);
+        gradientAlphaTest.SetFloat("_Cutoff", 0.5f);
+        gradientAlphaTest.SetFloat("_ColorCorrectionMode", 2);
+        gradientAlphaTest.SetTexture("_GradientMap", CreateCompileTexture(FilterMode.Bilinear));
+
         var alphaTest = new Material(shader);
         alphaTest.SetFloat("_RenderType", 1);
         alphaTest.SetFloat("_Cutoff", 0.5f);
@@ -256,6 +373,20 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             baseFeatureClipRect,
             baseFeatureAlphaTest,
             tintColor,
+            tintMap,
+            tintMap2DArray,
+            tintMap3D,
+            tintMapRandomRow,
+            tintRim,
+            flowBase,
+            flowTint,
+            parallax2DBase,
+            parallax2DArrayTint,
+            parallax3D,
+            greyscale,
+            gradientMap,
+            tintFlowClipRect,
+            gradientAlphaTest,
             alphaTest,
             clipRect,
             stencil

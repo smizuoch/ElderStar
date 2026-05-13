@@ -598,3 +598,36 @@ Phase 5.2A compatibility annotations:
 - Random row selection is validated through mesh UV streams in the UI smoke harness. Full Particle System Custom Vertex Streams parity is still pending.
 - Stencil, `_ColorMask`, rect clipping, vertex color, vertex alpha, alpha test, and the single-pass UI topology are preserved by regression coverage.
 - Remaining UI UberUnlit gaps after Phase 5.2A: full feature parity, tint map/rim expansion, flow map, parallax map, greyscale/gradient map, alpha transition, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.
+
+## Phase 5.2B UI UberUnlit Tint, Flow, Parallax, and Color Status
+
+Phase 5.2B expands only `Nova/UIParticles/UberUnlit` tint map, tint rim, flow map, parallax 2D base-target approximation, greyscale, and gradient-map behavior on top of the Phase 5.2A single-pass Built-in UI forward path. It does not implement UI alpha transition, dissolve transition, second alpha transition texture, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, Picking, Lit, Distortion runtime, optimizer/replacer runtime behavior, final visual regression, or golden image baselines.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| UI tint map 2D | Passed | Passed | `_TINT_MAP_ENABLED` samples `_TintMap` and applies the shared tint blend helper with `_TintBlendRate` while preserving vertex color, vertex alpha, UI clip, stencil, and `_ColorMask` behavior. |
+| UI tint map 2D array | Passed | Passed | `_TINT_MAP_MODE_2D_ARRAY` samples `_TintMap2DArray` using `_TintMapProgress`, `_TintMapSliceCount`, and the shared flip-book progress helper. |
+| UI tint map 3D | Passed | Passed | `_TINT_MAP_3D_ENABLED` samples `_TintMap3D` using `_TintMap3DProgress` and the shared flip-book blending progress helper. |
+| UI tint random row selection | Passed | Passed | `_TINT_MAP_RANDOM_ROW_SELECTION_ENABLED` uses `_TintMapRowCount` and `_TintMapRandomRowCoord`; the smoke supplies deterministic mesh `TEXCOORD1.x`, so full Particle System Custom Vertex Streams parity remains unclaimed. |
+| UI tint rim | Passed | Passed | `_TINT_AREA_RIM` uses Built-in world normal and view direction helpers with `_TintRimProgress`, `_TintRimSharpness`, and `_InverseTintRim`. This is Approximate because UI orthographic/view-vector behavior differs from the URP helper path. |
+| UI flow map target base | Passed | Passed | `_FLOW_MAP_TARGET_BASE` samples `_FlowMap`, selects `_FlowMapChannelsX/Y`, applies `_FlowIntensity`, and offsets base-map UVs. |
+| UI flow map target tint | Passed | Passed | `_FLOW_MAP_TARGET_TINT` offsets tint-map UVs when tint map sampling is active and leaves base-map sampling unchanged. Alpha-transition and emission flow targets remain pending because those feature groups are out of scope. |
+| UI parallax map 2D target base | Passed | Passed | `_PARALLAX_MAP_MODE_2D` with `_PARALLAX_MAP_TARGET_BASE` samples `_ParallaxMap`, selects `_ParallaxMapChannel`, and applies the shared one-step Built-in tangent-space offset. This is Approximate and validated only through a controlled UI mesh/tangent smoke. |
+| UI parallax target tint | Pending | Pending | `_PARALLAX_MAP_TARGET_TINT` remains a compile/keyword compatibility surface only in Phase 5.2B; runtime tint-target offset is deferred until a stable narrow UI smoke is added. |
+| UI greyscale | Passed | Passed | `_GREYSCALE_ENABLED` applies the shared luminance conversion to RGB while preserving alpha, clip, and stencil behavior. |
+| UI gradient map | Passed | Passed | `_GRADIENT_MAP_ENABLED` samples `_GradientMap` by luminance on the U axis while preserving UI alpha, clip, and stencil behavior. |
+| UI stencil / rect clip regression | Passed | Passed | New PlayMode smokes verify tint+flow still respects `UNITY_UI_CLIP_RECT` and gradient-map output still respects controlled stencil masking. Canvas `Mask` / `RectMask2D` parity remains pending. |
+| UI pass topology | Passed | Passed | `Nova/UIParticles/UberUnlit` remains one `ForwardBase` UI pass with stencil and `ColorMask [_ColorMask]`; no ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking pass was added. |
+| Non-UI keyword exclusion | Passed | Passed | UI shader declarations still include `UNITY_UI_CLIP_RECT` and intentionally exclude `_CASTING_PUNCTUAL_LIGHT_SHADOW` and `_SHADOW_CASTER_ALPHA_TEST_ENABLED`. |
+| Shader compiler diagnostics | Passed | Passed | EditMode compile coverage now includes tint color/map/2D array/3D/random row/rim, flow base/tint targets, parallax 2D/2D array/3D modes and base/tint targets, greyscale, gradient map, `UNITY_UI_CLIP_RECT` combinations, alpha test combinations, and stencil property states. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UIParticlesUberUnlitTintMapAffectsOutput`, `UIParticlesUberUnlitTintMap2DArrayAffectsOutput`, `UIParticlesUberUnlitTintMap3DAffectsOutput`, `UIParticlesUberUnlitTintMapRandomRowSelectionAffectsOutput`, `UIParticlesUberUnlitTintRimAffectsOutput`, `UIParticlesUberUnlitFlowMapOffsetsBaseSampling`, `UIParticlesUberUnlitFlowMapOffsetsTintSampling`, `UIParticlesUberUnlitParallax2DOffsetsBaseSampling`, `UIParticlesUberUnlitGreyscaleAffectsOutput`, `UIParticlesUberUnlitGradientMapAffectsOutput`, `UIParticlesUberUnlitTintFlowFeaturesRespectRectClip`, and `UIParticlesUberUnlitTintFlowFeaturesPreserveStencilOrMaskBehavior`. |
+
+Phase 5.2B compatibility annotations:
+
+- `Nova/UIParticles/UberUnlit` now reuses the shared Built-in UberUnlit helpers for tint-map progress, random-row selection, tint blending, rim factor, flow UV offset, parallax 2D offset, luminance, and gradient-map sampling where those helpers are safe for the UI forward path.
+- Parallax 2D target base is Approximate. It uses a Built-in tangent/view-direction approximation and controlled mesh tangents in tests; no pixel-perfect URP parity or full UI/particle tangent-stream parity is claimed.
+- Parallax 2D array and 3D runtime behavior, and parallax target tint runtime behavior, remain Pending. Their keyword/property surfaces are compile-covered only.
+- Flow targets for alpha transition and emission remain Pending because UI alpha transition and UI emission are explicitly out of Phase 5.2B scope.
+- Stencil, `_ColorMask`, rect clipping, vertex color, vertex alpha, alpha test, and the single-pass UI topology are preserved by regression coverage.
+- Full Canvas `Mask` / `RectMask2D` parity is still pending; Phase 5.2B continues to use the controlled mesh-based UI shader smoke harness without adding `com.unity.ugui`.
+- Remaining UI UberUnlit gaps after Phase 5.2B: full feature parity, alpha transition, dissolve transition, second alpha transition texture, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, parallax 2D array/3D runtime behavior, parallax tint target runtime behavior, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.
