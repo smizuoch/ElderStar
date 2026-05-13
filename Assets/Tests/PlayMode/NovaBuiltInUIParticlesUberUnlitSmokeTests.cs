@@ -460,6 +460,323 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
     }
 
     [Test]
+    public void UIParticlesUberUnlitFadeAlphaTransitionAffectsOutput()
+    {
+        var visible = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)), progress: 0f, mode: 1);
+        var faded = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)), progress: 1f, mode: 1);
+
+        Assert.That(visible.r, Is.GreaterThan(faded.r + 0.25f), $"Visible {visible}, faded {faded}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDissolveAlphaTransitionClipsOrAttenuatesOutput()
+    {
+        var attenuated = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.1f, 0.1f, 0.1f, 1f)), progress: 0.5f, mode: 2);
+        var retained = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)), progress: 0.5f, mode: 2);
+
+        Assert.That(retained.r, Is.GreaterThan(attenuated.r + 0.25f), $"Retained {retained}, attenuated {attenuated}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionMap2DAffectsOutput()
+    {
+        var low = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.1f, 0.1f, 0.1f, 1f)), progress: 0.5f, mode: 2);
+        var high = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)), progress: 0.5f, mode: 2);
+
+        Assert.That(high.r, Is.GreaterThan(low.r + 0.25f), $"High {high}, low {low}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionMap2DArrayAffectsOutput()
+    {
+        var lowTexture = CreateTexture2DArray(
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.1f, 0.1f, 0.1f, 1f));
+        var highTexture = CreateTexture2DArray(
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.9f, 0.9f, 0.9f, 1f),
+            new Color(0.1f, 0.1f, 0.1f, 1f));
+
+        var low = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 1, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap2DArray", lowTexture);
+                m.SetFloat("_AlphaTransitionMapProgress", 0.45f);
+                m.SetFloat("_AlphaTransitionMapSliceCount", lowTexture.depth);
+            }),
+            background: Color.black);
+        var high = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 1, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap2DArray", highTexture);
+                m.SetFloat("_AlphaTransitionMapProgress", 0.45f);
+                m.SetFloat("_AlphaTransitionMapSliceCount", highTexture.depth);
+            }),
+            background: Color.black);
+
+        Assert.That(high.r, Is.GreaterThan(low.r + 0.25f), $"High {high}, low {low}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionMap3DAffectsOutput()
+    {
+        var lowTexture = CreateTexture3D(
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.1f, 0.1f, 0.1f, 1f));
+        var highTexture = CreateTexture3D(
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.9f, 0.9f, 0.9f, 1f),
+            new Color(0.1f, 0.1f, 0.1f, 1f));
+
+        var low = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 2, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap3D", lowTexture);
+                m.SetFloat("_AlphaTransitionMapProgress", 0.45f);
+                m.SetFloat("_AlphaTransitionMapSliceCount", lowTexture.depth);
+            }),
+            background: Color.black);
+        var high = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 2, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap3D", highTexture);
+                m.SetFloat("_AlphaTransitionMapProgress", 0.45f);
+                m.SetFloat("_AlphaTransitionMapSliceCount", highTexture.depth);
+            }),
+            background: Color.black);
+
+        Assert.That(high.r, Is.GreaterThan(low.r + 0.25f), $"High {high}, low {low}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionRandomRowSelectionAffectsOutput()
+    {
+        var lowRowTexture = CreateTexture2DArray(
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.15f, 0.15f, 0.15f, 1f),
+            new Color(0.85f, 0.85f, 0.85f, 1f),
+            new Color(0.9f, 0.9f, 0.9f, 1f));
+        var highRowTexture = CreateTexture2DArray(
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.15f, 0.15f, 0.15f, 1f),
+            new Color(0.85f, 0.85f, 0.85f, 1f),
+            new Color(0.9f, 0.9f, 0.9f, 1f));
+
+        var lowRow = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 1, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap2DArray", lowRowTexture);
+                m.SetFloat("_AlphaTransitionMapProgress", 0.1f);
+                m.SetFloat("_AlphaTransitionMapSliceCount", lowRowTexture.depth);
+                m.SetFloat("_AlphaTransitionMapRandomRowSelectionEnabled", 1);
+                m.SetFloat("_AlphaTransitionMapRandomRowCoord", 1);
+                m.SetFloat("_AlphaTransitionMapRowCount", 2);
+            }),
+            mesh: CreateQuad(Color.white, customCoord1: new Vector4(0.2f, 0f, 0f, 0f)),
+            background: Color.black);
+        var highRow = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 1, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap2DArray", highRowTexture);
+                m.SetFloat("_AlphaTransitionMapProgress", 0.1f);
+                m.SetFloat("_AlphaTransitionMapSliceCount", highRowTexture.depth);
+                m.SetFloat("_AlphaTransitionMapRandomRowSelectionEnabled", 1);
+                m.SetFloat("_AlphaTransitionMapRandomRowCoord", 1);
+                m.SetFloat("_AlphaTransitionMapRowCount", 2);
+            }),
+            mesh: CreateQuad(Color.white, customCoord1: new Vector4(1.2f, 0f, 0f, 0f)),
+            background: Color.black);
+
+        Assert.That(highRow.r, Is.GreaterThan(lowRow.r + 0.25f), $"High row {highRow}, low row {lowRow}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitSecondAlphaTransitionTexture2DAffectsOutput()
+    {
+        var noSecond = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)), progress: 0.5f, mode: 2);
+        var withSecond = RenderUiSecondAlphaTransition(
+            CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)),
+            CreateSolidTexture(new Color(0.1f, 0.1f, 0.1f, 1f)),
+            secondBlendMode: 1);
+
+        Assert.That(noSecond.r, Is.GreaterThan(withSecond.r + 0.18f), $"No second {noSecond}, with second {withSecond}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitSecondAlphaTransitionTextureAverageAffectsOutput()
+    {
+        var noSecond = RenderUiAlphaTransition(CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)), progress: 0.5f, mode: 2);
+        var average = RenderUiSecondAlphaTransition(
+            CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)),
+            CreateSolidTexture(new Color(0.1f, 0.1f, 0.1f, 1f)),
+            secondBlendMode: 1);
+
+        Assert.That(noSecond.r, Is.GreaterThan(average.r + 0.18f), $"No second {noSecond}, average {average}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitSecondAlphaTransitionTextureMultiplyAffectsOutput()
+    {
+        var multiply = RenderUiSecondAlphaTransition(
+            CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)),
+            CreateSolidTexture(new Color(0.1f, 0.1f, 0.1f, 1f)),
+            secondBlendMode: 2);
+
+        Assert.That(multiply.r, Is.LessThan(0.2f), multiply.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitVertexAlphaCanDriveTransitionProgress()
+    {
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 1, 0f, 0, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)));
+                m.SetFloat("_VertexAlphaMode", 1);
+            }),
+            mesh: CreateQuad(new Color(1f, 1f, 1f, 0.2f)),
+            background: Color.black);
+
+        Assert.That(color.r, Is.LessThan(0.1f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitFlowMapOffsetsAlphaTransitionSampling()
+    {
+        var transitionTexture = CreateHorizontalSplitTexture(
+            new Color(0.1f, 0.1f, 0.1f, 1f),
+            new Color(0.9f, 0.9f, 0.9f, 1f),
+            rightColorStartX: TextureSize - 1);
+        var flowTexture = CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f));
+
+        var noFlow = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap", transitionTexture);
+            }),
+            background: Color.black);
+        var flow = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap", CreateHorizontalSplitTexture(
+                    new Color(0.1f, 0.1f, 0.1f, 1f),
+                    new Color(0.9f, 0.9f, 0.9f, 1f),
+                    rightColorStartX: TextureSize - 1));
+                m.SetTexture("_FlowMap", flowTexture);
+                m.SetFloat("_FlowMapTarget", 4);
+                m.SetFloat("_FlowMapChannelsX", 0);
+                m.SetFloat("_FlowMapChannelsY", 1);
+                m.SetFloat("_FlowIntensity", 0.4f);
+            }),
+            background: Color.black);
+
+        Assert.That(flow.r, Is.GreaterThan(noFlow.r + 0.25f), $"No flow {noFlow}, flow {flow}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionFeaturesPreserveVertexColorAndAlpha()
+    {
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)));
+            }),
+            mesh: CreateQuad(new Color(0.1f, 0.9f, 0.1f, 0.5f)),
+            background: Color.black);
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.18f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.18f), color.ToString());
+        Assert.That(color.g, Is.InRange(0.25f, 0.65f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionFeaturesPreserveAlphaTest()
+    {
+        var background = new Color(0.05f, 0.1f, 0.8f, 1f);
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.1f, 0.1f, 0.1f, 1f)));
+                m.SetFloat("_RenderType", 1);
+                m.SetFloat("_Cutoff", 0.5f);
+            }),
+            background: background);
+
+        Assert.That(color.b, Is.GreaterThan(color.r + 0.25f), color.ToString());
+        Assert.That(color.b, Is.GreaterThan(color.g + 0.25f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionFeaturesPreserveColorMask()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)));
+                m.SetFloat("_ColorMask", 0);
+            }),
+            background: background);
+
+        Assert.That(color.r, Is.LessThan(0.06f), color.ToString());
+        Assert.That(color.b, Is.GreaterThan(color.r + 0.02f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionFeaturesRespectRectClip()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateUiDraw(material =>
+                {
+                    ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+                    {
+                        m.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)));
+                    });
+                    material.EnableKeyword("UNITY_UI_CLIP_RECT");
+                    material.SetVector("_ClipRect", new Vector4(-0.05f, -1f, 1f, 1f));
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[1].r, Is.GreaterThan(samples[0].r + 0.5f), $"Clipped {samples[0]}, visible {samples[1]}");
+        Assert.That(samples[0].r, Is.LessThan(0.1f), $"Clipped {samples[0]}, visible {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitAlphaTransitionFeaturesPreserveStencilOrMaskBehavior()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateStencilMask(new Rect(-0.5f, -0.5f, 0.5f, 1f)),
+                CreateUiDraw(material =>
+                {
+                    ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+                    {
+                        m.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.9f, 0.9f, 0.9f, 1f)));
+                    });
+                    material.SetFloat("_StencilComp", (float)CompareFunction.Equal);
+                    material.SetFloat("_Stencil", 1);
+                    material.SetFloat("_StencilOp", (float)StencilOp.Keep);
+                    material.SetFloat("_StencilReadMask", 255);
+                    material.SetFloat("_StencilWriteMask", 255);
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[0].r, Is.GreaterThan(samples[1].r + 0.5f), $"Inside {samples[0]}, outside {samples[1]}");
+        Assert.That(samples[1].r, Is.LessThan(0.1f), $"Inside {samples[0]}, outside {samples[1]}");
+    }
+
+    [Test]
     public void UIParticlesUberUnlitStencilMaskClipsOutput()
     {
         var background = new Color(0.03f, 0.04f, 0.08f, 1f);
@@ -644,6 +961,42 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
             new[] { CreateUiDraw(configureMaterial, mesh) },
             new[] { new Vector2(0.5f, 0.5f) },
             background ?? new Color(0.01f, 0.01f, 0.01f, 1f))[0];
+    }
+
+    private static Color RenderUiAlphaTransition(Texture transitionTexture, float progress, int mode)
+    {
+        return RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, mode, progress, 0, m => m.SetTexture("_AlphaTransitionMap", transitionTexture)),
+            background: Color.black);
+    }
+
+    private static Color RenderUiSecondAlphaTransition(Texture mainTexture, Texture secondTexture, int secondBlendMode)
+    {
+        return RenderUiUberUnlit(
+            material => ConfigureUiAlphaTransition(material, 2, 0.5f, 0, m =>
+            {
+                m.SetTexture("_AlphaTransitionMap", mainTexture);
+                m.SetFloat("_AlphaTransitionSecondTextureBlendMode", secondBlendMode);
+                m.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 0);
+                m.SetTexture("_AlphaTransitionMapSecondTexture", secondTexture);
+                m.SetFloat("_AlphaTransitionProgressSecondTexture", 0.5f);
+            }),
+            background: Color.black);
+    }
+
+    private static void ConfigureUiAlphaTransition(Material material, int mode, float progress, int mapMode, Action<Material> configureMap)
+    {
+        material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+        material.SetFloat("_BaseMapMode", 0);
+        material.SetFloat("_RenderType", 2);
+        material.SetFloat("_TransparentBlendMode", 0);
+        material.SetFloat("_AlphaTransitionMode", mode);
+        material.SetFloat("_AlphaTransitionMapMode", mapMode);
+        material.SetFloat("_AlphaTransitionProgress", progress);
+        material.SetFloat("_DissolveSharpness", 1f);
+        material.SetFloat("_DissolveSharpnessSecondTexture", 1f);
+        material.SetColor("_TintColor", Color.white);
+        configureMap(material);
     }
 
     private static UiDraw CreateUiDraw(Action<Material> configureMaterial, Mesh mesh = null)

@@ -60,6 +60,19 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("NovaParallaxOffset"));
         Assert.That(shaderText, Does.Contain("NovaLuminance"));
         Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_GradientMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D(_AlphaTransitionMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D_ARRAY(_AlphaTransitionMap2DArray"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX3D(_AlphaTransitionMap3D"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D(_AlphaTransitionMapSecondTexture"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D_ARRAY(_AlphaTransitionMapSecondTexture2DArray"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX3D(_AlphaTransitionMapSecondTexture3D"));
+        Assert.That(shaderText, Does.Contain("SampleAlphaTransitionMap"));
+        Assert.That(shaderText, Does.Contain("SampleAlphaTransitionSecondMap"));
+        Assert.That(shaderText, Does.Contain("NovaAlphaTransitionMapProgress"));
+        Assert.That(shaderText, Does.Contain("NovaAlphaTransitionSecondMapProgress"));
+        Assert.That(shaderText, Does.Contain("NovaAlphaTransitionFactor"));
+        Assert.That(shaderText, Does.Contain("NovaBlendAlphaTransitionFactors"));
+        Assert.That(shaderText, Does.Contain("NovaModulateAlphaTransitionProgress"));
         Assert.That(shaderText, Does.Contain("NovaUIClipAlpha"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(shaderText, Does.Contain("clip("));
@@ -139,6 +152,30 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("_PARALLAX_MAP_TARGET_TINT"));
         Assert.That(shaderText, Does.Contain("_GREYSCALE_ENABLED"));
         Assert.That(shaderText, Does.Contain("_GRADIENT_MAP_ENABLED"));
+        Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
+        Assert.That(shaderText, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
+        Assert.That(shaderText, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitPhase53AAlphaTransitionKeywordsStayUiScoped()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("_FADE_TRANSITION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_DISSOLVE_TRANSITION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_MODE_2D"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_MODE_3D"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_RANDOM_ROW_SELECTION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE"));
+        Assert.That(shaderText, Does.Contain("_ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY"));
+        Assert.That(shaderText, Does.Contain("_VERTEX_ALPHA_AS_TRANSITION_PROGRESS"));
+        Assert.That(shaderText, Does.Contain("_FLOW_MAP_TARGET_ALPHA_TRANSITION"));
         Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
         Assert.That(shaderText, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
         Assert.That(shaderText, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
@@ -341,6 +378,108 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         gradientAlphaTest.SetFloat("_ColorCorrectionMode", 2);
         gradientAlphaTest.SetTexture("_GradientMap", CreateCompileTexture(FilterMode.Bilinear));
 
+        var fadeTransition = new Material(shader);
+        fadeTransition.SetFloat("_AlphaTransitionMode", 1);
+        fadeTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        fadeTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var dissolveTransition = new Material(shader);
+        dissolveTransition.SetFloat("_AlphaTransitionMode", 2);
+        dissolveTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        dissolveTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var alphaTransition2DArray = new Material(shader);
+        alphaTransition2DArray.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransition2DArray.SetFloat("_AlphaTransitionMapMode", 1);
+        alphaTransition2DArray.SetFloat("_AlphaTransitionMapSliceCount", 2);
+        alphaTransition2DArray.SetTexture("_AlphaTransitionMap2DArray", CreateCompileTexture2DArray());
+
+        var alphaTransition3D = new Material(shader);
+        alphaTransition3D.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransition3D.SetFloat("_AlphaTransitionMapMode", 2);
+        alphaTransition3D.SetFloat("_AlphaTransitionMapSliceCount", 2);
+        alphaTransition3D.SetTexture("_AlphaTransitionMap3D", CreateCompileTexture3D());
+
+        var alphaTransitionRandomRow = new Material(shader);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapMode", 1);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapRandomRowSelectionEnabled", 1);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapRandomRowCoord", 1);
+        alphaTransitionRandomRow.SetFloat("_AlphaTransitionMapRowCount", 2);
+        alphaTransitionRandomRow.SetTexture("_AlphaTransitionMap2DArray", CreateCompileTexture2DArray(4));
+
+        var secondAlphaTransitionAverage = new Material(shader);
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransitionAverage.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransitionAverage.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 0);
+        secondAlphaTransitionAverage.SetTexture("_AlphaTransitionMapSecondTexture", CreateCompileTexture(FilterMode.Point));
+
+        var secondAlphaTransitionMultiply = new Material(shader);
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransitionMultiply.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionSecondTextureBlendMode", 2);
+        secondAlphaTransitionMultiply.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 0);
+        secondAlphaTransitionMultiply.SetTexture("_AlphaTransitionMapSecondTexture", CreateCompileTexture(FilterMode.Point));
+
+        var secondAlphaTransition2DArray = new Material(shader);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransition2DArray.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 1);
+        secondAlphaTransition2DArray.SetFloat("_AlphaTransitionMapSecondTextureSliceCount", 2);
+        secondAlphaTransition2DArray.SetTexture("_AlphaTransitionMapSecondTexture2DArray", CreateCompileTexture2DArray());
+
+        var secondAlphaTransition3D = new Material(shader);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransition3D.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 2);
+        secondAlphaTransition3D.SetFloat("_AlphaTransitionMapSecondTextureSliceCount", 2);
+        secondAlphaTransition3D.SetTexture("_AlphaTransitionMapSecondTexture3D", CreateCompileTexture3D());
+
+        var secondAlphaTransitionRandomRow = new Material(shader);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMode", 2);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapMode", 0);
+        secondAlphaTransitionRandomRow.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionSecondTextureBlendMode", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureMapMode", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureRandomRowSelectionEnabled", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureRandomRowCoord", 1);
+        secondAlphaTransitionRandomRow.SetFloat("_AlphaTransitionMapSecondTextureRowCount", 2);
+        secondAlphaTransitionRandomRow.SetTexture("_AlphaTransitionMapSecondTexture2DArray", CreateCompileTexture2DArray(4));
+
+        var vertexAlphaTransition = new Material(shader);
+        vertexAlphaTransition.SetFloat("_VertexAlphaMode", 1);
+        vertexAlphaTransition.SetFloat("_AlphaTransitionMode", 1);
+        vertexAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        vertexAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var flowAlphaTransition = new Material(shader);
+        flowAlphaTransition.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
+        flowAlphaTransition.SetFloat("_FlowMapTarget", 4);
+        flowAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        flowAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        flowAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var alphaTransitionClipRect = new Material(shader);
+        alphaTransitionClipRect.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransitionClipRect.SetFloat("_AlphaTransitionMapMode", 0);
+        alphaTransitionClipRect.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        alphaTransitionClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        alphaTransitionClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var alphaTransitionAlphaTest = new Material(shader);
+        alphaTransitionAlphaTest.SetFloat("_RenderType", 1);
+        alphaTransitionAlphaTest.SetFloat("_Cutoff", 0.5f);
+        alphaTransitionAlphaTest.SetFloat("_AlphaTransitionMode", 2);
+        alphaTransitionAlphaTest.SetFloat("_AlphaTransitionMapMode", 0);
+        alphaTransitionAlphaTest.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
         var alphaTest = new Material(shader);
         alphaTest.SetFloat("_RenderType", 1);
         alphaTest.SetFloat("_Cutoff", 0.5f);
@@ -387,6 +526,20 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             gradientMap,
             tintFlowClipRect,
             gradientAlphaTest,
+            fadeTransition,
+            dissolveTransition,
+            alphaTransition2DArray,
+            alphaTransition3D,
+            alphaTransitionRandomRow,
+            secondAlphaTransitionAverage,
+            secondAlphaTransitionMultiply,
+            secondAlphaTransition2DArray,
+            secondAlphaTransition3D,
+            secondAlphaTransitionRandomRow,
+            vertexAlphaTransition,
+            flowAlphaTransition,
+            alphaTransitionClipRect,
+            alphaTransitionAlphaTest,
             alphaTest,
             clipRect,
             stencil
