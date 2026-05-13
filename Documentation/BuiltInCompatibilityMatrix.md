@@ -414,3 +414,29 @@ Phase 4.5A compatibility annotations:
 - Offset coordinate support is shader-side compatible with the existing custom-coordinate numeric layout. The deterministic test uses mesh `TEXCOORD1.x`; full Particle System Custom Vertex Streams authoring and renderer stream validation parity remains pending.
 - This phase is ForwardBase-only. Deformed geometry is not yet reflected in ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking behavior, and `_ShadowCasterApplyVertexDeformation` remains only a preserved material property/API surface.
 - The following `Nova/Particles/UberUnlit` features remain Pending: ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.5B Verification Status
+
+Phase 4.5B expands only `Nova/Particles/UberUnlit` pass topology beyond the primary `ForwardBase` path. It does not implement UI UberUnlit, Lit, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, full Particle System Custom Vertex Streams parity, or full URP DepthNormals parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| ShadowCaster pass topology | Passed | Passed | Adds Built-in `Name "ShadowCaster"` / `LightMode` `ShadowCaster`, local Built-in shadow helpers, `ZWrite On`, `ZTest LEqual`, `ColorMask 0`, and material `_Cull`. Built-in shadow bias and punctual shadow behavior are Approximate rather than URP parity. |
+| `_ShadowCasterEnabled` | Passed | Passed | Preserved as the public material property and routed through the existing editor setup to `material.SetShaderPassEnabled("ShadowCaster", ...)`. Built-in cannot remove a pass from the shader solely from a material float without material/editor setup, so renderer shadow participation still depends on Unity renderer shadow settings plus the material setup call. |
+| ShadowCaster alpha test | Passed | Passed | `_ShadowCasterAlphaTestEnabled` enables `_SHADOW_CASTER_ALPHA_TEST_ENABLED`; `_ShadowCasterAlphaCutoff` clips the shadow alpha path independently from the visible `_Cutoff`. |
+| ShadowCaster vertex deformation | Passed | Passed | `_ShadowCasterApplyVertexDeformation` gates the same deformation-map sampling, channel, base-value, intensity, and custom-coordinate offset path used by the Phase 4.5A forward pass. |
+| ShadowCaster alpha influence toggles | Passed | Passed | Tint color, flow-map UV offset, alpha-transition map, and luminance transparency toggles are implemented in the shadow alpha path where their corresponding feature keywords are active. Runtime smoke coverage targets tint, alpha transition, and luminance; flow-map influence remains compile/source covered because robust real-shadow UV-offset validation is deferred. |
+| DepthOnly pass | Passed | Passed | Adds a Built-in-compatible `Name "DepthOnly"` / `LightMode` `DepthOnly` pass with depth write, optional alpha clip, alpha-transition/luminance alpha influence, and vertex deformation. Built-in camera depth texture consumption remains Approximate because Built-in commonly uses `ShadowCaster` for camera depth generation. |
+| SceneSelectionPass | Passed | Passed | Adds a compile-compatible editor pass preserving `LightMode` `SceneSelectionPass` and returning Unity editor object/pass IDs. Runtime editor selection visual parity is not claimed. |
+| Picking | Passed | Passed | Adds a compile-compatible editor pass preserving `LightMode` `Picking` and returning `_SelectionID`. Runtime editor picking parity is not claimed. |
+| DepthNormals decision | Passed | Passed | No DepthNormals pass is added in Phase 4.5B. Built-in has no URP DepthNormals prepass contract, and no clear Built-in consumer/test exists for a minimal feature-complete pass at this stage. Status remains Unsupported/Pending until a later phase defines a Built-in consumer. |
+
+Phase 4.5B compatibility annotations:
+
+- `Nova/Particles/UberUnlit` now has Built-in pass declarations for `ForwardBase`, `SceneSelectionPass`, `Picking`, `DepthOnly`, and `ShadowCaster`.
+- ShadowCaster is Approximate: it uses Built-in shadow caster bias helpers instead of URP `Shadows.hlsl` and URP shadow constants, and `_CASTING_PUNCTUAL_LIGHT_SHADOW` is preserved only as a compatibility keyword surface.
+- `_ShadowCasterEnabled` is implemented through the original material setup API and Unity pass enablement. Materials that bypass setup may still have the shader pass available until setup is applied.
+- DepthOnly is Approximate: the pass is compile-safe and can write depth when explicitly drawn, but Built-in camera depth generation does not provide the same URP DepthOnly prepass contract.
+- SceneSelectionPass and Picking are compile-compatible editor passes only; no runtime visual parity claim is made.
+- DepthNormals remains unimplemented in Phase 4.5B because Built-in has no URP DepthNormals prepass contract.
+- The following remain out of scope: UI UberUnlit, Lit, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, final visual parity, and full Particle System Custom Vertex Streams parity.

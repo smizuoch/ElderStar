@@ -55,6 +55,52 @@ public sealed class NovaBuiltInUberUnlitCompileTests
     }
 
     [Test]
+    public void UberUnlitPhase45BPassTopologyIsDeclared()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("Name \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Contain("Name \"DepthOnly\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"DepthOnly\""));
+        Assert.That(shaderText, Does.Contain("Name \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Contain("Name \"Picking\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"Picking\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+    }
+
+    [Test]
+    public void UberUnlitPhase45BPassesUseBuiltInHelpersAndShadowControls()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInShadow.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaShadowCasterClipPos"));
+        Assert.That(shaderText, Does.Contain("_ShadowCasterApplyVertexDeformation"));
+        Assert.That(shaderText, Does.Contain("_ShadowCasterAlphaCutoff"));
+        Assert.That(shaderText, Does.Contain("_ShadowCasterAlphaAffectedByTintColor"));
+        Assert.That(shaderText, Does.Contain("_ShadowCasterAlphaAffectedByFlowMap"));
+        Assert.That(shaderText, Does.Contain("_ShadowCasterAlphaAffectedByAlphaTransitionMap"));
+        Assert.That(shaderText, Does.Contain("_ShadowCasterAlphaAffectedByTransparencyLuminance"));
+        Assert.That(shaderText, Does.Contain("ColorMask 0"));
+        Assert.That(shaderText, Does.Contain("fragSceneHighlight"));
+        Assert.That(shaderText, Does.Contain("fragScenePicking"));
+    }
+
+    [Test]
+    public void UberUnlitDepthNormalsDecisionIsDocumentedForPhase45B()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+        var matrixText = File.ReadAllText("Documentation/BuiltInCompatibilityMatrix.md");
+
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(matrixText, Does.Contain("Phase 4.5B"));
+        Assert.That(matrixText, Does.Contain("DepthNormals"));
+        Assert.That(matrixText, Does.Contain("Built-in has no URP DepthNormals prepass contract"));
+    }
+
+    [Test]
     public void UberUnlitRepresentativeKeywordStatesHaveNoBlockingCompilerMessages()
     {
         var shader = Shader.Find(ShaderName);
@@ -455,6 +501,57 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         vertexDeformationDepthFade.SetFloat("_DepthFadeWidth", 0.5f);
         vertexDeformationDepthFade.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
 
+        var shadowCasterDefault = new Material(shader);
+        shadowCasterDefault.SetFloat("_ShadowCasterEnabled", 1);
+
+        var shadowCasterAlphaTest = new Material(shader);
+        shadowCasterAlphaTest.SetFloat("_ShadowCasterEnabled", 1);
+        shadowCasterAlphaTest.SetFloat("_ShadowCasterAlphaTestEnabled", 1);
+        shadowCasterAlphaTest.SetFloat("_ShadowCasterAlphaCutoff", 0.5f);
+        shadowCasterAlphaTest.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Point));
+
+        var shadowCasterVertexDeformation = new Material(shader);
+        shadowCasterVertexDeformation.SetFloat("_ShadowCasterEnabled", 1);
+        shadowCasterVertexDeformation.SetFloat("_ShadowCasterApplyVertexDeformation", 1);
+        shadowCasterVertexDeformation.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
+        var shadowCasterTint = new Material(shader);
+        shadowCasterTint.SetFloat("_ShadowCasterEnabled", 1);
+        shadowCasterTint.SetFloat("_ShadowCasterAlphaTestEnabled", 1);
+        shadowCasterTint.SetFloat("_ShadowCasterAlphaAffectedByTintColor", 1);
+        shadowCasterTint.SetFloat("_TintAreaMode", 1);
+        shadowCasterTint.SetFloat("_TintColorMode", 0);
+        shadowCasterTint.SetColor("_TintColor", new Color(1f, 1f, 1f, 0.25f));
+
+        var shadowCasterFlow = new Material(shader);
+        shadowCasterFlow.SetFloat("_ShadowCasterEnabled", 1);
+        shadowCasterFlow.SetFloat("_ShadowCasterAlphaTestEnabled", 1);
+        shadowCasterFlow.SetFloat("_ShadowCasterAlphaAffectedByFlowMap", 1);
+        shadowCasterFlow.SetFloat("_FlowMapTarget", 1);
+        shadowCasterFlow.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
+
+        var shadowCasterAlphaTransition = new Material(shader);
+        shadowCasterAlphaTransition.SetFloat("_ShadowCasterEnabled", 1);
+        shadowCasterAlphaTransition.SetFloat("_ShadowCasterAlphaTestEnabled", 1);
+        shadowCasterAlphaTransition.SetFloat("_ShadowCasterAlphaAffectedByAlphaTransitionMap", 1);
+        shadowCasterAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        shadowCasterAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        shadowCasterAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var shadowCasterLuminance = new Material(shader);
+        shadowCasterLuminance.SetFloat("_ShadowCasterEnabled", 1);
+        shadowCasterLuminance.SetFloat("_ShadowCasterAlphaTestEnabled", 1);
+        shadowCasterLuminance.SetFloat("_ShadowCasterAlphaAffectedByTransparencyLuminance", 1);
+        shadowCasterLuminance.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var depthOnlyAlphaTest = new Material(shader);
+        depthOnlyAlphaTest.SetFloat("_RenderType", 1);
+        depthOnlyAlphaTest.SetFloat("_Cutoff", 0.5f);
+        depthOnlyAlphaTest.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Point));
+
+        var depthOnlyVertexDeformation = new Material(shader);
+        depthOnlyVertexDeformation.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
@@ -550,6 +647,15 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             vertexDeformationAlphaTransition,
             vertexDeformationEmission,
             vertexDeformationDepthFade,
+            shadowCasterDefault,
+            shadowCasterAlphaTest,
+            shadowCasterVertexDeformation,
+            shadowCasterTint,
+            shadowCasterFlow,
+            shadowCasterAlphaTransition,
+            shadowCasterLuminance,
+            depthOnlyAlphaTest,
+            depthOnlyVertexDeformation,
             vertexColor,
             baseMap2DArray,
             baseMap3D,

@@ -212,6 +212,38 @@ public sealed class NovaBuiltInUberUnlitDepthSmokeTests
         Assert.That(withoutDepth.g, Is.GreaterThan(withDepth.g + 0.05f), $"Without {withoutDepth}, with {withDepth}");
     }
 
+    [Test]
+    public void UberUnlitDepthOnlyPassWritesDepth()
+    {
+        var withoutDepth = RenderDepthOnlyProbe(null);
+        var withDepth = RenderDepthOnlyProbe(material =>
+        {
+            material.SetFloat("_RenderType", 0);
+            material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+        });
+
+        Assert.That(withDepth.g, Is.GreaterThan(withoutDepth.g + 0.5f), $"without {withoutDepth}, with {withDepth}");
+    }
+
+    [Test]
+    public void UberUnlitDepthOnlyAlphaTestAffectsDepth()
+    {
+        var lowCutoff = RenderDepthOnlyProbe(material =>
+        {
+            material.SetFloat("_RenderType", 1);
+            material.SetFloat("_Cutoff", 0.1f);
+            material.SetTexture("_BaseMap", CreateSolidTexture(new Color(1f, 1f, 1f, 0.45f)));
+        });
+        var highCutoff = RenderDepthOnlyProbe(material =>
+        {
+            material.SetFloat("_RenderType", 1);
+            material.SetFloat("_Cutoff", 0.9f);
+            material.SetTexture("_BaseMap", CreateSolidTexture(new Color(1f, 1f, 1f, 0.45f)));
+        });
+
+        Assert.That(lowCutoff.g, Is.GreaterThan(highCutoff.g + 0.5f), $"low {lowCutoff}, high {highCutoff}");
+    }
+
     private static void ConfigureTransparentDepthMaterial(Material material)
     {
         material.SetFloat("_RenderType", 2);
@@ -324,6 +356,70 @@ public sealed class NovaBuiltInUberUnlitDepthSmokeTests
             {
                 UnityEngine.Object.DestroyImmediate(ownedObject);
             }
+        }
+    }
+
+    private static Color RenderDepthOnlyProbe(Action<Material> configureDepthMaterial)
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+        var probeShader = Shader.Find("Hidden/NovaBuiltIn/Tests/DepthProbe");
+        Assert.That(probeShader, Is.Not.Null, "Hidden/NovaBuiltIn/Tests/DepthProbe");
+
+        var depthMaterial = new Material(shader);
+        var probeMaterial = new Material(probeShader);
+        var mesh = CreateQuad("NovaBuiltInDepthOnlyProbeQuad");
+        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
+        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);
+        var cameraObject = new GameObject("NovaBuiltInDepthOnlyProbeCamera");
+        var commandBuffer = new CommandBuffer { name = "NovaBuiltInDepthOnlyProbe" };
+
+        try
+        {
+            var depthPass = depthMaterial.FindPass("DepthOnly");
+            Assert.That(depthPass, Is.GreaterThanOrEqualTo(0), "DepthOnly pass should exist.");
+
+            depthMaterial.SetFloat("_Cull", (float)CullMode.Off);
+            depthMaterial.SetFloat("_ZTest", (float)CompareFunction.LessEqual);
+            configureDepthMaterial?.Invoke(depthMaterial);
+            SetupUberUnlit(depthMaterial);
+
+            var camera = cameraObject.AddComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black;
+            camera.orthographic = true;
+            camera.orthographicSize = 0.75f;
+            camera.nearClipPlane = 0.1f;
+            camera.farClipPlane = 10f;
+            camera.transform.position = new Vector3(0f, 0f, -2f);
+            camera.targetTexture = target;
+
+            if (configureDepthMaterial != null)
+            {
+                commandBuffer.DrawMesh(mesh, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one), depthMaterial, 0, depthPass);
+            }
+
+            commandBuffer.DrawMesh(mesh, Matrix4x4.TRS(new Vector3(0f, 0f, 0.2f), Quaternion.identity, Vector3.one), probeMaterial);
+            camera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, commandBuffer);
+            camera.Render();
+
+            var previous = RenderTexture.active;
+            RenderTexture.active = target;
+            readback.ReadPixels(new Rect(0, 0, RenderSize, RenderSize), 0, 0);
+            readback.Apply();
+            RenderTexture.active = previous;
+
+            return readback.GetPixel(RenderSize / 2, RenderSize / 2);
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(cameraObject);
+            UnityEngine.Object.DestroyImmediate(readback);
+            UnityEngine.Object.DestroyImmediate(target);
+            UnityEngine.Object.DestroyImmediate(mesh);
+            UnityEngine.Object.DestroyImmediate(depthMaterial);
+            UnityEngine.Object.DestroyImmediate(probeMaterial);
+            commandBuffer.Release();
         }
     }
 
