@@ -331,6 +331,7 @@ Shader "Nova/Particles/UberUnlit"
             float4 _ParallaxMap2DArray_ST;
             NOVA_DECLARE_TEX3D(_ParallaxMap3D);
             NOVA_DECLARE_TEX2D(_GradientMap);
+            NOVA_DECLARE_TEX2D(_VertexDeformationMap);
 
             fixed4 _TintColor;
             fixed4 _EmissionColor;
@@ -450,6 +451,12 @@ Shader "Nova/Particles/UberUnlit"
             half _ParallaxStrength;
             half _ParallaxMapRandomRowCoord;
             half _ParallaxMapRowCount;
+            half _VertexDeformationMapOffsetXCoord;
+            half _VertexDeformationMapOffsetYCoord;
+            half _VertexDeformationMapChannel;
+            float _VertexDeformationIntensity;
+            half _VertexDeformationIntensityCoord;
+            float _VertexDeformationBaseValue;
 
             struct appdata
             {
@@ -486,6 +493,16 @@ Shader "Nova/Particles/UberUnlit"
             v2f vert(appdata v)
             {
                 v2f o;
+                #if defined(_VERTEX_DEFORMATION_ENABLED)
+                float2 vertexDeformationUv = NovaTransformUV(v.uv, _VertexDeformationMap_ST);
+                vertexDeformationUv.x += NovaGetCustomCoord(_VertexDeformationMapOffsetXCoord, v.customCoord1, v.customCoord2);
+                vertexDeformationUv.y += NovaGetCustomCoord(_VertexDeformationMapOffsetYCoord, v.customCoord1, v.customCoord2);
+                half4 vertexDeformation = NOVA_SAMPLE_TEX2D_LOD(_VertexDeformationMap, vertexDeformationUv, 0.0);
+                float vertexDeformationIntensity = _VertexDeformationIntensity + NovaGetCustomCoord(_VertexDeformationIntensityCoord, v.customCoord1, v.customCoord2);
+                float vertexDeformationAmount = (NovaSelectChannel(vertexDeformation, _VertexDeformationMapChannel) - _VertexDeformationBaseValue) * vertexDeformationIntensity;
+                v.vertex.xyz += normalize(v.normal) * vertexDeformationAmount;
+                #endif
+
                 o.vertex = NovaObjectToClipPos(v.vertex);
                 o.screenPosition = NovaComputeScreenPos(o.vertex);
                 o.screenPosition.z = -UnityObjectToViewPos(v.vertex).z;

@@ -387,3 +387,30 @@ Phase 4.4B compatibility annotations:
 - Depth fade preserves the original view-depth semantics rather than inventing a scene-depth intersection fade; `_CameraDepthTexture` is still required for soft particles and is enabled in the shared depth-feature test scenes.
 - Combined depth features multiply their alpha factors conservatively and do not replace alpha transition, emission keep-edge transparency, rim transparency, luminance transparency, alpha test, or alpha modulation behavior.
 - The following `Nova/Particles/UberUnlit` features remain Pending: vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.
+
+## Phase 4.5A Verification Status
+
+Phase 4.5A expands only `Nova/Particles/UberUnlit` vertex deformation on the Built-in `ForwardBase` path. It does not implement ShadowCaster deformation, `_ShadowCasterApplyVertexDeformation`, ShadowCaster alpha behavior, DepthOnly, DepthNormals, SceneSelectionPass, Picking, UI UberUnlit, Lit, Distortion runtime, optimizer/replacer runtime behavior, visual regression, or golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Vertex deformation enabled path | Passed | Passed | `_VERTEX_DEFORMATION_ENABLED` is applied in the primary Built-in `ForwardBase` vertex stage before clip-space, screen-position, world-position, normal/view, and fragment UV data are produced. |
+| Vertex deformation map sampling | Passed | Passed | `_VertexDeformationMap` is sampled in the vertex shader with LOD 0 through the local Built-in `tex2Dlod` helper macro. The existing shader target 3.5 is sufficient for the tested editor backends. |
+| Vertex deformation channel selection | Passed | Passed | `_VertexDeformationMapChannel` selects the sampled RGBA channel using the same 0/1/2/3 mapping as the shared Built-in channel helper; PlayMode compares red and green channel motion. |
+| Vertex deformation intensity | Passed | Passed | `_VertexDeformationIntensity` scales the map-derived displacement, and zero or lower intensity produces less silhouette movement. |
+| Vertex deformation base value | Passed | Passed | `_VertexDeformationBaseValue` is subtracted from the selected map channel before intensity multiplication, allowing positive and negative movement around the base value. |
+| Vertex deformation offset coordinates | Passed | Passed | `_VertexDeformationMapOffsetXCoord` and `_VertexDeformationMapOffsetYCoord` use the existing Built-in custom-coordinate helper. The smoke test covers `TEXCOORD1.x`; full Particle System Custom Vertex Streams parity remains pending. |
+| Deformation direction | Passed | Passed | Vertices are displaced along normalized object-space normals, matching the original shader semantics. |
+| Interaction with previous ForwardBase features | Passed | Passed | Existing base map, tint, alpha test, base map 2D array/3D, tone mapping, flow, parallax, greyscale/gradient, alpha transition, emission, rim/luminance transparency, soft particles, and depth fade tests remain green; an added smoke verifies emission remains visible while deformation moves geometry. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes `_VERTEX_DEFORMATION_ENABLED`, vertex deformation plus alpha test, base map 2D array, alpha transition, emission, and depth fade. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UberUnlitVertexDeformationMovesGeometry`, `UberUnlitVertexDeformationIntensityAffectsMotion`, `UberUnlitVertexDeformationBaseValueAffectsMotion`, `UberUnlitVertexDeformationChannelSelectionAffectsMotion`, `UberUnlitVertexDeformationWithOffsetCoordinatesAffectsSampling`, and `UberUnlitVertexDeformationPreservesForwardColorFeatures`. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans Built-in runtime/editor/package files and excludes the untracked `NovaShader/` reference directory. |
+
+Phase 4.5A compatibility annotations:
+
+- Vertex deformation, deformation map sampling, channel selection, intensity, base value, and shader-side map offset coordinates are implemented for `Nova/Particles/UberUnlit` Built-in `ForwardBase`.
+- Vertex deformation uses the original semantics: sample `_VertexDeformationMap` at transformed UV plus custom-coordinate offsets, subtract `_VertexDeformationBaseValue`, multiply by `_VertexDeformationIntensity` plus its custom coordinate, and offset object-space position along `normalize(normalOS)`.
+- Vertex texture sampling uses `tex2Dlod` through the local Built-in texture helper surface. No shader target increase was required beyond the existing target 3.5 in the tested Unity editor paths.
+- Offset coordinate support is shader-side compatible with the existing custom-coordinate numeric layout. The deterministic test uses mesh `TEXCOORD1.x`; full Particle System Custom Vertex Streams authoring and renderer stream validation parity remains pending.
+- This phase is ForwardBase-only. Deformed geometry is not yet reflected in ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking behavior, and `_ShadowCasterApplyVertexDeformation` remains only a preserved material property/API surface.
+- The following `Nova/Particles/UberUnlit` features remain Pending: ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking.

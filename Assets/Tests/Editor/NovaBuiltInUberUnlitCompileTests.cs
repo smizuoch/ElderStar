@@ -46,6 +46,8 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_BaseMap"));
         Assert.That(shaderText, Does.Contain("NovaSoftParticleFactor"));
         Assert.That(shaderText, Does.Contain("NovaDepthFadeFactor"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D_LOD(_VertexDeformationMap"));
+        Assert.That(shaderText, Does.Contain("v.vertex.xyz += normalize(v.normal)"));
         Assert.That(shaderText, Does.Contain("_TintColor"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(shaderText, Does.Contain("clip("));
@@ -420,6 +422,39 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         combinedDepthFeatures.SetFloat("_DepthFadeFar", 3f);
         combinedDepthFeatures.SetFloat("_DepthFadeWidth", 0.5f);
 
+        var vertexDeformation = new Material(shader);
+        vertexDeformation.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
+        var vertexDeformationAlphaTest = new Material(shader);
+        vertexDeformationAlphaTest.SetFloat("_RenderType", 1);
+        vertexDeformationAlphaTest.SetFloat("_Cutoff", 0.5f);
+        vertexDeformationAlphaTest.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
+        var vertexDeformationBaseMap2DArray = new Material(shader);
+        vertexDeformationBaseMap2DArray.SetFloat("_BaseMapMode", 1);
+        vertexDeformationBaseMap2DArray.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
+        var vertexDeformationAlphaTransition = new Material(shader);
+        vertexDeformationAlphaTransition.SetFloat("_RenderType", 2);
+        vertexDeformationAlphaTransition.SetFloat("_AlphaTransitionMode", 1);
+        vertexDeformationAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        vertexDeformationAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationAlphaTransition.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
+        var vertexDeformationEmission = new Material(shader);
+        vertexDeformationEmission.SetFloat("_EmissionAreaType", 1);
+        vertexDeformationEmission.SetFloat("_EmissionColorType", 0);
+        vertexDeformationEmission.SetColor("_EmissionColor", Color.green);
+        vertexDeformationEmission.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
+        var vertexDeformationDepthFade = new Material(shader);
+        vertexDeformationDepthFade.SetFloat("_RenderType", 2);
+        vertexDeformationDepthFade.SetFloat("_DepthFadeEnabled", 1);
+        vertexDeformationDepthFade.SetFloat("_DepthFadeNear", 1.5f);
+        vertexDeformationDepthFade.SetFloat("_DepthFadeFar", 3f);
+        vertexDeformationDepthFade.SetFloat("_DepthFadeWidth", 0.5f);
+        vertexDeformationDepthFade.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+
         var vertexColor = new Material(shader);
         vertexColor.SetFloat("_VertexAlphaMode", 0);
 
@@ -509,6 +544,12 @@ public sealed class NovaBuiltInUberUnlitCompileTests
             depthFadeEmission,
             depthFadeTransparency,
             combinedDepthFeatures,
+            vertexDeformation,
+            vertexDeformationAlphaTest,
+            vertexDeformationBaseMap2DArray,
+            vertexDeformationAlphaTransition,
+            vertexDeformationEmission,
+            vertexDeformationDepthFade,
             vertexColor,
             baseMap2DArray,
             baseMap3D,
