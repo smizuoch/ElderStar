@@ -440,3 +440,106 @@ Phase 4.5B compatibility annotations:
 - SceneSelectionPass and Picking are compile-compatible editor passes only; no runtime visual parity claim is made.
 - DepthNormals remains unimplemented in Phase 4.5B because Built-in has no URP DepthNormals prepass contract.
 - The following remain out of scope: UI UberUnlit, Lit, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, final visual parity, and full Particle System Custom Vertex Streams parity.
+
+## Phase 4.6A UberUnlit Status Audit
+
+Phase 4.6A consolidates the existing `Nova/Particles/UberUnlit` Built-in port after Phase 4.5B. It adds interaction smoke coverage, representative complex compile permutation coverage, pass-topology/documentation regressions, and explicit status documentation. It does not port `Nova/UIParticles/UberUnlit`, any Lit shader, Distortion runtime, optimizer/replacer runtime behavior, final visual regression, or golden image baselines. This audit does not claim full UberUnlit visual parity.
+
+### Implemented and smoke-tested
+
+- ForwardBase base map 2D.
+- base map 2D array.
+- base map 3D.
+- base map channel extraction.
+- random row selection.
+- tritone.
+- pentone.
+- tint color.
+- tint map 2D / 2D array / 3D.
+- tint random row.
+- tint rim.
+- flow target base.
+- flow target tint.
+- flow target alpha transition.
+- flow target emission.
+- parallax 2D target base approximation.
+- greyscale.
+- gradient map.
+- fade alpha transition.
+- dissolve alpha transition.
+- alpha transition map 2D / 2D array / 3D.
+- primary alpha transition random row.
+- second alpha transition 2D average / multiply.
+- vertex alpha transition progress.
+- emission area all / alpha / map.
+- emission map 2D / 2D array / 3D.
+- emission map random row.
+- emission color base / explicit / ramp.
+- emission intensity.
+- keep edge transparency.
+- rim transparency.
+- luminance transparency.
+- soft particles.
+- depth fade.
+- vertex deformation in ForwardBase.
+- ShadowCaster.
+- DepthOnly.
+- SceneSelectionPass compile compatibility.
+- Picking compile compatibility.
+
+Phase 4.6A interaction smoke coverage adds deterministic, non-golden combinations for complex texture/tint/flow/color-correction, alpha-transition/emission/transparency, depth features with emission/transparency, vertex deformation with alpha/depth state, ShadowCaster alpha-transition/deformation, and DepthOnly alpha/deformation behavior.
+
+Phase 4.6A complex compile permutation coverage represents:
+
+- base map 2D array + tint map 2D array + flow.
+- base map 3D + alpha transition 3D + emission 3D.
+- dissolve + second alpha transition + flow target alpha transition.
+- emission + keep edge transparency + luminance transparency.
+- soft particles + depth fade + alpha transition + emission.
+- vertex deformation + soft particles + ShadowCaster.
+- ShadowCaster + alpha test + alpha transition + luminance transparency.
+- DepthOnly + alpha test + vertex deformation.
+- SceneSelectionPass / Picking with common keyword set.
+- one dense implemented non-lit keyword set excluding mutually exclusive modes.
+
+### Implemented but approximate
+
+- manual mirror sampler approximation: Built-in uses local mirror UV math rather than URP sampler-state parity.
+- parallax 2D approximation: the Built-in path uses a one-step tangent/view helper approximation.
+- rim transparency view-vector approximation: Built-in world normal/view interpolation differs from the original URP helper path.
+- soft particles Built-in camera depth texture approximation: cameras must provide `_CameraDepthTexture`, and Built-in depth generation differs from URP.
+- depth fade Built-in camera depth texture approximation: the shared Built-in depth helper path is validated, but final depth visual parity remains pending.
+- Built-in ShadowCaster bias/punctual shadow approximation: Built-in `UnityClipSpaceShadowCasterPos` and bias behavior replace URP shadow caster constants.
+- DepthOnly Built-in consumption approximation: the pass can be explicitly drawn and compile safely, but Built-in does not provide the same URP DepthOnly prepass contract.
+- editor SceneSelection/Picking compile-compatible only: SceneSelectionPass and Picking are compile-compatible editor passes only; no runtime visual parity claim is made.
+
+### Preserved but not fully parity-tested
+
+- full Particle System Custom Vertex Streams parity.
+- flow-map shadow alpha influence real-shadow UV-offset smoke.
+- second alpha transition 2D array / 3D / random-row runtime behavior.
+- editor visual scene selection / picking parity.
+- golden image visual parity.
+- final visual regression remains pending.
+
+### Unsupported or intentionally not implemented
+
+- URP debug display.
+- URP DepthNormals prepass parity. DepthNormals remains intentionally unimplemented because Built-in has no URP DepthNormals prepass contract and no Built-in consumer has been defined for this package phase.
+
+Phase 4.6A compatibility annotations:
+
+- `Nova/Particles/UberUnlit` remains the only runtime shader family advanced by this phase.
+- ShadowCaster is Approximate for Built-in shadow bias, punctual shadow behavior, and material/pass enablement differences.
+- DepthOnly is Approximate for Built-in consumption differences.
+- SceneSelectionPass and Picking remain compile-compatible / approximate, not visual parity complete.
+- Full Particle System Custom Vertex Streams parity remains pending; deterministic tests supply mesh UV streams directly.
+- Visual regression is still pending and golden image baselines were not added or updated.
+- UI UberUnlit is still the next phase and is not complete.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| EditMode suite | Passed, 32/32 | Passed, 32/32 | Adds `NovaBuiltInUberUnlitInteractionCompileTests` for pass topology, documentation/status audit, scope guard, and complex compile permutations. |
+| PlayMode suite | Passed, 87/87 | Passed, 87/87 | Adds `NovaBuiltInUberUnlitInteractionSmokeTests` for six broad non-golden feature interaction smokes. |
+| Shader compiler diagnostics | Passed | Passed | Existing diagnostics plus Phase 4.6A representative complex keyword states report no blocking shader compiler messages. |
+| Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans `Assets/Nova/Runtime`, `Assets/Nova/Editor`, `Assets/Nova/package.json`, and `Packages/manifest.json`; the untracked `NovaShader/` reference directory is excluded. |
