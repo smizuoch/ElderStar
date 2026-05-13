@@ -107,6 +107,133 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
     }
 
     [Test]
+    public void UIParticlesUberUnlitRendersBaseMap2DArray()
+    {
+        var texture = CreateTexture2DArray(
+            new Color(0.9f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.9f, 0.05f, 1f),
+            new Color(0.05f, 0.05f, 0.9f, 1f));
+
+        var color = RenderUiUberUnlit(material =>
+        {
+            material.SetTexture("_BaseMap2DArray", texture);
+            material.SetFloat("_BaseMapMode", 1);
+            material.SetFloat("_BaseMapProgress", 0.45f);
+            material.SetFloat("_BaseMapSliceCount", texture.depth);
+        });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.2f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.2f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitRendersBaseMap3D()
+    {
+        var texture = CreateTexture3D(
+            new Color(0.9f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.9f, 0.05f, 1f),
+            new Color(0.05f, 0.05f, 0.9f, 1f));
+
+        var color = RenderUiUberUnlit(material =>
+        {
+            material.SetTexture("_BaseMap3D", texture);
+            material.SetFloat("_BaseMapMode", 2);
+            material.SetFloat("_BaseMapProgress", 0.45f);
+            material.SetFloat("_BaseMapSliceCount", texture.depth);
+        });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.12f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.12f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitBaseMapChannelExtractionAffectsOutput()
+    {
+        var color = RenderUiUberUnlit(material =>
+        {
+            material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.08f, 0.82f, 0.18f, 1f)));
+            material.SetFloat("_BaseMapMode", 0);
+            material.SetFloat("_BaseMapChannel", 2);
+        });
+
+        Assert.That(Mathf.Abs(color.r - color.g), Is.LessThan(0.08f), color.ToString());
+        Assert.That(Mathf.Abs(color.g - color.b), Is.LessThan(0.08f), color.ToString());
+        Assert.That(color.r, Is.GreaterThan(0.45f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitBaseMapRandomRowSelectionAffectsOutput()
+    {
+        var texture = CreateTexture2DArray(
+            new Color(0.85f, 0.05f, 0.05f, 1f),
+            new Color(0.9f, 0.08f, 0.05f, 1f),
+            new Color(0.05f, 0.82f, 0.05f, 1f),
+            new Color(0.05f, 0.9f, 0.05f, 1f));
+
+        var color = RenderUiUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap2DArray", texture);
+                material.SetFloat("_BaseMapMode", 1);
+                material.SetFloat("_BaseMapProgress", 0.1f);
+                material.SetFloat("_BaseMapSliceCount", texture.depth);
+                material.SetFloat("_BaseMapRandomRowSelectionEnabled", 1);
+                material.SetFloat("_BaseMapRandomRowCoord", 1);
+                material.SetFloat("_BaseMapRowCount", 2);
+            },
+            mesh: CreateQuad(Color.white, customCoord1: new Vector4(1.2f, 0f, 0f, 0f)));
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.2f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.2f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitTritoneAffectsOutput()
+    {
+        var color = RenderUiUberUnlit(material =>
+        {
+            material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)));
+            material.SetFloat("_BaseMapMode", 0);
+            material.SetFloat("_BaseMapToneMode", 1);
+            material.SetFloat("_BaseMapToneChannel", 0);
+            material.SetColor("_BaseMapToneShadowsColor", new Color(0.9f, 0.05f, 0.05f, 1f));
+            material.SetColor("_BaseMapToneMidtonesColor", new Color(0.05f, 0.9f, 0.05f, 1f));
+            material.SetColor("_BaseMapToneHighlightsColor", new Color(0.05f, 0.05f, 0.9f, 1f));
+            material.SetFloat("_BaseMapToneShadows", 0.2f);
+            material.SetFloat("_BaseMapToneMidtones", 0.5f);
+            material.SetFloat("_BaseMapToneHighlights", 0.8f);
+        });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.15f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.15f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitPentoneAffectsOutput()
+    {
+        var color = RenderUiUberUnlit(material =>
+        {
+            material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.65f, 0.65f, 0.65f, 1f)));
+            material.SetFloat("_BaseMapMode", 0);
+            material.SetFloat("_BaseMapToneMode", 2);
+            material.SetFloat("_BaseMapToneChannel", 0);
+            material.SetColor("_BaseMapToneShadowsColor", new Color(0.9f, 0.05f, 0.05f, 1f));
+            material.SetColor("_BaseMapToneDarktonesColor", new Color(0.9f, 0.9f, 0.05f, 1f));
+            material.SetColor("_BaseMapToneMidtonesColor", new Color(0.05f, 0.9f, 0.05f, 1f));
+            material.SetColor("_BaseMapToneBrightsColor", new Color(0.05f, 0.85f, 0.85f, 1f));
+            material.SetColor("_BaseMapToneHighlightsColor", new Color(0.05f, 0.05f, 0.9f, 1f));
+            material.SetFloat("_BaseMapToneShadows", 0.1f);
+            material.SetFloat("_BaseMapToneMidtones", 0.5f);
+            material.SetFloat("_BaseMapToneHighlights", 0.9f);
+            material.SetFloat("_BaseMapToneDarktones", 0.5f);
+            material.SetFloat("_BaseMapToneBrights", 0.5f);
+        });
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.1f), color.ToString());
+        Assert.That(color.b, Is.GreaterThan(color.r + 0.1f), color.ToString());
+    }
+
+    [Test]
     public void UIParticlesUberUnlitStencilMaskClipsOutput()
     {
         var background = new Color(0.03f, 0.04f, 0.08f, 1f);
@@ -152,6 +279,67 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
 
         Assert.That(samples[1].r, Is.GreaterThan(samples[1].b + 0.2f), $"Clipped {samples[0]}, visible {samples[1]}");
         Assert.That(samples[0].b, Is.GreaterThan(samples[0].r + 0.02f), $"Clipped {samples[0]}, visible {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitBaseTextureFeaturesRespectRectClip()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var texture = CreateTexture2DArray(
+            new Color(0.9f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.9f, 0.05f, 1f));
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateUiDraw(material =>
+                {
+                    material.SetTexture("_BaseMap2DArray", texture);
+                    material.SetFloat("_BaseMapMode", 1);
+                    material.SetFloat("_BaseMapProgress", 0.75f);
+                    material.SetFloat("_BaseMapSliceCount", texture.depth);
+                    material.EnableKeyword("UNITY_UI_CLIP_RECT");
+                    material.SetVector("_ClipRect", new Vector4(-0.05f, -1f, 1f, 1f));
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[1].g, Is.GreaterThan(samples[1].r + 0.2f), $"Clipped {samples[0]}, visible {samples[1]}");
+        Assert.That(samples[0].b, Is.GreaterThan(samples[0].g + 0.02f), $"Clipped {samples[0]}, visible {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitBaseTextureFeaturesPreserveStencilOrMaskBehavior()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateStencilMask(new Rect(-0.5f, -0.5f, 0.5f, 1f)),
+                CreateUiDraw(material =>
+                {
+                    material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)));
+                    material.SetFloat("_BaseMapMode", 0);
+                    material.SetFloat("_BaseMapToneMode", 1);
+                    material.SetFloat("_BaseMapToneChannel", 0);
+                    material.SetColor("_BaseMapToneShadowsColor", new Color(0.9f, 0.05f, 0.05f, 1f));
+                    material.SetColor("_BaseMapToneMidtonesColor", new Color(0.05f, 0.9f, 0.05f, 1f));
+                    material.SetColor("_BaseMapToneHighlightsColor", new Color(0.05f, 0.05f, 0.9f, 1f));
+                    material.SetFloat("_BaseMapToneShadows", 0.2f);
+                    material.SetFloat("_BaseMapToneMidtones", 0.5f);
+                    material.SetFloat("_BaseMapToneHighlights", 0.8f);
+                    material.SetFloat("_StencilComp", (float)CompareFunction.Equal);
+                    material.SetFloat("_Stencil", 1);
+                    material.SetFloat("_StencilOp", (float)StencilOp.Keep);
+                    material.SetFloat("_StencilReadMask", 255);
+                    material.SetFloat("_StencilWriteMask", 255);
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[0].g, Is.GreaterThan(samples[0].r + 0.15f), $"Inside {samples[0]}, outside {samples[1]}");
+        Assert.That(samples[1].b, Is.GreaterThan(samples[1].g + 0.02f), $"Inside {samples[0]}, outside {samples[1]}");
     }
 
     private static Color RenderUiUberUnlit(
@@ -271,12 +459,12 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
         }
     }
 
-    private static Mesh CreateQuad(Color vertexColor)
+    private static Mesh CreateQuad(Color vertexColor, Vector4? customCoord1 = null)
     {
-        return CreateQuad(vertexColor, new Rect(-0.5f, -0.5f, 1f, 1f));
+        return CreateQuad(vertexColor, new Rect(-0.5f, -0.5f, 1f, 1f), customCoord1);
     }
 
-    private static Mesh CreateQuad(Color vertexColor, Rect rect)
+    private static Mesh CreateQuad(Color vertexColor, Rect rect, Vector4? customCoord1 = null)
     {
         var mesh = new Mesh { name = "NovaBuiltInUIParticlesUberUnlitQuad" };
         mesh.vertices = new[]
@@ -294,6 +482,7 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
             new Vector2(0f, 1f),
         };
         mesh.colors = Enumerable.Repeat(vertexColor, 4).ToArray();
+        mesh.SetUVs(1, Enumerable.Repeat(customCoord1 ?? Vector4.zero, 4).ToList());
         mesh.triangles = new[] { 0, 2, 1, 0, 3, 2 };
         mesh.RecalculateBounds();
         return mesh;
@@ -307,6 +496,47 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
             wrapMode = TextureWrapMode.Clamp,
         };
         texture.SetPixels(Enumerable.Repeat(color, TextureSize * TextureSize).ToArray());
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2DArray CreateTexture2DArray(params Color[] sliceColors)
+    {
+        var texture = new Texture2DArray(TextureSize, TextureSize, sliceColors.Length, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+
+        for (var slice = 0; slice < sliceColors.Length; slice++)
+        {
+            texture.SetPixels(Enumerable.Repeat(sliceColors[slice], TextureSize * TextureSize).ToArray(), slice);
+        }
+
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture3D CreateTexture3D(params Color[] depthColors)
+    {
+        var texture = new Texture3D(TextureSize, TextureSize, depthColors.Length, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        var pixels = new Color[TextureSize * TextureSize * depthColors.Length];
+        for (var z = 0; z < depthColors.Length; z++)
+        {
+            for (var y = 0; y < TextureSize; y++)
+            {
+                for (var x = 0; x < TextureSize; x++)
+                {
+                    pixels[x + TextureSize * (y + TextureSize * z)] = depthColors[z];
+                }
+            }
+        }
+
+        texture.SetPixels(pixels);
         texture.Apply();
         return texture;
     }

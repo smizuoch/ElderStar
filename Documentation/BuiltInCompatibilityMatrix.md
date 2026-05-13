@@ -571,3 +571,30 @@ Phase 5.1 compatibility annotations:
 - Keyword declarations were split into independent UI-compatible groups so base map, tint, alpha test, and `UNITY_UI_CLIP_RECT` can be enabled together. Non-UI ShadowCaster-only keywords remain excluded from UI shader declarations.
 - UI pass topology intentionally stays one primary forward pass. No ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking scope was added in Phase 5.1.
 - Remaining UI UberUnlit gaps: full feature parity, base map 2D array / 3D, tone/channel/random row, flow, parallax, tint map/rim expansion, greyscale/gradient map, alpha transition, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.
+
+## Phase 5.2A UI UberUnlit Base Texture and Tone Status
+
+Phase 5.2A expands only `Nova/UIParticles/UberUnlit` base texture and tone behavior on top of the Phase 5.1 single-pass Built-in UI forward path. It does not implement UI tint map expansion, tint rim, flow map, parallax map, greyscale/gradient map, alpha transition, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, Picking, Lit, Distortion runtime, optimizer/replacer runtime behavior, final visual regression, or golden image baselines.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| UI base map 2D array | Passed | Passed | `_BASE_MAP_MODE_2D_ARRAY` samples `_BaseMap2DArray` using the same Built-in flip-book progress helper already proven for `Nova/Particles/UberUnlit`; PlayMode smoke renders a deterministic solid-color slice. |
+| UI base map 3D | Passed | Passed | `_BASE_MAP_MODE_3D` samples `_BaseMap3D` using the shared flip-book blending progress helper; PlayMode smoke renders a deterministic 3D layer. |
+| UI base map channel extraction | Passed | Passed | `_BASE_MAP_CHANNEL_ENABLED` uses `_BaseMapChannel` through the shared base-map channel helper; PlayMode smoke verifies selected-channel grayscale output while preserving alpha behavior. |
+| UI base map random row selection | Passed | Passed | `_BASE_MAP_RANDOM_ROW_SELECTION_ENABLED` uses `_BaseMapRowCount` and `_BaseMapRandomRowCoord` through mesh `TEXCOORD1` in the controlled UI smoke harness. Full Particle System Custom Vertex Streams parity remains unclaimed. |
+| UI tritone mode | Passed | Passed | `_BASE_MAP_TONE_MODE_TRITONE` uses `_BaseMapToneChannel` and shadow/midtone/highlight properties through the shared tone helper; PlayMode smoke verifies tone colors affect output. |
+| UI pentone mode | Passed | Passed | `_BASE_MAP_TONE_MODE_PENTONE` uses the shared shadow/darktone/midtone/bright/highlight interpolation helper; PlayMode smoke verifies pentone colors affect output. |
+| UI mirror sampler compatibility surface | Passed | Passed | `_BASE_SAMPLER_STATE_POINT_MIRROR`, `_BASE_SAMPLER_STATE_LINEAR_MIRROR`, and `_BASE_SAMPLER_STATE_TRILINEAR_MIRROR` remain declared and use the shared manual mirror-UV approximation. Exact backend sampler-state filtering/wrap parity remains approximate. |
+| UI stencil / rect clip regression | Passed | Passed | New PlayMode smokes verify a base texture feature still respects `UNITY_UI_CLIP_RECT` and a tone feature still respects controlled stencil masking. Canvas `Mask` / `RectMask2D` parity remains pending. |
+| UI pass topology | Passed | Passed | `Nova/UIParticles/UberUnlit` remains one `ForwardBase` UI pass with stencil and `ColorMask [_ColorMask]`; no ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking pass was added. |
+| Non-UI keyword exclusion | Passed | Passed | UI shader declarations still include `UNITY_UI_CLIP_RECT` and intentionally exclude `_CASTING_PUNCTUAL_LIGHT_SHADOW` and `_SHADOW_CASTER_ALPHA_TEST_ENABLED`. |
+| Shader compiler diagnostics | Passed | Passed | EditMode compile coverage now includes 2D array, 3D, channel extraction, random row, tritone, pentone, mirror sampler keywords, base texture feature plus `UNITY_UI_CLIP_RECT`, and base texture feature plus alpha test. |
+
+Phase 5.2A compatibility annotations:
+
+- `Nova/UIParticles/UberUnlit` now reuses the shared Built-in UberUnlit base texture helpers for 2D array, 3D, random-row progress, channel extraction, tritone, pentone, and manual mirror UV behavior.
+- 2D array and 3D support remain Approximate at the platform level because texture array and 3D texture support depend on the target backend, although the tested Unity editor paths pass deterministic PlayMode smoke coverage.
+- Mirror sampling remains Approximate: the Built-in port manually mirrors UVs when the preserved mirror keywords are enabled rather than relying on URP sampler-state definitions.
+- Random row selection is validated through mesh UV streams in the UI smoke harness. Full Particle System Custom Vertex Streams parity is still pending.
+- Stencil, `_ColorMask`, rect clipping, vertex color, vertex alpha, alpha test, and the single-pass UI topology are preserved by regression coverage.
+- Remaining UI UberUnlit gaps after Phase 5.2A: full feature parity, tint map/rim expansion, flow map, parallax map, greyscale/gradient map, alpha transition, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.

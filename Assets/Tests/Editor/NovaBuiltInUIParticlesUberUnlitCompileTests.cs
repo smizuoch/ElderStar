@@ -44,7 +44,12 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUI.cginc"));
         Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUberUnlit.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
+        Assert.That(shaderText, Does.Contain("SampleBaseMap"));
         Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_BaseMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D_ARRAY(_BaseMap2DArray"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX3D_LOD(_BaseMap3D"));
+        Assert.That(shaderText, Does.Contain("NovaApplyBaseMapChannel"));
+        Assert.That(shaderText, Does.Contain("NovaApplyBaseMapTone"));
         Assert.That(shaderText, Does.Contain("NovaApplyTintColor"));
         Assert.That(shaderText, Does.Contain("NovaUIClipAlpha"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
@@ -86,6 +91,24 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
     }
 
     [Test]
+    public void UIParticlesUberUnlitPhase52ABaseTextureKeywordsStayUiScoped()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("_BASE_MAP_MODE_2D_ARRAY"));
+        Assert.That(shaderText, Does.Contain("_BASE_MAP_MODE_3D"));
+        Assert.That(shaderText, Does.Contain("_BASE_MAP_CHANNEL_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_BASE_MAP_RANDOM_ROW_SELECTION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_BASE_MAP_TONE_MODE_TRITONE"));
+        Assert.That(shaderText, Does.Contain("_BASE_MAP_TONE_MODE_PENTONE"));
+        Assert.That(shaderText, Does.Contain("_BASE_SAMPLER_STATE_POINT_MIRROR"));
+        Assert.That(shaderText, Does.Contain("_BASE_SAMPLER_STATE_LINEAR_MIRROR"));
+        Assert.That(shaderText, Does.Contain("_BASE_SAMPLER_STATE_TRILINEAR_MIRROR"));
+        Assert.That(shaderText, Does.Contain("NovaApplyBaseMirror"));
+        Assert.That(shaderText, Does.Contain("NovaBaseMapProgress"));
+    }
+
+    [Test]
     public void UIParticlesUberUnlitRepresentativeKeywordStatesHaveNoBlockingCompilerMessages()
     {
         var shader = Shader.Find(ShaderName);
@@ -109,8 +132,10 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             }
             finally
             {
-                var texture = material.GetTexture("_BaseMap");
-                if (texture != null && texture.name == "NovaBuiltInUiCompileTexture")
+                foreach (var texture in material.GetTexturePropertyNames()
+                    .Select(material.GetTexture)
+                    .Where(texture => texture != null && texture.name.StartsWith("NovaBuiltInUiCompile", StringComparison.Ordinal))
+                    .Distinct())
                 {
                     UnityEngine.Object.DestroyImmediate(texture);
                 }
@@ -139,6 +164,61 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         baseMap2D.SetFloat("_BaseMapMode", 0);
         baseMap2D.SetTexture("_BaseMap", CreateCompileTexture());
 
+        var baseMap2DArray = new Material(shader);
+        baseMap2DArray.SetFloat("_BaseMapMode", 1);
+        baseMap2DArray.SetFloat("_BaseMapSliceCount", 2);
+        baseMap2DArray.SetTexture("_BaseMap2DArray", CreateCompileTexture2DArray());
+
+        var baseMap3D = new Material(shader);
+        baseMap3D.SetFloat("_BaseMapMode", 2);
+        baseMap3D.SetFloat("_BaseMapSliceCount", 2);
+        baseMap3D.SetTexture("_BaseMap3D", CreateCompileTexture3D());
+
+        var channel = new Material(shader);
+        channel.SetFloat("_BaseMapChannel", 2);
+        channel.SetTexture("_BaseMap", CreateCompileTexture());
+
+        var randomRow = new Material(shader);
+        randomRow.SetFloat("_BaseMapMode", 1);
+        randomRow.SetFloat("_BaseMapSliceCount", 4);
+        randomRow.SetFloat("_BaseMapRandomRowSelectionEnabled", 1);
+        randomRow.SetFloat("_BaseMapRandomRowCoord", 1);
+        randomRow.SetFloat("_BaseMapRowCount", 2);
+        randomRow.SetTexture("_BaseMap2DArray", CreateCompileTexture2DArray(4));
+
+        var tritone = new Material(shader);
+        tritone.SetFloat("_BaseMapToneMode", 1);
+        tritone.SetTexture("_BaseMap", CreateCompileTexture());
+
+        var pentone = new Material(shader);
+        pentone.SetFloat("_BaseMapToneMode", 2);
+        pentone.SetTexture("_BaseMap", CreateCompileTexture());
+
+        var pointMirror = new Material(shader);
+        pointMirror.SetFloat("_BaseMapMirrorSampling", 1);
+        pointMirror.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Point));
+
+        var linearMirror = new Material(shader);
+        linearMirror.SetFloat("_BaseMapMirrorSampling", 1);
+        linearMirror.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Bilinear));
+
+        var trilinearMirror = new Material(shader);
+        trilinearMirror.SetFloat("_BaseMapMirrorSampling", 1);
+        trilinearMirror.SetTexture("_BaseMap", CreateCompileTexture(FilterMode.Trilinear));
+
+        var baseFeatureClipRect = new Material(shader);
+        baseFeatureClipRect.SetFloat("_BaseMapMode", 1);
+        baseFeatureClipRect.SetFloat("_BaseMapSliceCount", 2);
+        baseFeatureClipRect.SetTexture("_BaseMap2DArray", CreateCompileTexture2DArray());
+        baseFeatureClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        baseFeatureClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var baseFeatureAlphaTest = new Material(shader);
+        baseFeatureAlphaTest.SetFloat("_RenderType", 1);
+        baseFeatureAlphaTest.SetFloat("_Cutoff", 0.5f);
+        baseFeatureAlphaTest.SetFloat("_BaseMapToneMode", 1);
+        baseFeatureAlphaTest.SetTexture("_BaseMap", CreateCompileTexture());
+
         var tintColor = new Material(shader);
         tintColor.SetFloat("_TintAreaMode", 1);
         tintColor.SetFloat("_TintColorMode", 0);
@@ -160,18 +240,67 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         stencil.SetFloat("_StencilWriteMask", 255);
         stencil.SetFloat("_ColorMask", 15);
 
-        return new[] { defaultMaterial, baseMap2D, tintColor, alphaTest, clipRect, stencil };
+        return new[]
+        {
+            defaultMaterial,
+            baseMap2D,
+            baseMap2DArray,
+            baseMap3D,
+            channel,
+            randomRow,
+            tritone,
+            pentone,
+            pointMirror,
+            linearMirror,
+            trilinearMirror,
+            baseFeatureClipRect,
+            baseFeatureAlphaTest,
+            tintColor,
+            alphaTest,
+            clipRect,
+            stencil
+        };
     }
 
-    private static Texture2D CreateCompileTexture()
+    private static Texture2D CreateCompileTexture(FilterMode filterMode = FilterMode.Point)
     {
         var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false)
         {
             name = "NovaBuiltInUiCompileTexture",
-            filterMode = FilterMode.Point,
+            filterMode = filterMode,
             wrapMode = TextureWrapMode.Clamp,
         };
         texture.SetPixel(0, 0, Color.white);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2DArray CreateCompileTexture2DArray(int depth = 2)
+    {
+        var texture = new Texture2DArray(1, 1, depth, TextureFormat.RGBA32, false)
+        {
+            name = "NovaBuiltInUiCompileTexture2DArray",
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        for (var slice = 0; slice < depth; slice++)
+        {
+            texture.SetPixels(new[] { Color.white }, slice);
+        }
+
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture3D CreateCompileTexture3D()
+    {
+        var texture = new Texture3D(1, 1, 2, TextureFormat.RGBA32, false)
+        {
+            name = "NovaBuiltInUiCompileTexture3D",
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        texture.SetPixels(new[] { Color.white, Color.white });
         texture.Apply();
         return texture;
     }
