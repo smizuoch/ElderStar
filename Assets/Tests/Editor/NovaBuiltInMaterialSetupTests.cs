@@ -358,10 +358,25 @@ public sealed class NovaBuiltInMaterialSetupTests
             material.SetFloat("_StencilReadMask", 63);
             material.SetFloat("_ColorMask", 11);
             material.EnableKeyword("UNITY_UI_CLIP_RECT");
-            material.SetFloat("_RenderType", 0);
+            material.SetFloat("_RenderType", 2);
+            material.SetFloat("_TransparentBlendMode", 1);
+            material.SetFloat("_Cull", (float)CullMode.Front);
+            material.SetFloat("_QueueOffset", 5);
+            material.SetFloat("_BlendSrc", (float)BlendMode.One);
+            material.SetFloat("_BlendDst", (float)BlendMode.Zero);
             material.SetFloat("_ZWriteOverride", -1);
+            material.SetFloat("_ZTest", (float)CompareFunction.Always);
             SetupUberUnlit(material);
 
+            Assert.That(material.renderQueue, Is.EqualTo((int)RenderQueue.Transparent + 5));
+            Assert.That(material.GetTag("RenderType", false), Is.EqualTo("Transparent"));
+            Assert.That(material.GetFloat("_RenderType"), Is.EqualTo(2));
+            Assert.That(material.GetFloat("_TransparentBlendMode"), Is.EqualTo(1));
+            Assert.That(material.GetFloat("_Cull"), Is.EqualTo((float)CullMode.Front));
+            Assert.That(material.GetFloat("_QueueOffset"), Is.EqualTo(5));
+            Assert.That(material.GetFloat("_BlendSrc"), Is.EqualTo((float)BlendMode.SrcAlpha));
+            Assert.That(material.GetFloat("_BlendDst"), Is.EqualTo((float)BlendMode.One));
+            Assert.That(material.GetFloat("_ZTest"), Is.EqualTo((float)CompareFunction.Always));
             Assert.That(material.GetFloat("_StencilComp"), Is.EqualTo(3));
             Assert.That(material.GetFloat("_Stencil"), Is.EqualTo(7));
             Assert.That(material.GetFloat("_StencilOp"), Is.EqualTo(2));

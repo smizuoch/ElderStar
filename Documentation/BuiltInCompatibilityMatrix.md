@@ -543,3 +543,31 @@ Phase 4.6A compatibility annotations:
 | PlayMode suite | Passed, 87/87 | Passed, 87/87 | Adds `NovaBuiltInUberUnlitInteractionSmokeTests` for six broad non-golden feature interaction smokes. |
 | Shader compiler diagnostics | Passed | Passed | Existing diagnostics plus Phase 4.6A representative complex keyword states report no blocking shader compiler messages. |
 | Forbidden URP/RenderGraph scan | Passed | Passed | Static validation scans `Assets/Nova/Runtime`, `Assets/Nova/Editor`, `Assets/Nova/package.json`, and `Packages/manifest.json`; the untracked `NovaShader/` reference directory is excluded. |
+
+## Phase 5.1 UI UberUnlit Minimum Forward Status
+
+Phase 5.1 begins `Nova/UIParticles/UberUnlit` only. It replaces the Phase 1/2 UI skeleton output with a minimum Built-in UI-compatible `ForwardBase` pass. This phase does not implement full UI UberUnlit feature parity, UI Lit, non-UI Lit, Distortion runtime, optimizer/replacer runtime behavior, final visual regression, or golden image baselines.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Minimum UI forward pass | Passed | Passed | One Built-in `ForwardBase` pass samples `_BaseMap` in 2D mode, applies `_TintColor` for `_TINT_AREA_ALL` + `_TINT_COLOR_ENABLED`, multiplies vertex color/alpha, preserves material alpha, supports `_ALPHATEST_ENABLED` + `_Cutoff`, and uses local Built-in includes only. |
+| Base map 2D UI smoke | Passed | Passed | Non-golden PlayMode smoke renders a deterministic solid `_BaseMap` color through `Nova/UIParticles/UberUnlit`. UI 2D array and 3D base map modes remain pending. |
+| Tint / vertex color / vertex alpha | Passed | Passed | PlayMode smokes verify tint changes the dominant channel, UI vertex color multiplies output, and vertex alpha blends toward the known background. Tint maps, tint rim, and vertex alpha as transition progress remain pending. |
+| Alpha test | Passed | Passed | PlayMode smoke verifies `_ALPHATEST_ENABLED` clips below `_Cutoff` and reveals the background. Alpha transition and dissolve remain pending for UI. |
+| UI stencil properties and state | Passed | Passed | `_StencilComp`, `_Stencil`, `_StencilOp`, `_StencilWriteMask`, `_StencilReadMask`, and `_ColorMask` remain material properties; the shader has a stencil block referencing those properties; a controlled stencil mask smoke hides/reveals the UI particle quad. |
+| `_ColorMask` | Passed | Passed | Source and PlayMode stencil-mask coverage verify `_ColorMask` is wired to `ColorMask [_ColorMask]`, including a no-color stencil writer material. |
+| `UNITY_UI_CLIP_RECT` / rect clip | Passed | Passed | `UNITY_UI_CLIP_RECT` remains declared as a local multi-compile keyword. The shader uses the local Built-in UI helper around `UnityGet2DClipping`, and a deterministic rect-clip smoke verifies outside-clip output is hidden. |
+| Canvas / Mask / RectMask2D coverage | Approximate | Approximate | Phase 5.1 uses controlled mesh-based UI shader smokes instead of a uGUI `Canvas`/`Mask`/`RectMask2D` scene because the package manifest does not depend on `com.unity.ugui`. Full Canvas masking parity remains pending. |
+| UI pass topology | Passed | Passed | `Nova/UIParticles/UberUnlit` remains a single-pass UI shader. Phase 5.1 does not add ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking. |
+| Non-UI ShadowCaster keyword exclusion | Passed | Passed | UI shader keyword declarations still include `UNITY_UI_CLIP_RECT` and intentionally exclude `_CASTING_PUNCTUAL_LIGHT_SHADOW` and `_SHADOW_CASTER_ALPHA_TEST_ENABLED`. ShadowCaster material properties remain preserved as public API surface. |
+| Material/editor API regression | Passed | Passed | Existing material setup continues to preserve `_RenderType`, `_TransparentBlendMode`, `_Cull`, `_QueueOffset`, `_BlendSrc`, `_BlendDst`, `_ZWrite`, `_ZWriteOverride`, `_ZTest`, UI stencil properties, `_ColorMask`, and `UNITY_UI_CLIP_RECT`. |
+| Shader compiler diagnostics | Passed | Passed | New EditMode diagnostics cover default UI import, base-map 2D, tint color, alpha test, `UNITY_UI_CLIP_RECT`, and stencil property states with no blocking compiler messages. |
+
+Phase 5.1 compatibility annotations:
+
+- `Nova/UIParticles/UberUnlit` now has a real minimum Built-in UI forward path, but only for the base-map 2D + tint color + vertex color/alpha + alpha test subset.
+- Stencil and `_ColorMask` are implemented through the same material property contract Unity UI uses. The runtime smoke validates a controlled stencil setup, not full uGUI Mask component behavior.
+- Rect clipping is Approximate: it uses Built-in `UnityUI.cginc` clipping through `NovaBuiltInUI.cginc` and object-space clip positions. The smoke validates deterministic mesh clipping; Canvas `RectMask2D` behavior remains pending.
+- Keyword declarations were split into independent UI-compatible groups so base map, tint, alpha test, and `UNITY_UI_CLIP_RECT` can be enabled together. Non-UI ShadowCaster-only keywords remain excluded from UI shader declarations.
+- UI pass topology intentionally stays one primary forward pass. No ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking scope was added in Phase 5.1.
+- Remaining UI UberUnlit gaps: full feature parity, base map 2D array / 3D, tone/channel/random row, flow, parallax, tint map/rim expansion, greyscale/gradient map, alpha transition, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.
