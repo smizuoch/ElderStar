@@ -701,3 +701,32 @@ Phase 5.3B compatibility annotations:
 - Stencil, `_ColorMask`, rect clipping, vertex color, vertex alpha, alpha test, alpha transition interaction, and the single-pass UI topology remain covered by deterministic non-golden PlayMode smokes.
 - Full Canvas `Mask` / `RectMask2D` parity remains pending; Phase 5.3B continues to use the controlled mesh-based UI shader smoke harness without adding `com.unity.ugui`.
 - Remaining UI UberUnlit gaps after Phase 5.3B: full feature parity, rim/luminance transparency, soft particles/depth fade, vertex deformation, parallax 2D array/3D runtime behavior, parallax tint target runtime behavior, second alpha transition 2D array/3D/random-row runtime behavior, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.
+
+## Phase 5.4A UI UberUnlit Transparency Status
+
+Phase 5.4A expands only `Nova/UIParticles/UberUnlit` rim and luminance transparency behavior on top of the Phase 5.3B single-pass Built-in UI forward path. It does not implement UI soft particles, depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, Picking, Lit, Distortion runtime, optimizer/replacer runtime behavior, visual regression, or golden image baselines.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| UI rim transparency | Passed | Passed | `_TRANSPARENCY_BY_RIM` multiplies final alpha using the shared progress/sharpness shaping after emission and before UI rect clipping and alpha test. The rim input uses the same Built-in world normal/view-direction approximation already used for `Nova/Particles/UberUnlit`. |
+| UI inverse rim transparency | Passed | Passed | `_InverseRimTransparency` flips the rim input before shaping, matching the shared helper semantics. |
+| UI rim progress and sharpness | Passed | Passed | `_RimTransparencyProgress`, `_RimTransparencyProgressCoord`, `_RimTransparencySharpness`, and `_RimTransparencySharpnessCoord` are routed through the shared shaping helper and custom-coordinate path. |
+| UI luminance transparency | Passed | Passed | `_TRANSPARENCY_BY_LUMINANCE` derives luminance from current RGB after base, tint, color correction, vertex color, and emission, then multiplies final alpha. |
+| UI inverse luminance transparency | Passed | Passed | `_InverseLuminanceTransparency` flips the luminance input before shaping. |
+| UI luminance progress and sharpness | Passed | Passed | `_LuminanceTransparencyProgress`, `_LuminanceTransparencyProgressCoord`, `_LuminanceTransparencySharpness`, and `_LuminanceTransparencySharpnessCoord` use the same shaping helper as rim transparency. |
+| UI combined rim and luminance transparency | Passed | Passed | When both transparency keywords are enabled, both alpha multipliers are applied in the same conservative multiplicative order used by the non-UI Built-in UberUnlit path. |
+| UI stencil / ColorMask / rect clip regressions | Passed | Passed | Transparency smokes verify rect clipping, controlled stencil masking, vertex color, vertex alpha, and alpha test remain intact. Existing `_ColorMask` coverage remains green. Canvas `Mask` / `RectMask2D` parity is still pending because the package still does not add `com.unity.ugui`. |
+| UI emission / alpha transition interaction | Passed | Passed | A combined smoke verifies luminance transparency does not clobber existing emission or fade alpha transition behavior. |
+| UI pass topology | Passed | Passed | `Nova/UIParticles/UberUnlit` remains one `ForwardBase` UI pass with stencil and `ColorMask [_ColorMask]`; no ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking pass was added. |
+| Non-UI keyword exclusion | Passed | Passed | UI shader declarations still include `UNITY_UI_CLIP_RECT` and intentionally exclude `_CASTING_PUNCTUAL_LIGHT_SHADOW` and `_SHADOW_CASTER_ALPHA_TEST_ENABLED`. |
+| Shader compiler diagnostics | Passed | Passed | EditMode compile coverage includes `_TRANSPARENCY_BY_RIM`, `_TRANSPARENCY_BY_LUMINANCE`, both together, combinations with `UNITY_UI_CLIP_RECT`, alpha test, alpha transition, emission, and stencil property state. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UIParticlesUberUnlitRimTransparencyAffectsOutput`, `UIParticlesUberUnlitInverseRimTransparencyInvertsEffect`, `UIParticlesUberUnlitRimTransparencyProgressAffectsOutput`, `UIParticlesUberUnlitRimTransparencySharpnessAffectsFalloff`, `UIParticlesUberUnlitLuminanceTransparencyAffectsOutput`, `UIParticlesUberUnlitInverseLuminanceTransparencyInvertsEffect`, `UIParticlesUberUnlitLuminanceTransparencyProgressAffectsOutput`, `UIParticlesUberUnlitLuminanceTransparencySharpnessAffectsOutput`, `UIParticlesUberUnlitRimAndLuminanceTransparencyCanCombine`, transparency UI regression smokes for rect clip, stencil, vertex color/alpha, alpha test, and emission plus alpha transition. |
+
+Phase 5.4A compatibility annotations:
+
+- `Nova/UIParticles/UberUnlit` now reuses the shared Built-in UberUnlit rim transparency and luminance transparency helpers while preserving the single UI forward pass.
+- UI rim transparency is Approximate because Built-in world normal/view-direction interpolation differs from the original URP helper path. The alpha-factor math is shared with the already verified non-UI Built-in path, but pixel-perfect URP rim parity is not claimed.
+- Luminance transparency follows the original call order for this port: after base/tint/color-correction, vertex color, and emission, and before UI rect clipping, alpha test, and alpha modulation.
+- Combined rim plus luminance transparency applies both alpha multipliers and does not replace alpha transition, emission keep-edge transparency, vertex alpha, stencil, rect clipping, or `_ColorMask` behavior.
+- Full Canvas `Mask` / `RectMask2D` parity remains pending; Phase 5.4A continues to use the controlled mesh-based UI shader smoke harness without adding `com.unity.ugui`.
+- Remaining UI UberUnlit gaps after Phase 5.4A: full feature parity, soft particles/depth fade, vertex deformation, parallax 2D array/3D runtime behavior, parallax tint target runtime behavior, second alpha transition 2D array/3D/random-row runtime behavior, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.

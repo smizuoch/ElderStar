@@ -216,6 +216,32 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
     }
 
     [Test]
+    public void UIParticlesUberUnlitPhase54ATransparencyKeywordsStayUiScoped()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("_TRANSPARENCY_BY_RIM"));
+        Assert.That(shaderText, Does.Contain("_TRANSPARENCY_BY_LUMINANCE"));
+        Assert.That(shaderText, Does.Contain("_RimTransparencyProgress"));
+        Assert.That(shaderText, Does.Contain("_RimTransparencySharpness"));
+        Assert.That(shaderText, Does.Contain("_InverseRimTransparency"));
+        Assert.That(shaderText, Does.Contain("_LuminanceTransparencyProgress"));
+        Assert.That(shaderText, Does.Contain("_LuminanceTransparencySharpness"));
+        Assert.That(shaderText, Does.Contain("_InverseLuminanceTransparency"));
+        Assert.That(shaderText, Does.Contain("NovaApplyRimTransparency"));
+        Assert.That(shaderText, Does.Contain("NovaApplyLuminanceTransparency"));
+        Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
+        Assert.That(shaderText, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
+        Assert.That(shaderText, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
+        Assert.That(CountOccurrences(shaderText, "\n        Pass\n        {"), Is.EqualTo(1));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthOnly\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"Picking\""));
+    }
+
+    [Test]
     public void UIParticlesUberUnlitRepresentativeKeywordStatesHaveNoBlockingCompilerMessages()
     {
         var shader = Shader.Find(ShaderName);
@@ -559,6 +585,58 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         flowEmission.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
         flowEmission.SetFloat("_FlowMapTarget", 8);
 
+        var rimTransparency = new Material(shader);
+        rimTransparency.SetFloat("_RimTransparencyEnabled", 1);
+
+        var luminanceTransparency = new Material(shader);
+        luminanceTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var combinedTransparency = new Material(shader);
+        combinedTransparency.SetFloat("_RimTransparencyEnabled", 1);
+        combinedTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var rimTransparencyClipRect = new Material(shader);
+        rimTransparencyClipRect.SetFloat("_RimTransparencyEnabled", 1);
+        rimTransparencyClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        rimTransparencyClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var luminanceTransparencyClipRect = new Material(shader);
+        luminanceTransparencyClipRect.SetFloat("_LuminanceTransparencyEnabled", 1);
+        luminanceTransparencyClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        luminanceTransparencyClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var rimTransparencyAlphaTest = new Material(shader);
+        rimTransparencyAlphaTest.SetFloat("_RenderType", 1);
+        rimTransparencyAlphaTest.SetFloat("_Cutoff", 0.5f);
+        rimTransparencyAlphaTest.SetFloat("_RimTransparencyEnabled", 1);
+
+        var luminanceTransparencyAlphaTest = new Material(shader);
+        luminanceTransparencyAlphaTest.SetFloat("_RenderType", 1);
+        luminanceTransparencyAlphaTest.SetFloat("_Cutoff", 0.5f);
+        luminanceTransparencyAlphaTest.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var rimTransparencyAlphaTransition = new Material(shader);
+        rimTransparencyAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        rimTransparencyAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        rimTransparencyAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        rimTransparencyAlphaTransition.SetFloat("_RimTransparencyEnabled", 1);
+
+        var luminanceTransparencyAlphaTransition = new Material(shader);
+        luminanceTransparencyAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        luminanceTransparencyAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        luminanceTransparencyAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        luminanceTransparencyAlphaTransition.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var rimTransparencyEmission = new Material(shader);
+        rimTransparencyEmission.SetFloat("_EmissionAreaType", 1);
+        rimTransparencyEmission.SetFloat("_EmissionColorType", 0);
+        rimTransparencyEmission.SetFloat("_RimTransparencyEnabled", 1);
+
+        var luminanceTransparencyEmission = new Material(shader);
+        luminanceTransparencyEmission.SetFloat("_EmissionAreaType", 1);
+        luminanceTransparencyEmission.SetFloat("_EmissionColorType", 0);
+        luminanceTransparencyEmission.SetFloat("_LuminanceTransparencyEnabled", 1);
+
         var emissionClipRect = new Material(shader);
         emissionClipRect.SetFloat("_EmissionAreaType", 2);
         emissionClipRect.SetFloat("_EmissionColorType", 0);
@@ -661,6 +739,17 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             emissionMap3D,
             emissionMapRandomRow,
             flowEmission,
+            rimTransparency,
+            luminanceTransparency,
+            combinedTransparency,
+            rimTransparencyClipRect,
+            luminanceTransparencyClipRect,
+            rimTransparencyAlphaTest,
+            luminanceTransparencyAlphaTest,
+            rimTransparencyAlphaTransition,
+            luminanceTransparencyAlphaTransition,
+            rimTransparencyEmission,
+            luminanceTransparencyEmission,
             emissionClipRect,
             emissionAlphaTest,
             emissionAlphaTransition,
