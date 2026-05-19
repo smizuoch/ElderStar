@@ -790,3 +790,85 @@ Phase 5.5A compatibility annotations:
 - Offset-coordinate support is shader-side only in this phase. Tests provide deterministic mesh UV custom coordinates, but full Particle System Custom Vertex Streams parity remains pending.
 - Full Canvas `Mask` / `RectMask2D` parity remains pending; Phase 5.5A continues to use the controlled mesh-based UI shader smoke harness without adding `com.unity.ugui`.
 - Remaining UI UberUnlit gaps after Phase 5.5A: full feature interaction consolidation, parallax 2D array/3D runtime behavior, parallax tint target runtime behavior, second alpha transition 2D array/3D/random-row runtime behavior, full Particle System Custom Vertex Streams parity, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.
+
+## Phase 5.6A UI UberUnlit Consolidation Status Audit
+
+Phase 5.6A consolidates the `Nova/UIParticles/UberUnlit` Built-in port after Phase 5.5A. It adds high-value interaction smoke coverage, representative complex compile permutation coverage, pass-topology/static regressions, and an explicit status audit before moving to Lit. It does not add a new major runtime feature, does not add UI ShadowCaster/depth/editor passes, does not add `com.unity.ugui`, does not start final visual regression, and does not add or update golden image baselines. This audit does not claim full UI UberUnlit visual parity.
+
+### Implemented and smoke-tested
+
+- UI minimum forward rendering through a single Built-in `ForwardBase` pass.
+- Base map 2D, base map 2D array, base map 3D, base map channel extraction, and base map random row selection.
+- Tritone and pentone base-map tone mapping.
+- Tint color, tint map 2D, tint map 2D array, tint map 3D, tint random row, and tint rim.
+- Flow target base, flow target tint, flow target alpha transition, and flow target emission.
+- Parallax 2D target base approximation.
+- Greyscale and gradient map color correction.
+- Fade alpha transition and dissolve alpha transition.
+- Alpha transition map 2D, alpha transition map 2D array, alpha transition map 3D, and primary alpha transition random row.
+- Second alpha transition 2D average and second alpha transition 2D multiply.
+- Vertex alpha transition progress.
+- Emission area all, emission area alpha, emission area map, emission map 2D, emission map 2D array, emission map 3D, emission map random row, emission color base, emission color explicit, emission color ramp, emission intensity, and keep edge transparency.
+- Rim transparency and luminance transparency.
+- Soft particles and depth fade.
+- Vertex deformation in UI ForwardBase, including deformation map sampling, channel selection, intensity, base value, and offset coordinate path.
+- UI stencil properties, `_ColorMask`, `UNITY_UI_CLIP_RECT` / local rect clip behavior, one-pass UI topology, and non-UI ShadowCaster keyword exclusion.
+
+### Implemented but approximate
+
+- Manual mirror sampler approximation uses explicit mirrored UVs instead of exact backend sampler-state parity.
+- Parallax 2D approximation uses the shared Built-in tangent/view-vector helper path and is only runtime-smoked for target base.
+- Tint rim / rim transparency view-vector approximation uses Built-in world normal and view direction helpers rather than the original URP helper path.
+- Soft particles Built-in camera depth texture approximation depends on `_CameraDepthTexture` generation by the Built-in camera.
+- Depth fade Built-in camera depth texture approximation is tested in the same controlled depth scene, while the depth-fade factor itself follows the original view-depth range semantics.
+- Texture array / 3D texture platform dependence remains because support depends on the target backend and shader model.
+- Controlled mesh-based UI shader smoke harness is used instead of full Canvas parity.
+- Screen Space Overlay depth relationship limitation remains: overlay-style UI has no meaningful scene-depth relationship in this package without additional runtime infrastructure.
+
+### Preserved but not fully parity-tested
+
+- Full Canvas `Mask` / `RectMask2D` parity remains pending.
+- Full Particle System Custom Vertex Streams parity remains pending; tests provide deterministic mesh UV custom coordinates.
+- Second alpha transition 2D array / 3D / random-row runtime behavior remains pending beyond compile coverage.
+- Parallax target tint / 2D array / 3D runtime behavior remains pending beyond compile coverage.
+- Full UI material inspector visual parity remains pending.
+- Golden image visual parity remains pending.
+- Final visual regression remains pending.
+
+### Intentionally not implemented for UI UberUnlit
+
+- UI ShadowCaster pass.
+- UI DepthOnly pass.
+- UI DepthNormals pass.
+- UI SceneSelectionPass.
+- UI Picking pass.
+- Non-UI ShadowCaster-only keywords, including `_CASTING_PUNCTUAL_LIGHT_SHADOW` and `_SHADOW_CASTER_ALPHA_TEST_ENABLED`.
+- URP debug display path.
+
+Phase 5.6A interaction smoke coverage adds deterministic, non-golden combinations for complex texture/tint/flow/color-correction with rect clip, alpha-transition/emission/transparency, depth features with emission/transparency and rect clip, vertex deformation with depth and alpha behavior, stencil plus rect clip with a complex feature stack, `_ColorMask` with transparency/emission, and vertex alpha as alpha-transition progress with emission keep-edge transparency.
+
+Phase 5.6A complex compile permutation coverage represents:
+
+- base map 2D array + tint map 2D array + flow + `UNITY_UI_CLIP_RECT`
+- base map 3D + alpha transition 3D + emission 3D
+- dissolve + second alpha transition + flow target alpha transition
+- emission + keep edge transparency + luminance transparency
+- soft particles + depth fade + alpha transition + emission
+- vertex deformation + soft particles + `UNITY_UI_CLIP_RECT`
+- vertex deformation + alpha transition + emission + rect clip
+- tint rim + rim transparency + luminance transparency
+- stencil property state + alpha test + emission
+- all major currently implemented UI non-lit feature keywords except mutually exclusive modes
+
+Phase 5.6A topology and material/editor regressions verify that `Nova/UIParticles/UberUnlit` still declares exactly one UI forward pass, still declares no ShadowCaster / DepthOnly / DepthNormals / SceneSelectionPass / Picking pass, still excludes non-UI ShadowCaster-only keywords, still includes `UNITY_UI_CLIP_RECT`, still preserves stencil and `_ColorMask` properties through material setup, and still declares `CustomEditor "Nova.Editor.Core.Scripts.UIParticlesUberUnlitGUI"`.
+
+Phase 5.6A compatibility annotations:
+
+- `Nova/UIParticles/UberUnlit` is a stable Built-in approximation for the implemented non-lit UI feature set, but not a claim of full UI UberUnlit visual parity.
+- One-pass UI topology is intentional. The original UI shader had only a UI forward pass, and the Built-in port does not add UI ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking passes.
+- Full Canvas `Mask` / `RectMask2D` parity remains pending; controlled stencil and rect-clip paths are smoke-tested without adding `com.unity.ugui`.
+- Full Particle System Custom Vertex Streams parity remains pending; shader-side custom-coordinate semantics are covered through deterministic mesh UV channels.
+- Built-in depth texture behavior for UI depth features remains Approximate. Tests use a controlled camera depth texture setup, and Screen Space Overlay depth behavior remains a documented limitation.
+- Texture array, 3D texture, vertex texture sampling, manual mirror sampling, parallax, and rim/view-vector behavior remain Approximate until final target-platform and visual validation.
+- Visual regression remains pending and golden image baselines were not added or updated.
+- Lit is the next major shader family. `Nova/Particles/UberLit`, `Nova/UIParticles/UberLit`, Distortion runtime, and Optimized Shader Generator/Replacer runtime behavior remain outside Phase 5.6A scope.
