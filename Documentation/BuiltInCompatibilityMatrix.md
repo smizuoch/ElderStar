@@ -666,3 +666,38 @@ Phase 5.3A compatibility annotations:
 - Stencil, `_ColorMask`, rect clipping, vertex color, vertex alpha, alpha test, and the single-pass UI topology remain covered by deterministic non-golden PlayMode smokes.
 - Full Canvas `Mask` / `RectMask2D` parity remains pending; Phase 5.3A continues to use the controlled mesh-based UI shader smoke harness without adding `com.unity.ugui`.
 - Remaining UI UberUnlit gaps after Phase 5.3A: full feature parity, emission, rim/luminance transparency, soft particles/depth fade, vertex deformation, parallax 2D array/3D runtime behavior, parallax tint target runtime behavior, second alpha transition 2D array/3D/random-row runtime behavior, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.
+
+## Phase 5.3B UI UberUnlit Emission Status
+
+Phase 5.3B expands only `Nova/UIParticles/UberUnlit` emission behavior on top of the Phase 5.3A single-pass Built-in UI forward path. It does not implement UI rim/luminance transparency, soft particles/depth fade, vertex deformation, ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, Picking, Lit, Distortion runtime, optimizer/replacer runtime behavior, visual regression, or golden image baselines.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| UI emission area all | Passed | Passed | `_EMISSION_AREA_ALL` adds emission across the rendered UI surface using `_EmissionIntensity` and the selected emission color source while preserving UI vertex color, alpha, clip, stencil, and blend state behavior. |
+| UI emission area alpha | Passed | Passed | `_EMISSION_AREA_ALPHA` follows the original edge rule: emission is driven by `1 - alpha`, with texture-compression margin handling and `_KeepEdgeTransparency` support. |
+| UI emission area map | Passed | Passed | `_EMISSION_AREA_MAP` samples the emission map signal and preserves `_EmissionMapChannelsX` channel extraction. |
+| UI emission map 2D | Passed | Passed | `_EMISSION_MAP_MODE_2D` samples `_EmissionMap` with offset, rotation, and channel selection through the shared Built-in helper path. |
+| UI emission map 2D array | Passed | Passed | `_EMISSION_MAP_MODE_2D_ARRAY` samples `_EmissionMap2DArray` using `_EmissionMapProgress`, `_EmissionMapSliceCount`, and flip-book frame selection. Texture array support remains platform-dependent. |
+| UI emission map 3D | Passed | Passed | `_EMISSION_MAP_MODE_3D` samples `_EmissionMap3D` using flip-book blending progress. Texture 3D support remains platform-dependent. |
+| UI emission map random row selection | Passed | Passed | `_EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED` uses `_EmissionMapRowCount` and `_EmissionMapRandomRowCoord`; the smoke supplies deterministic mesh `TEXCOORD1.x`, not full Particle System Custom Vertex Streams parity. |
+| UI emission color from base color | Passed | Passed | `_EMISSION_COLOR_BASECOLOR` derives emission from the current post-base/tint/color-correction and vertex-color RGB, matching the original emission call order. |
+| UI emission color from explicit color | Passed | Passed | `_EMISSION_COLOR_COLOR` uses `_EmissionColor.rgb` and `_EmissionIntensity`. |
+| UI emission color map/ramp | Passed | Passed | `_EMISSION_COLOR_MAP` samples `_EmissionColorRamp` at the emission-map or alpha-derived signal, matching the original ramp semantics for covered area modes. |
+| UI emission intensity | Passed | Passed | `_EmissionIntensity` and `_EmissionIntensityCoord` scale the final emission contribution. |
+| UI keep edge transparency | Passed | Passed | `_KeepEdgeTransparency` preserves alpha for edge emission when enabled and hardens nonzero alpha when disabled, matching the original shader rule. |
+| UI flow map target emission | Passed | Passed | `_FLOW_MAP_TARGET_EMISSION` offsets only emission-map UVs with the existing UI flow-map offset path and does not affect base, tint, or alpha-transition sampling for this target. |
+| UI stencil / ColorMask / rect clip regressions | Passed | Passed | Emission smokes verify rect clip, controlled stencil masking, vertex color, vertex alpha, alpha test, and alpha transition behavior remain intact. Existing `_ColorMask` coverage remains green. Canvas `Mask` / `RectMask2D` parity is still pending because the package still does not add `com.unity.ugui`. |
+| UI alpha transition interaction | Passed | Passed | Emission remains visible when alpha transition permits output and is attenuated when the existing fade transition reduces alpha. |
+| UI pass topology | Passed | Passed | `Nova/UIParticles/UberUnlit` remains one `ForwardBase` UI pass with stencil and `ColorMask [_ColorMask]`; no ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, or Picking pass was added. |
+| Non-UI keyword exclusion | Passed | Passed | UI shader declarations still include `UNITY_UI_CLIP_RECT` and intentionally exclude `_CASTING_PUNCTUAL_LIGHT_SHADOW` and `_SHADOW_CASTER_ALPHA_TEST_ENABLED`. |
+| Shader compiler diagnostics | Passed | Passed | EditMode compile coverage includes emission area all/alpha/map, emission color color/base/ramp, emission map 2D/2D array/3D/random row, flow target emission, `UNITY_UI_CLIP_RECT`, alpha test, alpha transition, and stencil property states. |
+| Rendering smokes | Passed | Passed | PlayMode coverage adds `UIParticlesUberUnlitEmissionAreaAllAffectsOutput`, `UIParticlesUberUnlitEmissionAreaAlphaUsesAlpha`, `UIParticlesUberUnlitEmissionAreaMapMasksEmission`, `UIParticlesUberUnlitEmissionMap2DAffectsOutput`, `UIParticlesUberUnlitEmissionMap2DArrayAffectsOutput`, `UIParticlesUberUnlitEmissionMap3DAffectsOutput`, `UIParticlesUberUnlitEmissionMapRandomRowSelectionAffectsOutput`, `UIParticlesUberUnlitEmissionColorFromBaseColorAffectsOutput`, `UIParticlesUberUnlitEmissionColorFromExplicitColorAffectsOutput`, `UIParticlesUberUnlitEmissionColorMapOrRampAffectsOutput`, `UIParticlesUberUnlitEmissionIntensityAffectsOutput`, `UIParticlesUberUnlitKeepEdgeTransparencyPreservesTransparentEdges`, `UIParticlesUberUnlitFlowMapOffsetsEmissionSampling`, and emission UI regression smokes for rect clip, stencil, vertex color/alpha, alpha test, and alpha transition. |
+
+Phase 5.3B compatibility annotations:
+
+- `Nova/UIParticles/UberUnlit` now reuses the shared Built-in UberUnlit emission progress, map sampling, color source, intensity, keep-edge transparency, and flow target emission semantics while keeping the single UI forward pass.
+- UI emission 2D array and 3D modes are runtime smoke-tested but remain Approximate at the platform level because texture array and 3D texture support depends on the target backend.
+- Random row selection tests use mesh UV streams to represent custom coordinates and do not claim full Particle System Custom Vertex Streams parity.
+- Stencil, `_ColorMask`, rect clipping, vertex color, vertex alpha, alpha test, alpha transition interaction, and the single-pass UI topology remain covered by deterministic non-golden PlayMode smokes.
+- Full Canvas `Mask` / `RectMask2D` parity remains pending; Phase 5.3B continues to use the controlled mesh-based UI shader smoke harness without adding `com.unity.ugui`.
+- Remaining UI UberUnlit gaps after Phase 5.3B: full feature parity, rim/luminance transparency, soft particles/depth fade, vertex deformation, parallax 2D array/3D runtime behavior, parallax tint target runtime behavior, second alpha transition 2D array/3D/random-row runtime behavior, full Canvas Mask/RectMask2D parity, visual regression, and golden image parity.

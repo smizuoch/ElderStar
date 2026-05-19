@@ -73,6 +73,13 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("NovaAlphaTransitionFactor"));
         Assert.That(shaderText, Does.Contain("NovaBlendAlphaTransitionFactors"));
         Assert.That(shaderText, Does.Contain("NovaModulateAlphaTransitionProgress"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D(_EmissionMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D_ARRAY(_EmissionMap2DArray"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX3D(_EmissionMap3D"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D(_EmissionColorRamp"));
+        Assert.That(shaderText, Does.Contain("SampleEmissionMap"));
+        Assert.That(shaderText, Does.Contain("NovaEmissionMapProgress"));
+        Assert.That(shaderText, Does.Contain("ApplyEmissionColor"));
         Assert.That(shaderText, Does.Contain("NovaUIClipAlpha"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(shaderText, Does.Contain("clip("));
@@ -179,6 +186,33 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
         Assert.That(shaderText, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
         Assert.That(shaderText, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitPhase53BEmissionKeywordsStayUiScoped()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("_EMISSION_AREA_ALL"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_AREA_ALPHA"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_AREA_MAP"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_COLOR_BASECOLOR"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_COLOR_COLOR"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_COLOR_MAP"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_MAP_MODE_2D"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_MAP_MODE_2D_ARRAY"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_MAP_MODE_3D"));
+        Assert.That(shaderText, Does.Contain("_EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_FLOW_MAP_TARGET_EMISSION"));
+        Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
+        Assert.That(shaderText, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
+        Assert.That(shaderText, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
+        Assert.That(CountOccurrences(shaderText, "\n        Pass\n        {"), Is.EqualTo(1));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthOnly\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"Picking\""));
     }
 
     [Test]
@@ -466,6 +500,86 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         flowAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
         flowAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
 
+        var emissionAreaAll = new Material(shader);
+        emissionAreaAll.SetFloat("_EmissionAreaType", 1);
+        emissionAreaAll.SetFloat("_EmissionColorType", 0);
+        emissionAreaAll.SetColor("_EmissionColor", new Color(0f, 1f, 0f, 1f));
+
+        var emissionAreaAlpha = new Material(shader);
+        emissionAreaAlpha.SetFloat("_EmissionAreaType", 3);
+        emissionAreaAlpha.SetFloat("_EmissionColorType", 0);
+        emissionAreaAlpha.SetColor("_EmissionColor", new Color(0f, 1f, 0f, 1f));
+
+        var emissionAreaMap = new Material(shader);
+        emissionAreaMap.SetFloat("_EmissionAreaType", 2);
+        emissionAreaMap.SetFloat("_EmissionColorType", 0);
+        emissionAreaMap.SetFloat("_EmissionMapMode", 0);
+        emissionAreaMap.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
+
+        var emissionColorBase = new Material(shader);
+        emissionColorBase.SetFloat("_EmissionAreaType", 1);
+        emissionColorBase.SetFloat("_EmissionColorType", 1);
+
+        var emissionColorRamp = new Material(shader);
+        emissionColorRamp.SetFloat("_EmissionAreaType", 2);
+        emissionColorRamp.SetFloat("_EmissionColorType", 2);
+        emissionColorRamp.SetFloat("_EmissionMapMode", 0);
+        emissionColorRamp.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
+        emissionColorRamp.SetTexture("_EmissionColorRamp", CreateCompileTexture(FilterMode.Point));
+
+        var emissionMap2DArray = new Material(shader);
+        emissionMap2DArray.SetFloat("_EmissionAreaType", 2);
+        emissionMap2DArray.SetFloat("_EmissionColorType", 0);
+        emissionMap2DArray.SetFloat("_EmissionMapMode", 1);
+        emissionMap2DArray.SetFloat("_EmissionMapSliceCount", 2);
+        emissionMap2DArray.SetTexture("_EmissionMap2DArray", CreateCompileTexture2DArray());
+
+        var emissionMap3D = new Material(shader);
+        emissionMap3D.SetFloat("_EmissionAreaType", 2);
+        emissionMap3D.SetFloat("_EmissionColorType", 0);
+        emissionMap3D.SetFloat("_EmissionMapMode", 2);
+        emissionMap3D.SetFloat("_EmissionMapSliceCount", 2);
+        emissionMap3D.SetTexture("_EmissionMap3D", CreateCompileTexture3D());
+
+        var emissionMapRandomRow = new Material(shader);
+        emissionMapRandomRow.SetFloat("_EmissionAreaType", 2);
+        emissionMapRandomRow.SetFloat("_EmissionColorType", 0);
+        emissionMapRandomRow.SetFloat("_EmissionMapMode", 1);
+        emissionMapRandomRow.SetFloat("_EmissionMapRandomRowSelectionEnabled", 1);
+        emissionMapRandomRow.SetFloat("_EmissionMapRandomRowCoord", 1);
+        emissionMapRandomRow.SetFloat("_EmissionMapRowCount", 2);
+        emissionMapRandomRow.SetFloat("_EmissionMapSliceCount", 4);
+        emissionMapRandomRow.SetTexture("_EmissionMap2DArray", CreateCompileTexture2DArray(4));
+
+        var flowEmission = new Material(shader);
+        flowEmission.SetFloat("_EmissionAreaType", 2);
+        flowEmission.SetFloat("_EmissionColorType", 0);
+        flowEmission.SetFloat("_EmissionMapMode", 0);
+        flowEmission.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
+        flowEmission.SetTexture("_FlowMap", CreateCompileTexture(FilterMode.Point));
+        flowEmission.SetFloat("_FlowMapTarget", 8);
+
+        var emissionClipRect = new Material(shader);
+        emissionClipRect.SetFloat("_EmissionAreaType", 2);
+        emissionClipRect.SetFloat("_EmissionColorType", 0);
+        emissionClipRect.SetFloat("_EmissionMapMode", 0);
+        emissionClipRect.SetTexture("_EmissionMap", CreateCompileTexture(FilterMode.Point));
+        emissionClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        emissionClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var emissionAlphaTest = new Material(shader);
+        emissionAlphaTest.SetFloat("_RenderType", 1);
+        emissionAlphaTest.SetFloat("_Cutoff", 0.5f);
+        emissionAlphaTest.SetFloat("_EmissionAreaType", 1);
+        emissionAlphaTest.SetFloat("_EmissionColorType", 0);
+
+        var emissionAlphaTransition = new Material(shader);
+        emissionAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        emissionAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        emissionAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        emissionAlphaTransition.SetFloat("_EmissionAreaType", 1);
+        emissionAlphaTransition.SetFloat("_EmissionColorType", 0);
+
         var alphaTransitionClipRect = new Material(shader);
         alphaTransitionClipRect.SetFloat("_AlphaTransitionMode", 2);
         alphaTransitionClipRect.SetFloat("_AlphaTransitionMapMode", 0);
@@ -538,6 +652,18 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             secondAlphaTransitionRandomRow,
             vertexAlphaTransition,
             flowAlphaTransition,
+            emissionAreaAll,
+            emissionAreaAlpha,
+            emissionAreaMap,
+            emissionColorBase,
+            emissionColorRamp,
+            emissionMap2DArray,
+            emissionMap3D,
+            emissionMapRandomRow,
+            flowEmission,
+            emissionClipRect,
+            emissionAlphaTest,
+            emissionAlphaTransition,
             alphaTransitionClipRect,
             alphaTransitionAlphaTest,
             alphaTest,

@@ -676,6 +676,345 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
     }
 
     [Test]
+    public void UIParticlesUberUnlitEmissionAreaAllAffectsOutput()
+    {
+        var disabled = RenderUiEmissionAreaAll(intensity: 0f);
+        var enabled = RenderUiEmissionAreaAll(intensity: 1.2f);
+
+        Assert.That(enabled.g, Is.GreaterThan(disabled.g + 0.20f), $"Disabled {disabled}, enabled {enabled}");
+        Assert.That(enabled.g, Is.GreaterThan(enabled.r + 0.12f), enabled.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionAreaAlphaUsesAlpha()
+    {
+        var lowAlpha = RenderUiEmissionAreaAlpha(baseAlpha: 0.15f, keepEdgeTransparency: false);
+        var highAlpha = RenderUiEmissionAreaAlpha(baseAlpha: 1f, keepEdgeTransparency: false);
+
+        Assert.That(lowAlpha.g, Is.GreaterThan(highAlpha.g + 0.20f), $"Low {lowAlpha}, high {highAlpha}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionAreaMapMasksEmission()
+    {
+        var emissionMap = CreateHorizontalSplitTexture(
+            new Color(0f, 0f, 0f, 1f),
+            new Color(1f, 0f, 0f, 1f),
+            rightColorStartX: TextureSize / 2);
+
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateUiDraw(material => ConfigureUiEmission(material, 2, 0, 0, 1f, m =>
+                {
+                    m.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.08f, 0.08f, 0.08f, 1f)));
+                    m.SetTexture("_EmissionMap", emissionMap);
+                    m.SetFloat("_EmissionMapChannelsX", 0);
+                    m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+                })),
+            },
+            new[] { new Vector2(0.25f, 0.5f), new Vector2(0.75f, 0.5f) },
+            Color.black);
+
+        Assert.That(samples[1].g, Is.GreaterThan(samples[0].g + 0.20f), $"Masked {samples[0]}, unmasked {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionMap2DAffectsOutput()
+    {
+        var emissionMap = CreateSolidTexture(new Color(0f, 0.9f, 0f, 1f));
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 2, 0, 0, 1f, m =>
+            {
+                m.SetTexture("_EmissionMap", emissionMap);
+                m.SetFloat("_EmissionMapChannelsX", 1);
+                m.SetColor("_EmissionColor", new Color(0.9f, 0f, 0f, 1f));
+            }),
+            background: Color.black);
+
+        Assert.That(color.r, Is.GreaterThan(color.g + 0.12f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionMap2DArrayAffectsOutput()
+    {
+        var emissionMap = CreateTexture2DArray(
+            new Color(0f, 0f, 0f, 1f),
+            new Color(1f, 0f, 0f, 1f),
+            new Color(0f, 0f, 0f, 1f));
+
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 2, 0, 1, 1f, m =>
+            {
+                m.SetTexture("_EmissionMap2DArray", emissionMap);
+                m.SetFloat("_EmissionMapProgress", 0.45f);
+                m.SetFloat("_EmissionMapSliceCount", emissionMap.depth);
+                m.SetFloat("_EmissionMapChannelsX", 0);
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+            }),
+            background: Color.black);
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.12f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionMap3DAffectsOutput()
+    {
+        var emissionMap = CreateTexture3D(
+            new Color(0f, 0f, 0f, 1f),
+            new Color(1f, 0f, 0f, 1f),
+            new Color(0f, 0f, 0f, 1f));
+
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 2, 0, 2, 1f, m =>
+            {
+                m.SetTexture("_EmissionMap3D", emissionMap);
+                m.SetFloat("_EmissionMapProgress", 0.45f);
+                m.SetFloat("_EmissionMapSliceCount", emissionMap.depth);
+                m.SetFloat("_EmissionMapChannelsX", 0);
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+            }),
+            background: Color.black);
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.10f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionMapRandomRowSelectionAffectsOutput()
+    {
+        var emissionMap = CreateTexture2DArray(
+            new Color(0f, 0f, 0f, 1f),
+            new Color(0.1f, 0f, 0f, 1f),
+            new Color(1f, 0f, 0f, 1f),
+            new Color(0.9f, 0f, 0f, 1f));
+
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 2, 0, 1, 1f, m =>
+            {
+                m.SetTexture("_EmissionMap2DArray", emissionMap);
+                m.SetFloat("_EmissionMapProgress", 0.1f);
+                m.SetFloat("_EmissionMapSliceCount", emissionMap.depth);
+                m.SetFloat("_EmissionMapRandomRowSelectionEnabled", 1);
+                m.SetFloat("_EmissionMapRandomRowCoord", 1);
+                m.SetFloat("_EmissionMapRowCount", 2);
+                m.SetFloat("_EmissionMapChannelsX", 0);
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+            }),
+            mesh: CreateQuad(Color.white, customCoord1: new Vector4(1.2f, 0f, 0f, 0f)),
+            background: Color.black);
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.10f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionColorFromBaseColorAffectsOutput()
+    {
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 1, 1, 0, 1f, m =>
+            {
+                m.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.55f, 0.08f, 0.08f, 1f)));
+            }),
+            background: Color.black);
+
+        Assert.That(color.r, Is.GreaterThan(color.g + 0.18f), color.ToString());
+        Assert.That(color.r, Is.GreaterThan(color.b + 0.18f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionColorFromExplicitColorAffectsOutput()
+    {
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 1, 0, 0, 1f, m =>
+            {
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+            }),
+            background: Color.black);
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.18f), color.ToString());
+        Assert.That(color.g, Is.GreaterThan(color.b + 0.18f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionColorMapOrRampAffectsOutput()
+    {
+        var emissionMap = CreateSolidTexture(new Color(0.8f, 0f, 0f, 1f));
+        var ramp = CreateHorizontalSplitTexture(
+            new Color(0.9f, 0.05f, 0.05f, 1f),
+            new Color(0.05f, 0.05f, 0.9f, 1f),
+            rightColorStartX: TextureSize / 2);
+
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 2, 2, 0, 1f, m =>
+            {
+                m.SetTexture("_EmissionMap", emissionMap);
+                m.SetTexture("_EmissionColorRamp", ramp);
+                m.SetFloat("_EmissionMapChannelsX", 0);
+            }),
+            background: Color.black);
+
+        Assert.That(color.b, Is.GreaterThan(color.r + 0.12f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionIntensityAffectsOutput()
+    {
+        var low = RenderUiEmissionAreaAll(intensity: 0.15f);
+        var high = RenderUiEmissionAreaAll(intensity: 1.2f);
+
+        Assert.That(high.g, Is.GreaterThan(low.g + 0.20f), $"Low {low}, high {high}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitKeepEdgeTransparencyPreservesTransparentEdges()
+    {
+        var keep = RenderUiEmissionAreaAlpha(baseAlpha: 0.2f, keepEdgeTransparency: true, renderTransparent: true);
+        var harden = RenderUiEmissionAreaAlpha(baseAlpha: 0.2f, keepEdgeTransparency: false, renderTransparent: true);
+
+        Assert.That(harden.g, Is.GreaterThan(keep.g + 0.18f), $"Keep {keep}, harden {harden}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitFlowMapOffsetsEmissionSampling()
+    {
+        var emissionMap = CreateHorizontalSplitTexture(
+            new Color(0f, 0f, 0f, 1f),
+            new Color(1f, 0f, 0f, 1f),
+            rightColorStartX: TextureSize - 1);
+        var flowTexture = CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f));
+
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 2, 0, 0, 1f, m =>
+            {
+                m.SetTexture("_EmissionMap", emissionMap);
+                m.SetFloat("_EmissionMapChannelsX", 0);
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+                m.SetTexture("_FlowMap", flowTexture);
+                m.SetFloat("_FlowMapTarget", 8);
+                m.SetFloat("_FlowMapChannelsX", 0);
+                m.SetFloat("_FlowMapChannelsY", 1);
+                m.SetFloat("_FlowIntensity", 0.4f);
+            }),
+            background: Color.black);
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.12f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionFeaturesPreserveVertexColorAndAlpha()
+    {
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 1, 0, 0, 0.6f, m =>
+            {
+                m.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.35f, 0.35f, 0.35f, 1f)));
+                m.SetColor("_EmissionColor", new Color(0f, 0.5f, 0f, 1f));
+            }),
+            mesh: CreateQuad(new Color(0.1f, 0.9f, 0.1f, 0.5f)),
+            background: Color.black);
+
+        Assert.That(color.g, Is.GreaterThan(color.r + 0.18f), color.ToString());
+        Assert.That(color.g, Is.InRange(0.25f, 0.85f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionFeaturesPreserveAlphaTest()
+    {
+        var background = new Color(0.05f, 0.1f, 0.8f, 1f);
+        var color = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 1, 0, 0, 1f, m =>
+            {
+                m.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.1f, 0.1f, 0.1f, 0.2f)));
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+                m.SetFloat("_RenderType", 1);
+                m.SetFloat("_Cutoff", 0.5f);
+            }),
+            background: background);
+
+        Assert.That(color.b, Is.GreaterThan(color.r + 0.25f), color.ToString());
+        Assert.That(color.b, Is.GreaterThan(color.g + 0.25f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionFeaturesRespectRectClip()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateUiDraw(material =>
+                {
+                    ConfigureUiEmission(material, 2, 0, 0, 1f, m =>
+                    {
+                        m.SetTexture("_EmissionMap", CreateSolidTexture(new Color(1f, 0f, 0f, 1f)));
+                        m.SetFloat("_EmissionMapChannelsX", 0);
+                        m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+                    });
+                    material.EnableKeyword("UNITY_UI_CLIP_RECT");
+                    material.SetVector("_ClipRect", new Vector4(-0.05f, -1f, 1f, 1f));
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[1].g, Is.GreaterThan(samples[0].g + 0.45f), $"Clipped {samples[0]}, visible {samples[1]}");
+        Assert.That(samples[0].b, Is.GreaterThan(samples[0].g + 0.02f), $"Clipped {samples[0]}, visible {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionFeaturesPreserveStencilOrMaskBehavior()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateStencilMask(new Rect(-0.5f, -0.5f, 0.5f, 1f)),
+                CreateUiDraw(material =>
+                {
+                    ConfigureUiEmission(material, 1, 0, 0, 1f, m =>
+                    {
+                        m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+                    });
+                    material.SetFloat("_StencilComp", (float)CompareFunction.Equal);
+                    material.SetFloat("_Stencil", 1);
+                    material.SetFloat("_StencilOp", (float)StencilOp.Keep);
+                    material.SetFloat("_StencilReadMask", 255);
+                    material.SetFloat("_StencilWriteMask", 255);
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[0].g, Is.GreaterThan(samples[1].g + 0.45f), $"Inside {samples[0]}, outside {samples[1]}");
+        Assert.That(samples[1].b, Is.GreaterThan(samples[1].g + 0.02f), $"Inside {samples[0]}, outside {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitEmissionPreservesAlphaTransition()
+    {
+        var faded = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 1, 0, 0, 1f, m =>
+            {
+                ConfigureUiAlphaTransition(m, 1, 1f, 0, alpha =>
+                {
+                    alpha.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)));
+                });
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+            }),
+            background: Color.black);
+        var visible = RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 1, 0, 0, 1f, m =>
+            {
+                ConfigureUiAlphaTransition(m, 1, 0f, 0, alpha =>
+                {
+                    alpha.SetTexture("_AlphaTransitionMap", CreateSolidTexture(new Color(0.5f, 0.5f, 0.5f, 1f)));
+                });
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+            }),
+            background: Color.black);
+
+        Assert.That(visible.g, Is.GreaterThan(faded.g + 0.25f), $"Visible {visible}, faded {faded}");
+    }
+
+    [Test]
     public void UIParticlesUberUnlitAlphaTransitionFeaturesPreserveVertexColorAndAlpha()
     {
         var color = RenderUiUberUnlit(
@@ -997,6 +1336,44 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
         material.SetFloat("_DissolveSharpnessSecondTexture", 1f);
         material.SetColor("_TintColor", Color.white);
         configureMap(material);
+    }
+
+    private static Color RenderUiEmissionAreaAll(float intensity)
+    {
+        return RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 1, 0, 0, intensity, m =>
+            {
+                m.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.08f, 0.08f, 0.08f, 1f)));
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+            }),
+            background: Color.black);
+    }
+
+    private static Color RenderUiEmissionAreaAlpha(float baseAlpha, bool keepEdgeTransparency, bool renderTransparent = false)
+    {
+        return RenderUiUberUnlit(
+            material => ConfigureUiEmission(material, 3, 0, 0, 1f, m =>
+            {
+                m.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.08f, 0.08f, 0.08f, baseAlpha)));
+                m.SetFloat("_RenderType", renderTransparent ? 2 : 0);
+                m.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+                m.SetFloat("_KeepEdgeTransparency", keepEdgeTransparency ? 1f : 0f);
+            }),
+            background: Color.black);
+    }
+
+    private static void ConfigureUiEmission(Material material, int areaType, int colorType, int mapMode, float intensity, Action<Material> configure)
+    {
+        material.SetFloat("_RenderType", 2);
+        material.SetFloat("_TransparentBlendMode", 0);
+        material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.08f, 0.08f, 0.08f, 1f)));
+        material.SetFloat("_BaseMapMode", 0);
+        material.SetFloat("_EmissionAreaType", areaType);
+        material.SetFloat("_EmissionColorType", colorType);
+        material.SetFloat("_EmissionMapMode", mapMode);
+        material.SetFloat("_EmissionIntensity", intensity);
+        material.SetFloat("_KeepEdgeTransparency", 1f);
+        configure(material);
     }
 
     private static UiDraw CreateUiDraw(Action<Material> configureMaterial, Mesh mesh = null)
