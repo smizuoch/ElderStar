@@ -242,6 +242,36 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
     }
 
     [Test]
+    public void UIParticlesUberUnlitPhase54BDepthFeaturesStayUiScoped()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("_SOFT_PARTICLES_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_DEPTH_FADE_ENABLED"));
+        Assert.That(shaderText, Does.Contain("_SoftParticlesIntensity"));
+        Assert.That(shaderText, Does.Contain("_DepthFadeNear"));
+        Assert.That(shaderText, Does.Contain("_DepthFadeFar"));
+        Assert.That(shaderText, Does.Contain("_DepthFadeWidth"));
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInDepth.cginc"));
+        Assert.That(shaderText, Does.Contain("screenPosition"));
+        Assert.That(shaderText, Does.Contain("NovaSoftParticleFactor"));
+        Assert.That(shaderText, Does.Contain("NovaDepthFadeFactor"));
+        Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
+        Assert.That(CountOccurrences(shaderText, "\n        Pass\n        {"), Is.EqualTo(1));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthOnly\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"Picking\""));
+
+        var keywordDeclarations = string.Join("\n", shaderText
+            .Split('\n')
+            .Where(line => line.Contains("#pragma", StringComparison.Ordinal) && line.Contains("shader_feature", StringComparison.Ordinal)));
+        Assert.That(keywordDeclarations, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
+        Assert.That(keywordDeclarations, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
+    }
+
+    [Test]
     public void UIParticlesUberUnlitRepresentativeKeywordStatesHaveNoBlockingCompilerMessages()
     {
         var shader = Shader.Find(ShaderName);
@@ -688,6 +718,96 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         stencil.SetFloat("_StencilWriteMask", 255);
         stencil.SetFloat("_ColorMask", 15);
 
+        var softParticles = new Material(shader);
+        softParticles.SetFloat("_SoftParticlesEnabled", 1);
+        softParticles.SetFloat("_SoftParticlesIntensity", 1);
+
+        var softParticlesClipRect = new Material(shader);
+        softParticlesClipRect.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesClipRect.SetFloat("_SoftParticlesIntensity", 1);
+        softParticlesClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        softParticlesClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var softParticlesAlphaTest = new Material(shader);
+        softParticlesAlphaTest.SetFloat("_RenderType", 1);
+        softParticlesAlphaTest.SetFloat("_Cutoff", 0.5f);
+        softParticlesAlphaTest.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesAlphaTest.SetFloat("_SoftParticlesIntensity", 1);
+
+        var softParticlesAlphaTransition = new Material(shader);
+        softParticlesAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        softParticlesAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        softParticlesAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        softParticlesAlphaTransition.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesAlphaTransition.SetFloat("_SoftParticlesIntensity", 1);
+
+        var softParticlesEmission = new Material(shader);
+        softParticlesEmission.SetFloat("_EmissionAreaType", 1);
+        softParticlesEmission.SetFloat("_EmissionColorType", 0);
+        softParticlesEmission.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesEmission.SetFloat("_SoftParticlesIntensity", 1);
+
+        var softParticlesTransparency = new Material(shader);
+        softParticlesTransparency.SetFloat("_RimTransparencyEnabled", 1);
+        softParticlesTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+        softParticlesTransparency.SetFloat("_SoftParticlesEnabled", 1);
+        softParticlesTransparency.SetFloat("_SoftParticlesIntensity", 1);
+
+        var depthFade = new Material(shader);
+        depthFade.SetFloat("_DepthFadeEnabled", 1);
+        depthFade.SetFloat("_DepthFadeNear", 1.5f);
+        depthFade.SetFloat("_DepthFadeFar", 3f);
+        depthFade.SetFloat("_DepthFadeWidth", 0.5f);
+
+        var depthFadeClipRect = new Material(shader);
+        depthFadeClipRect.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeClipRect.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeClipRect.SetFloat("_DepthFadeFar", 3f);
+        depthFadeClipRect.SetFloat("_DepthFadeWidth", 0.5f);
+        depthFadeClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        depthFadeClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var depthFadeAlphaTest = new Material(shader);
+        depthFadeAlphaTest.SetFloat("_RenderType", 1);
+        depthFadeAlphaTest.SetFloat("_Cutoff", 0.5f);
+        depthFadeAlphaTest.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeAlphaTest.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeAlphaTest.SetFloat("_DepthFadeFar", 3f);
+        depthFadeAlphaTest.SetFloat("_DepthFadeWidth", 0.5f);
+
+        var depthFadeAlphaTransition = new Material(shader);
+        depthFadeAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        depthFadeAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        depthFadeAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+        depthFadeAlphaTransition.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeAlphaTransition.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeAlphaTransition.SetFloat("_DepthFadeFar", 3f);
+        depthFadeAlphaTransition.SetFloat("_DepthFadeWidth", 0.5f);
+
+        var depthFadeEmission = new Material(shader);
+        depthFadeEmission.SetFloat("_EmissionAreaType", 1);
+        depthFadeEmission.SetFloat("_EmissionColorType", 0);
+        depthFadeEmission.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeEmission.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeEmission.SetFloat("_DepthFadeFar", 3f);
+        depthFadeEmission.SetFloat("_DepthFadeWidth", 0.5f);
+
+        var depthFadeTransparency = new Material(shader);
+        depthFadeTransparency.SetFloat("_RimTransparencyEnabled", 1);
+        depthFadeTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+        depthFadeTransparency.SetFloat("_DepthFadeEnabled", 1);
+        depthFadeTransparency.SetFloat("_DepthFadeNear", 1.5f);
+        depthFadeTransparency.SetFloat("_DepthFadeFar", 3f);
+        depthFadeTransparency.SetFloat("_DepthFadeWidth", 0.5f);
+
+        var combinedDepthFeatures = new Material(shader);
+        combinedDepthFeatures.SetFloat("_SoftParticlesEnabled", 1);
+        combinedDepthFeatures.SetFloat("_SoftParticlesIntensity", 1);
+        combinedDepthFeatures.SetFloat("_DepthFadeEnabled", 1);
+        combinedDepthFeatures.SetFloat("_DepthFadeNear", 1.5f);
+        combinedDepthFeatures.SetFloat("_DepthFadeFar", 3f);
+        combinedDepthFeatures.SetFloat("_DepthFadeWidth", 0.5f);
+
         return new[]
         {
             defaultMaterial,
@@ -757,7 +877,20 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             alphaTransitionAlphaTest,
             alphaTest,
             clipRect,
-            stencil
+            stencil,
+            softParticles,
+            softParticlesClipRect,
+            softParticlesAlphaTest,
+            softParticlesAlphaTransition,
+            softParticlesEmission,
+            softParticlesTransparency,
+            depthFade,
+            depthFadeClipRect,
+            depthFadeAlphaTest,
+            depthFadeAlphaTransition,
+            depthFadeEmission,
+            depthFadeTransparency,
+            combinedDepthFeatures
         };
     }
 

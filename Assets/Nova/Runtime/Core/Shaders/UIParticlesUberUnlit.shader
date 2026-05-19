@@ -306,6 +306,7 @@ Shader "Nova/UIParticles/UberUnlit"
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
+            #include "BuiltIn/NovaBuiltInDepth.cginc"
             #include "BuiltIn/NovaBuiltInUI.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
 
@@ -450,6 +451,10 @@ Shader "Nova/UIParticles/UberUnlit"
             half _LuminanceTransparencySharpness;
             half _LuminanceTransparencySharpnessCoord;
             half _InverseLuminanceTransparency;
+            half _SoftParticlesIntensity;
+            half _DepthFadeNear;
+            half _DepthFadeFar;
+            half _DepthFadeWidth;
 
             struct appdata
             {
@@ -480,6 +485,7 @@ Shader "Nova/UIParticles/UberUnlit"
                 float3 alphaTransitionUvAndProgress : TEXCOORD12;
                 float3 alphaTransitionSecondUvAndProgress : TEXCOORD13;
                 float3 emissionUvAndProgress : TEXCOORD14;
+                float4 screenPosition : TEXCOORD15;
                 fixed4 color : COLOR;
             };
 
@@ -487,6 +493,8 @@ Shader "Nova/UIParticles/UberUnlit"
             {
                 v2f o;
                 o.vertex = NovaObjectToClipPos(v.vertex);
+                o.screenPosition = NovaComputeScreenPos(o.vertex);
+                o.screenPosition.z = -UnityObjectToViewPos(v.vertex).z;
                 float3 positionWS = NovaObjectToWorld(v.vertex.xyz);
                 o.normalWS = NovaObjectToWorldNormal(v.normal);
                 o.viewDirWS = NovaWorldSpaceViewDir(positionWS);
@@ -875,6 +883,14 @@ Shader "Nova/UIParticles/UberUnlit"
                     _LuminanceTransparencyProgress + NovaGetCustomCoord(_LuminanceTransparencyProgressCoord, i.customCoord1, i.customCoord2),
                     _LuminanceTransparencySharpness + NovaGetCustomCoord(_LuminanceTransparencySharpnessCoord, i.customCoord1, i.customCoord2),
                     _InverseLuminanceTransparency);
+                #endif
+
+                #if defined(_SOFT_PARTICLES_ENABLED)
+                color.a *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity);
+                #endif
+
+                #if defined(_DEPTH_FADE_ENABLED)
+                color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.screenPosition);
                 #endif
 
                 color.a *= NovaUIClipAlpha(i.positionOS);

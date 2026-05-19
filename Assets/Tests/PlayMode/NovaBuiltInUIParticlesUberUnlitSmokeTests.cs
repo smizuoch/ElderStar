@@ -1113,6 +1113,274 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
     }
 
     [Test]
+    public void UIParticlesUberUnlitSoftParticlesRequireCameraDepthTexture()
+    {
+        var result = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 1f);
+        });
+
+        Assert.That(result.CameraDepthTextureMode.HasFlag(DepthTextureMode.Depth), Is.True);
+        Assert.That(result.Color.r + result.Color.g + result.Color.b, Is.GreaterThan(0.05f), result.Color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitSoftParticlesFadeNearSceneDepth()
+    {
+        var disabled = RenderUiDepthScene(material => ConfigureUiTransparentDepthMaterial(material), opaqueZ: 0.08f).Color;
+        var enabled = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 1f);
+        }, opaqueZ: 0.08f).Color;
+
+        Assert.That(disabled.r, Is.GreaterThan(enabled.r + 0.25f), $"Disabled {disabled}, enabled {enabled}");
+        Assert.That(enabled.b, Is.GreaterThan(disabled.b + 0.15f), $"Disabled {disabled}, enabled {enabled}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitSoftParticlesIntensityAffectsOutput()
+    {
+        var low = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 0.05f);
+        }, opaqueZ: 0.25f).Color;
+        var high = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 1f);
+        }, opaqueZ: 0.25f).Color;
+
+        Assert.That(low.r, Is.GreaterThan(high.r + 0.20f), $"Low {low}, high {high}");
+        Assert.That(high.b, Is.GreaterThan(low.b + 0.10f), $"Low {low}, high {high}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitSoftParticlesDoNotAffectWhenDepthFar()
+    {
+        var disabled = RenderUiDepthScene(material => ConfigureUiTransparentDepthMaterial(material), opaqueZ: 4f).Color;
+        var enabled = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 1f);
+        }, opaqueZ: 4f).Color;
+
+        Assert.That(Mathf.Abs(disabled.r - enabled.r), Is.LessThan(0.08f), $"Disabled {disabled}, enabled {enabled}");
+        Assert.That(Mathf.Abs(disabled.b - enabled.b), Is.LessThan(0.08f), $"Disabled {disabled}, enabled {enabled}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFadeAffectsOutput()
+    {
+        var disabled = RenderUiDepthScene(material => ConfigureUiTransparentDepthMaterial(material)).Color;
+        var enabled = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+        }).Color;
+
+        Assert.That(disabled.r, Is.GreaterThan(enabled.r + 0.25f), $"Disabled {disabled}, enabled {enabled}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFadeNearFarAffectOutput()
+    {
+        var wideRange = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiDepthFade(material, near: 0.5f, far: 5f, width: 0.5f);
+        }).Color;
+        var nearEdge = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiDepthFade(material, near: 1.9f, far: 5f, width: 0.5f);
+        }).Color;
+
+        Assert.That(wideRange.r, Is.GreaterThan(nearEdge.r + 0.20f), $"Wide {wideRange}, near edge {nearEdge}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFadeWidthAffectsFalloff()
+    {
+        var narrow = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.05f);
+        }).Color;
+        var wide = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+        }).Color;
+
+        Assert.That(narrow.r, Is.GreaterThan(wide.r + 0.20f), $"Narrow {narrow}, wide {wide}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFadeDoesNotBreakBaseAlpha()
+    {
+        var disabled = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetTexture("_BaseMap", CreateSolidTexture(new Color(1f, 0f, 0f, 0.5f)));
+        }).Color;
+        var enabled = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetTexture("_BaseMap", CreateSolidTexture(new Color(1f, 0f, 0f, 0.5f)));
+            ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+        }).Color;
+
+        Assert.That(disabled.r, Is.GreaterThan(enabled.r + 0.08f), $"Disabled {disabled}, enabled {enabled}");
+        Assert.That(enabled.r, Is.LessThan(0.8f), enabled.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitSoftParticlesAndDepthFadeCanCombine()
+    {
+        var disabled = RenderUiDepthScene(material => ConfigureUiTransparentDepthMaterial(material), opaqueZ: 0.25f).Color;
+        var softOnly = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 1f);
+        }, opaqueZ: 0.25f).Color;
+        var depthOnly = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+        }, opaqueZ: 0.25f).Color;
+        var combined = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 1f);
+            ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+        }, opaqueZ: 0.25f).Color;
+
+        Assert.That(disabled.r, Is.GreaterThan(combined.r + 0.30f), $"Disabled {disabled}, combined {combined}");
+        Assert.That(softOnly.r, Is.GreaterThan(combined.r + 0.08f), $"Soft {softOnly}, combined {combined}");
+        Assert.That(depthOnly.r, Is.GreaterThan(combined.r + 0.08f), $"Depth {depthOnly}, combined {combined}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFeaturesPreserveAlphaTransition()
+    {
+        var visible = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiAlphaTransition(material, 1, 0f, 0, alpha => alpha.SetTexture("_AlphaTransitionMap", CreateSolidTexture(Color.white)));
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 0.05f);
+        }, opaqueZ: 4f).Color;
+        var faded = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiAlphaTransition(material, 1, 1f, 0, alpha => alpha.SetTexture("_AlphaTransitionMap", CreateSolidTexture(Color.white)));
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 0.05f);
+        }, opaqueZ: 4f).Color;
+
+        Assert.That(visible.r, Is.GreaterThan(faded.r + 0.25f), $"Visible {visible}, faded {faded}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFeaturesPreserveEmissionAndTransparency()
+    {
+        var withoutDepth = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiEmissionAndTransparency(material);
+        }, opaqueZ: 0.25f).Color;
+        var withDepth = RenderUiDepthScene(material =>
+        {
+            ConfigureUiTransparentDepthMaterial(material);
+            ConfigureUiEmissionAndTransparency(material);
+            material.SetFloat("_SoftParticlesEnabled", 1f);
+            material.SetFloat("_SoftParticlesIntensity", 1f);
+        }, opaqueZ: 0.25f).Color;
+
+        Assert.That(withoutDepth.g, Is.GreaterThan(0.10f), withoutDepth.ToString());
+        Assert.That(withDepth.g, Is.GreaterThan(0.03f), withDepth.ToString());
+        Assert.That(withoutDepth.g, Is.GreaterThan(withDepth.g + 0.05f), $"Without {withoutDepth}, with {withDepth}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFeaturesRespectRectClip()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateUiDraw(material =>
+                {
+                    material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+                    material.SetFloat("_BaseMapMode", 0);
+                    ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+                    material.EnableKeyword("UNITY_UI_CLIP_RECT");
+                    material.SetVector("_ClipRect", new Vector4(-0.05f, -1f, 1f, 1f));
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[1].r, Is.GreaterThan(samples[0].r + 0.10f), $"Clipped {samples[0]}, visible {samples[1]}");
+        Assert.That(samples[0].b, Is.GreaterThan(samples[0].r + 0.02f), $"Clipped {samples[0]}, visible {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFeaturesPreserveStencilOrMaskBehavior()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateStencilMask(new Rect(-0.5f, -0.5f, 0.5f, 1f)),
+                CreateUiDraw(material =>
+                {
+                    material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+                    material.SetFloat("_BaseMapMode", 0);
+                    ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+                    material.SetFloat("_StencilComp", (float)CompareFunction.Equal);
+                    material.SetFloat("_Stencil", 1);
+                    material.SetFloat("_StencilOp", (float)StencilOp.Keep);
+                    material.SetFloat("_StencilReadMask", 255);
+                    material.SetFloat("_StencilWriteMask", 255);
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background);
+
+        Assert.That(samples[0].r, Is.GreaterThan(samples[1].r + 0.10f), $"Inside {samples[0]}, outside {samples[1]}");
+        Assert.That(samples[1].b, Is.GreaterThan(samples[1].r + 0.02f), $"Inside {samples[0]}, outside {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitDepthFeaturesPreserveColorMask()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var color = RenderUiUberUnlit(
+            material =>
+            {
+                material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+                material.SetFloat("_BaseMapMode", 0);
+                ConfigureUiDepthFade(material, near: 1.9f, far: 3f, width: 0.5f);
+                material.SetFloat("_ColorMask", 0);
+            },
+            background: background);
+
+        Assert.That(color.r, Is.LessThan(0.06f), color.ToString());
+        Assert.That(color.b, Is.GreaterThan(color.r + 0.02f), color.ToString());
+    }
+
+    [Test]
     public void UIParticlesUberUnlitEmissionFeaturesPreserveVertexColorAndAlpha()
     {
         var color = RenderUiUberUnlit(
@@ -1656,6 +1924,36 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
             background: Color.black);
     }
 
+    private static void ConfigureUiTransparentDepthMaterial(Material material)
+    {
+        material.SetFloat("_RenderType", 2);
+        material.SetFloat("_TransparentBlendMode", 0);
+        material.SetFloat("_Cull", (float)CullMode.Off);
+        material.SetFloat("_ZTest", (float)CompareFunction.Always);
+        material.SetTexture("_BaseMap", CreateSolidTexture(new Color(1f, 0f, 0f, 1f)));
+        material.SetFloat("_BaseMapMode", 0);
+    }
+
+    private static void ConfigureUiDepthFade(Material material, float near, float far, float width)
+    {
+        material.SetFloat("_DepthFadeEnabled", 1f);
+        material.SetFloat("_DepthFadeNear", near);
+        material.SetFloat("_DepthFadeFar", far);
+        material.SetFloat("_DepthFadeWidth", width);
+    }
+
+    private static void ConfigureUiEmissionAndTransparency(Material material)
+    {
+        material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.25f, 0.25f, 0.25f, 1f)));
+        material.SetFloat("_EmissionAreaType", 1);
+        material.SetFloat("_EmissionColorType", 0);
+        material.SetColor("_EmissionColor", new Color(0f, 0.9f, 0f, 1f));
+        material.SetFloat("_EmissionIntensity", 1f);
+        material.SetFloat("_LuminanceTransparencyEnabled", 1f);
+        material.SetFloat("_LuminanceTransparencyProgress", 0.1f);
+        material.SetFloat("_LuminanceTransparencySharpness", 0f);
+    }
+
     private static void ConfigureUiEmission(Material material, int areaType, int colorType, int mapMode, float intensity, Action<Material> configure)
     {
         material.SetFloat("_RenderType", 2);
@@ -1774,6 +2072,93 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
                 UnityEngine.Object.DestroyImmediate(ownedObject);
             }
         }
+    }
+
+    private static DepthRenderResult RenderUiDepthScene(Action<Material> configureMaterial, float opaqueZ = 0.08f)
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        var material = new Material(shader);
+        var particleMesh = CreateQuad(Color.white);
+        var opaqueMesh = CreateQuad(Color.white);
+        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
+        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);
+        var cameraObject = new GameObject("NovaBuiltInUIParticlesUberUnlitDepthCamera");
+        var particleObject = new GameObject("NovaBuiltInUIParticlesUberUnlitDepthParticle");
+        var opaqueObject = new GameObject("NovaBuiltInUIParticlesUberUnlitDepthOpaque");
+        var ownedObjects = new List<UnityEngine.Object>();
+        var previousAmbientMode = RenderSettings.ambientMode;
+        var previousAmbientLight = RenderSettings.ambientLight;
+        var previous = RenderTexture.active;
+
+        try
+        {
+            RenderSettings.ambientMode = AmbientMode.Flat;
+            RenderSettings.ambientLight = Color.white;
+
+            configureMaterial(material);
+            SetupUberUnlit(material);
+
+            var particleFilter = particleObject.AddComponent<MeshFilter>();
+            particleFilter.sharedMesh = particleMesh;
+            var particleRenderer = particleObject.AddComponent<MeshRenderer>();
+            particleRenderer.sharedMaterial = material;
+
+            opaqueObject.transform.position = new Vector3(0f, 0f, opaqueZ);
+            var opaqueFilter = opaqueObject.AddComponent<MeshFilter>();
+            opaqueFilter.sharedMesh = opaqueMesh;
+            var opaqueRenderer = opaqueObject.AddComponent<MeshRenderer>();
+            opaqueRenderer.sharedMaterial = CreateOpaqueMaterial(new Color(0f, 0f, 1f, 1f));
+            ownedObjects.Add(opaqueRenderer.sharedMaterial);
+
+            var camera = cameraObject.AddComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black;
+            camera.orthographic = true;
+            camera.orthographicSize = 0.75f;
+            camera.nearClipPlane = 0.1f;
+            camera.farClipPlane = 10f;
+            camera.depthTextureMode |= DepthTextureMode.Depth;
+            camera.transform.position = new Vector3(0f, 0f, -2f);
+            camera.targetTexture = target;
+            camera.Render();
+
+            RenderTexture.active = target;
+            readback.ReadPixels(new Rect(0, 0, RenderSize, RenderSize), 0, 0);
+            readback.Apply();
+
+            var color = readback.GetPixel(RenderSize / 2, RenderSize / 2);
+            return new DepthRenderResult(color, camera.depthTextureMode);
+        }
+        finally
+        {
+            RenderSettings.ambientMode = previousAmbientMode;
+            RenderSettings.ambientLight = previousAmbientLight;
+            RenderTexture.active = previous;
+            UnityEngine.Object.DestroyImmediate(cameraObject);
+            UnityEngine.Object.DestroyImmediate(particleObject);
+            UnityEngine.Object.DestroyImmediate(opaqueObject);
+            UnityEngine.Object.DestroyImmediate(readback);
+            UnityEngine.Object.DestroyImmediate(target);
+            UnityEngine.Object.DestroyImmediate(particleMesh);
+            UnityEngine.Object.DestroyImmediate(opaqueMesh);
+            UnityEngine.Object.DestroyImmediate(material);
+            foreach (var ownedObject in ownedObjects.Where(ownedObject => ownedObject != null).Distinct())
+            {
+                UnityEngine.Object.DestroyImmediate(ownedObject);
+            }
+        }
+    }
+
+    private static Material CreateOpaqueMaterial(Color color)
+    {
+        var shader = Shader.Find("Standard");
+        Assert.That(shader, Is.Not.Null, "Standard");
+        var material = new Material(shader);
+        material.SetColor("_Color", color);
+        material.renderQueue = (int)RenderQueue.Geometry;
+        return material;
     }
 
     private static Mesh CreateQuad(Color vertexColor, Vector4? customCoord1 = null, bool skewForParallax = false, Vector3? normal = null)
@@ -1911,5 +2296,18 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
         public Action<Material> ConfigureMaterial { get; }
         public Mesh Mesh { get; }
         public int? RenderQueue { get; }
+    }
+
+    private readonly struct DepthRenderResult
+    {
+        public DepthRenderResult(Color color, DepthTextureMode cameraDepthTextureMode)
+        {
+            Color = color;
+            CameraDepthTextureMode = cameraDepthTextureMode;
+        }
+
+        public Color Color { get; }
+
+        public DepthTextureMode CameraDepthTextureMode { get; }
     }
 }
