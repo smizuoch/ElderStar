@@ -77,6 +77,9 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D_ARRAY(_EmissionMap2DArray"));
         Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX3D(_EmissionMap3D"));
         Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D(_EmissionColorRamp"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D(_VertexDeformationMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D_LOD(_VertexDeformationMap"));
+        Assert.That(shaderText, Does.Contain("v.vertex.xyz += normalize(v.normal)"));
         Assert.That(shaderText, Does.Contain("SampleEmissionMap"));
         Assert.That(shaderText, Does.Contain("NovaEmissionMapProgress"));
         Assert.That(shaderText, Does.Contain("ApplyEmissionColor"));
@@ -267,6 +270,38 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         var keywordDeclarations = string.Join("\n", shaderText
             .Split('\n')
             .Where(line => line.Contains("#pragma", StringComparison.Ordinal) && line.Contains("shader_feature", StringComparison.Ordinal)));
+        Assert.That(keywordDeclarations, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
+        Assert.That(keywordDeclarations, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
+    }
+
+    [Test]
+    public void UIParticlesUberUnlitPhase55AVertexDeformationStaysForwardBaseOnlyAndUiScoped()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("_VERTEX_DEFORMATION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("#pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED"));
+        Assert.That(shaderText, Does.Contain("NOVA_DECLARE_TEX2D(_VertexDeformationMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D_LOD(_VertexDeformationMap"));
+        Assert.That(shaderText, Does.Contain("_VertexDeformationMapOffsetXCoord"));
+        Assert.That(shaderText, Does.Contain("_VertexDeformationMapOffsetYCoord"));
+        Assert.That(shaderText, Does.Contain("_VertexDeformationMapChannel"));
+        Assert.That(shaderText, Does.Contain("_VertexDeformationIntensity"));
+        Assert.That(shaderText, Does.Contain("_VertexDeformationIntensityCoord"));
+        Assert.That(shaderText, Does.Contain("_VertexDeformationBaseValue"));
+        Assert.That(shaderText, Does.Contain("v.vertex.xyz += normalize(v.normal)"));
+        Assert.That(shaderText.IndexOf("v.vertex.xyz += normalize(v.normal)", StringComparison.Ordinal), Is.LessThan(shaderText.IndexOf("o.vertex = NovaObjectToClipPos(v.vertex)", StringComparison.Ordinal)));
+        Assert.That(shaderText, Does.Contain("UNITY_UI_CLIP_RECT"));
+        Assert.That(CountOccurrences(shaderText, "\n        Pass\n        {"), Is.EqualTo(1));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthOnly\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"Picking\""));
+
+        var keywordDeclarations = string.Join("\n", shaderText
+            .Split('\n')
+            .Where(line => line.Contains("#pragma", StringComparison.Ordinal)));
         Assert.That(keywordDeclarations, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
         Assert.That(keywordDeclarations, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
     }
@@ -808,6 +843,57 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         combinedDepthFeatures.SetFloat("_DepthFadeFar", 3f);
         combinedDepthFeatures.SetFloat("_DepthFadeWidth", 0.5f);
 
+        var vertexDeformation = new Material(shader);
+        vertexDeformation.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformation.SetFloat("_VertexDeformationIntensity", 0.25f);
+        vertexDeformation.SetFloat("_VertexDeformationMapChannel", 0);
+
+        var vertexDeformationClipRect = new Material(shader);
+        vertexDeformationClipRect.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationClipRect.SetFloat("_VertexDeformationIntensity", 0.25f);
+        vertexDeformationClipRect.EnableKeyword("UNITY_UI_CLIP_RECT");
+        vertexDeformationClipRect.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+
+        var vertexDeformationAlphaTest = new Material(shader);
+        vertexDeformationAlphaTest.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationAlphaTest.SetFloat("_RenderType", 1);
+        vertexDeformationAlphaTest.SetFloat("_Cutoff", 0.5f);
+
+        var vertexDeformationAlphaTransition = new Material(shader);
+        vertexDeformationAlphaTransition.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationAlphaTransition.SetFloat("_AlphaTransitionMode", 2);
+        vertexDeformationAlphaTransition.SetFloat("_AlphaTransitionMapMode", 0);
+        vertexDeformationAlphaTransition.SetTexture("_AlphaTransitionMap", CreateCompileTexture(FilterMode.Point));
+
+        var vertexDeformationEmission = new Material(shader);
+        vertexDeformationEmission.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationEmission.SetFloat("_EmissionAreaType", 1);
+        vertexDeformationEmission.SetFloat("_EmissionColorType", 0);
+        vertexDeformationEmission.SetColor("_EmissionColor", new Color(0f, 1f, 0f, 1f));
+
+        var vertexDeformationTransparency = new Material(shader);
+        vertexDeformationTransparency.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationTransparency.SetFloat("_RimTransparencyEnabled", 1);
+        vertexDeformationTransparency.SetFloat("_LuminanceTransparencyEnabled", 1);
+
+        var vertexDeformationDepthFeatures = new Material(shader);
+        vertexDeformationDepthFeatures.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationDepthFeatures.SetFloat("_SoftParticlesEnabled", 1);
+        vertexDeformationDepthFeatures.SetFloat("_SoftParticlesIntensity", 1);
+        vertexDeformationDepthFeatures.SetFloat("_DepthFadeEnabled", 1);
+        vertexDeformationDepthFeatures.SetFloat("_DepthFadeNear", 1.5f);
+        vertexDeformationDepthFeatures.SetFloat("_DepthFadeFar", 3f);
+        vertexDeformationDepthFeatures.SetFloat("_DepthFadeWidth", 0.5f);
+
+        var vertexDeformationStencil = new Material(shader);
+        vertexDeformationStencil.SetTexture("_VertexDeformationMap", CreateCompileTexture(FilterMode.Point));
+        vertexDeformationStencil.SetFloat("_StencilComp", 3);
+        vertexDeformationStencil.SetFloat("_Stencil", 1);
+        vertexDeformationStencil.SetFloat("_StencilOp", 2);
+        vertexDeformationStencil.SetFloat("_StencilReadMask", 255);
+        vertexDeformationStencil.SetFloat("_StencilWriteMask", 255);
+        vertexDeformationStencil.SetFloat("_ColorMask", 15);
+
         return new[]
         {
             defaultMaterial,
@@ -890,7 +976,15 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             depthFadeAlphaTransition,
             depthFadeEmission,
             depthFadeTransparency,
-            combinedDepthFeatures
+            combinedDepthFeatures,
+            vertexDeformation,
+            vertexDeformationClipRect,
+            vertexDeformationAlphaTest,
+            vertexDeformationAlphaTransition,
+            vertexDeformationEmission,
+            vertexDeformationTransparency,
+            vertexDeformationDepthFeatures,
+            vertexDeformationStencil
         };
     }
 
