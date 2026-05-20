@@ -44,7 +44,7 @@ Phase 3 adds local Built-in include scaffolding under `Assets/Nova/Runtime/Core/
 | Fog helpers | `NovaBuiltInFog.cginc` | Verified | Pending | Wraps Built-in fog macros for future shader passes. No target shader has real fog integration yet. |
 | Instancing helpers | `NovaBuiltInInstancing.cginc` | Verified | Pending | Wraps Built-in instance ID setup/transfer macros only. Mesh/particle instancing feature behavior remains unimplemented. |
 | Shadow caster helpers | `NovaBuiltInShadow.cginc` | Verified | Pending | Provides a compile-safe Built-in ShadowCaster clip-position helper. Bias and per-light behavior are Built-in approximations and not parity with the original shadow constants. |
-| Lighting scaffolding | `NovaBuiltInLighting.cginc` | Verified | Approximate | Provides main-light direction/color access, ambient sampling, Lambert diffuse, and minimum-lit composition for Phase 6.1. Full UberLit PBR parity remains pending and is not claimed. |
+| Lighting scaffolding | `NovaBuiltInLighting.cginc` | Verified | Approximate | Provides main-light direction/color access, ambient sampling, Lambert diffuse, and Phase 6.2A surface inputs for `Nova/Particles/UberLit`. Full UberLit PBR parity remains pending and is not claimed. |
 | UI helpers | `NovaBuiltInUI.cginc` | Verified | Pending | Provides local access to Built-in UI clipping support while preserving stencil-compatible properties in target shaders. Full UI shader behavior remains later phases. |
 
 ## Common Shader Features
@@ -903,3 +903,31 @@ Phase 6.1 compatibility annotations:
 - Unsupported URP-specific runtime behavior in this phase: Forward+, cluster light loop, URP additional light loop, probe volumes, foveated rendering, and URP `UniversalFragmentPBR`.
 - Intentionally pending for later Lit phases: metallic workflow runtime, specular workflow runtime, normal map runtime, smoothness map runtime, receive shadows runtime, environment reflections runtime, `ForwardAdd`, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full visual parity, and golden image visual regression.
 - `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.1 scope and are not promoted by this phase.
+
+## Phase 6.2A UberLit Surface Specular Status
+
+Phase 6.2A expands only the primary `Nova/Particles/UberLit` Built-in `ForwardBase` path. It adds a local Built-in approximation for metallic/specular workflow inputs, 2D metallic/specular/smoothness/normal maps, smoothness, bump scale, and basic specular highlights. It does not attempt URP `UniversalFragmentPBR` parity, does not add receive shadows, environment reflections, additional lights, `ForwardAdd`, Lit ShadowCaster / DepthOnly / DepthNormals / SceneSelectionPass / Picking, `Nova/UIParticles/UberLit`, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, 2D array Lit surface maps, or 3D Lit surface maps.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Metallic workflow | Passed | Passed | `_LitWorkflowMode` / `_SPECULAR_SETUP` semantics follow the original editor setup: workflow mode `1` is metallic, mode `0` is specular. Metallic mode uses `_Metallic` and feeds a Built-in specular approximation; diffuse/base color remains the Phase 6.1 albedo path. |
+| Metallic map 2D and channel | Passed | Passed | `_METALLIC_MAP_ENABLED` samples `_MetallicMap` in 2D mode, selects `_MetallicMapChannelsX`, multiplies by `_Metallic`, and affects the approximation. `_MetallicMap2DArray` and `_MetallicMap3D` remain runtime-pending. |
+| Specular workflow and color | Passed | Passed | `_SPECULAR_SETUP` switches to specular workflow and uses `_SpecularColor` for the highlight approximation. In metallic workflow, specular color is approximated from dielectric 0.04 to albedo by metallic value. |
+| Specular map 2D | Passed | Passed | `_SPECULAR_MAP_ENABLED` samples `_SpecularMap` in 2D mode and multiplies RGB by `_SpecularColor`, matching the original RGB map semantics. `_SpecularMapChannelsX` remains preserved; the original runtime path does not use it for RGB specular sampling. `_SpecularMap2DArray` and `_SpecularMap3D` remain runtime-pending. |
+| Specular highlights toggle | Passed | Passed | `_SPECULAR_HIGHLIGHTS_ENABLED` gates the local specular contribution. `_SpecularHighlights` remains the material/editor property that drives the keyword through the preserved setup path. |
+| Smoothness scalar and map 2D | Passed | Passed | `_Smoothness` shapes and scales the Blinn-Phong-style highlight. `_SMOOTHNESS_MAP_ENABLED` samples `_SmoothnessMap`, selects `_SmoothnessMapChannelsX`, and multiplies by `_Smoothness`. `_SmoothnessMap2DArray` and `_SmoothnessMap3D` remain runtime-pending. |
+| Normal map 2D and bump scale | Passed | Passed | `_NORMAL_MAP_ENABLED` samples `_NormalMap`, unpacks a tangent-space 2D normal, applies `_NormalMapBumpScale`, and transforms it through Built-in tangent/bitangent/normal interpolation. `_NormalMap2DArray` and `_NormalMap3D` remain runtime-pending. |
+| Basic specular approximation | Passed | Passed | The local model is a Built-in Blinn-Phong-style approximation using main light direction, view direction, smoothness-shaped exponent, and workflow-specific specular color/strength. It is not energy-equivalent to URP and does not claim PBR parity. |
+| Lit feature interactions | Passed | Passed | Phase 6.2A smoke tests verify the new surface features preserve alpha test, tint color, and vertex color behavior from the Phase 6.1 minimum albedo/alpha path. |
+| Lit keyword compile compatibility | Passed | Passed | Compile diagnostics cover `_SPECULAR_SETUP`, `_NORMAL_MAP_ENABLED`, `_SPECULAR_MAP_ENABLED`, `_METALLIC_MAP_ENABLED`, `_SMOOTHNESS_MAP_ENABLED`, `_SPECULAR_HIGHLIGHTS_ENABLED`, representative Phase 6.2A combinations, and compatibility-only URP keywords for shadows/additional lights/Forward+/cluster light loop. |
+| Pass topology | Passed | Passed | `Nova/Particles/UberLit` remains a single primary Built-in `ForwardBase` runtime pass. Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, and Lit Picking are not yet implemented. |
+| Scope guard | Passed | Passed | UI Lit remains Pending, Distortion runtime remains Pending, and optimizer/replacer runtime behavior remains Pending. No golden images were added or updated. |
+
+Phase 6.2A compatibility annotations:
+
+- Metallic workflow, metallic map 2D, metallic map channel selection, specular workflow, specular color, specular map 2D, smoothness scalar, smoothness map 2D, smoothness map channel selection, normal map 2D, bump scale, and basic specular highlights are implemented for `Nova/Particles/UberLit` `ForwardBase` only.
+- The Lit BRDF is Approximate. It uses a local Built-in Blinn-Phong-style term rather than URP `UniversalFragmentPBR`, URP BRDF data, URP reflection probes, URP shadows, or URP light loops.
+- Specular map channel status is property-preserved. The original Lit forward helper samples specular map RGB directly, so Phase 6.2A keeps RGB semantics instead of inventing `_SpecularMapChannelsX` runtime channel extraction.
+- Runtime-pending Lit surface texture modes: `_NormalMap2DArray`, `_NormalMap3D`, `_SpecularMap2DArray`, `_SpecularMap3D`, `_MetallicMap2DArray`, `_MetallicMap3D`, `_SmoothnessMap2DArray`, and `_SmoothnessMap3D`.
+- Runtime-pending lighting and topology features: `_LitReceiveShadows`, `_EnvironmentReflections`, additional lights, `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full visual parity, and golden image visual regression.
+- `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.2A scope and are not promoted by this phase.

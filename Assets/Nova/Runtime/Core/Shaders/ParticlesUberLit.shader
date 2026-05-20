@@ -353,6 +353,7 @@ Shader "Nova/Particles/UberLit"
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
+                float4 tangent : TANGENT;
                 float2 uv : TEXCOORD0;
                 fixed4 color : COLOR;
             };
@@ -360,8 +361,11 @@ Shader "Nova/Particles/UberLit"
             struct v2f
             {
                 float4 vertex : SV_POSITION;
-                float3 normalWS : TEXCOORD0;
-                float2 uv : TEXCOORD1;
+                float3 positionWS : TEXCOORD0;
+                float3 normalWS : TEXCOORD1;
+                float3 tangentWS : TEXCOORD2;
+                float3 bitangentWS : TEXCOORD3;
+                float2 uv : TEXCOORD4;
                 fixed4 color : COLOR;
             };
 
@@ -372,7 +376,10 @@ Shader "Nova/Particles/UberLit"
             {
                 v2f o;
                 o.vertex = NovaObjectToClipPos(v.vertex);
+                o.positionWS = NovaObjectToWorld(v.vertex.xyz);
                 o.normalWS = NovaObjectToWorldNormal(v.normal);
+                o.tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
+                o.bitangentWS = NovaCreateBitangent(o.normalWS, o.tangentWS, v.tangent.w);
                 o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
                 o.color = v.color;
                 return o;
@@ -381,7 +388,14 @@ Shader "Nova/Particles/UberLit"
             fixed4 frag(v2f i) : SV_Target
             {
                 half4 baseColor = NovaResolveMinimumLitBaseColor(_BaseMap, i.uv, _TintColor, i.color);
-                return NovaApplyMinimumLitForward(baseColor, i.normalWS, _Cutoff);
+                return NovaApplyLitForwardBase(
+                    baseColor,
+                    i.uv,
+                    i.normalWS,
+                    i.tangentWS,
+                    i.bitangentWS,
+                    NovaWorldSpaceViewDir(i.positionWS),
+                    _Cutoff);
             }
             ENDCG
         }

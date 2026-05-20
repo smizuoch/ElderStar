@@ -144,6 +144,14 @@ public sealed class NovaBuiltInUberLitCompileTests
         Assert.That(shaderText, Does.Contain("NovaObjectToWorldNormal"));
         Assert.That(combinedText, Does.Contain("NOVA_SAMPLE_TEX2D(baseMap"));
         Assert.That(combinedText, Does.Contain("NovaComputeMinimumLitColor"));
+        Assert.That(combinedText, Does.Contain("NovaLitSurfaceData"));
+        Assert.That(combinedText, Does.Contain("NovaResolveLitSurfaceData"));
+        Assert.That(combinedText, Does.Contain("NovaResolveMetallic"));
+        Assert.That(combinedText, Does.Contain("NovaResolveSpecularColor"));
+        Assert.That(combinedText, Does.Contain("NovaResolveSmoothness"));
+        Assert.That(combinedText, Does.Contain("NovaUnpackNormalMap2D"));
+        Assert.That(combinedText, Does.Contain("NovaComputeSpecularApproximation"));
+        Assert.That(combinedText, Does.Contain("NovaComputeLitForwardBaseColor"));
         Assert.That(combinedText, Does.Contain("_TintColor"));
         Assert.That(combinedText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(combinedText, Does.Contain("clip("));
@@ -284,6 +292,18 @@ public sealed class NovaBuiltInUberLitCompileTests
             new CompileCase("_RECEIVE_SHADOWS_ENABLED", WithFloat(shader, "_LitReceiveShadows", 1)),
             new CompileCase("_SPECULAR_HIGHLIGHTS_ENABLED", WithFloat(shader, "_SpecularHighlights", 1)),
             new CompileCase("_ENVIRONMENT_REFLECTIONS_ENABLED", WithFloat(shader, "_EnvironmentReflections", 1)),
+            new CompileCase(
+                "_NORMAL_MAP_ENABLED + _SPECULAR_SETUP",
+                WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_NormalMap")),
+            new CompileCase(
+                "_METALLIC_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED",
+                WithTexture(WithTexture(shader, "_MetallicMap"), "_SmoothnessMap")),
+            new CompileCase(
+                "_SPECULAR_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED",
+                WithTexture(WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularMap"), "_SmoothnessMap")),
+            new CompileCase(
+                "_NORMAL_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED",
+                WithTexture(WithTexture(shader, "_NormalMap"), "_SmoothnessMap")),
             new CompileCase("_MAIN_LIGHT_SHADOWS", new Material(shader), "_MAIN_LIGHT_SHADOWS"),
             new CompileCase("_MAIN_LIGHT_SHADOWS_CASCADE", new Material(shader), "_MAIN_LIGHT_SHADOWS_CASCADE"),
             new CompileCase("_SHADOWS_SOFT", new Material(shader), "_SHADOWS_SOFT"),
@@ -297,6 +317,23 @@ public sealed class NovaBuiltInUberLitCompileTests
                 WithTexture(WithTexture(WithFloat(WithFloat(shader, "_RenderType", 1), "_SpecularHighlights", 1), "_NormalMap"), "_SmoothnessMap"),
                 "_MAIN_LIGHT_SHADOWS",
                 "_SHADOWS_SOFT"),
+            new CompileCase(
+                "representative Phase 6.2A surface combination",
+                WithTexture(
+                    WithTexture(
+                        WithTexture(
+                            WithTexture(
+                                WithFloat(
+                                    WithFloat(
+                                        WithFloat(shader, "_LitWorkflowMode", 0),
+                                        "_SpecularHighlights",
+                                        1),
+                                    "_Smoothness",
+                                    0.85f),
+                                "_NormalMap"),
+                            "_SpecularMap"),
+                        "_MetallicMap"),
+                    "_SmoothnessMap")),
         };
     }
 
