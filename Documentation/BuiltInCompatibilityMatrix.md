@@ -44,7 +44,7 @@ Phase 3 adds local Built-in include scaffolding under `Assets/Nova/Runtime/Core/
 | Fog helpers | `NovaBuiltInFog.cginc` | Verified | Pending | Wraps Built-in fog macros for future shader passes. No target shader has real fog integration yet. |
 | Instancing helpers | `NovaBuiltInInstancing.cginc` | Verified | Pending | Wraps Built-in instance ID setup/transfer macros only. Mesh/particle instancing feature behavior remains unimplemented. |
 | Shadow caster helpers | `NovaBuiltInShadow.cginc` | Verified | Pending | Provides a compile-safe Built-in ShadowCaster clip-position helper. Bias and per-light behavior are Built-in approximations and not parity with the original shadow constants. |
-| Lighting scaffolding | `NovaBuiltInLighting.cginc` | Verified | Pending | Provides main-light direction/color access, ambient sampling, and placeholder surface data for future Lit work. Full UberLit shading remains Phase 6 and no original PBR parity is claimed. |
+| Lighting scaffolding | `NovaBuiltInLighting.cginc` | Verified | Approximate | Provides main-light direction/color access, ambient sampling, Lambert diffuse, and minimum-lit composition for Phase 6.1. Full UberLit PBR parity remains pending and is not claimed. |
 | UI helpers | `NovaBuiltInUI.cginc` | Verified | Pending | Provides local access to Built-in UI clipping support while preserving stencil-compatible properties in target shaders. Full UI shader behavior remains later phases. |
 
 ## Common Shader Features
@@ -872,3 +872,34 @@ Phase 5.6A compatibility annotations:
 - Texture array, 3D texture, vertex texture sampling, manual mirror sampling, parallax, and rim/view-vector behavior remain Approximate until final target-platform and visual validation.
 - Visual regression remains pending and golden image baselines were not added or updated.
 - Lit is the next major shader family. `Nova/Particles/UberLit`, `Nova/UIParticles/UberLit`, Distortion runtime, and Optimized Shader Generator/Replacer runtime behavior remain outside Phase 5.6A scope.
+
+## Phase 6.1 UberLit Minimum ForwardBase Status
+
+Phase 6.1 begins `Nova/Particles/UberLit` only. It replaces the Phase 1/2 fake vertex-color output with a minimum Built-in `ForwardBase` lit approximation. This phase does not attempt full PBR parity, does not add `ForwardAdd`, does not add receive-shadow runtime behavior, does not add Lit ShadowCaster / Lit DepthOnly / Lit DepthNormals / Lit SceneSelectionPass / Lit Picking, does not port `Nova/UIParticles/UberLit`, does not port Distortion, does not implement optimizer/replacer runtime behavior, and does not add or update golden images.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Minimum `ForwardBase` lit pass | Passed | Passed | `Nova/Particles/UberLit` now has one named Built-in `ForwardBase` pass using local Built-in includes, object-to-clip transforms, world normal interpolation, UV0, vertex color, and material render-state properties. |
+| Main directional light approximation | Passed | Passed | The Phase 6.1 path uses `_WorldSpaceLightPos0` and `_LightColor0` through local `NovaGetMainLightDirection`, `NovaGetMainLightColor`, `NovaComputeLambertDiffuse`, and `NovaComputeMinimumLitColor` helpers. This is Lambert diffuse only and is not URP `UniversalFragmentPBR` parity. |
+| Ambient / SH approximation | Passed | Passed | `NovaComputeAmbientApproximation` samples Built-in SH through `ShadeSH9` and falls back against `UNITY_LIGHTMODEL_AMBIENT`. This is a Built-in approximation of the original baked/global illumination path. |
+| Base map 2D lit albedo | Passed | Passed | The minimum Lit path samples `_BaseMap` as a 2D texture and multiplies it into the lit albedo. Base map 2D array and 3D runtime behavior remain pending for Lit. |
+| Tint / vertex color lit albedo | Passed | Passed | `_TINT_AREA_ALL` plus `_TINT_COLOR_ENABLED` multiplies `_TintColor`; vertex color also multiplies the minimum lit albedo. Tint maps, tint rim, flow, parallax, color correction, emission, transparency, soft particles, depth fade, and vertex deformation remain pending for Lit. |
+| Alpha test and alpha output | Passed | Passed | `_ALPHATEST_ENABLED` clips against `_Cutoff`, and the fragment output preserves the resolved base alpha. Other alpha-transition paths remain pending for Lit runtime behavior. |
+| Lit property preservation | Passed | Passed | The 23 audited Lit property additions remain present on `Nova/Particles/UberLit`, with representative texture, color, float, and range-compatible property types covered by EditMode tests. |
+| Lit keyword compile compatibility | Passed | Passed | Lit keywords remain declared for compatibility, including URP-only surfaces such as `_FORWARD_PLUS` and `_CLUSTER_LIGHT_LOOP`. Many keywords are compile-compatible only in Phase 6.1 and do not imply runtime behavior. |
+| Shader compiler diagnostics | Passed | Passed | EditMode compile coverage includes the default material, alpha test, specular setup, normal/specular/metallic/smoothness map keywords, receive shadows, specular highlights, environment reflections, main light shadow keywords, additional light keywords, Forward+, cluster light loop, and one representative combination. |
+| Lit rendering smokes | Passed | Passed | PlayMode coverage verifies non-empty directional-light rendering, light direction response, light color response, ambient contribution, base map albedo, tint plus vertex color, alpha test clipping, and a meaningful difference from `Nova/Particles/UberUnlit`. |
+| Pass topology | Passed | Passed | `Nova/Particles/UberLit` is intentionally `ForwardBase` only in Phase 6.1. Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, and Lit Picking are not yet implemented. |
+| Scope guard | Passed | Passed | UI Lit remains Pending, Distortion runtime remains Pending, and optimizer/replacer runtime behavior remains Pending. |
+
+Phase 6.1 compatibility annotations:
+
+- `Nova/Particles/UberLit` minimum `ForwardBase` runtime behavior is Approximate. It is a Built-in Lambert diffuse plus ambient/SH path, not a port of URP `UniversalFragmentPBR`.
+- Main directional light behavior is Approximate and limited to Built-in forward base main light uniforms. URP additional light loops, Forward+, cluster light loop, and URP shadow data are preserved only as keyword compatibility surfaces in this phase.
+- Ambient / SH behavior is Approximate. The Built-in path uses `ShadeSH9` with a `UNITY_LIGHTMODEL_AMBIENT` fallback instead of URP baked GI, probe-volume, and APV behavior.
+- Base map 2D lit albedo, `_TINT_AREA_ALL` / `_TINT_COLOR_ENABLED`, vertex color multiplication, alpha clipping, and alpha output preservation are implemented and smoke-tested for the minimum Lit path.
+- Lit property preservation is Exact for the audited public shader property surface. Material/editor keyword setup remains covered as an API regression surface.
+- Lit keyword declarations are preserved for compile compatibility, including `EVALUATE_SH_MIXED`, `EVALUATE_SH_VERTEX`, `_ADDITIONAL_LIGHTS`, `_ADDITIONAL_LIGHTS_VERTEX`, `_ADDITIONAL_LIGHT_SHADOWS`, `_CLUSTER_LIGHT_LOOP`, `_ENVIRONMENT_REFLECTIONS_ENABLED`, `_FORWARD_PLUS`, `_MAIN_LIGHT_SHADOWS`, `_MAIN_LIGHT_SHADOWS_CASCADE`, `_METALLIC_MAP_ENABLED`, `_NORMAL_MAP_ENABLED`, `_RECEIVE_SHADOWS_ENABLED`, `_SHADOWS_SOFT`, `_SMOOTHNESS_MAP_ENABLED`, `_SPECULAR_HIGHLIGHTS_ENABLED`, `_SPECULAR_MAP_ENABLED`, and `_SPECULAR_SETUP`.
+- Unsupported URP-specific runtime behavior in this phase: Forward+, cluster light loop, URP additional light loop, probe volumes, foveated rendering, and URP `UniversalFragmentPBR`.
+- Intentionally pending for later Lit phases: metallic workflow runtime, specular workflow runtime, normal map runtime, smoothness map runtime, receive shadows runtime, environment reflections runtime, `ForwardAdd`, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full visual parity, and golden image visual regression.
+- `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.1 scope and are not promoted by this phase.
