@@ -366,6 +366,7 @@ Shader "Nova/Particles/UberLit"
                 float3 tangentWS : TEXCOORD2;
                 float3 bitangentWS : TEXCOORD3;
                 float2 uv : TEXCOORD4;
+                float3 litUvAndProgress : TEXCOORD5;
                 fixed4 color : COLOR;
             };
 
@@ -381,6 +382,7 @@ Shader "Nova/Particles/UberLit"
                 o.tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
                 o.bitangentWS = NovaCreateBitangent(o.normalWS, o.tangentWS, v.tangent.w);
                 o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
+                o.litUvAndProgress = NovaResolveLitTextureCoord(o.uv, _BaseMapProgress, _BaseMapSliceCount);
                 o.color = v.color;
                 return o;
             }
@@ -390,7 +392,7 @@ Shader "Nova/Particles/UberLit"
                 half4 baseColor = NovaResolveMinimumLitBaseColor(_BaseMap, i.uv, _TintColor, i.color);
                 return NovaApplyLitForwardBase(
                     baseColor,
-                    i.uv,
+                    i.litUvAndProgress,
                     i.normalWS,
                     i.tangentWS,
                     i.bitangentWS,

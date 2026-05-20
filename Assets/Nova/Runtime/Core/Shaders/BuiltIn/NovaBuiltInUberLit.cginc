@@ -1,6 +1,8 @@
 #ifndef NOVA_BUILTIN_UBER_LIT_INCLUDED
 #define NOVA_BUILTIN_UBER_LIT_INCLUDED
 
+#include "NovaBuiltInUberUnlit.cginc"
+
 half4 NovaResolveMinimumLitBaseColor(
     sampler2D baseMap,
     float2 uv,
@@ -28,9 +30,17 @@ half4 NovaApplyMinimumLitForward(half4 baseColor, float3 normalWS, half cutoff)
 }
 
 NOVA_DECLARE_TEX2D(_NormalMap);
+NOVA_DECLARE_TEX2D_ARRAY(_NormalMap2DArray);
+NOVA_DECLARE_TEX3D(_NormalMap3D);
 NOVA_DECLARE_TEX2D(_SpecularMap);
+NOVA_DECLARE_TEX2D_ARRAY(_SpecularMap2DArray);
+NOVA_DECLARE_TEX3D(_SpecularMap3D);
 NOVA_DECLARE_TEX2D(_MetallicMap);
+NOVA_DECLARE_TEX2D_ARRAY(_MetallicMap2DArray);
+NOVA_DECLARE_TEX3D(_MetallicMap3D);
 NOVA_DECLARE_TEX2D(_SmoothnessMap);
+NOVA_DECLARE_TEX2D_ARRAY(_SmoothnessMap2DArray);
+NOVA_DECLARE_TEX3D(_SmoothnessMap3D);
 
 half _NormalMapBumpScale;
 half4 _SpecularColor;
@@ -39,6 +49,9 @@ half _Metallic;
 half _MetallicMapChannelsX;
 half _Smoothness;
 half _SmoothnessMapChannelsX;
+half _BaseMapProgress;
+half _BaseMapSliceCount;
+half _BaseMapRowCount;
 
 struct NovaLitSurfaceData
 {
@@ -50,23 +63,42 @@ struct NovaLitSurfaceData
     half3 normalWS;
 };
 
-half NovaResolveMetallic(float2 uv)
+float3 NovaResolveLitTextureCoord(float2 uv, half progress, half sliceCount)
+{
+    return float3(uv, NovaBaseMapProgress(progress, sliceCount, _BaseMapRowCount, 0.0h));
+}
+
+#if defined(_BASE_MAP_MODE_2D_ARRAY)
+#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#elif defined(_BASE_MAP_MODE_3D)
+#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#else
+#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
+#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
+#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
+#endif
+
+half NovaResolveMetallic(float3 litCoord)
 {
     #if defined(_SPECULAR_SETUP)
     return 1.0h;
     #elif defined(_METALLIC_MAP_ENABLED)
-    half4 metallic = NOVA_SAMPLE_TEX2D(_MetallicMap, uv);
+    half4 metallic = NovaSampleLitScalarMap(_MetallicMap, _MetallicMap2DArray, _MetallicMap3D, litCoord);
     return saturate(NovaSelectChannel(metallic, _MetallicMapChannelsX) * _Metallic);
     #else
     return saturate(_Metallic);
     #endif
 }
 
-half3 NovaResolveSpecularColor(float2 uv)
+half3 NovaResolveSpecularColor(float3 litCoord)
 {
     #if defined(_SPECULAR_SETUP)
     #if defined(_SPECULAR_MAP_ENABLED)
-    half4 specular = NOVA_SAMPLE_TEX2D(_SpecularMap, uv);
+    half4 specular = NovaSampleLitColorMap(_SpecularMap, _SpecularMap2DArray, _SpecularMap3D, litCoord);
     return saturate(specular.rgb * _SpecularColor.rgb);
     #else
     return saturate(_SpecularColor.rgb);
@@ -76,20 +108,20 @@ half3 NovaResolveSpecularColor(float2 uv)
     #endif
 }
 
-half NovaResolveSmoothness(float2 uv)
+half NovaResolveSmoothness(float3 litCoord)
 {
     #if defined(_SMOOTHNESS_MAP_ENABLED)
-    half4 smoothness = NOVA_SAMPLE_TEX2D(_SmoothnessMap, uv);
+    half4 smoothness = NovaSampleLitScalarMap(_SmoothnessMap, _SmoothnessMap2DArray, _SmoothnessMap3D, litCoord);
     return saturate(NovaSelectChannel(smoothness, _SmoothnessMapChannelsX) * _Smoothness);
     #else
     return saturate(_Smoothness);
     #endif
 }
 
-half3 NovaUnpackNormalMap2D(float2 uv)
+half3 NovaResolveNormalMap(float3 litCoord)
 {
     #if defined(_NORMAL_MAP_ENABLED)
-    half4 packedNormal = NOVA_SAMPLE_TEX2D(_NormalMap, uv);
+    half4 packedNormal = NovaSampleLitNormalMap(_NormalMap, _NormalMap2DArray, _NormalMap3D, litCoord);
     half3 normalTS;
     normalTS.xy = packedNormal.xy * 2.0h - 1.0h;
     normalTS.xy *= _NormalMapBumpScale;
@@ -118,7 +150,7 @@ half3 NovaTangentToWorldNormal(half3 normalTS, float3 normalWS, float3 tangentWS
 
 NovaLitSurfaceData NovaResolveLitSurfaceData(
     half4 baseColor,
-    float2 uv,
+    float3 litCoord,
     float3 normalWS,
     float3 tangentWS,
     float3 bitangentWS)
@@ -126,10 +158,10 @@ NovaLitSurfaceData NovaResolveLitSurfaceData(
     NovaLitSurfaceData surfaceData;
     surfaceData.albedo = baseColor.rgb;
     surfaceData.alpha = baseColor.a;
-    surfaceData.metallic = NovaResolveMetallic(uv);
-    surfaceData.specularColor = NovaResolveSpecularColor(uv);
-    surfaceData.smoothness = NovaResolveSmoothness(uv);
-    surfaceData.normalWS = NovaTangentToWorldNormal(NovaUnpackNormalMap2D(uv), normalWS, tangentWS, bitangentWS);
+    surfaceData.metallic = NovaResolveMetallic(litCoord);
+    surfaceData.specularColor = NovaResolveSpecularColor(litCoord);
+    surfaceData.smoothness = NovaResolveSmoothness(litCoord);
+    surfaceData.normalWS = NovaTangentToWorldNormal(NovaResolveNormalMap(litCoord), normalWS, tangentWS, bitangentWS);
     return surfaceData;
 }
 
@@ -168,7 +200,7 @@ half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 view
 
 half4 NovaApplyLitForwardBase(
     half4 baseColor,
-    float2 uv,
+    float3 litCoord,
     float3 normalWS,
     float3 tangentWS,
     float3 bitangentWS,
@@ -179,7 +211,7 @@ half4 NovaApplyLitForwardBase(
     clip(baseColor.a - cutoff);
     #endif
 
-    NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(baseColor, uv, normalWS, tangentWS, bitangentWS);
+    NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(baseColor, litCoord, normalWS, tangentWS, bitangentWS);
     return NovaComputeLitForwardBaseColor(surfaceData, viewDirectionWS);
 }
 

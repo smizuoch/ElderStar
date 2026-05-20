@@ -931,3 +931,38 @@ Phase 6.2A compatibility annotations:
 - Runtime-pending Lit surface texture modes: `_NormalMap2DArray`, `_NormalMap3D`, `_SpecularMap2DArray`, `_SpecularMap3D`, `_MetallicMap2DArray`, `_MetallicMap3D`, `_SmoothnessMap2DArray`, and `_SmoothnessMap3D`.
 - Runtime-pending lighting and topology features: `_LitReceiveShadows`, `_EnvironmentReflections`, additional lights, `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full visual parity, and golden image visual regression.
 - `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.2A scope and are not promoted by this phase.
+
+## Phase 6.2B UberLit Texture Mode Status
+
+Phase 6.2B expands only the primary `Nova/Particles/UberLit` Built-in `ForwardBase` surface approximation. It adds runtime sampling for Lit-specific normal, metallic, specular, and smoothness maps in 2D array and 3D texture modes. It does not attempt URP `UniversalFragmentPBR` parity, receive shadows, environment reflections, additional lights, `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster / DepthOnly / DepthNormals / SceneSelectionPass / Picking, `Nova/UIParticles/UberLit`, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, or full visual parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Lit texture-mode resolver | Passed | Passed | Lit surface maps follow the original material setup rule: `_BaseMapMode` selects the source texture family. `SingleTexture` samples 2D maps, `FlipBook` samples 2D array maps, and `FlipBookBlending` samples 3D maps. No new Lit-specific progress, slice, or mode properties were added. |
+| Normal map 2D array | Passed | Passed | `_NORMAL_MAP_ENABLED` samples `_NormalMap2DArray` when `_BASE_MAP_MODE_2D_ARRAY` is active, unpacks tangent-space normals, applies `_NormalMapBumpScale`, and affects diffuse/specular lighting through the existing Built-in tangent basis. |
+| Normal map 3D | Passed | Passed | `_NORMAL_MAP_ENABLED` samples `_NormalMap3D` when `_BASE_MAP_MODE_3D` is active. This is Approximate because 3D texture sampling and tangent-space normal precision are backend-dependent. |
+| Metallic map 2D array and channel | Passed | Passed | `_METALLIC_MAP_ENABLED` samples `_MetallicMap2DArray`, selects `_MetallicMapChannelsX`, multiplies by `_Metallic`, and affects the local specular approximation. |
+| Metallic map 3D and channel | Passed | Passed | `_METALLIC_MAP_ENABLED` samples `_MetallicMap3D`, preserves `_MetallicMapChannelsX` selection, and affects the local specular approximation. |
+| Specular map 2D array | Passed | Passed | `_SPECULAR_MAP_ENABLED` samples `_SpecularMap2DArray` in specular workflow and multiplies RGB by `_SpecularColor`. `_SpecularMapChannelsX` remains property-preserved; the original Lit forward path uses RGB specular map semantics. |
+| Specular map 3D | Passed | Passed | `_SPECULAR_MAP_ENABLED` samples `_SpecularMap3D` in specular workflow and preserves `_SpecularColor` tinting. |
+| Smoothness map 2D array and channel | Passed | Passed | `_SMOOTHNESS_MAP_ENABLED` samples `_SmoothnessMap2DArray`, selects `_SmoothnessMapChannelsX`, multiplies by `_Smoothness`, and affects the specular shape/intensity. |
+| Smoothness map 3D and channel | Passed | Passed | `_SMOOTHNESS_MAP_ENABLED` samples `_SmoothnessMap3D`, preserves `_SmoothnessMapChannelsX` selection, and affects the specular shape/intensity. |
+| Lit surface interaction smokes | Passed | Passed | PlayMode coverage verifies normal/metallic/smoothness 2D array stack behavior, normal/metallic/smoothness 3D stack behavior, and preservation of alpha test, base map 2D, tint, vertex color, metallic/specular workflow, smoothness, and normal map 2D regressions. |
+| Shader compiler diagnostics | Passed | Passed | EditMode compile coverage includes normal/metallic/specular/smoothness 2D array and 3D cases, normal array/3D plus specular workflow, metallic plus smoothness array/3D, specular plus smoothness array/3D, one representative Phase 6.2B combination, and compatibility-only URP lighting keywords. |
+| Texture array / 3D platform support | Passed | Passed | The shader remains at `#pragma target 3.5`, matching the existing texture array requirement. 2D array and 3D support remain Approximate because target backend support can vary outside the tested editor paths. |
+| Pass topology | Passed | Passed | `Nova/Particles/UberLit` remains a single primary Built-in `ForwardBase` runtime pass. Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, and Lit Picking remain not implemented. |
+| Scope guard | Passed | Passed | UI Lit remains Pending, Distortion runtime remains Pending, optimizer/replacer runtime behavior remains Pending, and no golden images were added or updated. |
+
+Phase 6.2B compatibility annotations:
+
+- Normal map 2D array, normal map 3D, metallic map 2D array, metallic map 3D, specular map 2D array, specular map 3D, smoothness map 2D array, and smoothness map 3D are implemented for `Nova/Particles/UberLit` `ForwardBase` only.
+- Lit map texture selection is intentionally coupled to `_BaseMapMode`, matching the original editor/material post-processor. `_BaseMapProgress` and `_BaseMapSliceCount` drive the 2D array slice or 3D depth coordinate; no new public material properties were introduced.
+- Metallic and smoothness channel selection is implemented for 2D, 2D array, and 3D maps through `_MetallicMapChannelsX` and `_SmoothnessMapChannelsX`.
+- Specular map semantics remain RGB-based for 2D, 2D array, and 3D maps. `_SpecularMapChannelsX` is still preserved as a public property but is not used by the original Lit forward RGB specular sampling path.
+- The Lit BRDF remains Approximate. Phase 6.2B expands texture sources feeding the Phase 6.2A Blinn-Phong-style main-light approximation; it does not claim URP PBR parity.
+- Texture array and 3D texture behavior is Approximate at the platform level. Unity 2022.3.22f1 and Unity 6000.0.74f1 editor smoke coverage passes, but target backend support can still vary outside these editor paths.
+- Shader target / pragma status: no broad target increase was added; the shader remains at `#pragma target 3.5`.
+- Property preservation remains Exact for the audited public Lit map properties. Material/editor setup still controls Lit map keywords by checking the texture property that corresponds to `_BaseMapMode`.
+- Lit keyword compile compatibility remains compile-only for `_RECEIVE_SHADOWS_ENABLED`, `_ENVIRONMENT_REFLECTIONS_ENABLED`, `_MAIN_LIGHT_SHADOWS`, `_MAIN_LIGHT_SHADOWS_CASCADE`, `_SHADOWS_SOFT`, `_ADDITIONAL_LIGHTS`, `_ADDITIONAL_LIGHTS_VERTEX`, `_ADDITIONAL_LIGHT_SHADOWS`, `_FORWARD_PLUS`, and `_CLUSTER_LIGHT_LOOP`; Phase 6.2B does not claim runtime behavior for those keywords.
+- Runtime-pending lighting and topology features: receive shadows, environment reflections, additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full visual parity, and golden image visual regression.
+- `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.2B scope and are not promoted by this phase.

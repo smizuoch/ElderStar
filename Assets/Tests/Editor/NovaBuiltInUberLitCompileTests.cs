@@ -149,7 +149,10 @@ public sealed class NovaBuiltInUberLitCompileTests
         Assert.That(combinedText, Does.Contain("NovaResolveMetallic"));
         Assert.That(combinedText, Does.Contain("NovaResolveSpecularColor"));
         Assert.That(combinedText, Does.Contain("NovaResolveSmoothness"));
-        Assert.That(combinedText, Does.Contain("NovaUnpackNormalMap2D"));
+        Assert.That(combinedText, Does.Contain("NovaResolveLitTextureCoord"));
+        Assert.That(combinedText, Does.Contain("NovaSampleLitScalarMap"));
+        Assert.That(combinedText, Does.Contain("NovaSampleLitColorMap"));
+        Assert.That(combinedText, Does.Contain("NovaSampleLitNormalMap"));
         Assert.That(combinedText, Does.Contain("NovaComputeSpecularApproximation"));
         Assert.That(combinedText, Does.Contain("NovaComputeLitForwardBaseColor"));
         Assert.That(combinedText, Does.Contain("_TintColor"));
@@ -289,6 +292,14 @@ public sealed class NovaBuiltInUberLitCompileTests
             new CompileCase("_SPECULAR_MAP_ENABLED", WithTexture(shader, "_SpecularMap")),
             new CompileCase("_METALLIC_MAP_ENABLED", WithTexture(shader, "_MetallicMap")),
             new CompileCase("_SMOOTHNESS_MAP_ENABLED", WithTexture(shader, "_SmoothnessMap")),
+            new CompileCase("normal map 2D array", WithTexture2DArray(WithBaseMapMode(shader, 1f), "_NormalMap2DArray")),
+            new CompileCase("normal map 3D", WithTexture3D(WithBaseMapMode(shader, 2f), "_NormalMap3D")),
+            new CompileCase("metallic map 2D array", WithTexture2DArray(WithBaseMapMode(shader, 1f), "_MetallicMap2DArray")),
+            new CompileCase("metallic map 3D", WithTexture3D(WithBaseMapMode(shader, 2f), "_MetallicMap3D")),
+            new CompileCase("specular map 2D array", WithTexture2DArray(WithBaseMapMode(WithFloat(shader, "_LitWorkflowMode", 0), 1f), "_SpecularMap2DArray")),
+            new CompileCase("specular map 3D", WithTexture3D(WithBaseMapMode(WithFloat(shader, "_LitWorkflowMode", 0), 2f), "_SpecularMap3D")),
+            new CompileCase("smoothness map 2D array", WithTexture2DArray(WithBaseMapMode(shader, 1f), "_SmoothnessMap2DArray")),
+            new CompileCase("smoothness map 3D", WithTexture3D(WithBaseMapMode(shader, 2f), "_SmoothnessMap3D")),
             new CompileCase("_RECEIVE_SHADOWS_ENABLED", WithFloat(shader, "_LitReceiveShadows", 1)),
             new CompileCase("_SPECULAR_HIGHLIGHTS_ENABLED", WithFloat(shader, "_SpecularHighlights", 1)),
             new CompileCase("_ENVIRONMENT_REFLECTIONS_ENABLED", WithFloat(shader, "_EnvironmentReflections", 1)),
@@ -296,11 +307,32 @@ public sealed class NovaBuiltInUberLitCompileTests
                 "_NORMAL_MAP_ENABLED + _SPECULAR_SETUP",
                 WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_NormalMap")),
             new CompileCase(
+                "normal 2D array + specular workflow",
+                WithTexture2DArray(WithBaseMapMode(WithFloat(shader, "_LitWorkflowMode", 0), 1f), "_NormalMap2DArray")),
+            new CompileCase(
+                "normal 3D + specular workflow",
+                WithTexture3D(WithBaseMapMode(WithFloat(shader, "_LitWorkflowMode", 0), 2f), "_NormalMap3D")),
+            new CompileCase(
+                "normal 2D array + smoothness 2D array",
+                WithTexture2DArray(WithTexture2DArray(WithBaseMapMode(shader, 1f), "_NormalMap2DArray"), "_SmoothnessMap2DArray")),
+            new CompileCase(
                 "_METALLIC_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED",
                 WithTexture(WithTexture(shader, "_MetallicMap"), "_SmoothnessMap")),
             new CompileCase(
+                "metallic 2D array + smoothness 2D array",
+                WithTexture2DArray(WithTexture2DArray(WithBaseMapMode(shader, 1f), "_MetallicMap2DArray"), "_SmoothnessMap2DArray")),
+            new CompileCase(
+                "metallic 3D + smoothness 3D",
+                WithTexture3D(WithTexture3D(WithBaseMapMode(shader, 2f), "_MetallicMap3D"), "_SmoothnessMap3D")),
+            new CompileCase(
                 "_SPECULAR_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED",
                 WithTexture(WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularMap"), "_SmoothnessMap")),
+            new CompileCase(
+                "specular 2D array + smoothness 2D array",
+                WithTexture2DArray(WithTexture2DArray(WithBaseMapMode(WithFloat(shader, "_LitWorkflowMode", 0), 1f), "_SpecularMap2DArray"), "_SmoothnessMap2DArray")),
+            new CompileCase(
+                "specular 3D + smoothness 3D",
+                WithTexture3D(WithTexture3D(WithBaseMapMode(WithFloat(shader, "_LitWorkflowMode", 0), 2f), "_SpecularMap3D"), "_SmoothnessMap3D")),
             new CompileCase(
                 "_NORMAL_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED",
                 WithTexture(WithTexture(shader, "_NormalMap"), "_SmoothnessMap")),
@@ -334,6 +366,22 @@ public sealed class NovaBuiltInUberLitCompileTests
                             "_SpecularMap"),
                         "_MetallicMap"),
                     "_SmoothnessMap")),
+            new CompileCase(
+                "representative Phase 6.2B texture-mode combination",
+                WithTexture3D(
+                    WithTexture3D(
+                        WithTexture3D(
+                            WithTexture3D(
+                                WithBaseMapMode(
+                                    WithFloat(
+                                        WithFloat(shader, "_SpecularHighlights", 1),
+                                        "_LitWorkflowMode",
+                                        0),
+                                    2f),
+                                "_NormalMap3D"),
+                            "_SpecularMap3D"),
+                        "_MetallicMap3D"),
+                    "_SmoothnessMap3D")),
         };
     }
 
@@ -364,6 +412,49 @@ public sealed class NovaBuiltInUberLitCompileTests
         texture.SetPixels(Enumerable.Repeat(UnityEngine.Color.white, 4).ToArray());
         texture.Apply();
         material.SetTexture(property, texture);
+        return material;
+    }
+
+    private static Material WithTexture2DArray(Material material, string property)
+    {
+        var texture = new Texture2DArray(2, 2, 2, TextureFormat.RGBA32, false)
+        {
+            name = "NovaBuiltInUberLitCompileTexture",
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        var pixels = Enumerable.Repeat(UnityEngine.Color.white, 4).ToArray();
+        texture.SetPixels(pixels, 0);
+        texture.SetPixels(pixels, 1);
+        texture.Apply();
+        material.SetTexture(property, texture);
+        return material;
+    }
+
+    private static Material WithTexture3D(Material material, string property)
+    {
+        var texture = new Texture3D(2, 2, 2, TextureFormat.RGBA32, false)
+        {
+            name = "NovaBuiltInUberLitCompileTexture",
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        texture.SetPixels(Enumerable.Repeat(UnityEngine.Color.white, 8).ToArray());
+        texture.Apply();
+        material.SetTexture(property, texture);
+        return material;
+    }
+
+    private static Material WithBaseMapMode(Shader shader, float mode)
+    {
+        return WithBaseMapMode(new Material(shader), mode);
+    }
+
+    private static Material WithBaseMapMode(Material material, float mode)
+    {
+        material.SetFloat("_BaseMapMode", mode);
+        material.SetFloat("_BaseMapSliceCount", 2f);
+        material.SetFloat("_BaseMapProgress", mode > 1.5f ? 1f : 0.75f);
         return material;
     }
 
