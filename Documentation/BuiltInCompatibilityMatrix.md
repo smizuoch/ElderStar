@@ -966,3 +966,35 @@ Phase 6.2B compatibility annotations:
 - Lit keyword compile compatibility remains compile-only for `_RECEIVE_SHADOWS_ENABLED`, `_ENVIRONMENT_REFLECTIONS_ENABLED`, `_MAIN_LIGHT_SHADOWS`, `_MAIN_LIGHT_SHADOWS_CASCADE`, `_SHADOWS_SOFT`, `_ADDITIONAL_LIGHTS`, `_ADDITIONAL_LIGHTS_VERTEX`, `_ADDITIONAL_LIGHT_SHADOWS`, `_FORWARD_PLUS`, and `_CLUSTER_LIGHT_LOOP`; Phase 6.2B does not claim runtime behavior for those keywords.
 - Runtime-pending lighting and topology features: receive shadows, environment reflections, additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full visual parity, and golden image visual regression.
 - `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.2B scope and are not promoted by this phase.
+
+## Phase 6.3A UberLit Receive Shadows Status
+
+Phase 6.3A expands only the primary `Nova/Particles/UberLit` Built-in `ForwardBase` approximation. It adds Built-in main directional receive-shadow attenuation for other shadow-casting objects. It does not add Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, `ForwardAdd`, additional lights, environment reflections, Forward+, cluster light loop, probe volumes, foveated rendering, `Nova/UIParticles/UberLit`, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, or URP shadow parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Receive shadows runtime | Passed | Passed | `_RECEIVE_SHADOWS_ENABLED` and `_LitReceiveShadows > 0.5` apply Built-in `AutoLight.cginc` ForwardBase shadow attenuation to direct diffuse/specular lighting. Ambient remains unshadowed. |
+| `_LitReceiveShadows` | Passed | Passed | Original editor/material semantics are preserved: the material setup path enables `_RECEIVE_SHADOWS_ENABLED` when `_LitReceiveShadows` is greater than `0.5`. Runtime also checks the property to avoid stale keyword-only behavior. |
+| `_RECEIVE_SHADOWS_ENABLED` | Passed | Passed | Disabling the keyword bypasses receive-shadow attenuation even when `_LitReceiveShadows` remains enabled. |
+| Main directional shadow attenuation | Passed | Passed | Built-in `#pragma multi_compile_fwdbase`, local `NovaTransferShadowCoord`, and local `NovaComputeShadowAttenuation` wrappers use Built-in ForwardBase shadow variants. This is not URP main-light shadow parity. |
+| Soft shadow compatibility | Compile-verified | Passed | `_SHADOWS_SOFT` remains compile-compatible. Runtime softness is controlled by Built-in light and quality settings, not by URP keyword semantics alone. No separate soft-shadow PlayMode assertion is claimed in this phase. |
+| Cascade compatibility | Compile-verified | Passed | `_MAIN_LIGHT_SHADOWS_CASCADE` remains compile-compatible. Runtime cascade selection is controlled by Built-in quality settings and screen-space shadow resolve behavior, not URP cascade data parity. |
+| Metallic/specular interaction | Passed | Passed | Receive-shadow smoke tests cover metallic workflow and specular workflow while preserving the Phase 6.2A/6.2B surface approximation. |
+| Normal map interaction | Passed | Passed | Receive-shadow smoke tests cover `_NORMAL_MAP_ENABLED` with direct lighting and shadow attenuation active. |
+| Alpha test interaction | Passed | Passed | Receive-shadow smoke tests cover `_ALPHATEST_ENABLED`; visible pixels still receive shadows and clipped pixels remain at the known background/proxy color. |
+| Tint / vertex color interaction | Passed | Passed | Receive-shadow smoke tests verify tinted and vertex-colored albedo remains tinted while shadowed regions darken. |
+| Ambient under shadows | Passed | Passed | Ambient is deliberately preserved while direct diffuse/specular lighting is shadowed. This is a Built-in approximation, not URP baked/global illumination parity. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes `_RECEIVE_SHADOWS_ENABLED`, `_MAIN_LIGHT_SHADOWS`, `_MAIN_LIGHT_SHADOWS_CASCADE`, `_SHADOWS_SOFT`, receive shadows plus those keywords, receive shadows plus metallic/specular/normal/smoothness/alpha-test states, and representative 2D array / 3D Lit map states. |
+| Pass topology | Passed | Passed | `Nova/Particles/UberLit` remains a single primary Built-in `ForwardBase` runtime pass. Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, and Lit Picking remain not implemented. |
+| Scope guard | Passed | Passed | UI Lit remains Pending, Distortion runtime remains Pending, optimizer/replacer runtime behavior remains Pending, and no golden images were added or updated. |
+
+Phase 6.3A compatibility annotations:
+
+- Receive shadows are Approximate. The Built-in port uses Built-in ForwardBase shadow variants and `AutoLight.cginc` wrappers; it does not reproduce URP shadow bias, URP screen-space shadow data, URP cascade data, URP punctual shadows, or `UniversalFragmentPBR` lighting behavior.
+- Built-in receive-shadow runtime is limited to the current primary `ForwardBase` approximation for `Nova/Particles/UberLit`. No `ForwardAdd` or additional-light shadow behavior is implemented.
+- `_LitReceiveShadows` and `_RECEIVE_SHADOWS_ENABLED` are runtime-active for direct diffuse/specular attenuation. Ambient remains unshadowed by design for this phase.
+- Built-in soft shadow and cascade behavior are controlled by `Light` and `QualitySettings`; `_SHADOWS_SOFT` and `_MAIN_LIGHT_SHADOWS_CASCADE` are preserved as compile-compatible URP-style keyword surfaces, not exact runtime controls.
+- Receive-shadow PlayMode smokes use a Built-in depth proxy to exercise screen-space directional shadows without adding a Nova Lit ShadowCaster or DepthOnly pass. This keeps Phase 6.3A scoped to receiving shadows from other shadow-casting objects and does not make `Nova/Particles/UberLit` cast shadows.
+- Metallic workflow, specular workflow, normal map, smoothness, base map 2D, tint, vertex color, and alpha test continue to use the Phase 6.2A/6.2B Built-in surface approximation under receive shadows.
+- Unsupported or pending URP-specific behavior remains: URP shadow bias parity, URP punctual shadow parity, URP additional light shadows, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, environment reflections, full PBR parity, full visual parity, and golden image visual regression.
+- `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.3A scope and are not promoted by this phase.

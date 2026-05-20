@@ -52,6 +52,7 @@ half _SmoothnessMapChannelsX;
 half _BaseMapProgress;
 half _BaseMapSliceCount;
 half _BaseMapRowCount;
+half _LitReceiveShadows;
 
 struct NovaLitSurfaceData
 {
@@ -188,14 +189,30 @@ half3 NovaComputeSpecularApproximation(NovaLitSurfaceData surfaceData, float3 li
     #endif
 }
 
-half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 viewDirectionWS)
+half NovaLitReceiveShadowsEnabled()
 {
+    #if defined(_RECEIVE_SHADOWS_ENABLED)
+    return step(0.5h, _LitReceiveShadows);
+    #else
+    return 0.0h;
+    #endif
+}
+
+half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation)
+{
+    half receiveShadow = NovaLitReceiveShadowsEnabled();
+    half directShadow = NovaApplyReceiveShadow(shadowAttenuation, receiveShadow);
     half diffuse = NovaComputeLambertDiffuse(surfaceData.normalWS, NovaGetMainLightDirection());
-    half3 direct = NovaGetMainLightColor() * diffuse;
+    half3 direct = NovaGetMainLightColor() * diffuse * directShadow;
     half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS);
     half3 diffuseColor = surfaceData.albedo * (direct + ambient);
-    half3 specularColor = NovaComputeSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS);
+    half3 specularColor = NovaComputeSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS) * directShadow;
     return half4(diffuseColor + specularColor, surfaceData.alpha);
+}
+
+half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 viewDirectionWS)
+{
+    return NovaComputeLitForwardBaseColor(surfaceData, viewDirectionWS, 1.0h);
 }
 
 half4 NovaApplyLitForwardBase(
@@ -205,14 +222,15 @@ half4 NovaApplyLitForwardBase(
     float3 tangentWS,
     float3 bitangentWS,
     float3 viewDirectionWS,
-    half cutoff)
+    half cutoff,
+    half shadowAttenuation)
 {
     #if defined(_ALPHATEST_ENABLED)
     clip(baseColor.a - cutoff);
     #endif
 
     NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(baseColor, litCoord, normalWS, tangentWS, bitangentWS);
-    return NovaComputeLitForwardBaseColor(surfaceData, viewDirectionWS);
+    return NovaComputeLitForwardBaseColor(surfaceData, viewDirectionWS, shadowAttenuation);
 }
 
 #endif

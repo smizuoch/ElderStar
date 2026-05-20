@@ -149,7 +149,11 @@ public sealed class NovaBuiltInUberUnlitInteractionCompileTests
         foreach (var shaderFile in shaderFiles)
         {
             var text = File.ReadAllText(shaderFile);
-            Assert.That(text, Does.Not.Contain("BuiltIn/NovaBuiltInShadow.cginc"), shaderFile);
+            if (shaderFile != "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader")
+            {
+                Assert.That(text, Does.Not.Contain("BuiltIn/NovaBuiltInShadow.cginc"), shaderFile);
+            }
+
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""ShadowCaster"""), shaderFile);
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""DepthOnly"""), shaderFile);
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""DepthNormals"""), shaderFile);

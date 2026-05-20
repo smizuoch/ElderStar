@@ -339,6 +339,62 @@ public sealed class NovaBuiltInUberLitCompileTests
             new CompileCase("_MAIN_LIGHT_SHADOWS", new Material(shader), "_MAIN_LIGHT_SHADOWS"),
             new CompileCase("_MAIN_LIGHT_SHADOWS_CASCADE", new Material(shader), "_MAIN_LIGHT_SHADOWS_CASCADE"),
             new CompileCase("_SHADOWS_SOFT", new Material(shader), "_SHADOWS_SOFT"),
+            new CompileCase(
+                "_RECEIVE_SHADOWS_ENABLED + _MAIN_LIGHT_SHADOWS",
+                WithFloat(shader, "_LitReceiveShadows", 1f),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "_RECEIVE_SHADOWS_ENABLED + _MAIN_LIGHT_SHADOWS_CASCADE",
+                WithFloat(shader, "_LitReceiveShadows", 1f),
+                "_MAIN_LIGHT_SHADOWS_CASCADE"),
+            new CompileCase(
+                "_RECEIVE_SHADOWS_ENABLED + _SHADOWS_SOFT",
+                WithFloat(shader, "_LitReceiveShadows", 1f),
+                "_SHADOWS_SOFT"),
+            new CompileCase(
+                "receive shadows + metallic workflow",
+                WithFloat(WithFloat(shader, "_LitReceiveShadows", 1f), "_LitWorkflowMode", 1f),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + specular workflow",
+                WithFloat(WithFloat(shader, "_LitReceiveShadows", 1f), "_LitWorkflowMode", 0f),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + normal map",
+                WithTexture(WithFloat(shader, "_LitReceiveShadows", 1f), "_NormalMap"),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + smoothness map",
+                WithTexture(WithFloat(shader, "_LitReceiveShadows", 1f), "_SmoothnessMap"),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + alpha test",
+                WithFloat(WithFloat(shader, "_LitReceiveShadows", 1f), "_RenderType", 1f),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + representative texture array Lit map state",
+                WithTexture2DArray(
+                    WithTexture2DArray(
+                        WithTexture2DArray(
+                            WithTexture2DArray(
+                                WithBaseMapMode(WithFloat(shader, "_LitReceiveShadows", 1f), 1f),
+                                "_NormalMap2DArray"),
+                            "_MetallicMap2DArray"),
+                        "_SpecularMap2DArray"),
+                    "_SmoothnessMap2DArray"),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + representative 3D Lit map state",
+                WithTexture3D(
+                    WithTexture3D(
+                        WithTexture3D(
+                            WithTexture3D(
+                                WithBaseMapMode(WithFloat(shader, "_LitReceiveShadows", 1f), 2f),
+                                "_NormalMap3D"),
+                            "_MetallicMap3D"),
+                        "_SpecularMap3D"),
+                    "_SmoothnessMap3D"),
+                "_MAIN_LIGHT_SHADOWS"),
             new CompileCase("_ADDITIONAL_LIGHTS", new Material(shader), "_ADDITIONAL_LIGHTS"),
             new CompileCase("_ADDITIONAL_LIGHTS_VERTEX", new Material(shader), "_ADDITIONAL_LIGHTS_VERTEX"),
             new CompileCase("_ADDITIONAL_LIGHT_SHADOWS", new Material(shader), "_ADDITIONAL_LIGHT_SHADOWS"),

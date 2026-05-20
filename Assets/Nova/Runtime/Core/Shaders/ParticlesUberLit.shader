@@ -284,6 +284,7 @@ Shader "Nova/Particles/UberLit"
             #pragma vertex vert
             #pragma fragment frag
             #pragma target 3.5
+            #pragma multi_compile_fwdbase
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment EVALUATE_SH_MIXED
             #pragma shader_feature_local_fragment EVALUATE_SH_VERTEX
@@ -345,6 +346,7 @@ Shader "Nova/Particles/UberLit"
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInLighting.cginc"
+            #include "BuiltIn/NovaBuiltInShadow.cginc"
             #include "BuiltIn/NovaBuiltInUberLit.cginc"
 
             NOVA_DECLARE_TEX2D(_BaseMap);
@@ -360,13 +362,14 @@ Shader "Nova/Particles/UberLit"
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
+                float4 pos : SV_POSITION;
                 float3 positionWS : TEXCOORD0;
                 float3 normalWS : TEXCOORD1;
                 float3 tangentWS : TEXCOORD2;
                 float3 bitangentWS : TEXCOORD3;
                 float2 uv : TEXCOORD4;
                 float3 litUvAndProgress : TEXCOORD5;
+                NOVA_SHADOW_COORDS(6)
                 fixed4 color : COLOR;
             };
 
@@ -376,7 +379,7 @@ Shader "Nova/Particles/UberLit"
             v2f vert(appdata v)
             {
                 v2f o;
-                o.vertex = NovaObjectToClipPos(v.vertex);
+                o.pos = NovaObjectToClipPos(v.vertex);
                 o.positionWS = NovaObjectToWorld(v.vertex.xyz);
                 o.normalWS = NovaObjectToWorldNormal(v.normal);
                 o.tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
@@ -384,6 +387,7 @@ Shader "Nova/Particles/UberLit"
                 o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
                 o.litUvAndProgress = NovaResolveLitTextureCoord(o.uv, _BaseMapProgress, _BaseMapSliceCount);
                 o.color = v.color;
+                NovaTransferShadowCoord(o, o.positionWS);
                 return o;
             }
 
@@ -397,7 +401,8 @@ Shader "Nova/Particles/UberLit"
                     i.tangentWS,
                     i.bitangentWS,
                     NovaWorldSpaceViewDir(i.positionWS),
-                    _Cutoff);
+                    _Cutoff,
+                    NovaComputeShadowAttenuation(i, i.positionWS));
             }
             ENDCG
         }
