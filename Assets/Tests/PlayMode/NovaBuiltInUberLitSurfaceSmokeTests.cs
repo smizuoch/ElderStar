@@ -457,6 +457,7 @@ public sealed class NovaBuiltInUberLitSurfaceSmokeTests
         material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.28f, 0.28f, 0.28f, 1f)));
         material.SetFloat("_LitWorkflowMode", 1f);
         material.SetFloat("_SpecularHighlights", 1f);
+        material.SetFloat("_EnvironmentReflections", 0f);
         material.SetFloat("_Metallic", metallic);
         material.SetFloat("_Smoothness", smoothness);
     }
@@ -473,6 +474,7 @@ public sealed class NovaBuiltInUberLitSurfaceSmokeTests
         material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.28f, 0.28f, 0.28f, 1f)));
         material.SetFloat("_LitWorkflowMode", 0f);
         material.SetFloat("_SpecularHighlights", 1f);
+        material.SetFloat("_EnvironmentReflections", 0f);
         material.SetColor("_SpecularColor", specularColor);
         material.SetFloat("_Smoothness", smoothness);
     }

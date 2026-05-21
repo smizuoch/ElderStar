@@ -190,6 +190,10 @@ public sealed class NovaBuiltInUberLitMinimumSmokeTests
             material.SetFloat("_Cull", (float)CullMode.Off);
             material.SetFloat("_ZTest", (float)CompareFunction.LessEqual);
             material.SetFloat("_RenderType", 0);
+            if (material.HasProperty("_EnvironmentReflections"))
+            {
+                material.SetFloat("_EnvironmentReflections", 0f);
+            }
             configureMaterial(material);
             setupMaterial(material);
 

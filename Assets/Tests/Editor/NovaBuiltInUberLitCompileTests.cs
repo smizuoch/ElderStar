@@ -154,6 +154,12 @@ public sealed class NovaBuiltInUberLitCompileTests
         Assert.That(combinedText, Does.Contain("NovaSampleLitColorMap"));
         Assert.That(combinedText, Does.Contain("NovaSampleLitNormalMap"));
         Assert.That(combinedText, Does.Contain("NovaComputeSpecularApproximation"));
+        Assert.That(combinedText, Does.Contain("NovaLitEnvironmentReflectionsEnabled"));
+        Assert.That(combinedText, Does.Contain("NovaReflectViewDirection"));
+        Assert.That(combinedText, Does.Contain("NovaSampleEnvironmentReflection"));
+        Assert.That(combinedText, Does.Contain("NovaComputeEnvironmentReflectionStrength"));
+        Assert.That(combinedText, Does.Contain("NovaApplyEnvironmentReflection"));
+        Assert.That(combinedText, Does.Contain("NovaComputeBuiltInEnvironmentReflection"));
         Assert.That(combinedText, Does.Contain("NovaComputeLitForwardBaseColor"));
         Assert.That(combinedText, Does.Contain("_TintColor"));
         Assert.That(combinedText, Does.Contain("_ALPHATEST_ENABLED"));
@@ -304,6 +310,47 @@ public sealed class NovaBuiltInUberLitCompileTests
             new CompileCase("_SPECULAR_HIGHLIGHTS_ENABLED", WithFloat(shader, "_SpecularHighlights", 1)),
             new CompileCase("_ENVIRONMENT_REFLECTIONS_ENABLED", WithFloat(shader, "_EnvironmentReflections", 1)),
             new CompileCase(
+                "_ENVIRONMENT_REFLECTIONS_ENABLED + _SPECULAR_SETUP",
+                WithFloat(WithFloat(shader, "_EnvironmentReflections", 1), "_LitWorkflowMode", 0)),
+            new CompileCase(
+                "_ENVIRONMENT_REFLECTIONS_ENABLED + _SMOOTHNESS_MAP_ENABLED",
+                WithTexture(WithFloat(shader, "_EnvironmentReflections", 1), "_SmoothnessMap")),
+            new CompileCase(
+                "_ENVIRONMENT_REFLECTIONS_ENABLED + _METALLIC_MAP_ENABLED",
+                WithTexture(WithFloat(shader, "_EnvironmentReflections", 1), "_MetallicMap")),
+            new CompileCase(
+                "_ENVIRONMENT_REFLECTIONS_ENABLED + _SPECULAR_MAP_ENABLED",
+                WithTexture(WithFloat(WithFloat(shader, "_EnvironmentReflections", 1), "_LitWorkflowMode", 0), "_SpecularMap")),
+            new CompileCase(
+                "_ENVIRONMENT_REFLECTIONS_ENABLED + _NORMAL_MAP_ENABLED",
+                WithTexture(WithFloat(shader, "_EnvironmentReflections", 1), "_NormalMap")),
+            new CompileCase(
+                "_ENVIRONMENT_REFLECTIONS_ENABLED + _RECEIVE_SHADOWS_ENABLED",
+                WithFloat(WithFloat(shader, "_EnvironmentReflections", 1), "_LitReceiveShadows", 1)),
+            new CompileCase(
+                "_ENVIRONMENT_REFLECTIONS_ENABLED + alpha test",
+                WithFloat(WithFloat(shader, "_EnvironmentReflections", 1), "_RenderType", 1)),
+            new CompileCase(
+                "environment reflections + normal map 2D array",
+                WithTexture2DArray(WithBaseMapMode(WithFloat(shader, "_EnvironmentReflections", 1), 1f), "_NormalMap2DArray")),
+            new CompileCase(
+                "environment reflections + normal map 3D",
+                WithTexture3D(WithBaseMapMode(WithFloat(shader, "_EnvironmentReflections", 1), 2f), "_NormalMap3D")),
+            new CompileCase(
+                "environment reflections + metallic/smoothness 2D array",
+                WithTexture2DArray(
+                    WithTexture2DArray(WithBaseMapMode(WithFloat(shader, "_EnvironmentReflections", 1), 1f), "_MetallicMap2DArray"),
+                    "_SmoothnessMap2DArray")),
+            new CompileCase(
+                "environment reflections + specular/smoothness 3D",
+                WithTexture3D(
+                    WithTexture3D(
+                        WithBaseMapMode(
+                            WithFloat(WithFloat(shader, "_EnvironmentReflections", 1), "_LitWorkflowMode", 0),
+                            2f),
+                        "_SpecularMap3D"),
+                    "_SmoothnessMap3D")),
+            new CompileCase(
                 "_NORMAL_MAP_ENABLED + _SPECULAR_SETUP",
                 WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_NormalMap")),
             new CompileCase(
@@ -402,7 +449,22 @@ public sealed class NovaBuiltInUberLitCompileTests
             new CompileCase("_CLUSTER_LIGHT_LOOP", new Material(shader), "_CLUSTER_LIGHT_LOOP"),
             new CompileCase(
                 "representative Lit keyword combination",
-                WithTexture(WithTexture(WithFloat(WithFloat(shader, "_RenderType", 1), "_SpecularHighlights", 1), "_NormalMap"), "_SmoothnessMap"),
+                WithTexture(WithTexture(WithFloat(WithFloat(WithFloat(shader, "_RenderType", 1), "_SpecularHighlights", 1), "_EnvironmentReflections", 1), "_NormalMap"), "_SmoothnessMap"),
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"),
+            new CompileCase(
+                "representative Phase 6.3B environment reflection combination",
+                WithTexture(
+                    WithTexture(
+                        WithFloat(
+                            WithFloat(
+                                WithFloat(shader, "_EnvironmentReflections", 1),
+                                "_LitReceiveShadows",
+                                1),
+                            "_SpecularHighlights",
+                            1),
+                        "_NormalMap"),
+                    "_SmoothnessMap"),
                 "_MAIN_LIGHT_SHADOWS",
                 "_SHADOWS_SOFT"),
             new CompileCase(

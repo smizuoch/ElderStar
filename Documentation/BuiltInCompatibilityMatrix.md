@@ -998,3 +998,39 @@ Phase 6.3A compatibility annotations:
 - Metallic workflow, specular workflow, normal map, smoothness, base map 2D, tint, vertex color, and alpha test continue to use the Phase 6.2A/6.2B Built-in surface approximation under receive shadows.
 - Unsupported or pending URP-specific behavior remains: URP shadow bias parity, URP punctual shadow parity, URP additional light shadows, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, environment reflections, full PBR parity, full visual parity, and golden image visual regression.
 - `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.3A scope and are not promoted by this phase.
+
+## Phase 6.3B UberLit Environment Reflections Status
+
+Phase 6.3B expands only the primary `Nova/Particles/UberLit` Built-in `ForwardBase` approximation. It adds a local Built-in environment reflection approximation using Built-in global reflection/skybox cubemap data. It does not add additional lights, `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, `Nova/UIParticles/UberLit`, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, URP reflection-probe parity, or URP PBR parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Environment reflections runtime | Passed | Passed | `_ENVIRONMENT_REFLECTIONS_ENABLED` and `_EnvironmentReflections > 0.5` add a visible Built-in reflection contribution in the primary `ForwardBase` path. |
+| `_EnvironmentReflections` | Passed | Passed | Original editor/material semantics are preserved: the material setup path enables `_ENVIRONMENT_REFLECTIONS_ENABLED` when `_EnvironmentReflections` is greater than `0.5`. Runtime also checks the property so stale keyword-only state cannot force reflections on. |
+| `_ENVIRONMENT_REFLECTIONS_ENABLED` | Passed | Passed | Disabling the keyword bypasses environment reflection contribution even when `_EnvironmentReflections` remains enabled. |
+| Built-in reflection probe / skybox approximation | Passed | Passed | The port samples `unity_SpecCube0` through local Nova-prefixed helpers and `DecodeHDR`. This uses Built-in global reflection data and is only an approximation of the original URP environment reflection path. |
+| Reflection probe blending / capture | Approximate | Approximate | Direct URP reflection probe blending parity and probe capture behavior are not implemented or claimed. Tests use deterministic Built-in `RenderSettings.customReflection` input rather than relying on probe capture timing. |
+| Box projection | Unsupported | Unsupported | Built-in box projection parity is not implemented in Phase 6.3B. The reflection direction is a conservative view-direction/world-normal reflection vector. |
+| Smoothness interaction | Passed | Passed | `_Smoothness` and `_SMOOTHNESS_MAP_ENABLED` affect reflection strength and cubemap mip selection in a stable Built-in direction. This is not URP roughness/BRDF parity. |
+| Metallic workflow interaction | Passed | Passed | Metallic workflow uses `_Metallic` / `_MetallicMap` to increase and tint reflection response using the local Phase 6.2A/6.2B surface data approximation. |
+| Specular workflow interaction | Passed | Passed | `_SPECULAR_SETUP` uses `_SpecularColor` / `_SpecularMap` to color and scale the reflection contribution. |
+| Normal map interaction | Passed | Passed | `_NORMAL_MAP_ENABLED` and `_NormalMapBumpScale` affect world normal and therefore reflection direction. Existing 2D, 2D array, and 3D Lit normal map compile coverage remains in place. |
+| Receive-shadow interaction | Passed | Passed | Receive shadows continue to attenuate direct diffuse/specular lighting. Environment reflection remains unshadowed in this approximation, matching the documented Built-in separation between direct shadow attenuation and global reflection. |
+| Ambient interaction | Passed | Passed | Ambient approximation remains separate from reflection contribution; PlayMode smokes verify ambient-only output and additional reflection output are distinguishable. |
+| Alpha test interaction | Passed | Passed | `_ALPHATEST_ENABLED` still clips pixels before the reflection contribution is returned. |
+| Tint / vertex color interaction | Passed | Passed | Tint and vertex color continue to affect base albedo while reflection contribution remains additive and stable. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes `_ENVIRONMENT_REFLECTIONS_ENABLED`, specular workflow, smoothness/metallic/specular/normal maps, receive shadows, alpha test, representative 2D array / 3D Lit map states, and compatibility-only URP lighting keywords. |
+| Pass topology | Passed | Passed | `Nova/Particles/UberLit` remains a single primary Built-in `ForwardBase` runtime pass. Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, and Lit Picking remain not implemented. |
+| Scope guard | Passed | Passed | UI Lit remains Pending, Distortion runtime remains Pending, optimizer/replacer runtime behavior remains Pending, additional lights/ForwardAdd remain Pending, and no golden images were added or updated. |
+
+Phase 6.3B compatibility annotations:
+
+- Environment reflections are Approximate. The Built-in port samples Built-in `unity_SpecCube0` with local Nova-prefixed helpers; it does not copy URP BRDF, URP reflection probe code, `UniversalFragmentPBR`, probe volumes, or foveated rendering includes.
+- `_EnvironmentReflections` and `_ENVIRONMENT_REFLECTIONS_ENABLED` are runtime-active for the primary `ForwardBase` reflection contribution.
+- Smoothness controls both reflection strength and a conservative cubemap mip approximation. This gives stable behavior for scalar and map-driven smoothness but is not URP roughness parity.
+- Metallic workflow uses the local albedo/metallic approximation for reflection color and strength. Specular workflow uses `_SpecularColor` and `_SpecularMap` directly for reflection color and strength.
+- Normal maps affect reflection direction through the same tangent-to-world normal path used by the Phase 6.2A/6.2B direct-light approximation.
+- Receive shadows attenuate only direct diffuse/specular lighting. The Phase 6.3B environment reflection term remains unshadowed; this is documented behavior for the Built-in approximation, not URP parity.
+- Built-in reflection probe blending, probe capture timing, box projection, URP PBR BRDF parity, URP reflection probe parity, and full visual parity remain unsupported or pending.
+- Unsupported or pending URP-specific behavior remains: probe volumes, Forward+, cluster light loop, additional lights, `ForwardAdd`, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full PBR parity, full visual parity, and golden image visual regression.
+- `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.3B scope and are not promoted by this phase.

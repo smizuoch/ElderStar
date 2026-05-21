@@ -63,4 +63,39 @@ half3 NovaComputeMinimumLitColor(half3 albedo, float3 normalWS)
     return albedo * saturate(direct + ambient);
 }
 
+float3 NovaReflectViewDirection(float3 viewDirectionWS, float3 normalWS)
+{
+    return NovaSafeNormalize(reflect(-NovaSafeNormalize(viewDirectionWS), NovaSafeNormalize(normalWS)));
+}
+
+half3 NovaSampleEnvironmentReflection(float3 reflectionDirectionWS, half smoothness)
+{
+    half mip = lerp(6.0h, 0.0h, saturate(smoothness));
+    half4 encodedEnvironment = UNITY_SAMPLE_TEXCUBE_LOD(unity_SpecCube0, NovaSafeNormalize(reflectionDirectionWS), mip);
+    return DecodeHDR(encodedEnvironment, unity_SpecCube0_HDR);
+}
+
+half3 NovaComputeEnvironmentReflectionStrength(
+    half3 albedo,
+    half metallic,
+    half3 specularColor,
+    half smoothness)
+{
+    half clampedSmoothness = saturate(smoothness);
+
+    #if defined(_SPECULAR_SETUP)
+    half3 reflectionColor = saturate(specularColor);
+    #else
+    half3 reflectionColor = lerp(half3(0.04h, 0.04h, 0.04h), albedo, saturate(metallic));
+    #endif
+
+    half workflowStrength = lerp(0.30h, 1.0h, saturate(metallic));
+    return reflectionColor * workflowStrength * clampedSmoothness;
+}
+
+half3 NovaApplyEnvironmentReflection(half3 litColor, half3 environmentReflection)
+{
+    return litColor + environmentReflection;
+}
+
 #endif
