@@ -350,6 +350,7 @@ Shader "Nova/UIParticles/UberLit"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInLighting.cginc"
             #include "BuiltIn/NovaBuiltInUI.cginc"
+            #include "BuiltIn/NovaBuiltInUIParticlesUberLit.cginc"
 
             NOVA_DECLARE_TEX2D(_BaseMap);
             fixed4 _TintColor;
@@ -359,6 +360,7 @@ Shader "Nova/UIParticles/UberLit"
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
+                float4 tangent : TANGENT;
                 float2 uv : TEXCOORD0;
                 fixed4 color : COLOR;
             };
@@ -369,6 +371,9 @@ Shader "Nova/UIParticles/UberLit"
                 float2 positionOS : TEXCOORD0;
                 float2 uv : TEXCOORD1;
                 float3 normalWS : TEXCOORD2;
+                float3 tangentWS : TEXCOORD3;
+                float3 bitangentWS : TEXCOORD4;
+                float3 positionWS : TEXCOORD5;
                 fixed4 color : COLOR;
             };
 
@@ -377,34 +382,36 @@ Shader "Nova/UIParticles/UberLit"
                 v2f o;
                 o.vertex = NovaObjectToClipPos(v.vertex);
                 o.positionOS = v.vertex.xy;
+                o.positionWS = NovaObjectToWorld(v.vertex.xyz);
                 o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
                 o.normalWS = NovaObjectToWorldNormal(v.normal);
+                o.tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
+                o.bitangentWS = NovaCreateBitangent(o.normalWS, o.tangentWS, v.tangent.w);
                 o.color = v.color;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
-                half4 color = NOVA_SAMPLE_TEX2D(_BaseMap, i.uv);
-
-                #if defined(_TINT_AREA_ALL) && defined(_TINT_COLOR_ENABLED)
-                color *= _TintColor;
-                #endif
-
-                color *= i.color;
-                color.a *= NovaUIClipAlpha(i.positionOS);
+                half4 color = NovaResolveUILitBaseColor(_BaseMap, i.uv, _TintColor, i.color, i.positionOS);
 
                 #if defined(_ALPHATEST_ENABLED)
                 clip(color.a - _Cutoff);
                 #endif
 
-                half3 litColor = NovaComputeMinimumLitColor(color.rgb, i.normalWS);
+                NovaUILitSurfaceData surfaceData = NovaResolveUILitSurfaceData(
+                    color,
+                    i.uv,
+                    i.normalWS,
+                    i.tangentWS,
+                    i.bitangentWS);
+                half4 litColor = NovaComputeUILitForwardBaseColor(surfaceData, NovaWorldSpaceViewDir(i.positionWS));
 
                 #if defined(_ALPHAMODULATE_ENABLED)
-                litColor = lerp(half3(1.0h, 1.0h, 1.0h), litColor, color.a);
+                litColor.rgb = lerp(half3(1.0h, 1.0h, 1.0h), litColor.rgb, color.a);
                 #endif
 
-                return fixed4(litColor, color.a);
+                return fixed4(litColor.rgb, litColor.a);
             }
             ENDCG
         }

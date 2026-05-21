@@ -1239,3 +1239,36 @@ Phase 7.1 compatibility annotations:
 - Optimizer/replacer runtime behavior remains Pending.
 - Final visual regression remains Pending, golden image baselines were not added, and no existing golden images were updated.
 - The next recommended phase is Phase 7.2A: `Nova/UIParticles/UberLit` metallic/specular workflow, normal map, smoothness map, and basic specular approximation.
+
+## Phase 7.2A UI UberLit Surface Approximation Status
+
+Phase 7.2A expands only the primary `Nova/UIParticles/UberLit` Built-in `ForwardBase` path. It adds a UI-scoped Built-in approximation for Lit metallic/specular workflow inputs, 2D metallic/specular/smoothness/normal maps, smoothness, normal bump scale, and a basic specular approximation. It does not attempt URP `UniversalFragmentPBR` parity, does not add receive shadows, environment reflections, additional lights, `ForwardAdd`, UI Lit ShadowCaster / DepthOnly / DepthNormals / SceneSelectionPass / Picking, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, 2D array Lit surface maps, or 3D Lit surface maps.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| UI metallic workflow | Passed | Passed | `_LitWorkflowMode` metallic mode uses `_Metallic`, and `_METALLIC_MAP_ENABLED` samples `_MetallicMap` 2D with `_MetallicMapChannelsX`. The result affects a Built-in specular approximation, not URP PBR. |
+| UI metallic map 2D/channel | Passed | Passed | 2D metallic map sampling and channel selection are covered by PlayMode smokes. 2D array and 3D metallic maps remain runtime-pending. |
+| UI specular workflow | Passed | Passed | `_SPECULAR_SETUP` uses `_SpecularColor`, and `_SPECULAR_MAP_ENABLED` samples `_SpecularMap` 2D RGB multiplied by `_SpecularColor`. |
+| UI specular map 2D/RGB semantics | Passed | Passed | Specular map 2D uses original RGB semantics for color. `_SpecularMapChannelsX` remains preserved as a material property but is not used by the original specular RGB path. |
+| UI specular highlights | Passed | Passed | `_SPECULAR_HIGHLIGHTS_ENABLED` gates the basic highlight contribution. `_SpecularHighlights` is still driven by the existing material setup path. |
+| UI smoothness scalar | Passed | Passed | `_Smoothness` shapes/intensifies the basic specular approximation. |
+| UI smoothness map 2D/channel | Passed | Passed | `_SMOOTHNESS_MAP_ENABLED` samples `_SmoothnessMap` 2D, selects `_SmoothnessMapChannelsX`, and multiplies by `_Smoothness`. 2D array and 3D smoothness maps remain runtime-pending. |
+| UI normal map 2D | Passed | Passed | `_NORMAL_MAP_ENABLED` samples `_NormalMap` 2D, unpacks tangent-space XY, reconstructs Z, and transforms through mesh tangent/bitangent/normal data. |
+| UI normal bump scale | Passed | Passed | `_NormalMapBumpScale` scales the unpacked tangent-space XY normal before reconstruction. |
+| Basic specular approximation | Passed | Passed | Uses a simple Built-in Blinn-Phong-style direct main-light highlight. Smoothness controls exponent, metallic controls specular color/strength in metallic workflow, and specular workflow uses `_SpecularColor`. |
+| UI BRDF limitation | Passed | Passed | The result is approximate and intentionally does not claim URP `UniversalFragmentPBR`, image-based lighting, reflection probe, shadow, Forward+, or clustered-light parity. |
+| UI alpha / tint / vertex color regression | Passed | Passed | Surface-feature smokes cover alpha test, tint plus vertex color, and vertex alpha blending. |
+| UI stencil / ColorMask / rect clip regression | Passed | Passed | Surface-feature smokes cover controlled stencil/mask behavior, `ColorMask [_ColorMask]`, and local `UNITY_UI_CLIP_RECT` behavior. Full Canvas `Mask` / `RectMask2D` parity remains pending. |
+| UI property preservation | Passed | Passed | The Phase 7.1 Lit/UI property inventory remains unchanged, including runtime-pending 2D array/3D surface maps and Lit toggles. |
+| UI Lit keyword compile-compatibility | Passed | Passed | Compile diagnostics include `_SPECULAR_SETUP`, `_NORMAL_MAP_ENABLED`, `_SPECULAR_MAP_ENABLED`, `_METALLIC_MAP_ENABLED`, `_SMOOTHNESS_MAP_ENABLED`, `_SPECULAR_HIGHLIGHTS_ENABLED`, combined Phase 7.2A states, `UNITY_UI_CLIP_RECT`, alpha test, and stencil property states. Compatibility-only URP keywords remain compile-only. |
+| UI pass topology | Passed | Passed | UI Lit remains a one-pass `ForwardBase` shader. It has no `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `DepthNormals`, `SceneSelectionPass`, `Picking`, `UniversalForward`, or Universal Render Pipeline tag. |
+| Non-UI keyword exclusion | Passed | Passed | UI Lit still excludes `_CASTING_PUNCTUAL_LIGHT_SHADOW`, `_SHADOW_CASTER_ALPHA_TEST_ENABLED`, `EVALUATE_SH_MIXED`, and `EVALUATE_SH_VERTEX`. |
+
+Phase 7.2A compatibility annotations:
+
+- `Nova/UIParticles/UberLit` now has a UI metallic workflow approximation, UI specular workflow approximation, UI 2D normal/metallic/specular/smoothness map runtime, UI normal bump scale runtime, and UI basic specular approximation on the one-pass Built-in `ForwardBase` path only.
+- The UI Lit surface helper is intentionally separate from the non-UI `Nova/Particles/UberLit` helper so Phase 7.2A does not promote UI receive shadows, UI environment reflections, UI additional lights, or UI `ForwardAdd`.
+- UI normal/specular/metallic/smoothness 2D array and 3D maps remain runtime-pending and are the intended scope of the next phase.
+- Unsupported or runtime-pending UI Lit behavior summary: 2D array / 3D normal/specular/metallic/smoothness maps, receive shadows, environment reflections, additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit pass topology beyond one-pass forward, UI Lit ShadowCaster, UI Lit DepthOnly, UI Lit DepthNormals, UI Lit SceneSelectionPass, UI Lit Picking, full Canvas `Mask` / `RectMask2D` parity, full UI UberUnlit feature stack parity, full UI Lit PBR parity, full visual parity, and golden image visual regression.
+- Distortion runtime, Optimized Shader Generator/Replacer runtime behavior, and final visual regression remain outside Phase 7.2A scope and are not promoted by this phase.
+- The next recommended phase is Phase 7.2B: `Nova/UIParticles/UberLit` texture-mode expansion for 2D array / 3D normal, metallic, specular, and smoothness maps.

@@ -123,7 +123,9 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
     {
         var shaderText = File.ReadAllText(ShaderPath);
         var combinedText = shaderText + "\n"
-            + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInLighting.cginc");
+            + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInLighting.cginc")
+            + "\n"
+            + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInUIParticlesUberLit.cginc");
 
         Assert.That(shaderText, Does.Contain("\"LightMode\" = \"ForwardBase\""));
         Assert.That(shaderText, Does.Contain("Blend [_BlendSrc] [_BlendDst]"));
@@ -137,10 +139,10 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUI.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
         Assert.That(shaderText, Does.Contain("NovaObjectToWorldNormal"));
-        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_BaseMap"));
+        Assert.That(combinedText, Does.Contain("NOVA_SAMPLE_TEX2D(baseMap"));
         Assert.That(shaderText, Does.Contain("_TintColor"));
         Assert.That(shaderText, Does.Contain("i.color"));
-        Assert.That(shaderText, Does.Contain("NovaUIClipAlpha"));
+        Assert.That(combinedText, Does.Contain("NovaUIClipAlpha"));
         Assert.That(combinedText, Does.Contain("NovaComputeMinimumLitColor"));
         Assert.That(combinedText, Does.Contain("NovaComputeAmbientApproximation"));
         Assert.That(combinedText, Does.Contain("ShadeSH9"));
@@ -164,7 +166,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
     }
 
     [Test]
-    public void UIParticlesUberLitPassTopologyStaysUiOnlyForPhase71()
+    public void UIParticlesUberLitPassTopologyStaysUiOnlyForPhase72A()
     {
         var shader = Shader.Find(ShaderName);
         Assert.That(shader, Is.Not.Null, ShaderName);
@@ -279,15 +281,62 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
     }
 
     [Test]
-    public void UIParticlesUberLitPhase71StatusIsDocumented()
+    public void UIParticlesUberLitSurfaceApproximationUsesUiScopedHelpers()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+        var helperPath = "Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInUIParticlesUberLit.cginc";
+        Assert.That(File.Exists(helperPath), Is.True, helperPath);
+
+        var helperText = File.ReadAllText(helperPath);
+        var combinedText = shaderText + "\n" + helperText;
+
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUIParticlesUberLit.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaResolveUILitSurfaceData"));
+        Assert.That(shaderText, Does.Contain("NovaComputeUILitForwardBaseColor"));
+        Assert.That(combinedText, Does.Contain("NovaUIClipAlpha"));
+        Assert.That(shaderText, Does.Contain("float4 tangent : TANGENT"));
+        Assert.That(combinedText, Does.Contain("NovaUILitSurfaceData"));
+        Assert.That(combinedText, Does.Contain("NovaResolveUILitMetallic"));
+        Assert.That(combinedText, Does.Contain("NovaResolveUILitSpecularColor"));
+        Assert.That(combinedText, Does.Contain("NovaResolveUILitSmoothness"));
+        Assert.That(combinedText, Does.Contain("NovaUnpackUILitNormalMap2D"));
+        Assert.That(combinedText, Does.Contain("NovaComputeUILitSpecularApproximation"));
+        Assert.That(combinedText, Does.Contain("_NormalMapBumpScale"));
+        Assert.That(combinedText, Does.Not.Contain("UniversalFragmentPBR"));
+        Assert.That(combinedText, Does.Not.Contain("ForwardAdd"));
+        Assert.That(combinedText, Does.Not.Contain("NovaSampleEnvironmentReflection"));
+    }
+
+    [Test]
+    public void UIParticlesUberLitDoesNotIncludeUrpShaderLibrariesOrNonUiPassKeywords()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Not.Contain("Packages/com.unity.render-pipelines.universal"));
+        Assert.That(shaderText, Does.Not.Contain("Core.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("Lighting.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("Shadows.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("ProbeVolumeVariants.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("FoveatedRenderingKeywords.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("_CASTING_PUNCTUAL_LIGHT_SHADOW"));
+        Assert.That(shaderText, Does.Not.Contain("_SHADOW_CASTER_ALPHA_TEST_ENABLED"));
+        Assert.That(shaderText, Does.Not.Contain("EVALUATE_SH_MIXED"));
+        Assert.That(shaderText, Does.Not.Contain("EVALUATE_SH_VERTEX"));
+    }
+
+    [Test]
+    public void UIParticlesUberLitPhase72AStatusIsDocumented()
     {
         var matrixText = File.ReadAllText(MatrixPath);
 
-        Assert.That(matrixText, Does.Contain("Phase 7.1 UI UberLit Minimum Forward Status"));
-        Assert.That(matrixText, Does.Contain("minimum UI ForwardBase lit"));
-        Assert.That(matrixText, Does.Contain("UI Lit ShadowCaster"));
+        Assert.That(matrixText, Does.Contain("Phase 7.2A UI UberLit Surface Approximation Status"));
+        Assert.That(matrixText, Does.Contain("UI metallic workflow"));
+        Assert.That(matrixText, Does.Contain("UI specular workflow"));
+        Assert.That(matrixText, Does.Contain("UI normal map 2D"));
+        Assert.That(matrixText, Does.Contain("UI smoothness map 2D"));
+        Assert.That(matrixText, Does.Contain("basic specular approximation"));
         Assert.That(matrixText, Does.Contain("full Canvas `Mask` / `RectMask2D` parity"));
-        Assert.That(matrixText, Does.Contain("metallic workflow runtime"));
+        Assert.That(matrixText, Does.Contain("2D array / 3D normal/specular/metallic/smoothness maps"));
         Assert.That(matrixText, Does.Contain("Forward+"));
     }
 
@@ -317,6 +366,22 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
             new CompileCase("_ADDITIONAL_LIGHT_SHADOWS", new Material(shader), "_ADDITIONAL_LIGHT_SHADOWS"),
             new CompileCase("_FORWARD_PLUS", new Material(shader), "_FORWARD_PLUS"),
             new CompileCase("_CLUSTER_LIGHT_LOOP", new Material(shader), "_CLUSTER_LIGHT_LOOP"),
+            new CompileCase("_NORMAL_MAP_ENABLED + _SPECULAR_SETUP", WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_NormalMap")),
+            new CompileCase("_METALLIC_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED", WithTexture(WithTexture(WithFloat(shader, "_LitWorkflowMode", 1), "_MetallicMap"), "_SmoothnessMap")),
+            new CompileCase("_SPECULAR_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED", WithTexture(WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularMap"), "_SmoothnessMap")),
+            new CompileCase("_NORMAL_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED", WithTexture(WithTexture(shader, "_NormalMap"), "_SmoothnessMap")),
+            new CompileCase(
+                "all Phase 7.2A surface keywords",
+                WithTexture(WithTexture(WithTexture(WithFloat(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularHighlights", 1), "_NormalMap"), "_SpecularMap"), "_SmoothnessMap")),
+            new CompileCase(
+                "Phase 7.2A with UNITY_UI_CLIP_RECT",
+                WithClipRect(WithTexture(WithTexture(WithFloat(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularHighlights", 1), "_NormalMap"), "_SmoothnessMap"))),
+            new CompileCase(
+                "Phase 7.2A with alpha test",
+                WithTexture(WithTexture(WithFloat(WithFloat(WithFloat(shader, "_RenderType", 1), "_LitWorkflowMode", 0), "_SpecularHighlights", 1), "_SpecularMap"), "_SmoothnessMap")),
+            new CompileCase(
+                "Phase 7.2A with stencil properties",
+                WithStencil(WithTexture(WithTexture(WithFloat(WithFloat(shader, "_LitWorkflowMode", 1), "_SpecularHighlights", 1), "_MetallicMap"), "_NormalMap"))),
             new CompileCase(
                 "representative UI Lit keyword combination",
                 WithClipRect(WithTexture(WithFloat(WithFloat(WithFloat(shader, "_RenderType", 1), "_TintAreaMode", 1), "_TintColorMode", 0), "_NormalMap")),
