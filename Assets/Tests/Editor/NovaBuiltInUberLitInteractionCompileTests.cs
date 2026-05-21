@@ -232,18 +232,19 @@ public sealed class NovaBuiltInUberLitInteractionCompileTests
     }
 
     [Test]
-    public void Phase66ADoesNotPromoteUiLitDistortionOrOptimizerRuntime()
+    public void Phase66AScopeGuardStillDoesNotPromoteUiLitFullParityDistortionOrOptimizerRuntime()
     {
         var uiLitText = File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader");
         var distortionText = File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/ParticlesDistortion.shader");
         var editorText = File.ReadAllText("Assets/Nova/Editor/Core/Scripts/ShaderGUIs.cs");
         var matrixText = File.ReadAllText(MatrixPath);
 
-        Assert.That(uiLitText, Does.Not.Contain("NovaBuiltInUberLit.cginc"));
         Assert.That(uiLitText, Does.Not.Contain("NovaComputeLitForwardBaseColor"));
+        Assert.That(uiLitText, Does.Not.Contain("\"LightMode\" = \"ForwardAdd\""));
+        Assert.That(uiLitText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
         Assert.That(distortionText, Does.Not.Contain("DistortedUvBuffer"));
         Assert.That(editorText, Does.Contain("Phase 2 preserves the optimizer API surface only"));
-        Assert.That(matrixText, Does.Contain("UI Lit remains Pending"));
+        Assert.That(matrixText, Does.Contain("Phase 7.1 UI UberLit Minimum Forward Status"));
         Assert.That(matrixText, Does.Contain("Distortion runtime remains Pending"));
         Assert.That(matrixText, Does.Contain("optimizer/replacer runtime behavior remains Pending"));
     }

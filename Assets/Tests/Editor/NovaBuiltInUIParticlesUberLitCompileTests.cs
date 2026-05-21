@@ -1,0 +1,548 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Rendering;
+
+public sealed class NovaBuiltInUIParticlesUberLitCompileTests
+{
+    private const string ShaderName = "Nova/UIParticles/UberLit";
+    private const string ShaderPath = "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader";
+    private const string MatrixPath = "Documentation/BuiltInCompatibilityMatrix.md";
+
+    private static readonly string[] LitProperties =
+    {
+        "_LitWorkflowMode",
+        "_LitReceiveShadows",
+        "_SpecularHighlights",
+        "_EnvironmentReflections",
+        "_NormalMap",
+        "_NormalMap2DArray",
+        "_NormalMap3D",
+        "_NormalMapBumpScale",
+        "_SpecularMap",
+        "_SpecularMap2DArray",
+        "_SpecularMap3D",
+        "_SpecularColor",
+        "_SpecularMapChannelsX",
+        "_MetallicMap",
+        "_MetallicMap2DArray",
+        "_MetallicMap3D",
+        "_Metallic",
+        "_MetallicMapChannelsX",
+        "_SmoothnessMap",
+        "_SmoothnessMap2DArray",
+        "_SmoothnessMap3D",
+        "_Smoothness",
+        "_SmoothnessMapChannelsX",
+    };
+
+    private static readonly string[] UiProperties =
+    {
+        "_StencilComp",
+        "_Stencil",
+        "_StencilOp",
+        "_StencilWriteMask",
+        "_StencilReadMask",
+        "_ColorMask",
+    };
+
+    private static readonly string[] CompileCompatibilityKeywords =
+    {
+        "UNITY_UI_CLIP_RECT",
+        "_SPECULAR_SETUP",
+        "_NORMAL_MAP_ENABLED",
+        "_SPECULAR_MAP_ENABLED",
+        "_METALLIC_MAP_ENABLED",
+        "_SMOOTHNESS_MAP_ENABLED",
+        "_RECEIVE_SHADOWS_ENABLED",
+        "_SPECULAR_HIGHLIGHTS_ENABLED",
+        "_ENVIRONMENT_REFLECTIONS_ENABLED",
+        "_MAIN_LIGHT_SHADOWS",
+        "_MAIN_LIGHT_SHADOWS_CASCADE",
+        "_SHADOWS_SOFT",
+        "_ADDITIONAL_LIGHTS",
+        "_ADDITIONAL_LIGHTS_VERTEX",
+        "_ADDITIONAL_LIGHT_SHADOWS",
+        "_FORWARD_PLUS",
+        "_CLUSTER_LIGHT_LOOP",
+    };
+
+    private static readonly string[] ForbiddenUiKeywords =
+    {
+        "_CASTING_PUNCTUAL_LIGHT_SHADOW",
+        "_SHADOW_CASTER_ALPHA_TEST_ENABLED",
+        "EVALUATE_SH_MIXED",
+        "EVALUATE_SH_VERTEX",
+    };
+
+    [Test]
+    public void UIParticlesUberLitPropertiesAndRepresentativeTypesArePreserved()
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        var material = new Material(shader);
+        try
+        {
+            var missing = LitProperties.Concat(UiProperties)
+                .Where(property => !material.HasProperty(property))
+                .ToArray();
+            Assert.That(missing, Is.Empty, string.Join(", ", missing));
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(material);
+        }
+
+        AssertShaderPropertyTypes(
+            shader,
+            FloatLike("_LitWorkflowMode"),
+            FloatLike("_LitReceiveShadows"),
+            FloatLike("_SpecularHighlights"),
+            FloatLike("_EnvironmentReflections"),
+            Texture("_NormalMap"),
+            Texture("_SpecularMap"),
+            Color("_SpecularColor"),
+            Texture("_MetallicMap"),
+            FloatLike("_Metallic"),
+            Texture("_SmoothnessMap"),
+            FloatLike("_Smoothness"),
+            FloatLike("_StencilComp"),
+            FloatLike("_Stencil"),
+            FloatLike("_ColorMask"));
+    }
+
+    [Test]
+    public void UIParticlesUberLitMinimumForwardPassUsesBuiltInUiLitHelpersOnly()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+        var combinedText = shaderText + "\n"
+            + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInLighting.cginc");
+
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"ForwardBase\""));
+        Assert.That(shaderText, Does.Contain("Blend [_BlendSrc] [_BlendDst]"));
+        Assert.That(shaderText, Does.Contain("ZWrite [_ZWrite]"));
+        Assert.That(shaderText, Does.Contain("Cull [_Cull]"));
+        Assert.That(shaderText, Does.Contain("ZTest [_ZTest]"));
+        Assert.That(shaderText, Does.Contain("ColorMask [_ColorMask]"));
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInCore.cginc"));
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInTexture.cginc"));
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInLighting.cginc"));
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUI.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
+        Assert.That(shaderText, Does.Contain("NovaObjectToWorldNormal"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_BaseMap"));
+        Assert.That(shaderText, Does.Contain("_TintColor"));
+        Assert.That(shaderText, Does.Contain("i.color"));
+        Assert.That(shaderText, Does.Contain("NovaUIClipAlpha"));
+        Assert.That(combinedText, Does.Contain("NovaComputeMinimumLitColor"));
+        Assert.That(combinedText, Does.Contain("NovaComputeAmbientApproximation"));
+        Assert.That(combinedText, Does.Contain("ShadeSH9"));
+        Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
+        Assert.That(shaderText, Does.Contain("clip("));
+        Assert.That(shaderText, Does.Contain("CustomEditor \"Nova.Editor.Core.Scripts.UIParticlesUberLitGUI\""));
+    }
+
+    [Test]
+    public void UIParticlesUberLitDeclaresUiStencilAndColorMaskState()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("Stencil"));
+        Assert.That(shaderText, Does.Contain("Ref [_Stencil]"));
+        Assert.That(shaderText, Does.Contain("Comp [_StencilComp]"));
+        Assert.That(shaderText, Does.Contain("Pass [_StencilOp]"));
+        Assert.That(shaderText, Does.Contain("ReadMask [_StencilReadMask]"));
+        Assert.That(shaderText, Does.Contain("WriteMask [_StencilWriteMask]"));
+        Assert.That(shaderText, Does.Contain("ColorMask [_ColorMask]"));
+    }
+
+    [Test]
+    public void UIParticlesUberLitPassTopologyStaysUiOnlyForPhase71()
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        var material = new Material(shader);
+        try
+        {
+            var shaderText = File.ReadAllText(ShaderPath);
+            var lightModes = Regex.Matches(shaderText, @"""LightMode""\s*=\s*""([^""]+)""")
+                .Cast<Match>()
+                .Select(match => match.Groups[1].Value)
+                .ToArray();
+
+            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase" }));
+            Assert.That(material.FindPass("ForwardBase"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(material.FindPass("ForwardAdd"), Is.LessThan(0));
+            Assert.That(material.FindPass("ShadowCaster"), Is.LessThan(0));
+            Assert.That(material.FindPass("DepthOnly"), Is.LessThan(0));
+            Assert.That(material.FindPass("DepthNormals"), Is.LessThan(0));
+            Assert.That(material.FindPass("SceneSelectionPass"), Is.LessThan(0));
+            Assert.That(material.FindPass("Picking"), Is.LessThan(0));
+            Assert.That(shaderText, Does.Not.Contain("UniversalForward"));
+            Assert.That(shaderText, Does.Not.Contain("RenderPipeline\" = \"UniversalPipeline\""));
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(material);
+        }
+    }
+
+    [Test]
+    public void UIParticlesUberLitKeywordSurfaceIncludesLitCompatibilityAndUiExclusions()
+    {
+        var declarations = DeclaredKeywords();
+
+        var missing = CompileCompatibilityKeywords
+            .Where(keyword => !declarations.Contains(keyword))
+            .ToArray();
+        var forbidden = ForbiddenUiKeywords
+            .Where(keyword => declarations.Contains(keyword))
+            .ToArray();
+
+        Assert.That(missing, Is.Empty, string.Join(", ", missing));
+        Assert.That(forbidden, Is.Empty, string.Join(", ", forbidden));
+    }
+
+    [Test]
+    public void UIParticlesUberLitMaterialSetupPreservesRenderLitAndUiSurface()
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        var material = new Material(shader);
+        try
+        {
+            material.SetFloat("_StencilComp", 3);
+            material.SetFloat("_Stencil", 7);
+            material.SetFloat("_StencilOp", 2);
+            material.SetFloat("_StencilWriteMask", 127);
+            material.SetFloat("_StencilReadMask", 63);
+            material.SetFloat("_ColorMask", 11);
+            material.EnableKeyword("UNITY_UI_CLIP_RECT");
+            material.SetFloat("_RenderType", 2);
+            material.SetFloat("_TransparentBlendMode", 1);
+            material.SetFloat("_Cull", (float)CullMode.Front);
+            material.SetFloat("_QueueOffset", 5);
+            material.SetFloat("_BlendSrc", (float)BlendMode.One);
+            material.SetFloat("_BlendDst", (float)BlendMode.Zero);
+            material.SetFloat("_ZWriteOverride", -1);
+            material.SetFloat("_ZTest", (float)CompareFunction.Always);
+            material.SetFloat("_LitWorkflowMode", 0);
+            material.SetFloat("_LitReceiveShadows", 1);
+            material.SetFloat("_SpecularHighlights", 1);
+            material.SetFloat("_EnvironmentReflections", 1);
+
+            SetupUberLit(material);
+
+            Assert.That(material.renderQueue, Is.EqualTo((int)RenderQueue.Transparent + 5));
+            Assert.That(material.GetTag("RenderType", false), Is.EqualTo("Transparent"));
+            Assert.That(material.GetFloat("_BlendSrc"), Is.EqualTo((float)BlendMode.SrcAlpha));
+            Assert.That(material.GetFloat("_BlendDst"), Is.EqualTo((float)BlendMode.One));
+            Assert.That(material.GetFloat("_ZWrite"), Is.EqualTo(0));
+            Assert.That(material.GetFloat("_ZTest"), Is.EqualTo((float)CompareFunction.Always));
+            Assert.That(material.GetFloat("_StencilComp"), Is.EqualTo(3));
+            Assert.That(material.GetFloat("_Stencil"), Is.EqualTo(7));
+            Assert.That(material.GetFloat("_StencilOp"), Is.EqualTo(2));
+            Assert.That(material.GetFloat("_StencilWriteMask"), Is.EqualTo(127));
+            Assert.That(material.GetFloat("_StencilReadMask"), Is.EqualTo(63));
+            Assert.That(material.GetFloat("_ColorMask"), Is.EqualTo(11));
+            Assert.That(material.IsKeywordEnabled("UNITY_UI_CLIP_RECT"), Is.True);
+            Assert.That(material.IsKeywordEnabled("_SPECULAR_SETUP"), Is.True);
+            Assert.That(material.IsKeywordEnabled("_RECEIVE_SHADOWS_ENABLED"), Is.True);
+            Assert.That(material.IsKeywordEnabled("_SPECULAR_HIGHLIGHTS_ENABLED"), Is.True);
+            Assert.That(material.IsKeywordEnabled("_ENVIRONMENT_REFLECTIONS_ENABLED"), Is.True);
+            Assert.That(material.IsKeywordEnabled("_SHADOW_CASTER_ALPHA_TEST_ENABLED"), Is.False);
+            Assert.That(material.GetShaderPassEnabled("ShadowCaster"), Is.False);
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(material);
+        }
+    }
+
+    [Test]
+    public void UIParticlesUberLitRepresentativeKeywordStatesHaveNoBlockingCompilerMessages()
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        AssetDatabase.ImportAsset(ShaderPath, ImportAssetOptions.ForceUpdate);
+        AssertCompileCasesHaveNoBlockingMessages(CreateCompileCases(shader));
+    }
+
+    [Test]
+    public void UIParticlesUberLitPhase71StatusIsDocumented()
+    {
+        var matrixText = File.ReadAllText(MatrixPath);
+
+        Assert.That(matrixText, Does.Contain("Phase 7.1 UI UberLit Minimum Forward Status"));
+        Assert.That(matrixText, Does.Contain("minimum UI ForwardBase lit"));
+        Assert.That(matrixText, Does.Contain("UI Lit ShadowCaster"));
+        Assert.That(matrixText, Does.Contain("full Canvas `Mask` / `RectMask2D` parity"));
+        Assert.That(matrixText, Does.Contain("metallic workflow runtime"));
+        Assert.That(matrixText, Does.Contain("Forward+"));
+    }
+
+    private static CompileCase[] CreateCompileCases(Shader shader)
+    {
+        return new[]
+        {
+            new CompileCase("default UI Lit material", new Material(shader)),
+            new CompileCase("base map 2D mode", WithFloat(shader, "_BaseMapMode", 0)),
+            new CompileCase("_ALPHATEST_ENABLED", WithFloat(shader, "_RenderType", 1)),
+            new CompileCase("tint color", WithFloat(WithFloat(shader, "_TintAreaMode", 1), "_TintColorMode", 0)),
+            new CompileCase("UNITY_UI_CLIP_RECT", WithClipRect(new Material(shader))),
+            new CompileCase("stencil property source check", WithStencil(new Material(shader))),
+            new CompileCase("_SPECULAR_SETUP", WithFloat(shader, "_LitWorkflowMode", 0)),
+            new CompileCase("_NORMAL_MAP_ENABLED", WithTexture(shader, "_NormalMap")),
+            new CompileCase("_SPECULAR_MAP_ENABLED", WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularMap")),
+            new CompileCase("_METALLIC_MAP_ENABLED", WithTexture(shader, "_MetallicMap")),
+            new CompileCase("_SMOOTHNESS_MAP_ENABLED", WithTexture(shader, "_SmoothnessMap")),
+            new CompileCase("_RECEIVE_SHADOWS_ENABLED", WithFloat(shader, "_LitReceiveShadows", 1)),
+            new CompileCase("_SPECULAR_HIGHLIGHTS_ENABLED", WithFloat(shader, "_SpecularHighlights", 1)),
+            new CompileCase("_ENVIRONMENT_REFLECTIONS_ENABLED", WithFloat(shader, "_EnvironmentReflections", 1)),
+            new CompileCase("_MAIN_LIGHT_SHADOWS", new Material(shader), "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase("_MAIN_LIGHT_SHADOWS_CASCADE", new Material(shader), "_MAIN_LIGHT_SHADOWS_CASCADE"),
+            new CompileCase("_SHADOWS_SOFT", new Material(shader), "_SHADOWS_SOFT"),
+            new CompileCase("_ADDITIONAL_LIGHTS", new Material(shader), "_ADDITIONAL_LIGHTS"),
+            new CompileCase("_ADDITIONAL_LIGHTS_VERTEX", new Material(shader), "_ADDITIONAL_LIGHTS_VERTEX"),
+            new CompileCase("_ADDITIONAL_LIGHT_SHADOWS", new Material(shader), "_ADDITIONAL_LIGHT_SHADOWS"),
+            new CompileCase("_FORWARD_PLUS", new Material(shader), "_FORWARD_PLUS"),
+            new CompileCase("_CLUSTER_LIGHT_LOOP", new Material(shader), "_CLUSTER_LIGHT_LOOP"),
+            new CompileCase(
+                "representative UI Lit keyword combination",
+                WithClipRect(WithTexture(WithFloat(WithFloat(WithFloat(shader, "_RenderType", 1), "_TintAreaMode", 1), "_TintColorMode", 0), "_NormalMap")),
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT",
+                "_ADDITIONAL_LIGHTS",
+                "_FORWARD_PLUS"),
+        };
+    }
+
+    private static HashSet<string> DeclaredKeywords()
+    {
+        var declarations = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var rawLine in File.ReadAllText(ShaderPath).Split('\n'))
+        {
+            var line = rawLine.Trim();
+            if (!line.StartsWith("#pragma", StringComparison.Ordinal) || !line.Contains("shader_feature", StringComparison.Ordinal) && !line.Contains("multi_compile", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            foreach (var token in line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (token == "_" || token.StartsWith("#", StringComparison.Ordinal) || token.Contains("shader_feature") || token.Contains("multi_compile"))
+                {
+                    continue;
+                }
+
+                declarations.Add(token);
+            }
+        }
+
+        return declarations;
+    }
+
+    private static void AssertCompileCasesHaveNoBlockingMessages(CompileCase[] compileCases)
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        foreach (var compileCase in compileCases)
+        {
+            TestContext.Out.WriteLine(compileCase.Name);
+            try
+            {
+                SetupUberLit(compileCase.Material);
+                foreach (var keyword in compileCase.AdditionalKeywords)
+                {
+                    compileCase.Material.EnableKeyword(keyword);
+                }
+
+                Shader.WarmupAllShaders();
+
+                var blockingMessages = ShaderUtil.GetShaderMessages(shader)
+                    .Where(IsBlockingShaderMessage)
+                    .Select(message => $"{compileCase.Name}: {message.severity}: {message.message} ({message.file}:{message.line})")
+                    .ToArray();
+
+                Assert.That(blockingMessages, Is.Empty, string.Join(Environment.NewLine, blockingMessages));
+            }
+            finally
+            {
+                DestroyMaterialAndOwnedTextures(compileCase.Material);
+            }
+        }
+    }
+
+    private static Material WithFloat(Shader shader, string property, float value)
+    {
+        return WithFloat(new Material(shader), property, value);
+    }
+
+    private static Material WithFloat(Material material, string property, float value)
+    {
+        material.SetFloat(property, value);
+        return material;
+    }
+
+    private static Material WithTexture(Shader shader, string property)
+    {
+        return WithTexture(new Material(shader), property);
+    }
+
+    private static Material WithTexture(Material material, string property)
+    {
+        var texture = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+        {
+            name = "NovaBuiltInUIParticlesUberLitCompileTexture",
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        texture.SetPixels(Enumerable.Repeat(UnityEngine.Color.white, 4).ToArray());
+        texture.Apply();
+        material.SetTexture(property, texture);
+        return material;
+    }
+
+    private static Material WithClipRect(Material material)
+    {
+        material.EnableKeyword("UNITY_UI_CLIP_RECT");
+        material.SetVector("_ClipRect", new Vector4(-0.25f, -1f, 1f, 1f));
+        return material;
+    }
+
+    private static Material WithStencil(Material material)
+    {
+        material.SetFloat("_StencilComp", (float)CompareFunction.Equal);
+        material.SetFloat("_Stencil", 1);
+        material.SetFloat("_StencilOp", (float)StencilOp.Keep);
+        material.SetFloat("_StencilReadMask", 255);
+        material.SetFloat("_StencilWriteMask", 255);
+        return material;
+    }
+
+    private static void AssertShaderPropertyTypes(Shader shader, params ExpectedPropertyType[] expected)
+    {
+        foreach (var property in expected)
+        {
+            var index = shader.FindPropertyIndex(property.Name);
+            Assert.That(index, Is.GreaterThanOrEqualTo(0), property.Name);
+            var actual = shader.GetPropertyType(index);
+            if (property.Type == ShaderPropertyType.Float)
+            {
+                Assert.That(actual, Is.EqualTo(ShaderPropertyType.Float).Or.EqualTo(ShaderPropertyType.Range), property.Name);
+            }
+            else
+            {
+                Assert.That(actual, Is.EqualTo(property.Type), property.Name);
+            }
+        }
+    }
+
+    private static ExpectedPropertyType Texture(string name)
+    {
+        return new ExpectedPropertyType(name, ShaderPropertyType.Texture);
+    }
+
+    private static ExpectedPropertyType Color(string name)
+    {
+        return new ExpectedPropertyType(name, ShaderPropertyType.Color);
+    }
+
+    private static ExpectedPropertyType FloatLike(string name)
+    {
+        return new ExpectedPropertyType(name, ShaderPropertyType.Float);
+    }
+
+    private static void SetupUberLit(Material material)
+    {
+        InvokeStatic("Nova.Editor.Core.Scripts.ParticlesUberLitMaterialPostProcessor", "SetupMaterialKeywords", material);
+        InvokeStatic("Nova.Editor.Core.Scripts.ParticlesUberLitMaterialPostProcessor", "SetupMaterialBlendMode", material);
+    }
+
+    private static void InvokeStatic(string typeName, string methodName, Material material)
+    {
+        var type = AppDomain.CurrentDomain.GetAssemblies()
+            .Select(assembly => assembly.GetType(typeName))
+            .FirstOrDefault(found => found != null);
+        Assert.That(type, Is.Not.Null, typeName);
+
+        var method = type.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+        Assert.That(method, Is.Not.Null, $"{typeName}.{methodName}");
+        method.Invoke(null, new object[] { material });
+    }
+
+    private static bool IsBlockingShaderMessage(ShaderMessage message)
+    {
+        var severity = message.severity.ToString();
+        if (string.Equals(severity, "Error", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (!string.Equals(severity, "Warning", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        var text = message.message ?? string.Empty;
+        return text.Contains("undeclared identifier", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("Couldn't open include file", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("invalid subscript", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("failed to compile", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("Shader error", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("invalid pass", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static void DestroyMaterialAndOwnedTextures(Material material)
+    {
+        var textures = material.GetTexturePropertyNames()
+            .Select(material.GetTexture)
+            .Where(texture => texture != null && texture.name == "NovaBuiltInUIParticlesUberLitCompileTexture")
+            .Distinct()
+            .ToArray();
+
+        foreach (var texture in textures)
+        {
+            UnityEngine.Object.DestroyImmediate(texture);
+        }
+
+        UnityEngine.Object.DestroyImmediate(material);
+    }
+
+    private readonly struct ExpectedPropertyType
+    {
+        public ExpectedPropertyType(string name, ShaderPropertyType type)
+        {
+            Name = name;
+            Type = type;
+        }
+
+        public string Name { get; }
+        public ShaderPropertyType Type { get; }
+    }
+
+    private sealed class CompileCase
+    {
+        public CompileCase(string name, Material material, params string[] additionalKeywords)
+        {
+            Name = name;
+            Material = material;
+            AdditionalKeywords = additionalKeywords;
+        }
+
+        public string Name { get; }
+        public Material Material { get; }
+        public string[] AdditionalKeywords { get; }
+    }
+}

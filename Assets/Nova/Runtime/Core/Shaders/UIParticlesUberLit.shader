@@ -267,29 +267,108 @@ Shader "Nova/UIParticles/UberLit"
     {
         Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
 
+        Stencil
+        {
+            Ref [_Stencil]
+            Comp [_StencilComp]
+            Pass [_StencilOp]
+            ReadMask [_StencilReadMask]
+            WriteMask [_StencilWriteMask]
+        }
+
         Pass
         {
+            Name "ForwardBase"
             Tags { "LightMode" = "ForwardBase" }
-            ZWrite Off
-            Cull Off
+            Blend [_BlendSrc] [_BlendDst]
+            ZWrite [_ZWrite]
+            Cull [_Cull]
+            Lighting Off
+            ZTest [_ZTest]
+            ColorMask [_ColorMask]
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma shader_feature_local _ DEBUG_DISPLAY UNITY_UI_CLIP_RECT _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHT_SHADOWS _ALPHAMODULATE_ENABLED _ALPHATEST_ENABLED _ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE _ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY _ALPHA_TRANSITION_MAP_MODE_2D _ALPHA_TRANSITION_MAP_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_MODE_3D _ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_RANDOM_ROW_SELECTION_ENABLED _BASE_MAP_CHANNEL_ENABLED _BASE_MAP_MODE_2D _BASE_MAP_MODE_2D_ARRAY _BASE_MAP_MODE_3D _BASE_MAP_RANDOM_ROW_SELECTION_ENABLED _BASE_MAP_TONE_MODE_PENTONE _BASE_MAP_TONE_MODE_TRITONE _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR _CLUSTER_LIGHT_LOOP _DEPTH_FADE_ENABLED _DISSOLVE_TRANSITION_ENABLED _EMISSION_AREA_ALL _EMISSION_AREA_ALPHA _EMISSION_AREA_MAP _EMISSION_COLOR_BASECOLOR _EMISSION_COLOR_COLOR _EMISSION_COLOR_MAP _EMISSION_MAP_MODE_2D _EMISSION_MAP_MODE_2D_ARRAY _EMISSION_MAP_MODE_3D _EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED _ENVIRONMENT_REFLECTIONS_ENABLED _FADE_TRANSITION_ENABLED _FLOW_MAP_ENABLED _FLOW_MAP_TARGET_ALPHA_TRANSITION _FLOW_MAP_TARGET_BASE _FLOW_MAP_TARGET_EMISSION _FLOW_MAP_TARGET_TINT _FORWARD_PLUS _GRADIENT_MAP_ENABLED _GREYSCALE_ENABLED _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _METALLIC_MAP_ENABLED _NORMAL_MAP_ENABLED _PARALLAX_MAP_MODE_2D _PARALLAX_MAP_MODE_2D_ARRAY _PARALLAX_MAP_MODE_3D _PARALLAX_MAP_RANDOM_ROW_SELECTION_ENABLED _PARALLAX_MAP_TARGET_BASE _PARALLAX_MAP_TARGET_EMISSION _PARALLAX_MAP_TARGET_TINT _RECEIVE_SHADOWS_ENABLED _SHADOWS_SOFT _SMOOTHNESS_MAP_ENABLED _SOFT_PARTICLES_ENABLED _SPECULAR_HIGHLIGHTS_ENABLED _SPECULAR_MAP_ENABLED _SPECULAR_SETUP _TINT_AREA_ALL _TINT_AREA_RIM _TINT_COLOR_ENABLED _TINT_MAP_3D_ENABLED _TINT_MAP_ENABLED _TINT_MAP_MODE_2D_ARRAY _TINT_MAP_RANDOM_ROW_SELECTION_ENABLED _TRANSPARENCY_BY_LUMINANCE _TRANSPARENCY_BY_RIM _VERTEX_ALPHA_AS_TRANSITION_PROGRESS _VERTEX_DEFORMATION_ENABLED
+            #pragma target 3.0
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _SHADOWS_SOFT
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX
+            #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile _ _FORWARD_PLUS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
+            #pragma shader_feature_local _ DEBUG_DISPLAY
+            #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
+            #pragma shader_feature_local_fragment _ALPHAMODULATE_ENABLED
+            #pragma shader_feature_local_fragment _ALPHATEST_ENABLED
+            #pragma shader_feature_local _RECEIVE_SHADOWS_ENABLED
+            #pragma shader_feature_local _SPECULAR_HIGHLIGHTS_ENABLED
+            #pragma shader_feature_local _ENVIRONMENT_REFLECTIONS_ENABLED
+            #pragma shader_feature_local _SPECULAR_SETUP
+            #pragma shader_feature_local _NORMAL_MAP_ENABLED
+            #pragma shader_feature_local_fragment _METALLIC_MAP_ENABLED
+            #pragma shader_feature_local_fragment _SMOOTHNESS_MAP_ENABLED
+            #pragma shader_feature_local_fragment _SPECULAR_MAP_ENABLED
+            #pragma shader_feature_local _BASE_MAP_MODE_2D _BASE_MAP_MODE_2D_ARRAY _BASE_MAP_MODE_3D
+            #pragma shader_feature_local_vertex _BASE_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_fragment _BASE_MAP_CHANNEL_ENABLED
+            #pragma shader_feature_local_fragment _ _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR
+            #pragma shader_feature_local_fragment _ _BASE_MAP_TONE_MODE_TRITONE _BASE_MAP_TONE_MODE_PENTONE
+            #pragma shader_feature_local _ _TINT_AREA_ALL _TINT_AREA_RIM
+            #pragma shader_feature_local _ _TINT_COLOR_ENABLED _TINT_MAP_ENABLED _TINT_MAP_3D_ENABLED _TINT_MAP_MODE_2D_ARRAY
+            #pragma shader_feature_local_vertex _TINT_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local _FLOW_MAP_ENABLED
+            #pragma shader_feature_local _FLOW_MAP_TARGET_BASE
+            #pragma shader_feature_local _FLOW_MAP_TARGET_TINT
+            #pragma shader_feature_local _FLOW_MAP_TARGET_EMISSION
+            #pragma shader_feature_local _FLOW_MAP_TARGET_ALPHA_TRANSITION
+            #pragma shader_feature_local _PARALLAX_MAP_TARGET_BASE
+            #pragma shader_feature_local _PARALLAX_MAP_TARGET_TINT
+            #pragma shader_feature_local _PARALLAX_MAP_TARGET_EMISSION
+            #pragma shader_feature_local _PARALLAX_MAP_MODE_2D _PARALLAX_MAP_MODE_2D_ARRAY _PARALLAX_MAP_MODE_3D
+            #pragma shader_feature_local_vertex _PARALLAX_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_fragment _ _GREYSCALE_ENABLED _GRADIENT_MAP_ENABLED
+            #pragma shader_feature_local _ _FADE_TRANSITION_ENABLED _DISSOLVE_TRANSITION_ENABLED
+            #pragma shader_feature_local _ALPHA_TRANSITION_MAP_MODE_2D _ALPHA_TRANSITION_MAP_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_MODE_3D
+            #pragma shader_feature_local _ _ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE _ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY
+            #pragma shader_feature_local _ _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D
+            #pragma shader_feature_local_vertex _ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_vertex _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local _ _EMISSION_AREA_ALL _EMISSION_AREA_MAP _EMISSION_AREA_ALPHA
+            #pragma shader_feature_local _EMISSION_MAP_MODE_2D _EMISSION_MAP_MODE_2D_ARRAY _EMISSION_MAP_MODE_3D
+            #pragma shader_feature_local _ _EMISSION_COLOR_COLOR _EMISSION_COLOR_BASECOLOR _EMISSION_COLOR_MAP
+            #pragma shader_feature_local_vertex _EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_fragment _TRANSPARENCY_BY_LUMINANCE
+            #pragma shader_feature_local _TRANSPARENCY_BY_RIM
+            #pragma shader_feature_local _SOFT_PARTICLES_ENABLED
+            #pragma shader_feature_local _DEPTH_FADE_ENABLED
+            #pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED
             #include "BuiltIn/NovaBuiltInCore.cginc"
+            #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInLighting.cginc"
             #include "BuiltIn/NovaBuiltInUI.cginc"
+
+            NOVA_DECLARE_TEX2D(_BaseMap);
+            fixed4 _TintColor;
+            half _Cutoff;
 
             struct appdata
             {
                 float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float2 uv : TEXCOORD0;
                 fixed4 color : COLOR;
             };
 
             struct v2f
             {
                 float4 vertex : SV_POSITION;
+                float2 positionOS : TEXCOORD0;
+                float2 uv : TEXCOORD1;
+                float3 normalWS : TEXCOORD2;
                 fixed4 color : COLOR;
             };
 
@@ -297,13 +376,35 @@ Shader "Nova/UIParticles/UberLit"
             {
                 v2f o;
                 o.vertex = NovaObjectToClipPos(v.vertex);
+                o.positionOS = v.vertex.xy;
+                o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
+                o.normalWS = NovaObjectToWorldNormal(v.normal);
                 o.color = v.color;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
-                return i.color;
+                half4 color = NOVA_SAMPLE_TEX2D(_BaseMap, i.uv);
+
+                #if defined(_TINT_AREA_ALL) && defined(_TINT_COLOR_ENABLED)
+                color *= _TintColor;
+                #endif
+
+                color *= i.color;
+                color.a *= NovaUIClipAlpha(i.positionOS);
+
+                #if defined(_ALPHATEST_ENABLED)
+                clip(color.a - _Cutoff);
+                #endif
+
+                half3 litColor = NovaComputeMinimumLitColor(color.rgb, i.normalWS);
+
+                #if defined(_ALPHAMODULATE_ENABLED)
+                litColor = lerp(half3(1.0h, 1.0h, 1.0h), litColor, color.a);
+                #endif
+
+                return fixed4(litColor, color.a);
             }
             ENDCG
         }

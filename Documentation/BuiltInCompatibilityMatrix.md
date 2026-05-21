@@ -1204,3 +1204,38 @@ Phase 6.6A compatibility annotations:
 - Optimizer/replacer runtime behavior remains Pending.
 - Final visual regression remains Pending, golden image baselines were not added, and no existing golden images were updated.
 - The next recommended phase is Phase 7.1: `Nova/UIParticles/UberLit` skeleton-to-minimum Built-in UI forward lit approximation.
+
+## Phase 7.1 UI UberLit Minimum Forward Status
+
+Phase 7.1 begins the `Nova/UIParticles/UberLit` runtime port by replacing the Phase 1/2 fake output with a minimum UI-compatible Built-in forward lit approximation. It does not mark full UI UberLit parity complete.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Minimum UI ForwardBase lit | Passed | Passed | `Nova/UIParticles/UberLit` has one primary `ForwardBase` pass using local Built-in includes. The pass samples `_BaseMap` in 2D mode, applies `_TintColor` for the all-area tint path, multiplies vertex color and alpha, applies UI rect clip alpha, applies alpha test, and writes lit alpha-preserving color. |
+| Main directional light approximation | Passed | Passed | Main directional light color and direction affect output through the shared Built-in Lambert helper. This is Approximate and does not call `UniversalFragmentPBR`. |
+| Ambient / SH approximation | Passed | Passed | The UI Lit path uses the shared `ShadeSH9` plus `UNITY_LIGHTMODEL_AMBIENT` fallback helper. This is a Built-in approximation, not URP baked/global illumination parity. |
+| Base map 2D lit albedo | Passed | Passed | `_BaseMap` 2D changes lit albedo. 2D array and 3D base map runtime remain pending for UI Lit. |
+| Tint / vertex color lit albedo | Passed | Passed | `_TINT_AREA_ALL` plus `_TINT_COLOR_ENABLED` and mesh vertex color affect lit albedo. Full UI UberUnlit tint map, tint rim, flow, tone, parallax, and color-correction behavior is not claimed for UI Lit in this phase. |
+| Vertex alpha | Passed | Passed | Vertex alpha is preserved through the final alpha and transparent blending. `_VERTEX_ALPHA_AS_TRANSITION_PROGRESS` is preserved as a keyword surface but transition-progress runtime is not implemented for UI Lit in this phase. |
+| Alpha test | Passed | Passed | `_ALPHATEST_ENABLED` clips with `_Cutoff` after base alpha, vertex alpha, and rect clip alpha are resolved. |
+| UI stencil | Passed | Passed | The pass declares a stencil block using `_StencilComp`, `_Stencil`, `_StencilOp`, `_StencilWriteMask`, and `_StencilReadMask`; controlled mesh-based UI smoke verifies hide/reveal behavior. |
+| `_ColorMask` | Passed | Passed | The pass uses `ColorMask [_ColorMask]`; material setup preserves the property. |
+| `UNITY_UI_CLIP_RECT` / rect clip | Passed | Passed | The pass preserves `UNITY_UI_CLIP_RECT` and uses local `NovaUIClipAlpha` / `UnityGet2DClipping` against object-space UI-compatible positions. Controlled mesh-based rect clip smoke verifies clipped output. |
+| UI pass topology | Passed | Passed | UI Lit remains a one-pass shader for Phase 7.1. It has no `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `DepthNormals`, `SceneSelectionPass`, or `Picking`. |
+| Lit property preservation | Passed | Passed | Lit workflow, receive-shadow, specular, environment-reflection, normal, specular-map, metallic, and smoothness properties remain present with representative property types. |
+| Lit keyword compile compatibility | Passed | Passed | Representative UI Lit keywords compile, including `_SPECULAR_SETUP`, `_NORMAL_MAP_ENABLED`, `_SPECULAR_MAP_ENABLED`, `_METALLIC_MAP_ENABLED`, `_SMOOTHNESS_MAP_ENABLED`, `_RECEIVE_SHADOWS_ENABLED`, `_SPECULAR_HIGHLIGHTS_ENABLED`, `_ENVIRONMENT_REFLECTIONS_ENABLED`, `_MAIN_LIGHT_SHADOWS`, `_MAIN_LIGHT_SHADOWS_CASCADE`, `_SHADOWS_SOFT`, `_ADDITIONAL_LIGHTS`, `_ADDITIONAL_LIGHTS_VERTEX`, `_ADDITIONAL_LIGHT_SHADOWS`, `_FORWARD_PLUS`, and `_CLUSTER_LIGHT_LOOP`. Compatibility-only URP keywords do not imply runtime behavior in this phase. |
+| Non-UI keyword exclusion | Passed | Passed | UI Lit does not declare `_CASTING_PUNCTUAL_LIGHT_SHADOW`, `_SHADOW_CASTER_ALPHA_TEST_ENABLED`, `EVALUATE_SH_MIXED`, or `EVALUATE_SH_VERTEX`. |
+| Shader compiler diagnostics | Passed | Passed | Diagnostics cover default import, base map 2D, alpha test, tint, `UNITY_UI_CLIP_RECT`, stencil property state, major Lit compatibility keywords, URP compatibility keywords, and a representative combined UI Lit keyword state. |
+| Full Canvas `Mask` / `RectMask2D` parity | Pending | Pending | Phase 7.1 uses the existing controlled mesh-based UI smoke harness. Full uGUI Canvas mask parity remains pending because the package still does not add a new `com.unity.ugui` dependency. |
+| Golden visual parity | Pending | Pending | No golden images were added or updated. |
+
+Phase 7.1 compatibility annotations:
+
+- `Nova/UIParticles/UberLit` now has a minimum UI ForwardBase lit approximation, not full UI Lit parity.
+- The UI Lit pass intentionally uses local Built-in helpers only. It does not use URP shader libraries, `UniversalForward`, `UniversalFragmentPBR`, `RenderPipeline` Universal tags, RenderGraph APIs, or URP C# runtime APIs.
+- Runtime-active behavior in this phase is limited to base map 2D lit albedo, all-area tint color, vertex color, vertex alpha, alpha test, UI stencil, `_ColorMask`, local rect clipping, main directional light diffuse, and ambient / SH approximation.
+- Unsupported or runtime-pending Lit behavior summary for UI Lit: metallic workflow runtime, specular workflow runtime, normal map runtime, smoothness map runtime, receive shadows runtime, environment reflections runtime, additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit ShadowCaster, UI Lit DepthOnly, UI Lit DepthNormals, UI Lit SceneSelectionPass, UI Lit Picking, full Canvas `Mask` / `RectMask2D` parity, full UI UberUnlit feature stack parity, full UI Lit PBR parity, full visual parity, and golden image visual regression.
+- Distortion runtime remains Pending.
+- Optimizer/replacer runtime behavior remains Pending.
+- Final visual regression remains Pending, golden image baselines were not added, and no existing golden images were updated.
+- The next recommended phase is Phase 7.2A: `Nova/UIParticles/UberLit` metallic/specular workflow, normal map, smoothness map, and basic specular approximation.
