@@ -7,9 +7,17 @@
 #include "NovaBuiltInUI.cginc"
 
 NOVA_DECLARE_TEX2D(_NormalMap);
+NOVA_DECLARE_TEX2D_ARRAY(_NormalMap2DArray);
+NOVA_DECLARE_TEX3D(_NormalMap3D);
 NOVA_DECLARE_TEX2D(_SpecularMap);
+NOVA_DECLARE_TEX2D_ARRAY(_SpecularMap2DArray);
+NOVA_DECLARE_TEX3D(_SpecularMap3D);
 NOVA_DECLARE_TEX2D(_MetallicMap);
+NOVA_DECLARE_TEX2D_ARRAY(_MetallicMap2DArray);
+NOVA_DECLARE_TEX3D(_MetallicMap3D);
 NOVA_DECLARE_TEX2D(_SmoothnessMap);
+NOVA_DECLARE_TEX2D_ARRAY(_SmoothnessMap2DArray);
+NOVA_DECLARE_TEX3D(_SmoothnessMap3D);
 
 half _NormalMapBumpScale;
 half4 _SpecularColor;
@@ -17,6 +25,8 @@ half _Metallic;
 half _MetallicMapChannelsX;
 half _Smoothness;
 half _SmoothnessMapChannelsX;
+half _BaseMapProgress;
+half _BaseMapSliceCount;
 
 struct NovaUILitSurfaceData
 {
@@ -46,24 +56,77 @@ half4 NovaResolveUILitBaseColor(
     return color;
 }
 
-half NovaResolveUILitMetallic(float2 uv)
+half NovaUIFlipBookProgress(half progress, half sliceCount)
+{
+    return floor(clamp(progress, 0.0h, 0.999h) * max(sliceCount, 1.0h));
+}
+
+half NovaUIFlipBookBlendingProgress(half progress, half sliceCount)
+{
+    half safeSliceCount = max(sliceCount, 1.0h);
+    half offset = 1.0h / safeSliceCount * 0.5h;
+    return lerp(offset, 1.0h - offset, saturate(progress));
+}
+
+float3 NovaResolveUILitTextureCoord(float2 uv)
+{
+    #if defined(_BASE_MAP_MODE_2D_ARRAY)
+    return float3(uv, NovaUIFlipBookProgress(_BaseMapProgress, _BaseMapSliceCount));
+    #elif defined(_BASE_MAP_MODE_3D)
+    return float3(uv, NovaUIFlipBookBlendingProgress(_BaseMapProgress, _BaseMapSliceCount));
+    #else
+    return float3(uv, 0.0h);
+    #endif
+}
+
+#if defined(_BASE_MAP_MODE_2D_ARRAY)
+#define NovaSampleUILitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#define NovaSampleUILitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#define NovaSampleUILitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#elif defined(_BASE_MAP_MODE_3D)
+#define NovaSampleUILitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#define NovaSampleUILitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#define NovaSampleUILitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#else
+#define NovaSampleUILitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
+#define NovaSampleUILitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
+#define NovaSampleUILitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
+#endif
+
+half NovaResolveUIMetallicMap(float3 litCoord)
+{
+    half4 metallic = NovaSampleUILitScalarMap(_MetallicMap, _MetallicMap2DArray, _MetallicMap3D, litCoord);
+    return NovaSelectChannel(metallic, _MetallicMapChannelsX);
+}
+
+half3 NovaResolveUISpecularMap(float3 litCoord)
+{
+    half4 specular = NovaSampleUILitColorMap(_SpecularMap, _SpecularMap2DArray, _SpecularMap3D, litCoord);
+    return specular.rgb;
+}
+
+half NovaResolveUISmoothnessMap(float3 litCoord)
+{
+    half4 smoothness = NovaSampleUILitScalarMap(_SmoothnessMap, _SmoothnessMap2DArray, _SmoothnessMap3D, litCoord);
+    return NovaSelectChannel(smoothness, _SmoothnessMapChannelsX);
+}
+
+half NovaResolveUILitMetallic(float3 litCoord)
 {
     #if defined(_SPECULAR_SETUP)
     return 1.0h;
     #elif defined(_METALLIC_MAP_ENABLED)
-    half4 metallic = NOVA_SAMPLE_TEX2D(_MetallicMap, uv);
-    return saturate(NovaSelectChannel(metallic, _MetallicMapChannelsX) * _Metallic);
+    return saturate(NovaResolveUIMetallicMap(litCoord) * _Metallic);
     #else
     return saturate(_Metallic);
     #endif
 }
 
-half3 NovaResolveUILitSpecularColor(float2 uv)
+half3 NovaResolveUILitSpecularColor(float3 litCoord)
 {
     #if defined(_SPECULAR_SETUP)
     #if defined(_SPECULAR_MAP_ENABLED)
-    half4 specular = NOVA_SAMPLE_TEX2D(_SpecularMap, uv);
-    return saturate(specular.rgb * _SpecularColor.rgb);
+    return saturate(NovaResolveUISpecularMap(litCoord) * _SpecularColor.rgb);
     #else
     return saturate(_SpecularColor.rgb);
     #endif
@@ -72,20 +135,19 @@ half3 NovaResolveUILitSpecularColor(float2 uv)
     #endif
 }
 
-half NovaResolveUILitSmoothness(float2 uv)
+half NovaResolveUILitSmoothness(float3 litCoord)
 {
     #if defined(_SMOOTHNESS_MAP_ENABLED)
-    half4 smoothness = NOVA_SAMPLE_TEX2D(_SmoothnessMap, uv);
-    return saturate(NovaSelectChannel(smoothness, _SmoothnessMapChannelsX) * _Smoothness);
+    return saturate(NovaResolveUISmoothnessMap(litCoord) * _Smoothness);
     #else
     return saturate(_Smoothness);
     #endif
 }
 
-half3 NovaUnpackUILitNormalMap2D(float2 uv)
+half3 NovaResolveUINormalMap(float3 litCoord)
 {
     #if defined(_NORMAL_MAP_ENABLED)
-    half4 packedNormal = NOVA_SAMPLE_TEX2D(_NormalMap, uv);
+    half4 packedNormal = NovaSampleUILitNormalMap(_NormalMap, _NormalMap2DArray, _NormalMap3D, litCoord);
     half3 normalTS;
     normalTS.xy = packedNormal.xy * 2.0h - 1.0h;
     normalTS.xy *= _NormalMapBumpScale;
@@ -94,6 +156,11 @@ half3 NovaUnpackUILitNormalMap2D(float2 uv)
     #else
     return half3(0.0h, 0.0h, 1.0h);
     #endif
+}
+
+half3 NovaUnpackUILitNormalMap2D(float2 uv)
+{
+    return NovaResolveUINormalMap(float3(uv, 0.0h));
 }
 
 half3 NovaUILitTangentToWorldNormal(half3 normalTS, float3 normalWS, float3 tangentWS, float3 bitangentWS)
@@ -119,13 +186,15 @@ NovaUILitSurfaceData NovaResolveUILitSurfaceData(
     float3 tangentWS,
     float3 bitangentWS)
 {
+    float3 litCoord = NovaResolveUILitTextureCoord(uv);
+
     NovaUILitSurfaceData surfaceData;
     surfaceData.albedo = baseColor.rgb;
     surfaceData.alpha = baseColor.a;
-    surfaceData.metallic = NovaResolveUILitMetallic(uv);
-    surfaceData.specularColor = NovaResolveUILitSpecularColor(uv);
-    surfaceData.smoothness = NovaResolveUILitSmoothness(uv);
-    surfaceData.normalWS = NovaUILitTangentToWorldNormal(NovaUnpackUILitNormalMap2D(uv), normalWS, tangentWS, bitangentWS);
+    surfaceData.metallic = NovaResolveUILitMetallic(litCoord);
+    surfaceData.specularColor = NovaResolveUILitSpecularColor(litCoord);
+    surfaceData.smoothness = NovaResolveUILitSmoothness(litCoord);
+    surfaceData.normalWS = NovaUILitTangentToWorldNormal(NovaResolveUINormalMap(litCoord), normalWS, tangentWS, bitangentWS);
     return surfaceData;
 }
 

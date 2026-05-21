@@ -107,11 +107,19 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
             FloatLike("_SpecularHighlights"),
             FloatLike("_EnvironmentReflections"),
             Texture("_NormalMap"),
+            Texture("_NormalMap2DArray"),
+            Texture("_NormalMap3D"),
             Texture("_SpecularMap"),
+            Texture("_SpecularMap2DArray"),
+            Texture("_SpecularMap3D"),
             Color("_SpecularColor"),
             Texture("_MetallicMap"),
+            Texture("_MetallicMap2DArray"),
+            Texture("_MetallicMap3D"),
             FloatLike("_Metallic"),
             Texture("_SmoothnessMap"),
+            Texture("_SmoothnessMap2DArray"),
+            Texture("_SmoothnessMap3D"),
             FloatLike("_Smoothness"),
             FloatLike("_StencilComp"),
             FloatLike("_Stencil"),
@@ -340,6 +348,23 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(matrixText, Does.Contain("Forward+"));
     }
 
+    [Test]
+    public void UIParticlesUberLitPhase72BStatusIsDocumented()
+    {
+        var matrixText = File.ReadAllText(MatrixPath);
+
+        Assert.That(matrixText, Does.Contain("Phase 7.2B UI UberLit Texture Mode Status"));
+        Assert.That(matrixText, Does.Contain("UI normal map 2D array"));
+        Assert.That(matrixText, Does.Contain("UI normal map 3D"));
+        Assert.That(matrixText, Does.Contain("UI metallic map 2D array"));
+        Assert.That(matrixText, Does.Contain("UI metallic map 3D"));
+        Assert.That(matrixText, Does.Contain("UI specular map 2D array"));
+        Assert.That(matrixText, Does.Contain("UI specular map 3D"));
+        Assert.That(matrixText, Does.Contain("UI smoothness map 2D array"));
+        Assert.That(matrixText, Does.Contain("UI smoothness map 3D"));
+        Assert.That(matrixText, Does.Contain("Phase 7.3A"));
+    }
+
     private static CompileCase[] CreateCompileCases(Shader shader)
     {
         return new[]
@@ -355,6 +380,14 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
             new CompileCase("_SPECULAR_MAP_ENABLED", WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularMap")),
             new CompileCase("_METALLIC_MAP_ENABLED", WithTexture(shader, "_MetallicMap")),
             new CompileCase("_SMOOTHNESS_MAP_ENABLED", WithTexture(shader, "_SmoothnessMap")),
+            new CompileCase("UI normal map 2D array", WithTexture2DArray(WithLitTextureMode(shader, 1, 0.75f, 2), "_NormalMap2DArray")),
+            new CompileCase("UI normal map 3D", WithTexture3D(WithLitTextureMode(shader, 2, 1, 2), "_NormalMap3D")),
+            new CompileCase("UI metallic map 2D array", WithTexture2DArray(WithLitTextureMode(shader, 1, 0.75f, 2), "_MetallicMap2DArray")),
+            new CompileCase("UI metallic map 3D", WithTexture3D(WithLitTextureMode(shader, 2, 1, 2), "_MetallicMap3D")),
+            new CompileCase("UI specular map 2D array", WithTexture2DArray(WithFloat(WithLitTextureMode(shader, 1, 0.75f, 2), "_LitWorkflowMode", 0), "_SpecularMap2DArray")),
+            new CompileCase("UI specular map 3D", WithTexture3D(WithFloat(WithLitTextureMode(shader, 2, 1, 2), "_LitWorkflowMode", 0), "_SpecularMap3D")),
+            new CompileCase("UI smoothness map 2D array", WithTexture2DArray(WithLitTextureMode(shader, 1, 0.75f, 2), "_SmoothnessMap2DArray")),
+            new CompileCase("UI smoothness map 3D", WithTexture3D(WithLitTextureMode(shader, 2, 1, 2), "_SmoothnessMap3D")),
             new CompileCase("_RECEIVE_SHADOWS_ENABLED", WithFloat(shader, "_LitReceiveShadows", 1)),
             new CompileCase("_SPECULAR_HIGHLIGHTS_ENABLED", WithFloat(shader, "_SpecularHighlights", 1)),
             new CompileCase("_ENVIRONMENT_REFLECTIONS_ENABLED", WithFloat(shader, "_EnvironmentReflections", 1)),
@@ -370,6 +403,36 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
             new CompileCase("_METALLIC_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED", WithTexture(WithTexture(WithFloat(shader, "_LitWorkflowMode", 1), "_MetallicMap"), "_SmoothnessMap")),
             new CompileCase("_SPECULAR_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED", WithTexture(WithTexture(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularMap"), "_SmoothnessMap")),
             new CompileCase("_NORMAL_MAP_ENABLED + _SMOOTHNESS_MAP_ENABLED", WithTexture(WithTexture(shader, "_NormalMap"), "_SmoothnessMap")),
+            new CompileCase(
+                "UI normal 2D array + specular workflow",
+                WithTexture2DArray(WithFloat(WithLitTextureMode(shader, 1, 0.75f, 2), "_LitWorkflowMode", 0), "_NormalMap2DArray")),
+            new CompileCase(
+                "UI normal 3D + specular workflow",
+                WithTexture3D(WithFloat(WithLitTextureMode(shader, 2, 1, 2), "_LitWorkflowMode", 0), "_NormalMap3D")),
+            new CompileCase(
+                "UI metallic 2D array + smoothness 2D array",
+                WithTexture2DArray(WithTexture2DArray(WithFloat(WithLitTextureMode(shader, 1, 0.75f, 2), "_LitWorkflowMode", 1), "_MetallicMap2DArray"), "_SmoothnessMap2DArray")),
+            new CompileCase(
+                "UI metallic 3D + smoothness 3D",
+                WithTexture3D(WithTexture3D(WithFloat(WithLitTextureMode(shader, 2, 1, 2), "_LitWorkflowMode", 1), "_MetallicMap3D"), "_SmoothnessMap3D")),
+            new CompileCase(
+                "UI specular 2D array + smoothness 2D array",
+                WithTexture2DArray(WithTexture2DArray(WithFloat(WithLitTextureMode(shader, 1, 0.75f, 2), "_LitWorkflowMode", 0), "_SpecularMap2DArray"), "_SmoothnessMap2DArray")),
+            new CompileCase(
+                "UI specular 3D + smoothness 3D",
+                WithTexture3D(WithTexture3D(WithFloat(WithLitTextureMode(shader, 2, 1, 2), "_LitWorkflowMode", 0), "_SpecularMap3D"), "_SmoothnessMap3D")),
+            new CompileCase(
+                "all Phase 7.2B texture mode keywords",
+                WithTexture2DArray(WithTexture2DArray(WithTexture2DArray(WithFloat(WithFloat(WithLitTextureMode(shader, 1, 0.75f, 2), "_LitWorkflowMode", 0), "_SpecularHighlights", 1), "_NormalMap2DArray"), "_SpecularMap2DArray"), "_SmoothnessMap2DArray")),
+            new CompileCase(
+                "Phase 7.2B with UNITY_UI_CLIP_RECT",
+                WithClipRect(WithTexture2DArray(WithTexture2DArray(WithFloat(WithLitTextureMode(shader, 1, 0.75f, 2), "_LitWorkflowMode", 1), "_NormalMap2DArray"), "_MetallicMap2DArray"))),
+            new CompileCase(
+                "Phase 7.2B with alpha test",
+                WithTexture3D(WithFloat(WithFloat(WithLitTextureMode(shader, 2, 1, 2), "_RenderType", 1), "_LitWorkflowMode", 0), "_SpecularMap3D")),
+            new CompileCase(
+                "Phase 7.2B with stencil properties",
+                WithStencil(WithTexture3D(WithTexture3D(WithFloat(WithLitTextureMode(shader, 2, 1, 2), "_LitWorkflowMode", 1), "_NormalMap3D"), "_SmoothnessMap3D"))),
             new CompileCase(
                 "all Phase 7.2A surface keywords",
                 WithTexture(WithTexture(WithTexture(WithFloat(WithFloat(shader, "_LitWorkflowMode", 0), "_SpecularHighlights", 1), "_NormalMap"), "_SpecularMap"), "_SmoothnessMap")),
@@ -476,6 +539,48 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         texture.SetPixels(Enumerable.Repeat(UnityEngine.Color.white, 4).ToArray());
         texture.Apply();
         material.SetTexture(property, texture);
+        return material;
+    }
+
+    private static Material WithTexture2DArray(Material material, string property)
+    {
+        var texture = new Texture2DArray(2, 2, 2, TextureFormat.RGBA32, false)
+        {
+            name = "NovaBuiltInUIParticlesUberLitCompileTexture",
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        texture.SetPixels(Enumerable.Repeat(UnityEngine.Color.white, 4).ToArray(), 0);
+        texture.SetPixels(Enumerable.Repeat(UnityEngine.Color.white, 4).ToArray(), 1);
+        texture.Apply();
+        material.SetTexture(property, texture);
+        return material;
+    }
+
+    private static Material WithTexture3D(Material material, string property)
+    {
+        var texture = new Texture3D(2, 2, 2, TextureFormat.RGBA32, false)
+        {
+            name = "NovaBuiltInUIParticlesUberLitCompileTexture",
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        texture.SetPixels(Enumerable.Repeat(UnityEngine.Color.white, 8).ToArray());
+        texture.Apply();
+        material.SetTexture(property, texture);
+        return material;
+    }
+
+    private static Material WithLitTextureMode(Shader shader, float baseMapMode, float progress, float sliceCount)
+    {
+        return WithLitTextureMode(new Material(shader), baseMapMode, progress, sliceCount);
+    }
+
+    private static Material WithLitTextureMode(Material material, float baseMapMode, float progress, float sliceCount)
+    {
+        material.SetFloat("_BaseMapMode", baseMapMode);
+        material.SetFloat("_BaseMapProgress", progress);
+        material.SetFloat("_BaseMapSliceCount", sliceCount);
         return material;
     }
 

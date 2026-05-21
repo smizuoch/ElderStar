@@ -1272,3 +1272,40 @@ Phase 7.2A compatibility annotations:
 - Unsupported or runtime-pending UI Lit behavior summary: 2D array / 3D normal/specular/metallic/smoothness maps, receive shadows, environment reflections, additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit pass topology beyond one-pass forward, UI Lit ShadowCaster, UI Lit DepthOnly, UI Lit DepthNormals, UI Lit SceneSelectionPass, UI Lit Picking, full Canvas `Mask` / `RectMask2D` parity, full UI UberUnlit feature stack parity, full UI Lit PBR parity, full visual parity, and golden image visual regression.
 - Distortion runtime, Optimized Shader Generator/Replacer runtime behavior, and final visual regression remain outside Phase 7.2A scope and are not promoted by this phase.
 - The next recommended phase is Phase 7.2B: `Nova/UIParticles/UberLit` texture-mode expansion for 2D array / 3D normal, metallic, specular, and smoothness maps.
+
+## Phase 7.2B UI UberLit Texture Mode Status
+
+Phase 7.2B expands only the primary `Nova/UIParticles/UberLit` one-pass Built-in `ForwardBase` surface approximation. Lit-specific normal, metallic, specular, and smoothness maps now follow the original editor/runtime convention that surface-map texture mode is selected by `_BaseMapMode`: single texture samples the 2D map, flip-book samples the 2D array map, and flip-book blending samples the 3D map. This phase does not add UI receive shadows, environment reflections, additional lights, `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit ShadowCaster / DepthOnly / DepthNormals / SceneSelectionPass / Picking, Distortion runtime, Optimized Shader Generator/Replacer runtime behavior, golden image visual regression, full Canvas `Mask` / `RectMask2D` parity, or URP PBR parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| UI normal map 2D array | Passed | Passed | `_NORMAL_MAP_ENABLED` samples `_NormalMap2DArray` when `_BASE_MAP_MODE_2D_ARRAY` is active, unpacks tangent-space normals, applies `_NormalMapBumpScale`, and affects the UI direct-light/specular approximation. |
+| UI normal map 3D | Passed | Passed | `_NORMAL_MAP_ENABLED` samples `_NormalMap3D` when `_BASE_MAP_MODE_3D` is active. This remains Approximate because 3D texture sampling and tangent-space normal precision are backend-dependent. |
+| UI metallic map 2D array | Passed | Passed | `_METALLIC_MAP_ENABLED` samples `_MetallicMap2DArray`, selects `_MetallicMapChannelsX`, multiplies by `_Metallic`, and affects the local specular response. |
+| UI metallic map 3D | Passed | Passed | `_METALLIC_MAP_ENABLED` samples `_MetallicMap3D`, preserves `_MetallicMapChannelsX` channel selection, multiplies by `_Metallic`, and affects the local specular response. |
+| UI metallic map channel status | Passed | Passed | `_MetallicMapChannelsX` is runtime-verified for 2D and 2D array paths and preserved for 3D through the same helper. |
+| UI specular map 2D array | Passed | Passed | `_SPECULAR_MAP_ENABLED` samples `_SpecularMap2DArray` in specular workflow and multiplies RGB by `_SpecularColor`. |
+| UI specular map 3D | Passed | Passed | `_SPECULAR_MAP_ENABLED` samples `_SpecularMap3D` in specular workflow and preserves `_SpecularColor` tinting. |
+| UI specular map semantics | Passed | Passed | Specular maps remain RGB-based for 2D, 2D array, and 3D modes. `_SpecularMapChannelsX` is preserved as a public property but is not used by the original Lit RGB specular sampling path. |
+| UI smoothness map 2D array | Passed | Passed | `_SMOOTHNESS_MAP_ENABLED` samples `_SmoothnessMap2DArray`, selects `_SmoothnessMapChannelsX`, multiplies by `_Smoothness`, and affects specular shape/intensity. |
+| UI smoothness map 3D | Passed | Passed | `_SMOOTHNESS_MAP_ENABLED` samples `_SmoothnessMap3D`, preserves `_SmoothnessMapChannelsX` channel selection, multiplies by `_Smoothness`, and affects specular shape/intensity. |
+| UI smoothness map channel status | Passed | Passed | `_SmoothnessMapChannelsX` is runtime-verified for 2D and 2D array paths and preserved for 3D through the same helper. |
+| Texture array / 3D texture platform status | Approximate | Approximate | The shader now uses `#pragma target 3.5` and `#pragma require 2darray`, matching the original UI Lit shader's texture-array requirement. Runtime support still depends on the target backend. |
+| Shader target / pragma requirements | Passed | Passed | UI Lit was raised from target 3.0 to target 3.5 with `#pragma require 2darray` for array sampling; no URP includes or RenderPipeline tags were added. |
+| UI lit surface interaction smoke coverage | Passed | Passed | Representative 2D array and 3D surface stacks cover normal plus metallic plus smoothness interactions without combinatorial expansion. |
+| UI alpha / tint / vertex color / vertex alpha regression | Passed | Passed | Phase 7.2B smokes cover alpha test, tint, vertex color, and vertex alpha while array/3D Lit maps are active. |
+| UI stencil / ColorMask / rect clip regression | Passed | Passed | Phase 7.2B smokes cover controlled stencil/mask behavior, `ColorMask [_ColorMask]`, and `UNITY_UI_CLIP_RECT` with active array/3D Lit maps. Full Canvas `Mask` / `RectMask2D` parity remains pending. |
+| UI property preservation | Passed | Passed | No new public material properties were added. The audited Lit map properties and UI stencil properties remain preserved. |
+| UI Lit keyword compile-compatibility | Passed | Passed | Compile diagnostics cover normal/metallic/specular/smoothness 2D array and 3D modes, representative combinations, alpha test, stencil state, `UNITY_UI_CLIP_RECT`, and compatibility-only shadow/additional-light/Forward+ keywords. |
+| UI pass topology | Passed | Passed | UI Lit remains a single `ForwardBase` pass with no `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `DepthNormals`, `SceneSelectionPass`, `Picking`, `UniversalForward`, or Universal Render Pipeline tag. |
+| Non-UI keyword exclusion | Passed | Passed | UI Lit still excludes `_CASTING_PUNCTUAL_LIGHT_SHADOW`, `_SHADOW_CASTER_ALPHA_TEST_ENABLED`, `EVALUATE_SH_MIXED`, and `EVALUATE_SH_VERTEX`. |
+
+Phase 7.2B compatibility annotations:
+
+- `Nova/UIParticles/UberLit` now implements UI normal map 2D array, UI normal map 3D, UI metallic map 2D array, UI metallic map 3D, UI specular map 2D array, UI specular map 3D, UI smoothness map 2D array, and UI smoothness map 3D runtime sampling on the one-pass Built-in `ForwardBase` approximation.
+- Metallic and smoothness channel selection uses `_MetallicMapChannelsX` and `_SmoothnessMapChannelsX` for 2D, 2D array, and 3D maps. Specular map sampling intentionally keeps RGB semantics for all texture modes because the original Lit forward helper samples specular RGB directly.
+- Texture selection is coupled to `_BaseMapMode`, matching the original UI Lit material UI and forward helper behavior. No `_NormalMapMode`, `_MetallicMapMode`, `_SpecularMapMode`, `_SmoothnessMapMode`, or new progress/slice properties were introduced.
+- Texture array and 3D support remain Approximate at the platform level because backend texture support and sampling precision can differ, but the Unity editor paths covered by smoke tests pass.
+- Runtime-pending UI Lit behavior summary: UI receive shadows, UI environment reflections, UI additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit pass topology beyond one-pass forward, UI Lit ShadowCaster, UI Lit DepthOnly, UI Lit DepthNormals, UI Lit SceneSelectionPass, UI Lit Picking, full Canvas `Mask` / `RectMask2D` parity, full UI UberUnlit feature stack parity, full UI Lit PBR parity, full visual parity, and golden image visual regression.
+- Distortion runtime, Optimized Shader Generator/Replacer runtime behavior, and final visual regression remain outside Phase 7.2B scope and are not promoted by this phase.
+- The next recommended phase is Phase 7.3A: `Nova/UIParticles/UberLit` receive shadows in the Built-in/UI ForwardBase approximation.

@@ -264,6 +264,59 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
     }
 
     [Test]
+    public void UIParticlesUberLitMetallicMap2DArrayAffectsSpecularResponse()
+    {
+        var samples = RenderUiLitSamples(
+            material =>
+            {
+                ConfigureMetallic(material, 1f, 0.85f);
+                ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                material.SetTexture("_MetallicMap2DArray", CreateSplitTextureArray(Color.black, Color.white));
+                material.SetFloat("_MetallicMapChannelsX", 0f);
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) });
+
+        Assert.That(Luminance(samples[1]), Is.GreaterThan(Luminance(samples[0]) + 0.02f), $"left {samples[0]}, right {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitMetallicMap2DArrayChannelSelectionAffectsOutput()
+    {
+        var red = RenderUiLit(material =>
+        {
+            ConfigureMetallic(material, 1f, 0.85f);
+            ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+            material.SetTexture("_MetallicMap2DArray", CreateTextureArray(new Color(1f, 0f, 0f, 1f), new Color(1f, 0f, 0f, 1f)));
+            material.SetFloat("_MetallicMapChannelsX", 0f);
+        }, LightCase.Front(Color.white, 2.2f), Color.black);
+        var green = RenderUiLit(material =>
+        {
+            ConfigureMetallic(material, 1f, 0.85f);
+            ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+            material.SetTexture("_MetallicMap2DArray", CreateTextureArray(new Color(1f, 0f, 0f, 1f), new Color(1f, 0f, 0f, 1f)));
+            material.SetFloat("_MetallicMapChannelsX", 1f);
+        }, LightCase.Front(Color.white, 2.2f), Color.black);
+
+        Assert.That(ColorDistance(red, green), Is.GreaterThan(0.06f), $"red {red}, green {green}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitMetallicMap3DAffectsSpecularResponse()
+    {
+        var samples = RenderUiLitSamples(
+            material =>
+            {
+                ConfigureMetallic(material, 1f, 0.85f);
+                ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                material.SetTexture("_MetallicMap3D", CreateSplitTexture3D(Color.black, Color.white));
+                material.SetFloat("_MetallicMapChannelsX", 0f);
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) });
+
+        Assert.That(Luminance(samples[1]), Is.GreaterThan(Luminance(samples[0]) + 0.02f), $"left {samples[0]}, right {samples[1]}");
+    }
+
+    [Test]
     public void UIParticlesUberLitSpecularWorkflowUsesSpecularColor()
     {
         var red = RenderUiLit(material => ConfigureSpecular(material, new Color(1f, 0.05f, 0.05f, 1f), 0.85f), LightCase.Front(Color.white, 2.2f), Color.black);
@@ -281,6 +334,56 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
             {
                 ConfigureSpecular(material, Color.white, 0.85f);
                 material.SetTexture("_SpecularMap", CreateSplitTexture(Color.black, Color.white));
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) });
+
+        Assert.That(Luminance(samples[1]), Is.GreaterThan(Luminance(samples[0]) + 0.02f), $"left {samples[0]}, right {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitSpecularMap2DArrayAffectsSpecularResponse()
+    {
+        var samples = RenderUiLitSamples(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                material.SetTexture("_SpecularMap2DArray", CreateSplitTextureArray(Color.black, Color.white));
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) });
+
+        Assert.That(Luminance(samples[1]), Is.GreaterThan(Luminance(samples[0]) + 0.02f), $"left {samples[0]}, right {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitSpecularMap2DArrayPreservesSpecularColorOrTinting()
+    {
+        var red = RenderUiLit(material =>
+        {
+            ConfigureSpecular(material, new Color(1f, 0.05f, 0.05f, 1f), 0.85f);
+            ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+            material.SetTexture("_SpecularMap2DArray", CreateTextureArray(Color.white, Color.white));
+        }, LightCase.Front(Color.white, 2.2f), Color.black);
+        var blue = RenderUiLit(material =>
+        {
+            ConfigureSpecular(material, new Color(0.05f, 0.05f, 1f, 1f), 0.85f);
+            ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+            material.SetTexture("_SpecularMap2DArray", CreateTextureArray(Color.white, Color.white));
+        }, LightCase.Front(Color.white, 2.2f), Color.black);
+
+        Assert.That(red.r, Is.GreaterThan(red.b + 0.05f), red.ToString());
+        Assert.That(blue.b, Is.GreaterThan(blue.r + 0.05f), blue.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberLitSpecularMap3DAffectsSpecularResponse()
+    {
+        var samples = RenderUiLitSamples(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                material.SetTexture("_SpecularMap3D", CreateSplitTexture3D(Color.black, Color.white));
             },
             new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) });
 
@@ -328,6 +431,59 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
     }
 
     [Test]
+    public void UIParticlesUberLitSmoothnessMap2DArrayAffectsSpecularResponse()
+    {
+        var samples = RenderUiLitSamples(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 1f);
+                ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                material.SetTexture("_SmoothnessMap2DArray", CreateSplitTextureArray(new Color(0.05f, 0.05f, 0.05f, 0.05f), Color.white));
+                material.SetFloat("_SmoothnessMapChannelsX", 0f);
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) });
+
+        Assert.That(ColorDistance(samples[1], samples[0]), Is.GreaterThan(0.03f), $"left {samples[0]}, right {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitSmoothnessMap2DArrayChannelSelectionAffectsOutput()
+    {
+        var red = RenderUiLit(material =>
+        {
+            ConfigureSpecular(material, Color.white, 1f);
+            ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+            material.SetTexture("_SmoothnessMap2DArray", CreateTextureArray(new Color(1f, 0.05f, 0.05f, 0.05f), new Color(1f, 0.05f, 0.05f, 0.05f)));
+            material.SetFloat("_SmoothnessMapChannelsX", 0f);
+        }, LightCase.Front(Color.white, 2.2f), Color.black);
+        var green = RenderUiLit(material =>
+        {
+            ConfigureSpecular(material, Color.white, 1f);
+            ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+            material.SetTexture("_SmoothnessMap2DArray", CreateTextureArray(new Color(1f, 0.05f, 0.05f, 0.05f), new Color(1f, 0.05f, 0.05f, 0.05f)));
+            material.SetFloat("_SmoothnessMapChannelsX", 1f);
+        }, LightCase.Front(Color.white, 2.2f), Color.black);
+
+        Assert.That(ColorDistance(red, green), Is.GreaterThan(0.03f), $"red {red}, green {green}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitSmoothnessMap3DAffectsSpecularResponse()
+    {
+        var samples = RenderUiLitSamples(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 1f);
+                ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                material.SetTexture("_SmoothnessMap3D", CreateSplitTexture3D(new Color(0.05f, 0.05f, 0.05f, 0.05f), Color.white));
+                material.SetFloat("_SmoothnessMapChannelsX", 0f);
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) });
+
+        Assert.That(ColorDistance(samples[1], samples[0]), Is.GreaterThan(0.03f), $"left {samples[0]}, right {samples[1]}");
+    }
+
+    [Test]
     public void UIParticlesUberLitNormalMapAffectsLighting()
     {
         var flat = RenderUiLit(material => ConfigureSpecular(material, Color.white, 0.85f), LightCase.Front(Color.white, 2.2f), Color.black);
@@ -336,6 +492,56 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
             {
                 ConfigureSpecular(material, Color.white, 0.85f);
                 material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.88f, 0.5f, 1f, 1f)));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+
+        Assert.That(ColorDistance(flat, tilted), Is.GreaterThan(0.03f), $"flat {flat}, tilted {tilted}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitNormalMap2DArrayAffectsLighting()
+    {
+        var flat = RenderUiLit(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 1f, 0.25f, 2f);
+                material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+        var tilted = RenderUiLit(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+
+        Assert.That(ColorDistance(flat, tilted), Is.GreaterThan(0.03f), $"flat {flat}, tilted {tilted}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitNormalMap3DAffectsLighting()
+    {
+        var flat = RenderUiLit(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 2f, 0f, 2f);
+                material.SetTexture("_NormalMap3D", CreateTexture3D(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+        var tilted = RenderUiLit(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                material.SetTexture("_NormalMap3D", CreateTexture3D(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
             },
             LightCase.Front(Color.white, 2.2f),
             Color.black);
@@ -519,6 +725,191 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
                 ConfigureSpecular(material, Color.white, 0.85f);
                 material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.05f, 0.05f, 1f, 1f)));
                 material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.65f, 0.5f, 1f, 1f)));
+                material.SetFloat("_ColorMask", 2f);
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black,
+            background: background);
+
+        Assert.That(color.r, Is.GreaterThan(0.25f), color.ToString());
+        Assert.That(color.b, Is.GreaterThan(background.b + 0.10f), color.ToString());
+    }
+
+    [Test]
+    public void UIParticlesUberLitTextureArraySurfaceStackAffectsLighting()
+    {
+        var baseline = RenderUiLit(
+            material =>
+            {
+                ConfigureMetallic(material, 0f, 0.25f);
+                material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.5f, 0.5f, 1f, 1f)));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+        var stacked = RenderUiLit(
+            material =>
+            {
+                ConfigureMetallic(material, 1f, 1f);
+                ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+                material.SetTexture("_MetallicMap2DArray", CreateTextureArray(Color.black, Color.white));
+                material.SetTexture("_SmoothnessMap2DArray", CreateTextureArray(Color.black, Color.white));
+                material.SetFloat("_MetallicMapChannelsX", 0f);
+                material.SetFloat("_SmoothnessMapChannelsX", 0f);
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+
+        Assert.That(ColorDistance(stacked, baseline), Is.GreaterThan(0.008f), $"baseline {baseline}, stacked {stacked}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitTexture3DSurfaceStackAffectsLighting()
+    {
+        var baseline = RenderUiLit(
+            material =>
+            {
+                ConfigureMetallic(material, 0f, 0.25f);
+                material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.5f, 0.5f, 1f, 1f)));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+        var stacked = RenderUiLit(
+            material =>
+            {
+                ConfigureMetallic(material, 1f, 1f);
+                ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                material.SetTexture("_NormalMap3D", CreateTexture3D(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+                material.SetTexture("_MetallicMap3D", CreateTexture3D(Color.black, Color.white));
+                material.SetTexture("_SmoothnessMap3D", CreateTexture3D(Color.black, Color.white));
+                material.SetFloat("_MetallicMapChannelsX", 0f);
+                material.SetFloat("_SmoothnessMapChannelsX", 0f);
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+
+        Assert.That(ColorDistance(stacked, baseline), Is.GreaterThan(0.008f), $"baseline {baseline}, stacked {stacked}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitTextureModesPreserveAlphaTestTintVertexColorAndVertexAlpha()
+    {
+        var background = new Color(0.05f, 0.10f, 0.80f, 1f);
+        var clipped = RenderUiLit(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                material.SetFloat("_RenderType", 1f);
+                material.SetFloat("_Cutoff", 0.5f);
+                material.SetTexture("_BaseMap", CreateSolidTexture(new Color(1f, 0.05f, 0.05f, 0.25f)));
+                material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black,
+            CreateQuad(new Color(1f, 1f, 1f, 0.8f)),
+            background);
+        var opaqueTinted = RenderUiLit(
+            material =>
+            {
+                ConfigureMetallic(material, 0.4f, 0.7f);
+                ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                material.SetTexture("_NormalMap3D", CreateTexture3D(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.5f, 0.5f, 1f, 1f)));
+                material.SetFloat("_TintAreaMode", 1f);
+                material.SetFloat("_TintColorMode", 0f);
+                material.SetColor("_TintColor", new Color(0.12f, 1f, 0.12f, 1f));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black,
+            CreateQuad(new Color(1f, 0.6f, 1f, 1f)),
+            background);
+        var tinted = RenderUiLit(
+            material =>
+            {
+                ConfigureMetallic(material, 0.4f, 0.7f);
+                ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                material.SetTexture("_NormalMap3D", CreateTexture3D(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.5f, 0.5f, 1f, 1f)));
+                material.SetFloat("_TintAreaMode", 1f);
+                material.SetFloat("_TintColorMode", 0f);
+                material.SetColor("_TintColor", new Color(0.12f, 1f, 0.12f, 1f));
+            },
+            LightCase.Front(Color.white, 2.2f),
+            Color.black,
+            CreateQuad(new Color(1f, 0.6f, 1f, 0.55f)),
+            background);
+
+        Assert.That(clipped.b, Is.GreaterThan(clipped.r + 0.20f), clipped.ToString());
+        Assert.That(tinted.g, Is.GreaterThan(tinted.r + 0.05f), tinted.ToString());
+        Assert.That(tinted.b, Is.GreaterThan(opaqueTinted.b + 0.08f), $"opaque {opaqueTinted}, transparent {tinted}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitTextureModesRespectRectClip()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateUiDraw(material =>
+                {
+                    ConfigureSpecular(material, Color.white, 0.85f);
+                    ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                    material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.9f, 0.08f, 0.05f, 1f)));
+                    material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+                    material.EnableKeyword("UNITY_UI_CLIP_RECT");
+                    material.SetVector("_ClipRect", new Vector4(-0.05f, -1f, 1f, 1f));
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background,
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+
+        Assert.That(samples[1].r, Is.GreaterThan(samples[1].b + 0.08f), $"clipped {samples[0]}, visible {samples[1]}");
+        Assert.That(samples[0].b, Is.GreaterThan(samples[0].r + 0.02f), $"clipped {samples[0]}, visible {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitTextureModesPreserveStencilOrMaskBehavior()
+    {
+        var background = new Color(0.03f, 0.04f, 0.08f, 1f);
+        var samples = RenderUiSceneSamples(
+            new[]
+            {
+                CreateStencilMask(new Rect(-0.5f, -0.5f, 0.5f, 1f)),
+                CreateUiDraw(material =>
+                {
+                    ConfigureSpecular(material, Color.white, 0.85f);
+                    ConfigureLitTextureMode(material, 2f, 1f, 2f);
+                    material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.9f, 0.08f, 0.05f, 1f)));
+                    material.SetTexture("_NormalMap3D", CreateTexture3D(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
+                    material.SetFloat("_StencilComp", (float)CompareFunction.Equal);
+                    material.SetFloat("_Stencil", 1);
+                    material.SetFloat("_StencilOp", (float)StencilOp.Keep);
+                    material.SetFloat("_StencilReadMask", 255);
+                    material.SetFloat("_StencilWriteMask", 255);
+                }),
+            },
+            new[] { new Vector2(0.3f, 0.5f), new Vector2(0.7f, 0.5f) },
+            background,
+            LightCase.Front(Color.white, 2.2f),
+            Color.black);
+
+        Assert.That(samples[0].r, Is.GreaterThan(samples[0].b + 0.08f), $"inside {samples[0]}, outside {samples[1]}");
+        Assert.That(samples[1].b, Is.GreaterThan(samples[1].r + 0.02f), $"inside {samples[0]}, outside {samples[1]}");
+    }
+
+    [Test]
+    public void UIParticlesUberLitTextureModesPreserveColorMask()
+    {
+        var background = new Color(0.35f, 0.02f, 0.02f, 1f);
+        var color = RenderUiLit(
+            material =>
+            {
+                ConfigureSpecular(material, Color.white, 0.85f);
+                ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
+                material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.05f, 0.05f, 1f, 1f)));
+                material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
                 material.SetFloat("_ColorMask", 2f);
             },
             LightCase.Front(Color.white, 2.2f),
@@ -735,6 +1126,99 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
         return texture;
     }
 
+    private static Texture2DArray CreateTextureArray(params Color[] slices)
+    {
+        var texture = new Texture2DArray(TextureSize, TextureSize, slices.Length, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+
+        for (var slice = 0; slice < slices.Length; slice++)
+        {
+            texture.SetPixels(Enumerable.Repeat(slices[slice], TextureSize * TextureSize).ToArray(), slice);
+        }
+
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2DArray CreateSplitTextureArray(Color left, Color right)
+    {
+        var texture = new Texture2DArray(TextureSize, TextureSize, 2, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+
+        for (var slice = 0; slice < 2; slice++)
+        {
+            var pixels = new Color[TextureSize * TextureSize];
+            for (var y = 0; y < TextureSize; y++)
+            {
+                for (var x = 0; x < TextureSize; x++)
+                {
+                    pixels[y * TextureSize + x] = x < TextureSize / 2 ? left : right;
+                }
+            }
+
+            texture.SetPixels(pixels, slice);
+        }
+
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture3D CreateTexture3D(params Color[] slices)
+    {
+        var texture = new Texture3D(TextureSize, TextureSize, slices.Length, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        var pixels = new Color[TextureSize * TextureSize * slices.Length];
+
+        for (var z = 0; z < slices.Length; z++)
+        {
+            for (var y = 0; y < TextureSize; y++)
+            {
+                for (var x = 0; x < TextureSize; x++)
+                {
+                    pixels[z * TextureSize * TextureSize + y * TextureSize + x] = slices[z];
+                }
+            }
+        }
+
+        texture.SetPixels(pixels);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture3D CreateSplitTexture3D(Color left, Color right)
+    {
+        var texture = new Texture3D(TextureSize, TextureSize, 2, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        var pixels = new Color[TextureSize * TextureSize * 2];
+
+        for (var z = 0; z < 2; z++)
+        {
+            for (var y = 0; y < TextureSize; y++)
+            {
+                for (var x = 0; x < TextureSize; x++)
+                {
+                    pixels[z * TextureSize * TextureSize + y * TextureSize + x] = x < TextureSize / 2 ? left : right;
+                }
+            }
+        }
+
+        texture.SetPixels(pixels);
+        texture.Apply();
+        return texture;
+    }
+
     private static void ConfigureMetallic(Material material, float metallic, float smoothness)
     {
         material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.28f, 0.28f, 0.28f, 1f)));
@@ -742,6 +1226,13 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
         material.SetFloat("_Metallic", metallic);
         material.SetFloat("_Smoothness", smoothness);
         material.SetFloat("_SpecularHighlights", 1f);
+    }
+
+    private static void ConfigureLitTextureMode(Material material, float baseMapMode, float progress, float sliceCount)
+    {
+        material.SetFloat("_BaseMapMode", baseMapMode);
+        material.SetFloat("_BaseMapProgress", progress);
+        material.SetFloat("_BaseMapSliceCount", sliceCount);
     }
 
     private static void ConfigureSpecular(Material material, Color specularColor, float smoothness)
