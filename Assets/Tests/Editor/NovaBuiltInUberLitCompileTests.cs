@@ -168,7 +168,7 @@ public sealed class NovaBuiltInUberLitCompileTests
     }
 
     [Test]
-    public void UberLitPhase64APassTopologyHasForwardBaseAndForwardAddOnlyAndDocumentsPendingPasses()
+    public void UberLitPassTopologyIsBuiltInCompatible()
     {
         var shader = Shader.Find(ShaderName);
         Assert.That(shader, Is.Not.Null, ShaderName);
@@ -183,28 +183,100 @@ public sealed class NovaBuiltInUberLitCompileTests
                 .ToArray();
             var matrixText = File.ReadAllText(MatrixPath);
 
-            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd" }));
+            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "DepthOnly", "SceneSelectionPass", "Picking" }));
             Assert.That(material.FindPass("ForwardBase"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("ForwardAdd"), Is.GreaterThanOrEqualTo(0));
-            Assert.That(material.FindPass("ShadowCaster"), Is.LessThan(0));
-            Assert.That(material.FindPass("DepthOnly"), Is.LessThan(0));
-            Assert.That(material.FindPass("SceneSelectionPass"), Is.LessThan(0));
-            Assert.That(material.FindPass("Picking"), Is.LessThan(0));
+            Assert.That(material.FindPass("ShadowCaster"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(material.FindPass("DepthOnly"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(material.FindPass("SceneSelectionPass"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(material.FindPass("Picking"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(material.FindPass("DepthNormals"), Is.LessThan(0));
             Assert.That(shaderText, Does.Not.Contain("UniversalForward"));
             Assert.That(shaderText, Does.Not.Contain("RenderPipeline\" = \"UniversalPipeline\""));
-            Assert.That(matrixText, Does.Contain("Phase 6.4A"));
-            Assert.That(matrixText, Does.Contain("ForwardAdd"));
-            Assert.That(matrixText, Does.Contain("additional lights"));
+            Assert.That(matrixText, Does.Contain("Phase 6.5A"));
             Assert.That(matrixText, Does.Contain("Lit ShadowCaster"));
             Assert.That(matrixText, Does.Contain("Lit DepthOnly"));
             Assert.That(matrixText, Does.Contain("Lit SceneSelectionPass"));
             Assert.That(matrixText, Does.Contain("Lit Picking"));
-            Assert.That(matrixText, Does.Contain("not implemented"));
+            Assert.That(matrixText, Does.Contain("Built-in has no URP DepthNormals prepass contract"));
         }
         finally
         {
             UnityEngine.Object.DestroyImmediate(material);
         }
+    }
+
+    [Test]
+    public void UberLitHasForwardBaseForwardAddShadowCasterDepthOnlyEditorPasses()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Contain("Name \"ForwardBase\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"ForwardBase\""));
+        Assert.That(shaderText, Does.Contain("Name \"ForwardAdd\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"ForwardAdd\""));
+        Assert.That(shaderText, Does.Contain("Name \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"ShadowCaster\""));
+        Assert.That(shaderText, Does.Contain("Name \"DepthOnly\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"DepthOnly\""));
+        Assert.That(shaderText, Does.Contain("Name \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"SceneSelectionPass\""));
+        Assert.That(shaderText, Does.Contain("Name \"Picking\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"Picking\""));
+    }
+
+    [Test]
+    public void UberLitDoesNotContainUniversalForwardOrUniversalPipelineTag()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Not.Contain("UniversalForward"));
+        Assert.That(shaderText, Does.Not.Contain("RenderPipeline\" = \"UniversalPipeline\""));
+        Assert.That(shaderText, Does.Not.Contain("\"RenderPipeline\"=\"UniversalPipeline\""));
+    }
+
+    [Test]
+    public void UberLitDoesNotIncludeUrpShaderLibraries()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+
+        Assert.That(shaderText, Does.Not.Contain("Packages/com.unity.render-pipelines.universal"));
+        Assert.That(shaderText, Does.Not.Contain("Core.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("Lighting.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("Shadows.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("ProbeVolumeVariants.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("FoveatedRenderingKeywords.hlsl"));
+        Assert.That(shaderText, Does.Not.Contain("UniversalFragmentPBR"));
+    }
+
+    [Test]
+    public void UberLitDepthNormalsDecisionIsDocumented()
+    {
+        var shaderText = File.ReadAllText(ShaderPath);
+        var matrixText = File.ReadAllText(MatrixPath);
+
+        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(matrixText, Does.Contain("Built-in has no URP DepthNormals prepass contract"));
+        Assert.That(matrixText, Does.Contain("Lit DepthNormals"));
+        Assert.That(matrixText, Does.Contain("Phase 6.5A"));
+    }
+
+    [Test]
+    public void UberLitShadowCasterVariantsHaveNoCompilerErrors()
+    {
+        AssertCompileCasesHaveNoBlockingMessages(CreatePhase65ACompileCases(Shader.Find(ShaderName), "ShadowCaster"));
+    }
+
+    [Test]
+    public void UberLitDepthOnlyVariantsHaveNoCompilerErrors()
+    {
+        AssertCompileCasesHaveNoBlockingMessages(CreatePhase65ACompileCases(Shader.Find(ShaderName), "DepthOnly"));
+    }
+
+    [Test]
+    public void UberLitEditorPassesHaveNoCompilerErrors()
+    {
+        AssertCompileCasesHaveNoBlockingMessages(CreatePhase65ACompileCases(Shader.Find(ShaderName), "Editor"));
     }
 
     [Test]
@@ -215,31 +287,7 @@ public sealed class NovaBuiltInUberLitCompileTests
 
         AssetDatabase.ImportAsset(ShaderPath, ImportAssetOptions.ForceUpdate);
 
-        foreach (var compileCase in CreateCompileCases(shader))
-        {
-            TestContext.Out.WriteLine(compileCase.Name);
-            try
-            {
-                SetupUberLit(compileCase.Material);
-                foreach (var keyword in compileCase.AdditionalKeywords)
-                {
-                    compileCase.Material.EnableKeyword(keyword);
-                }
-
-                Shader.WarmupAllShaders();
-
-                var blockingMessages = ShaderUtil.GetShaderMessages(shader)
-                    .Where(IsBlockingShaderMessage)
-                    .Select(message => $"{compileCase.Name}: {message.severity}: {message.message} ({message.file}:{message.line})")
-                    .ToArray();
-
-                Assert.That(blockingMessages, Is.Empty, string.Join(Environment.NewLine, blockingMessages));
-            }
-            finally
-            {
-                DestroyMaterialAndOwnedTextures(compileCase.Material);
-            }
-        }
+        AssertCompileCasesHaveNoBlockingMessages(CreateCompileCases(shader));
     }
 
     [Test]
@@ -576,6 +624,81 @@ public sealed class NovaBuiltInUberLitCompileTests
                         "_MetallicMap3D"),
                     "_SmoothnessMap3D")),
         };
+    }
+
+    private static CompileCase[] CreatePhase65ACompileCases(Shader shader, string category)
+    {
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        if (category == "ShadowCaster")
+        {
+            return new[]
+            {
+                new CompileCase("ShadowCaster default", WithFloat(shader, "_ShadowCasterEnabled", 1f)),
+                new CompileCase("ShadowCaster alpha test", WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_ShadowCasterAlphaTestEnabled", 1f)),
+                new CompileCase("ShadowCaster alpha test + forward alpha test", WithFloat(WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_ShadowCasterAlphaTestEnabled", 1f), "_RenderType", 1f)),
+                new CompileCase("ShadowCaster tint alpha influence", WithFloat(WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_ShadowCasterAlphaTestEnabled", 1f), "_ShadowCasterAlphaAffectedByTintColor", 1f)),
+                new CompileCase("ShadowCaster flow alpha influence", WithTexture(WithFloat(WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_ShadowCasterAlphaTestEnabled", 1f), "_ShadowCasterAlphaAffectedByFlowMap", 1f), "_FlowMap")),
+                new CompileCase("ShadowCaster alpha transition influence", WithFloat(WithTexture(WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_ShadowCasterAlphaTestEnabled", 1f), "_AlphaTransitionMap"), "_ShadowCasterAlphaAffectedByAlphaTransitionMap", 1f)),
+                new CompileCase("ShadowCaster luminance transparency influence", WithFloat(WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_ShadowCasterAlphaTestEnabled", 1f), "_ShadowCasterAlphaAffectedByTransparencyLuminance", 1f)),
+                new CompileCase("ShadowCaster vertex deformation compatibility", WithTexture(WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_ShadowCasterApplyVertexDeformation", 1f), "_VertexDeformationMap")),
+                new CompileCase("ShadowCaster representative Lit keywords", WithTexture(WithTexture(WithFloat(WithFloat(shader, "_ShadowCasterEnabled", 1f), "_LitWorkflowMode", 0f), "_NormalMap"), "_SmoothnessMap"), "_SPECULAR_SETUP"),
+                new CompileCase("ShadowCaster punctual keyword", WithFloat(shader, "_ShadowCasterEnabled", 1f), "_CASTING_PUNCTUAL_LIGHT_SHADOW"),
+            };
+        }
+
+        if (category == "DepthOnly")
+        {
+            return new[]
+            {
+                new CompileCase("DepthOnly default", new Material(shader)),
+                new CompileCase("DepthOnly alpha test", WithFloat(shader, "_RenderType", 1f)),
+                new CompileCase("DepthOnly alpha transition", WithTexture(WithFloat(shader, "_AlphaTransitionMode", 1f), "_AlphaTransitionMap")),
+                new CompileCase("DepthOnly representative Lit keywords", WithTexture(WithTexture(WithFloat(shader, "_LitWorkflowMode", 0f), "_NormalMap"), "_SmoothnessMap"), "_SPECULAR_SETUP"),
+            };
+        }
+
+        return new[]
+        {
+            new CompileCase("SceneSelectionPass", new Material(shader)),
+            new CompileCase("Picking", new Material(shader)),
+            new CompileCase("SceneSelectionPass vertex deformation", WithTexture(shader, "_VertexDeformationMap")),
+            new CompileCase("Picking alpha transition", WithTexture(WithFloat(shader, "_AlphaTransitionMode", 1f), "_AlphaTransitionMap")),
+        };
+    }
+
+    private static void AssertCompileCasesHaveNoBlockingMessages(CompileCase[] compileCases)
+    {
+        var shader = Shader.Find(ShaderName);
+        Assert.That(shader, Is.Not.Null, ShaderName);
+
+        AssetDatabase.ImportAsset(ShaderPath, ImportAssetOptions.ForceUpdate);
+
+        foreach (var compileCase in compileCases)
+        {
+            TestContext.Out.WriteLine(compileCase.Name);
+            try
+            {
+                SetupUberLit(compileCase.Material);
+                foreach (var keyword in compileCase.AdditionalKeywords)
+                {
+                    compileCase.Material.EnableKeyword(keyword);
+                }
+
+                Shader.WarmupAllShaders();
+
+                var blockingMessages = ShaderUtil.GetShaderMessages(shader)
+                    .Where(IsBlockingShaderMessage)
+                    .Select(message => $"{compileCase.Name}: {message.severity}: {message.message} ({message.file}:{message.line})")
+                    .ToArray();
+
+                Assert.That(blockingMessages, Is.Empty, string.Join(Environment.NewLine, blockingMessages));
+            }
+            finally
+            {
+                DestroyMaterialAndOwnedTextures(compileCase.Material);
+            }
+        }
     }
 
     private static Material WithFloat(Shader shader, string property, float value)

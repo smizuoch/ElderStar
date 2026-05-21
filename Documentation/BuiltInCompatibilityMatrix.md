@@ -1062,3 +1062,39 @@ Phase 6.4A compatibility annotations:
 - Receive shadows remain a `ForwardBase` main-light approximation. Additional-light shadows are not marked complete; Built-in full-shadow variants may compile, but runtime behavior depends on Built-in light and quality settings and is not a URP `_ADDITIONAL_LIGHT_SHADOWS` equivalent.
 - Unsupported or pending URP-specific behavior remains: URP additional-light-loop parity, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full PBR parity, full visual parity, and golden image visual regression.
 - `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.4A scope and are not promoted by this phase.
+
+## Phase 6.5A UberLit Pass Topology Status
+
+Phase 6.5A expands only `Nova/Particles/UberLit` pass topology. It adds Built-in-compatible `ShadowCaster`, `DepthOnly`, `SceneSelectionPass`, and `Picking` passes while preserving the Phase 6.4A `ForwardBase` and `ForwardAdd` lighting behavior. It does not add new Lit surface features, UI Lit, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, URP ShadowCaster parity, URP DepthOnly parity, or URP DepthNormals parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| Lit pass topology | Passed | Passed | `Nova/Particles/UberLit` declares `ForwardBase`, `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `SceneSelectionPass`, and `Picking`. It deliberately does not declare `DepthNormals`. |
+| Lit ShadowCaster | Passed | Passed | A Built-in `ShadowCaster` pass uses local Built-in helpers and participates in Built-in shadow casting. Built-in ShadowCaster bias/punctual shadow behavior is Approximate and not URP shadow bias or URP punctual shadow parity. |
+| `_ShadowCasterEnabled` | Passed | Passed | The preserved material setup path enables/disables the `ShadowCaster` pass with `Material.SetShaderPassEnabled`. Runtime smoke coverage also uses `Renderer.shadowCastingMode` as the Built-in fallback path when comparing disabled casting, matching the previously documented UberUnlit pattern. |
+| ShadowCaster alpha test | Passed | Passed | `_ShadowCasterAlphaTestEnabled` enables `_SHADOW_CASTER_ALPHA_TEST_ENABLED`, and `_ShadowCasterAlphaCutoff` clips shadow caster fragments against the shadow alpha source. This is separate from visible forward `_Cutoff` unless forward alpha-test keywords are also enabled. |
+| Shadow alpha affected by tint color | Passed | Passed | `_ShadowCasterAlphaAffectedByTintColor` is runtime-active for `_TINT_AREA_ALL` plus `_TINT_COLOR_ENABLED` and is covered by non-golden shadow smoke. |
+| Shadow alpha affected by flow map | Compile-compatible | Compile-compatible | `_ShadowCasterAlphaAffectedByFlowMap` is implemented for the Built-in shadow alpha source when flow targets the base map. Runtime visual validation remains pending because Phase 6.5A keeps the stable PlayMode coverage to the tint alpha toggle. |
+| Shadow alpha affected by alpha transition map | Compile-compatible | Compile-compatible | `_ShadowCasterAlphaAffectedByAlphaTransitionMap` is implemented for the Built-in shadow alpha source with fade/dissolve transition keywords. Runtime visual validation remains pending. |
+| Shadow alpha affected by transparency luminance | Compile-compatible | Compile-compatible | `_ShadowCasterAlphaAffectedByTransparencyLuminance` is implemented for the Built-in shadow alpha source with `_TRANSPARENCY_BY_LUMINANCE`. Runtime visual validation remains pending. |
+| `_ShadowCasterApplyVertexDeformation` | Compile-compatible / pending runtime | Compile-compatible / pending runtime | The property and keyword surface are preserved, and the shadow pass can apply the existing narrow vertex deformation path when `_VERTEX_DEFORMATION_ENABLED` is active. Full Lit ForwardBase vertex deformation parity remains pending, so no full Lit deformation parity is claimed. |
+| Lit DepthOnly | Passed | Passed | A Built-in-compatible `DepthOnly` pass writes depth in explicit command-buffer smoke coverage and respects `_ALPHATEST_ENABLED` / `_Cutoff`. Built-in camera consumption of a custom `DepthOnly` pass remains Approximate. |
+| SceneSelectionPass | Compile-compatible | Compile-compatible | The editor pass is declared and compiles with local Built-in helpers. Editor picking/selection visual parity is not claimed. |
+| Picking | Compile-compatible | Compile-compatible | The editor picking pass is declared and compiles with local Built-in helpers. Stable editor picking visual parity is not claimed. |
+| Lit DepthNormals | Unsupported / documented | Unsupported / documented | Phase 6.5A intentionally omits a `DepthNormals` pass because Built-in has no URP DepthNormals prepass contract and no tested Built-in consumer for this port stage. |
+| Shader compiler diagnostics | Passed | Passed | Diagnostics cover ShadowCaster default, shadow alpha test, shadow alpha influence toggles, representative Lit surface keywords, DepthOnly default, DepthOnly alpha/transition/Lit keyword states, SceneSelectionPass, Picking, and existing ForwardBase/ForwardAdd cases. |
+| Rendering smokes | Passed | Passed | Non-golden PlayMode smokes cover enabled/disabled shadow casting, shadow alpha cutoff, shadow alpha-test disabled behavior, tint-driven shadow alpha, explicit DepthOnly depth writes, DepthOnly alpha clipping, and a ForwardBase/ForwardAdd regression. |
+| Scope guard | Passed | Passed | `Nova/UIParticles/UberLit`, Distortion runtime, optimizer/replacer runtime behavior, and golden images remain untouched. |
+
+Phase 6.5A compatibility annotations:
+
+- Lit ShadowCaster is Approximate. The Built-in port uses Built-in shadow caster macros and local wrappers, not URP `Shadows.hlsl`, URP `ShadowUtils`, URP shadow constants, or URP normal-bias parity.
+- `_ShadowCasterEnabled` is preserved as the public material compatibility surface. Built-in cannot make every material property independently remove a pass at render time without material setup, so the editor/material setup path calls `SetShaderPassEnabled`, and runtime smoke comparisons use `Renderer.shadowCastingMode` as the documented fallback.
+- ShadowCaster alpha testing uses `_ShadowCasterAlphaCutoff` and the shadow-specific keyword. It does not silently substitute visible forward `_Cutoff` as the shadow cutoff.
+- The tint color shadow alpha toggle has stable runtime smoke coverage. Flow map, alpha transition, and luminance transparency shadow alpha toggles are implemented and compile-covered, but runtime visual validation remains pending until a broader Lit feature interaction phase.
+- `_ShadowCasterApplyVertexDeformation` is preserved and compile-compatible, but full Lit vertex deformation parity remains pending because Phase 6.5A does not implement broad Lit ForwardBase vertex deformation.
+- Lit DepthOnly is Approximate. Explicit command-buffer smoke proves the pass can write depth and alpha-clip, but Built-in camera depth consumption differs from URP DepthOnly prepass behavior.
+- SceneSelectionPass and Picking are compile-compatible editor passes only. The phase does not claim editor selection or picking visual parity.
+- Lit DepthNormals is Unsupported for Phase 6.5A. Built-in has no URP DepthNormals prepass contract, so the port does not add a fake feature-complete `DepthNormals` pass without a clear consumer and stable test.
+- `Nova/Particles/UberLit` still does not claim full PBR parity, URP Forward+ parity, URP additional-light-loop parity, URP shadow parity, final visual parity, or golden image completion.
+- The next planned Lit phase is Phase 6.6A: `Nova/Particles/UberLit` consolidation and feature interaction regression.

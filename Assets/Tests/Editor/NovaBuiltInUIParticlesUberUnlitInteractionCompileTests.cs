@@ -194,8 +194,8 @@ public sealed class NovaBuiltInUIParticlesUberUnlitInteractionCompileTests
 
         var litText = File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader");
         Assert.That(litText, Does.Contain(@"""LightMode"" = ""ForwardAdd"""));
-        Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""ShadowCaster"""));
-        Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""DepthOnly"""));
+        Assert.That(litText, Does.Contain(@"""LightMode"" = ""ShadowCaster"""));
+        Assert.That(litText, Does.Contain(@"""LightMode"" = ""DepthOnly"""));
         Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""DepthNormals"""));
         Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""DistortedUvBuffer"""));
     }
