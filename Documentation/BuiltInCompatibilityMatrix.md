@@ -1098,3 +1098,109 @@ Phase 6.5A compatibility annotations:
 - Lit DepthNormals is Unsupported for Phase 6.5A. Built-in has no URP DepthNormals prepass contract, so the port does not add a fake feature-complete `DepthNormals` pass without a clear consumer and stable test.
 - `Nova/Particles/UberLit` still does not claim full PBR parity, URP Forward+ parity, URP additional-light-loop parity, URP shadow parity, final visual parity, or golden image completion.
 - The next planned Lit phase is Phase 6.6A: `Nova/Particles/UberLit` consolidation and feature interaction regression.
+
+## Phase 6.6A UberLit Consolidation Status
+
+Phase 6.6A consolidates the current `Nova/Particles/UberLit` Built-in implementation after Phase 6.5A. It adds high-value interaction smoke coverage, complex compile permutation coverage, pass topology/status regressions, material/editor setup checks, and an implementation status audit. It does not port `Nova/UIParticles/UberLit`, Distortion, Optimized Shader Generator/Replacer runtime behavior, URP PBR parity, Forward+, cluster light loops, probe volumes, foveated rendering, URP DepthNormals parity, final visual regression, or golden image baselines.
+
+### Implemented and smoke-tested
+
+- Minimum `ForwardBase` lit path.
+- Main directional light Lambert approximation.
+- Ambient / SH approximation.
+- Base map 2D lit albedo.
+- Tint and vertex color lit albedo.
+- Alpha test.
+- Metallic workflow.
+- Metallic map 2D / 2D array / 3D.
+- Metallic map channel selection.
+- Specular workflow.
+- Specular color.
+- Specular map 2D / 2D array / 3D.
+- Smoothness scalar.
+- Smoothness map 2D / 2D array / 3D.
+- Smoothness channel selection.
+- Normal map 2D / 2D array / 3D.
+- Normal bump scale.
+- Basic Blinn-Phong-style specular approximation.
+- Receive shadows.
+- `_LitReceiveShadows`.
+- `_RECEIVE_SHADOWS_ENABLED`.
+- Environment reflections.
+- `_EnvironmentReflections`.
+- `_ENVIRONMENT_REFLECTIONS_ENABLED`.
+- Additional lights via `ForwardAdd`.
+- Point light contribution.
+- Spot light contribution.
+- `_ADDITIONAL_LIGHTS`.
+- ShadowCaster.
+- ShadowCaster alpha test.
+- DepthOnly.
+- SceneSelectionPass compile compatibility.
+- Picking compile compatibility.
+- Phase 6.6A interaction smoke coverage for complex surface lighting, receive shadows plus environment reflections, additional lights plus environment reflections, additional lights plus receive shadows, ShadowCaster plus Lit surface keywords, DepthOnly plus alpha and Lit surface keywords, ForwardBase/ForwardAdd alpha/tint/vertex color, and a combined main/additional/reflection/shadow feature scene.
+- Phase 6.6A complex compile permutation coverage for representative 2D array, 3D, ForwardAdd, receive-shadow, environment-reflection, ShadowCaster, DepthOnly, SceneSelectionPass/Picking, major Lit keyword, compatibility-only URP keyword, and additional-light keyword states.
+- Phase 6.6A pass topology regression verifies `ForwardBase`, `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `SceneSelectionPass`, and `Picking` are declared, and `DepthNormals`, `UniversalForward`, UniversalPipeline tags, and URP shader includes are not declared.
+- Phase 6.6A material/editor API regression verifies the `CustomEditor "Nova.Editor.Core.Scripts.ParticlesUberLitGUI"` declaration remains intact and material setup still toggles the already-implemented Lit feature keywords.
+
+### Implemented but approximate
+
+- Built-in Lambert / Blinn-Phong-style lighting approximation.
+- Built-in BRDF approximation, not URP PBR parity.
+- Built-in receive-shadow approximation.
+- Built-in soft/cascade shadow behavior controlled by Light/QualitySettings.
+- Built-in environment reflection via `unity_SpecCube0` / skybox approximation.
+- No URP reflection probe blending parity.
+- No box projection parity.
+- Built-in `ForwardAdd` approximation.
+- Additional light shadows compile-compatible only unless runtime-tested.
+- Built-in shadow caster bias / punctual behavior approximation.
+- DepthOnly consumption approximation.
+- SceneSelection/Picking compile-compatible editor passes only.
+- Environment reflections remain unshadowed by the Built-in approximation; receive shadows attenuate direct lighting only.
+
+### Preserved but not fully parity-tested
+
+- URP-style additional light shadow parity.
+- `_ADDITIONAL_LIGHTS_VERTEX` runtime behavior.
+- Flow-map shadow alpha real-shadow runtime validation.
+- Alpha-transition shadow alpha runtime validation.
+- Luminance shadow alpha runtime validation.
+- Full Particle System Custom Vertex Streams parity.
+- Editor scene selection / picking visual parity.
+- Full inspector visual parity.
+- Golden image visual parity.
+- Final visual regression.
+
+### Unsupported or intentionally not implemented
+
+- URP `UniversalFragmentPBR` parity.
+- no full URP PBR parity.
+- Forward+ runtime.
+- no Forward+ runtime.
+- Cluster light loop runtime.
+- no cluster light loop runtime.
+- Probe volumes.
+- no probe volume runtime.
+- Foveated rendering.
+- no foveated rendering runtime.
+- URP DepthNormals prepass parity.
+- no URP DepthNormals prepass parity.
+- `DepthNormals` pass for Built-in in the current design.
+- no Built-in DepthNormals implementation.
+- URP debug display path.
+- no golden visual parity.
+- golden image baselines not added.
+
+Phase 6.6A compatibility annotations:
+
+- `Nova/Particles/UberLit` is a stable Built-in approximation with broader non-golden interaction coverage, not a full UberLit completion claim.
+- Interaction smokes are deliberately broad and relative. They verify that implemented feature groups remain distinguishable together without adding golden images or final visual baselines.
+- Complex compile coverage is representative, not exhaustive. It is intended to catch include, keyword, pass, lighting, shadow, reflection, and `ForwardAdd` regressions without creating a combinatorial explosion.
+- Additional-light shadow parity remains pending. `_ADDITIONAL_LIGHT_SHADOWS` is preserved and compile-covered, but URP-style runtime semantics are not claimed.
+- `DepthNormals` remains intentionally omitted because Built-in has no URP DepthNormals prepass contract and no stable Built-in consumer has been defined for this package phase.
+- UI Lit remains Pending. `Nova/UIParticles/UberLit` stays a skeleton/API surface and is the next major shader family.
+- Distortion runtime remains Pending.
+- Optimizer/replacer runtime behavior remains Pending.
+- Final visual regression remains Pending, golden image baselines were not added, and no existing golden images were updated.
+- The next recommended phase is Phase 7.1: `Nova/UIParticles/UberLit` skeleton-to-minimum Built-in UI forward lit approximation.
