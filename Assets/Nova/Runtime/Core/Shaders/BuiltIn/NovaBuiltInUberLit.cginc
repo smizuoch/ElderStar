@@ -167,7 +167,11 @@ NovaLitSurfaceData NovaResolveLitSurfaceData(
     return surfaceData;
 }
 
-half3 NovaComputeSpecularApproximation(NovaLitSurfaceData surfaceData, float3 lightDirectionWS, float3 viewDirectionWS)
+half3 NovaComputeSpecularApproximationForLight(
+    NovaLitSurfaceData surfaceData,
+    float3 lightDirectionWS,
+    float3 viewDirectionWS,
+    half3 lightColor)
 {
     #if !defined(_SPECULAR_HIGHLIGHTS_ENABLED)
     return half3(0.0h, 0.0h, 0.0h);
@@ -186,8 +190,13 @@ half3 NovaComputeSpecularApproximation(NovaLitSurfaceData surfaceData, float3 li
     #endif
 
     half specularTerm = pow(ndoth, exponent) * surfaceData.smoothness * ndotl * specularStrength;
-    return specularColor * specularTerm * NovaGetMainLightColor();
+    return specularColor * specularTerm * lightColor;
     #endif
+}
+
+half3 NovaComputeSpecularApproximation(NovaLitSurfaceData surfaceData, float3 lightDirectionWS, float3 viewDirectionWS)
+{
+    return NovaComputeSpecularApproximationForLight(surfaceData, lightDirectionWS, viewDirectionWS, NovaGetMainLightColor());
 }
 
 half NovaLitReceiveShadowsEnabled()
@@ -203,6 +212,15 @@ half NovaLitEnvironmentReflectionsEnabled()
 {
     #if defined(_ENVIRONMENT_REFLECTIONS_ENABLED)
     return step(0.5h, _EnvironmentReflections);
+    #else
+    return 0.0h;
+    #endif
+}
+
+half NovaLitAdditionalLightsEnabled()
+{
+    #if defined(_ADDITIONAL_LIGHTS)
+    return 1.0h;
     #else
     return 0.0h;
     #endif
@@ -234,6 +252,45 @@ half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 view
     return half4(NovaApplyEnvironmentReflection(diffuseColor + specularColor, environmentReflection), surfaceData.alpha);
 }
 
+half3 NovaComputeForwardAddDiffuse(NovaLitSurfaceData surfaceData, float3 lightDirectionWS, half3 lightColor)
+{
+    return surfaceData.albedo * lightColor * NovaComputeLambertDiffuse(surfaceData.normalWS, lightDirectionWS);
+}
+
+half3 NovaComputeForwardAddSpecular(
+    NovaLitSurfaceData surfaceData,
+    float3 lightDirectionWS,
+    float3 viewDirectionWS,
+    half3 lightColor)
+{
+    return NovaComputeSpecularApproximationForLight(surfaceData, lightDirectionWS, viewDirectionWS, lightColor);
+}
+
+half3 NovaComputeForwardAddContribution(
+    NovaLitSurfaceData surfaceData,
+    float3 lightDirectionWS,
+    float3 viewDirectionWS,
+    half3 lightColor,
+    half attenuation)
+{
+    half enabled = NovaLitAdditionalLightsEnabled();
+    half alpha = saturate(surfaceData.alpha);
+    half3 diffuse = NovaComputeForwardAddDiffuse(surfaceData, lightDirectionWS, lightColor);
+    half3 specular = NovaComputeForwardAddSpecular(surfaceData, lightDirectionWS, viewDirectionWS, lightColor);
+    return (diffuse + specular) * saturate(attenuation) * enabled * alpha;
+}
+
+half4 NovaComputeLitForwardAddColor(
+    NovaLitSurfaceData surfaceData,
+    float3 positionWS,
+    float3 viewDirectionWS,
+    half attenuation)
+{
+    float3 lightDirectionWS = NovaGetBuiltInAddLightDirection(positionWS);
+    half3 lightColor = NovaGetBuiltInAddLightColor();
+    return half4(NovaComputeForwardAddContribution(surfaceData, lightDirectionWS, viewDirectionWS, lightColor, attenuation), 0.0h);
+}
+
 half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 viewDirectionWS)
 {
     return NovaComputeLitForwardBaseColor(surfaceData, viewDirectionWS, 1.0h);
@@ -255,6 +312,25 @@ half4 NovaApplyLitForwardBase(
 
     NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(baseColor, litCoord, normalWS, tangentWS, bitangentWS);
     return NovaComputeLitForwardBaseColor(surfaceData, viewDirectionWS, shadowAttenuation);
+}
+
+half4 NovaApplyLitForwardAdd(
+    half4 baseColor,
+    float3 litCoord,
+    float3 normalWS,
+    float3 tangentWS,
+    float3 bitangentWS,
+    float3 positionWS,
+    float3 viewDirectionWS,
+    half cutoff,
+    half attenuation)
+{
+    #if defined(_ALPHATEST_ENABLED)
+    clip(baseColor.a - cutoff);
+    #endif
+
+    NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(baseColor, litCoord, normalWS, tangentWS, bitangentWS);
+    return NovaComputeLitForwardAddColor(surfaceData, positionWS, viewDirectionWS, attenuation);
 }
 
 #endif

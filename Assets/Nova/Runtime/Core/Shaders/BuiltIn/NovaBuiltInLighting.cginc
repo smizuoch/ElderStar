@@ -30,6 +30,16 @@ half3 NovaGetMainLightColor()
     return _LightColor0.rgb;
 }
 
+float3 NovaGetBuiltInAddLightDirection(float3 positionWS)
+{
+    return NovaSafeNormalize(UnityWorldSpaceLightDir(positionWS));
+}
+
+half3 NovaGetBuiltInAddLightColor()
+{
+    return _LightColor0.rgb;
+}
+
 half NovaComputeLambertDiffuse(float3 normalWS, float3 lightDirectionWS)
 {
     return saturate(dot(NovaSafeNormalize(normalWS), NovaSafeNormalize(lightDirectionWS)));

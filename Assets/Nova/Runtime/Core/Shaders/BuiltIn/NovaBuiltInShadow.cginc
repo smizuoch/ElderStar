@@ -17,6 +17,9 @@ fixed4 NovaShadowCasterFragment()
 #define NOVA_SHADOW_COORDS(index) SHADOW_COORDS(index)
 #define NovaTransferShadowCoord(output, positionWS) TRANSFER_SHADOW_WPOS(output, positionWS)
 #define NovaComputeShadowAttenuation(input, positionWS) SHADOW_ATTENUATION(input)
+#define NOVA_LIGHTING_COORDS(lightIndex, shadowIndex) LIGHTING_COORDS(lightIndex, shadowIndex)
+#define NovaTransferBuiltInAddLightCoord(output) TRANSFER_VERTEX_TO_FRAGMENT(output)
+#define NovaComputeBuiltInAddLightAttenuation(input, positionWS) LIGHT_ATTENUATION(input)
 
 half NovaApplyReceiveShadow(half shadowAttenuation, half receiveShadows)
 {

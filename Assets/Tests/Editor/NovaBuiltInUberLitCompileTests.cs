@@ -168,7 +168,7 @@ public sealed class NovaBuiltInUberLitCompileTests
     }
 
     [Test]
-    public void UberLitPhase61PassTopologyIsForwardBaseOnlyAndDocumentsPendingPasses()
+    public void UberLitPhase64APassTopologyHasForwardBaseAndForwardAddOnlyAndDocumentsPendingPasses()
     {
         var shader = Shader.Find(ShaderName);
         Assert.That(shader, Is.Not.Null, ShaderName);
@@ -183,20 +183,23 @@ public sealed class NovaBuiltInUberLitCompileTests
                 .ToArray();
             var matrixText = File.ReadAllText(MatrixPath);
 
-            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase" }));
+            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd" }));
             Assert.That(material.FindPass("ForwardBase"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(material.FindPass("ForwardAdd"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("ShadowCaster"), Is.LessThan(0));
             Assert.That(material.FindPass("DepthOnly"), Is.LessThan(0));
             Assert.That(material.FindPass("SceneSelectionPass"), Is.LessThan(0));
             Assert.That(material.FindPass("Picking"), Is.LessThan(0));
             Assert.That(shaderText, Does.Not.Contain("UniversalForward"));
             Assert.That(shaderText, Does.Not.Contain("RenderPipeline\" = \"UniversalPipeline\""));
-            Assert.That(matrixText, Does.Contain("Phase 6.1"));
+            Assert.That(matrixText, Does.Contain("Phase 6.4A"));
+            Assert.That(matrixText, Does.Contain("ForwardAdd"));
+            Assert.That(matrixText, Does.Contain("additional lights"));
             Assert.That(matrixText, Does.Contain("Lit ShadowCaster"));
             Assert.That(matrixText, Does.Contain("Lit DepthOnly"));
             Assert.That(matrixText, Does.Contain("Lit SceneSelectionPass"));
             Assert.That(matrixText, Does.Contain("Lit Picking"));
-            Assert.That(matrixText, Does.Contain("not yet implemented"));
+            Assert.That(matrixText, Does.Contain("not implemented"));
         }
         finally
         {
@@ -445,8 +448,80 @@ public sealed class NovaBuiltInUberLitCompileTests
             new CompileCase("_ADDITIONAL_LIGHTS", new Material(shader), "_ADDITIONAL_LIGHTS"),
             new CompileCase("_ADDITIONAL_LIGHTS_VERTEX", new Material(shader), "_ADDITIONAL_LIGHTS_VERTEX"),
             new CompileCase("_ADDITIONAL_LIGHT_SHADOWS", new Material(shader), "_ADDITIONAL_LIGHT_SHADOWS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _ADDITIONAL_LIGHT_SHADOWS",
+                new Material(shader),
+                "_ADDITIONAL_LIGHTS",
+                "_ADDITIONAL_LIGHT_SHADOWS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _ADDITIONAL_LIGHT_SHADOWS + _SHADOWS_SOFT",
+                new Material(shader),
+                "_ADDITIONAL_LIGHTS",
+                "_ADDITIONAL_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _NORMAL_MAP_ENABLED",
+                WithTexture(shader, "_NormalMap"),
+                "_ADDITIONAL_LIGHTS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _SPECULAR_SETUP",
+                WithFloat(shader, "_LitWorkflowMode", 0f),
+                "_ADDITIONAL_LIGHTS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _SMOOTHNESS_MAP_ENABLED",
+                WithTexture(shader, "_SmoothnessMap"),
+                "_ADDITIONAL_LIGHTS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _METALLIC_MAP_ENABLED",
+                WithTexture(shader, "_MetallicMap"),
+                "_ADDITIONAL_LIGHTS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _RECEIVE_SHADOWS_ENABLED",
+                WithFloat(shader, "_LitReceiveShadows", 1f),
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + _ENVIRONMENT_REFLECTIONS_ENABLED",
+                WithFloat(shader, "_EnvironmentReflections", 1f),
+                "_ADDITIONAL_LIGHTS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS + alpha test",
+                WithFloat(shader, "_RenderType", 1f),
+                "_ADDITIONAL_LIGHTS"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS_VERTEX + normal map",
+                WithTexture(shader, "_NormalMap"),
+                "_ADDITIONAL_LIGHTS_VERTEX"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHTS_VERTEX + _SPECULAR_SETUP",
+                WithFloat(shader, "_LitWorkflowMode", 0f),
+                "_ADDITIONAL_LIGHTS_VERTEX"),
+            new CompileCase(
+                "_ADDITIONAL_LIGHT_SHADOWS + normal/specular",
+                WithTexture(WithFloat(shader, "_LitWorkflowMode", 0f), "_NormalMap"),
+                "_ADDITIONAL_LIGHT_SHADOWS",
+                "_SPECULAR_SETUP"),
             new CompileCase("_FORWARD_PLUS", new Material(shader), "_FORWARD_PLUS"),
             new CompileCase("_CLUSTER_LIGHT_LOOP", new Material(shader), "_CLUSTER_LIGHT_LOOP"),
+            new CompileCase(
+                "representative Phase 6.4A additional-light combination",
+                WithTexture(
+                    WithTexture(
+                        WithFloat(
+                            WithFloat(
+                                WithFloat(
+                                    WithFloat(shader, "_EnvironmentReflections", 1f),
+                                    "_LitReceiveShadows",
+                                    1f),
+                                "_SpecularHighlights",
+                                1f),
+                            "_LitWorkflowMode",
+                            0f),
+                        "_NormalMap"),
+                    "_SmoothnessMap"),
+                "_ADDITIONAL_LIGHTS",
+                "_MAIN_LIGHT_SHADOWS",
+                "_SHADOWS_SOFT"),
             new CompileCase(
                 "representative Lit keyword combination",
                 WithTexture(WithTexture(WithFloat(WithFloat(WithFloat(shader, "_RenderType", 1), "_SpecularHighlights", 1), "_EnvironmentReflections", 1), "_NormalMap"), "_SmoothnessMap"),

@@ -145,6 +145,22 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
         Assert.That(Luminance(sample.Shadow), Is.GreaterThan(0.05f), sample.ToString());
     }
 
+    [Test]
+    public void UberLitAdditionalLightsCoexistWithReceiveShadows()
+    {
+        var withoutAdditional = RenderReceiveShadowScene(material => ConfigureReceiveShadows(material, true));
+        var withAdditional = RenderReceiveShadowScene(
+            material => ConfigureReceiveShadows(material, true),
+            configureAfterSetup: material => material.EnableKeyword("_ADDITIONAL_LIGHTS"),
+            additionalPointLight: true);
+
+        AssertReceivesShadow(withAdditional);
+        Assert.That(
+            Luminance(withAdditional.Shadow),
+            Is.GreaterThan(Luminance(withoutAdditional.Shadow) + 0.05f),
+            $"with {withAdditional}, without {withoutAdditional}");
+    }
+
     private static void ConfigureReceiveShadows(Material material, bool enabled)
     {
         material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.82f, 0.82f, 0.82f, 1f)));
@@ -156,7 +172,8 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
         Color? ambient = null,
         Mesh mesh = null,
         Color? background = null,
-        Action<Material> configureAfterSetup = null)
+        Action<Material> configureAfterSetup = null,
+        bool additionalPointLight = false)
     {
         var shader = Shader.Find(LitShaderName);
         Assert.That(shader, Is.Not.Null, LitShaderName);
@@ -181,6 +198,7 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
         var depthProxyObject = new GameObject("NovaBuiltInUberLitShadowDepthProxy");
         var casterObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
         var lightObject = new GameObject("NovaBuiltInUberLitShadowLight");
+        var additionalLightObject = additionalPointLight ? new GameObject("NovaBuiltInUberLitShadowAdditionalLight") : null;
         var actualBackground = background ?? new Color(0.01f, 0.01f, 0.01f, 1f);
 
         try
@@ -237,6 +255,18 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
             light.shadowNormalBias = 0.05f;
             lightObject.transform.rotation = Quaternion.LookRotation(Vector3.down, Vector3.forward);
 
+            if (additionalLightObject != null)
+            {
+                additionalLightObject.transform.position = new Vector3(0.2f, 2f, 0f);
+                var additionalLight = additionalLightObject.AddComponent<Light>();
+                additionalLight.type = LightType.Point;
+                additionalLight.color = new Color(1f, 0.92f, 0.82f, 1f);
+                additionalLight.intensity = 2.2f;
+                additionalLight.range = 5f;
+                additionalLight.renderMode = LightRenderMode.ForcePixel;
+                additionalLight.shadows = LightShadows.None;
+            }
+
             var camera = cameraObject.AddComponent<Camera>();
             camera.orthographic = true;
             camera.orthographicSize = 2.5f;
@@ -278,6 +308,10 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
             UnityEngine.Object.DestroyImmediate(depthProxyObject);
             UnityEngine.Object.DestroyImmediate(casterObject);
             UnityEngine.Object.DestroyImmediate(lightObject);
+            if (additionalLightObject != null)
+            {
+                UnityEngine.Object.DestroyImmediate(additionalLightObject);
+            }
             UnityEngine.Object.DestroyImmediate(readback);
             UnityEngine.Object.DestroyImmediate(target);
             UnityEngine.Object.DestroyImmediate(receiverMesh);

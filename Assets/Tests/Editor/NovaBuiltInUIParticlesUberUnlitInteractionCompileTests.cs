@@ -178,7 +178,6 @@ public sealed class NovaBuiltInUIParticlesUberUnlitInteractionCompileTests
     {
         var shaderFiles = new[]
         {
-            "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader",
             "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader",
             "Assets/Nova/Runtime/Core/Shaders/ParticlesDistortion.shader",
         };
@@ -192,6 +191,13 @@ public sealed class NovaBuiltInUIParticlesUberUnlitInteractionCompileTests
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""DepthNormals"""), shaderFile);
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""DistortedUvBuffer"""), shaderFile);
         }
+
+        var litText = File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader");
+        Assert.That(litText, Does.Contain(@"""LightMode"" = ""ForwardAdd"""));
+        Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""ShadowCaster"""));
+        Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""DepthOnly"""));
+        Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""DepthNormals"""));
+        Assert.That(litText, Does.Not.Contain(@"""LightMode"" = ""DistortedUvBuffer"""));
     }
 
     private static IEnumerable<CompileCase> CreateComplexCompileCases()

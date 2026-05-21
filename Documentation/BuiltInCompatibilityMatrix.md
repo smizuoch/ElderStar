@@ -1034,3 +1034,31 @@ Phase 6.3B compatibility annotations:
 - Built-in reflection probe blending, probe capture timing, box projection, URP PBR BRDF parity, URP reflection probe parity, and full visual parity remain unsupported or pending.
 - Unsupported or pending URP-specific behavior remains: probe volumes, Forward+, cluster light loop, additional lights, `ForwardAdd`, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full PBR parity, full visual parity, and golden image visual regression.
 - `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.3B scope and are not promoted by this phase.
+
+## Phase 6.4A UberLit Additional Lights / ForwardAdd Status
+
+Phase 6.4A expands only `Nova/Particles/UberLit`. It adds a Built-in `ForwardAdd` pass that approximates URP additional-light contribution using Built-in per-light forward-add globals and attenuation. It does not implement URP Forward+, a clustered light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, `Nova/UIParticles/UberLit`, Distortion runtime, optimizer/replacer runtime behavior, golden image visual regression, URP additional-light-loop parity, or URP PBR parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| ForwardAdd pass topology | Passed | Passed | `Nova/Particles/UberLit` now has one Built-in `ForwardBase` pass and one Built-in `ForwardAdd` pass. Lit ShadowCaster, DepthOnly, DepthNormals, SceneSelectionPass, and Picking remain not implemented. |
+| Additional lights runtime | Passed | Passed | `_ADDITIONAL_LIGHTS` gates the Built-in `ForwardAdd` contribution. This is Approximate and uses Built-in pass scheduling rather than URP's additional-light loop. |
+| Additional point lights | Passed | Passed | Point-light color, position, and range attenuation are covered by non-golden PlayMode smoke tests. The falloff follows Built-in forward-add attenuation, not URP. |
+| Additional spot lights | Passed | Passed | Spot-light cone/direction and color are covered by smoke tests. The result is Approximate. |
+| Surface interaction | Passed | Passed | Additional-light diffuse/specular uses the Phase 6.2A/6.2B local metallic, specular, smoothness, and normal-map approximation. It does not call `UniversalFragmentPBR`. |
+| Receive-shadow interaction | Passed | Passed | Existing receive-shadow behavior remains in `ForwardBase`; an additional point light remains distinguishable in the receive-shadow smoke. Additional-light shadows are not claimed as URP parity. |
+| Environment-reflection interaction | Passed | Passed | Environment reflections remain `ForwardBase` only. `ForwardAdd` does not add ambient or reflection terms again. |
+| Alpha, tint, and vertex color regressions | Passed | Passed | Additional-light smokes cover alpha test, tint color, and mesh vertex color. Transparent blend behavior remains a Built-in additive-pass approximation. |
+| `_ADDITIONAL_LIGHTS_VERTEX` | Compile-compatible | Compile-compatible | Preserved as a keyword surface and compile diagnostic. Runtime vertex additional-light behavior is not implemented in Phase 6.4A. |
+| `_ADDITIONAL_LIGHT_SHADOWS` | Compile-compatible / Built-in controlled | Compile-compatible / Built-in controlled | Preserved as a keyword surface and compile diagnostic. Built-in additional-light shadows, where available, are controlled by Built-in light/shadow variants and quality settings rather than URP-style keyword semantics. No additional-light shadow parity is claimed. |
+| `_FORWARD_PLUS` / `_CLUSTER_LIGHT_LOOP` | Unsupported runtime | Unsupported runtime | Keywords remain compile-compatible only. No Forward+ or clustered loop is implemented. |
+
+Phase 6.4A compatibility annotations:
+
+- Built-in additional lights / `ForwardAdd` are Approximate. The pass uses Built-in `ForwardAdd` scheduling, additive blending, `_WorldSpaceLightPos0`, `_LightColor0`, and Built-in attenuation macros. It is not URP Forward+ and not URP additional-light-loop parity.
+- `_ADDITIONAL_LIGHTS` is runtime-active for the new `ForwardAdd` approximation. Materials without this keyword receive no deliberate Nova additional-light contribution, even though Built-in still schedules the pass.
+- `_ADDITIONAL_LIGHTS_VERTEX`, `_ADDITIONAL_LIGHT_SHADOWS`, `_FORWARD_PLUS`, and `_CLUSTER_LIGHT_LOOP` remain compatibility keywords. Phase 6.4A does not implement vertex additional lights, URP additional-light shadow parity, Forward+, or a cluster light loop.
+- Additional-light contribution uses albedo, alpha, tint, vertex color, normal map, metallic/specular workflow, smoothness, and specular-highlight controls from the existing Built-in Lit surface approximation. It intentionally does not add ambient or environment reflection in the `ForwardAdd` pass.
+- Receive shadows remain a `ForwardBase` main-light approximation. Additional-light shadows are not marked complete; Built-in full-shadow variants may compile, but runtime behavior depends on Built-in light and quality settings and is not a URP `_ADDITIONAL_LIGHT_SHADOWS` equivalent.
+- Unsupported or pending URP-specific behavior remains: URP additional-light-loop parity, Forward+, cluster light loop, probe volumes, foveated rendering, Lit ShadowCaster, Lit DepthOnly, Lit DepthNormals, Lit SceneSelectionPass, Lit Picking, full PBR parity, full visual parity, and golden image visual regression.
+- `Nova/UIParticles/UberLit`, Distortion runtime, and optimizer/replacer runtime behavior remain outside Phase 6.4A scope and are not promoted by this phase.
