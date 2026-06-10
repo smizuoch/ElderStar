@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Phase 4 TODO: port the `Nova/Particles/UberUnlit` Built-in forward path on top of the Phase 3 compatibility include layer.
+Phase 7.3A TODO: implement `Nova/UIParticles/UberLit` receive-shadow behavior in the existing one-pass Built-in/UI `ForwardBase` approximation.
 
 ## Risk-Ordered TODO
 

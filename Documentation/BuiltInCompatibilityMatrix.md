@@ -1309,3 +1309,31 @@ Phase 7.2B compatibility annotations:
 - Runtime-pending UI Lit behavior summary: UI receive shadows, UI environment reflections, UI additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit pass topology beyond one-pass forward, UI Lit ShadowCaster, UI Lit DepthOnly, UI Lit DepthNormals, UI Lit SceneSelectionPass, UI Lit Picking, full Canvas `Mask` / `RectMask2D` parity, full UI UberUnlit feature stack parity, full UI Lit PBR parity, full visual parity, and golden image visual regression.
 - Distortion runtime, Optimized Shader Generator/Replacer runtime behavior, and final visual regression remain outside Phase 7.2B scope and are not promoted by this phase.
 - The next recommended phase is Phase 7.3A: `Nova/UIParticles/UberLit` receive shadows in the Built-in/UI ForwardBase approximation.
+
+## Phase 7.3A UI UberLit Receive Shadow Status
+
+Phase 7.3A expands only the primary `Nova/UIParticles/UberLit` one-pass Built-in `ForwardBase` approximation. UI receive shadows now use Built-in `AutoLight.cginc` shadow coordinates and attenuation for the main directional light. This phase does not add UI environment reflections, UI additional lights, `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit ShadowCaster / DepthOnly / DepthNormals / SceneSelectionPass / Picking, Distortion runtime, Optimized Shader Generator/Replacer runtime behavior, golden image visual regression, full Canvas `Mask` / `RectMask2D` parity, or URP PBR/shadow parity.
+
+| Verification item | Unity 2022.3.22f1 | Unity 6000.0.74f1 | Notes |
+| --- | --- | --- | --- |
+| UI receive shadows runtime | Passed | Passed | `_RECEIVE_SHADOWS_ENABLED` and `_LitReceiveShadows > 0.5` apply Built-in `AutoLight.cginc` `ForwardBase` shadow attenuation to direct diffuse/specular lighting in `Nova/UIParticles/UberLit`. |
+| `_LitReceiveShadows` property behavior | Passed | Passed | Disabling `_LitReceiveShadows` through the existing material setup path bypasses the direct-light shadow attenuation and visibly brightens the shadowed sample. |
+| `_RECEIVE_SHADOWS_ENABLED` keyword behavior | Passed | Passed | Disabling the keyword after setup bypasses the direct-light shadow attenuation and visibly brightens the shadowed sample. |
+| Main directional shadow approximation | Passed | Passed | A deterministic Built-in scene with a directional light, opaque shadow caster, and UI Lit receiver mesh verifies the shadowed region is darker than a nearby lit region. |
+| Soft and cascade compatibility surface | Passed | Passed | Compile diagnostics cover `_MAIN_LIGHT_SHADOWS`, `_MAIN_LIGHT_SHADOWS_CASCADE`, `_SHADOWS_SOFT`, and combinations with `_RECEIVE_SHADOWS_ENABLED`. Runtime soft/cascade behavior remains controlled by Built-in light and `QualitySettings` rather than URP keywords. |
+| Surface feature interaction | Passed | Passed | Receive-shadow smokes cover base map 2D, tint, vertex color, vertex alpha, alpha test, metallic workflow, specular workflow, normal map, and representative 2D array Lit map states. |
+| UI stencil / ColorMask / rect clip interaction | Passed | Passed | Controlled mesh-based smokes verify stencil masking, `ColorMask [_ColorMask]`, and local `UNITY_UI_CLIP_RECT` still work with receive shadows. Full Canvas `Mask` / `RectMask2D` parity remains pending. |
+| Ambient contribution | Passed | Passed | Ambient remains unshadowed. Shadow attenuation applies only to the direct diffuse/specular term, so shadowed pixels do not collapse to black when ambient is configured. |
+| Shader compiler diagnostics | Passed | Passed | Compile coverage includes receive shadows alone, receive shadows plus main-light/cascade/soft shadow keywords, receive shadows plus metallic/specular/normal/smoothness/alpha-test states, `UNITY_UI_CLIP_RECT`, stencil properties, and representative 2D array / 3D UI Lit map states. |
+| UI pass topology | Passed | Passed | UI Lit still has no `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `DepthNormals`, `SceneSelectionPass`, or `Picking`; the runtime path remains one `ForwardBase` pass. |
+| Non-UI keyword exclusion | Passed | Passed | UI Lit still excludes `_CASTING_PUNCTUAL_LIGHT_SHADOW`, `_SHADOW_CASTER_ALPHA_TEST_ENABLED`, `EVALUATE_SH_MIXED`, and `EVALUATE_SH_VERTEX`. |
+
+Phase 7.3A compatibility annotations:
+
+- UI receive shadows are Approximate. The Built-in port uses Built-in `ForwardBase` shadow variants and `AutoLight.cginc` wrappers; it does not reproduce URP shadow bias, URP screen-space shadows, URP cascade data, URP punctual shadows, or `UniversalFragmentPBR` lighting behavior.
+- `_LitReceiveShadows` and `_RECEIVE_SHADOWS_ENABLED` gate only the direct diffuse/specular shadow attenuation. Ambient remains unshadowed in this approximation.
+- Soft shadows and cascades are compile-compatible through the Built-in shadow path, but runtime behavior is governed by Built-in `Light` and `QualitySettings` configuration, not URP `_MAIN_LIGHT_SHADOWS_CASCADE` / `_SHADOWS_SOFT` semantics.
+- UI stencil, `ColorMask`, and `UNITY_UI_CLIP_RECT` coverage uses the controlled mesh-based UI shader smoke harness. Full Canvas `Mask` / `RectMask2D` parity remains pending because this phase does not add new package dependencies or Canvas-specific tests.
+- Runtime-pending UI Lit behavior summary: UI environment reflections, UI additional lights / `ForwardAdd`, Forward+, cluster light loop, probe volumes, foveated rendering, UI Lit pass topology beyond one-pass forward, UI Lit ShadowCaster, UI Lit DepthOnly, UI Lit DepthNormals, UI Lit SceneSelectionPass, UI Lit Picking, full Canvas `Mask` / `RectMask2D` parity, full UI UberUnlit feature stack parity, full UI Lit PBR parity, full visual parity, and golden image visual regression.
+- Distortion runtime, Optimized Shader Generator/Replacer runtime behavior, and final visual regression remain outside Phase 7.3A scope and are not promoted by this phase.
+- The next recommended phase is Phase 7.3B: define the next UI Lit runtime subset, likely UI environment reflections or UI additional-light behavior, without changing the one-pass topology unless explicitly scoped.

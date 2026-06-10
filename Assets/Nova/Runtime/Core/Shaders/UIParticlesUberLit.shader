@@ -292,6 +292,7 @@ Shader "Nova/UIParticles/UberLit"
             #pragma fragment frag
             #pragma target 3.5
             #pragma require 2darray
+            #pragma multi_compile_fwdbase
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile _ _SHADOWS_SOFT
@@ -350,6 +351,7 @@ Shader "Nova/UIParticles/UberLit"
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInLighting.cginc"
+            #include "BuiltIn/NovaBuiltInShadow.cginc"
             #include "BuiltIn/NovaBuiltInUI.cginc"
             #include "BuiltIn/NovaBuiltInUIParticlesUberLit.cginc"
 
@@ -368,20 +370,21 @@ Shader "Nova/UIParticles/UberLit"
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
+                float4 pos : SV_POSITION;
                 float2 positionOS : TEXCOORD0;
                 float2 uv : TEXCOORD1;
                 float3 normalWS : TEXCOORD2;
                 float3 tangentWS : TEXCOORD3;
                 float3 bitangentWS : TEXCOORD4;
                 float3 positionWS : TEXCOORD5;
+                NOVA_SHADOW_COORDS(6)
                 fixed4 color : COLOR;
             };
 
             v2f vert(appdata v)
             {
                 v2f o;
-                o.vertex = NovaObjectToClipPos(v.vertex);
+                o.pos = NovaObjectToClipPos(v.vertex);
                 o.positionOS = v.vertex.xy;
                 o.positionWS = NovaObjectToWorld(v.vertex.xyz);
                 o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
@@ -389,6 +392,7 @@ Shader "Nova/UIParticles/UberLit"
                 o.tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
                 o.bitangentWS = NovaCreateBitangent(o.normalWS, o.tangentWS, v.tangent.w);
                 o.color = v.color;
+                NovaTransferShadowCoord(o, o.positionWS);
                 return o;
             }
 
@@ -406,7 +410,10 @@ Shader "Nova/UIParticles/UberLit"
                     i.normalWS,
                     i.tangentWS,
                     i.bitangentWS);
-                half4 litColor = NovaComputeUILitForwardBaseColor(surfaceData, NovaWorldSpaceViewDir(i.positionWS));
+                half4 litColor = NovaComputeUILitForwardBaseColor(
+                    surfaceData,
+                    NovaWorldSpaceViewDir(i.positionWS),
+                    NovaComputeShadowAttenuation(i, i.positionWS));
 
                 #if defined(_ALPHAMODULATE_ENABLED)
                 litColor.rgb = lerp(half3(1.0h, 1.0h, 1.0h), litColor.rgb, color.a);

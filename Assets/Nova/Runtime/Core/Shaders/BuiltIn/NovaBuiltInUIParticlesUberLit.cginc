@@ -4,6 +4,7 @@
 #include "NovaBuiltInCore.cginc"
 #include "NovaBuiltInTexture.cginc"
 #include "NovaBuiltInLighting.cginc"
+#include "NovaBuiltInShadow.cginc"
 #include "NovaBuiltInUI.cginc"
 
 NOVA_DECLARE_TEX2D(_NormalMap);
@@ -27,6 +28,7 @@ half _Smoothness;
 half _SmoothnessMapChannelsX;
 half _BaseMapProgress;
 half _BaseMapSliceCount;
+half _LitReceiveShadows;
 
 struct NovaUILitSurfaceData
 {
@@ -224,14 +226,30 @@ half3 NovaComputeUILitSpecularApproximation(
     #endif
 }
 
+half NovaUILitReceiveShadowsEnabled()
+{
+    #if defined(_RECEIVE_SHADOWS_ENABLED)
+    return step(0.5h, _LitReceiveShadows);
+    #else
+    return 0.0h;
+    #endif
+}
+
+half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation)
+{
+    half receiveShadow = NovaUILitReceiveShadowsEnabled();
+    half directShadow = NovaApplyReceiveShadow(shadowAttenuation, receiveShadow);
+    half diffuse = NovaComputeLambertDiffuse(surfaceData.normalWS, NovaGetMainLightDirection());
+    half3 direct = NovaGetMainLightColor() * diffuse * directShadow;
+    half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS);
+    half3 diffuseColor = surfaceData.albedo * (direct + ambient);
+    half3 specularColor = NovaComputeUILitSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS) * directShadow;
+    return half4(diffuseColor + specularColor, surfaceData.alpha);
+}
+
 half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS)
 {
-    half diffuse = NovaComputeLambertDiffuse(surfaceData.normalWS, NovaGetMainLightDirection());
-    half3 direct = NovaGetMainLightColor() * diffuse;
-    half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS);
-    half3 diffuseColor = surfaceData.albedo * saturate(direct + ambient);
-    half3 specularColor = NovaComputeUILitSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS);
-    return half4(diffuseColor + specularColor, surfaceData.alpha);
+    return NovaComputeUILitForwardBaseColor(surfaceData, viewDirectionWS, 1.0h);
 }
 
 #endif

@@ -153,6 +153,11 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(combinedText, Does.Contain("NovaUIClipAlpha"));
         Assert.That(combinedText, Does.Contain("NovaComputeMinimumLitColor"));
         Assert.That(combinedText, Does.Contain("NovaComputeAmbientApproximation"));
+        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInShadow.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaTransferShadowCoord"));
+        Assert.That(shaderText, Does.Contain("NovaComputeShadowAttenuation"));
+        Assert.That(combinedText, Does.Contain("NovaUILitReceiveShadowsEnabled"));
+        Assert.That(combinedText, Does.Contain("NovaApplyReceiveShadow"));
         Assert.That(combinedText, Does.Contain("ShadeSH9"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(shaderText, Does.Contain("clip("));
@@ -365,6 +370,21 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(matrixText, Does.Contain("Phase 7.3A"));
     }
 
+    [Test]
+    public void UIParticlesUberLitPhase73AReceiveShadowStatusIsDocumented()
+    {
+        var matrixText = File.ReadAllText(MatrixPath);
+
+        Assert.That(matrixText, Does.Contain("Phase 7.3A UI UberLit Receive Shadow Status"));
+        Assert.That(matrixText, Does.Contain("UI receive shadows runtime"));
+        Assert.That(matrixText, Does.Contain("_LitReceiveShadows"));
+        Assert.That(matrixText, Does.Contain("_RECEIVE_SHADOWS_ENABLED"));
+        Assert.That(matrixText, Does.Contain("Built-in `AutoLight.cginc`"));
+        Assert.That(matrixText, Does.Contain("Ambient remains unshadowed"));
+        Assert.That(matrixText, Does.Contain("UI Lit still has no `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `DepthNormals`, `SceneSelectionPass`, or `Picking`"));
+        Assert.That(matrixText, Does.Contain("UI environment reflections"));
+    }
+
     private static CompileCase[] CreateCompileCases(Shader shader)
     {
         return new[]
@@ -394,6 +414,54 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
             new CompileCase("_MAIN_LIGHT_SHADOWS", new Material(shader), "_MAIN_LIGHT_SHADOWS"),
             new CompileCase("_MAIN_LIGHT_SHADOWS_CASCADE", new Material(shader), "_MAIN_LIGHT_SHADOWS_CASCADE"),
             new CompileCase("_SHADOWS_SOFT", new Material(shader), "_SHADOWS_SOFT"),
+            new CompileCase(
+                "_RECEIVE_SHADOWS_ENABLED + _MAIN_LIGHT_SHADOWS",
+                WithFloat(shader, "_LitReceiveShadows", 1),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "_RECEIVE_SHADOWS_ENABLED + _MAIN_LIGHT_SHADOWS_CASCADE",
+                WithFloat(shader, "_LitReceiveShadows", 1),
+                "_MAIN_LIGHT_SHADOWS_CASCADE"),
+            new CompileCase(
+                "_RECEIVE_SHADOWS_ENABLED + _SHADOWS_SOFT",
+                WithFloat(shader, "_LitReceiveShadows", 1),
+                "_SHADOWS_SOFT"),
+            new CompileCase(
+                "receive shadows + metallic workflow",
+                WithFloat(WithFloat(shader, "_LitReceiveShadows", 1), "_LitWorkflowMode", 1),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + specular workflow",
+                WithFloat(WithFloat(shader, "_LitReceiveShadows", 1), "_LitWorkflowMode", 0),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + normal map",
+                WithTexture(WithFloat(shader, "_LitReceiveShadows", 1), "_NormalMap"),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + smoothness map",
+                WithTexture(WithFloat(shader, "_LitReceiveShadows", 1), "_SmoothnessMap"),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + alpha test",
+                WithFloat(WithFloat(shader, "_LitReceiveShadows", 1), "_RenderType", 1),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + UI clip rect",
+                WithClipRect(WithFloat(shader, "_LitReceiveShadows", 1)),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + UI Lit 2D array maps",
+                WithTexture2DArray(WithTexture2DArray(WithFloat(WithLitTextureMode(shader, 1, 0.75f, 2), "_LitReceiveShadows", 1), "_NormalMap2DArray"), "_MetallicMap2DArray"),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + UI Lit 3D maps",
+                WithTexture3D(WithTexture3D(WithFloat(WithLitTextureMode(shader, 2, 1, 2), "_LitReceiveShadows", 1), "_NormalMap3D"), "_SmoothnessMap3D"),
+                "_MAIN_LIGHT_SHADOWS"),
+            new CompileCase(
+                "receive shadows + stencil properties",
+                WithStencil(WithFloat(shader, "_LitReceiveShadows", 1)),
+                "_MAIN_LIGHT_SHADOWS"),
             new CompileCase("_ADDITIONAL_LIGHTS", new Material(shader), "_ADDITIONAL_LIGHTS"),
             new CompileCase("_ADDITIONAL_LIGHTS_VERTEX", new Material(shader), "_ADDITIONAL_LIGHTS_VERTEX"),
             new CompileCase("_ADDITIONAL_LIGHT_SHADOWS", new Material(shader), "_ADDITIONAL_LIGHT_SHADOWS"),
