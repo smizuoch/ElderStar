@@ -383,6 +383,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(matrixText, Does.Contain("Ambient remains unshadowed"));
         Assert.That(matrixText, Does.Contain("UI Lit still has no `ForwardAdd`, `ShadowCaster`, `DepthOnly`, `DepthNormals`, `SceneSelectionPass`, or `Picking`"));
         Assert.That(matrixText, Does.Contain("UI environment reflections"));
+        Assert.That(matrixText, Does.Contain("The next recommended phase is Phase 7.3B: `Nova/UIParticles/UberLit` environment reflections / reflection probe approximation."));
     }
 
     private static CompileCase[] CreateCompileCases(Shader shader)
