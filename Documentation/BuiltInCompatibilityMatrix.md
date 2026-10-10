@@ -88,6 +88,11 @@ streams. On platforms without mesh instancing support, use the tested non-instan
 These checks cover Windows D3D11 on the installed editors; other graphics backends require
 their own platform validation.
 
+Distortion now has the original editor selection and picking LightModes, with procedural particle
+transforms and the original selection-ID outputs. The original distortion fragment attenuates
+offsets without alpha-discarding geometry; the Built-in editor passes likewise select the geometry
+even when distortion intensity is zero. Render-target tests verify both identifier outputs.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.

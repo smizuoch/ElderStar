@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Restore distortion editor selection, then verify isolated UPM installation and player builds. Billboard and GPU mesh particle rendering now have custom-coordinate and distortion coverage.
+Current TODO: Verify isolated UPM installation, package-cache include resolution and player builds.
 
 Completion worklist (2026-10-10):
 
@@ -25,7 +25,7 @@ Completion worklist (2026-10-10):
 - [x] Optimized shader generator/replacer output compilation and rendering.
 - [x] Complete original editor APIs/inspectors and actual billboard ParticleSystem/vertex-stream coverage.
 - [x] Particle mesh instancing and distortion particle rendering.
-- [ ] Distortion editor selection and picking.
+- [x] Distortion editor selection and picking.
 - [ ] Isolated UPM installation, package-cache include resolution and player build validation.
 - [ ] Samples, migration utilities, installation and camera setup documentation.
 - [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.

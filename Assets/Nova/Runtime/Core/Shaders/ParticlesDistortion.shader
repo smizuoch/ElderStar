@@ -90,6 +90,40 @@ Shader "Nova/Particles/Distortion"
             #include "BuiltIn/NovaBuiltInDistortion.cginc"
             ENDCG
         }
+        // The original distortion fragment scales offsets without discarding pixels.
+        // Selection therefore follows the geometry, including zero-intensity particles.
+        Pass
+        {
+            Name "SceneSelectionPass"
+            Tags { "LightMode" = "SceneSelectionPass" }
+            Blend One Zero
+            ZWrite On
+            Cull Off
+            CGPROGRAM
+            #pragma target 3.5
+            #pragma vertex vertEditor
+            #pragma fragment fragSceneHighlight
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
+            #include "BuiltIn/NovaBuiltInDistortionEditor.cginc"
+            ENDCG
+        }
+        Pass
+        {
+            Name "Picking"
+            Tags { "LightMode" = "Picking" }
+            Blend One Zero
+            ZWrite On
+            Cull Off
+            CGPROGRAM
+            #pragma target 3.5
+            #pragma vertex vertEditor
+            #pragma fragment fragScenePicking
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
+            #include "BuiltIn/NovaBuiltInDistortionEditor.cginc"
+            ENDCG
+        }
     }
     Fallback Off
     CustomEditor "Nova.Editor.Core.Scripts.ParticlesDistortionGUI"
