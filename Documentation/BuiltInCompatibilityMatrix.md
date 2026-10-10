@@ -67,6 +67,15 @@ check optional-pass selection and properties, persist replacements, and compare 
 original opaque/cutout/transparent color frames. UPM package-cache installation and player build
 coverage remain scheduled separately.
 
+The complete original material inspector layouts, property constants, keyword extension methods,
+public enums, texture-reference cleanup and particle vertex-stream repair tools have been restored.
+Original public spellings remain (including legacy spelling mistakes); aliases introduced earlier
+by the Built-in port remain too. The Built-in post-processors retain the UI depth/shadow choices
+and automatic additional-light keyword. The package declares Unity's built-in particle-system
+module for its editor tooling; no URP package or assembly is required. Editor tests bind all five
+inspectors and repair actual ParticleSystemRenderer vertex streams. Billboard rendering tests
+verify all four Uber shaders with particle color and Custom1 transition progress.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.

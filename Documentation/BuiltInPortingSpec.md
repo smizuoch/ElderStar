@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Restore the complete original material inspector/editor API and verify actual ParticleSystem rendering. Optimizer generation/replacement now passes source, compiler and rendering tests.
+Current TODO: Verify particle mesh instancing, distortion particles, isolated UPM installation and player builds. Original material inspectors/editor APIs and billboard custom-coordinate rendering are restored and tested.
 
 Completion worklist (2026-10-10):
 
@@ -23,7 +23,8 @@ Completion worklist (2026-10-10):
 - [x] UI UberLit additional lights and Canvas masks.
 - [x] Built-in distortion runtime and rendering/cleanup tests.
 - [x] Optimized shader generator/replacer output compilation and rendering.
-- [ ] Complete original editor APIs/inspectors and actual ParticleSystem/vertex-stream coverage.
+- [x] Complete original editor APIs/inspectors and actual billboard ParticleSystem/vertex-stream coverage.
+- [ ] Particle mesh instancing and distortion particle rendering.
 - [ ] Isolated UPM installation, package-cache include resolution and player build validation.
 - [ ] Samples, migration utilities, installation and camera setup documentation.
 - [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.
