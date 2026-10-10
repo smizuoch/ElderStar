@@ -19,7 +19,7 @@ public sealed class NovaBuiltInUberLitInteractionSmokeTests
         var complex = RenderForward(
             material =>
             {
-                ConfigureSpecularSurface(material, new Color(0.25f, 0.8f, 1f, 1f), 1f);
+                ConfigureSpecularSurface(material, new Color(0.125f, 0.4f, 0.5f, 1f), 1f);
                 material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.35f, 0.25f, 0.25f, 1f)));
                 material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.7f, 0.5f, 1f, 1f)));
                 material.SetTexture("_SmoothnessMap", CreateSplitTexture(new Color(0.05f, 0.05f, 0.05f, 0.05f), Color.white));
@@ -196,7 +196,8 @@ public sealed class NovaBuiltInUberLitInteractionSmokeTests
         material.SetFloat("_LitWorkflowMode", 1f);
         material.SetFloat("_SpecularHighlights", 0f);
         material.SetFloat("_EnvironmentReflections", enabled ? 1f : 0f);
-        material.SetFloat("_Metallic", 1f);
+        // Partial metal retains diffuse light for the shadow/additional-light comparisons.
+        material.SetFloat("_Metallic", 0.7f);
         material.SetFloat("_Smoothness", 0.9f);
     }
 
@@ -253,6 +254,8 @@ public sealed class NovaBuiltInUberLitInteractionSmokeTests
         var previousActive = RenderTexture.active;
 
         var material = new Material(shader);
+
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         var actualMesh = mesh ?? CreateQuad(Color.white);
         var cubemap = CreateReflectionCubemap();
         var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
@@ -368,6 +371,8 @@ public sealed class NovaBuiltInUberLitInteractionSmokeTests
         var previousActive = RenderTexture.active;
 
         var material = new Material(shader);
+
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         var casterMaterial = new Material(Shader.Find("Standard") ?? Shader.Find("Diffuse"));
         var receiverMesh = CreateReceiverPlane(Color.white);
         var cubemap = CreateReflectionCubemap();
@@ -516,6 +521,8 @@ public sealed class NovaBuiltInUberLitInteractionSmokeTests
         var previousActive = RenderTexture.active;
 
         var material = new Material(shader);
+
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         var planeMaterial = CreatePlaneMaterial();
         var target = new RenderTexture(128, 128, 24, RenderTextureFormat.ARGB32);
         var readback = new Texture2D(128, 128, TextureFormat.RGBA32, false);
@@ -790,6 +797,7 @@ public sealed class NovaBuiltInUberLitInteractionSmokeTests
         var shader = Shader.Find("Standard");
         Assert.That(shader, Is.Not.Null, "Standard");
         var material = new Material(shader);
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         material.SetColor("_Color", new Color(0.76f, 0.76f, 0.76f, 1f));
         return material;
     }

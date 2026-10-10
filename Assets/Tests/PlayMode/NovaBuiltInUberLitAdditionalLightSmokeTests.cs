@@ -221,7 +221,8 @@ public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
         material.SetFloat("_LitWorkflowMode", 1f);
         material.SetFloat("_SpecularHighlights", 0f);
         material.SetFloat("_EnvironmentReflections", 1f);
-        material.SetFloat("_Metallic", 1f);
+        // Keep diffuse and reflection energy so both lighting paths are observable.
+        material.SetFloat("_Metallic", 0.5f);
         material.SetFloat("_Smoothness", 0.9f);
     }
 
@@ -246,6 +247,8 @@ public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
         var previousActive = RenderTexture.active;
 
         var material = new Material(shader);
+
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         var actualMesh = mesh ?? CreateQuad(Color.white);
         var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
         var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);

@@ -617,7 +617,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
         var tinted = RenderUiLit(
             material =>
             {
-                ConfigureSpecular(material, Color.white, 0.85f);
+                // Keep albedo visible while exercising the normal/specular surface stack.
+                ConfigureSpecular(material, Color.white * 0.1f, 0.85f);
                 material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
                 material.SetFloat("_TintAreaMode", 1);
                 material.SetFloat("_TintColorMode", 0);
@@ -670,7 +671,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
             {
                 CreateUiDraw(material =>
                 {
-                    ConfigureSpecular(material, Color.white, 0.85f);
+                    // Keep albedo visible while exercising the normal/specular surface stack.
+                    ConfigureSpecular(material, Color.white * 0.1f, 0.85f);
                     material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.9f, 0.08f, 0.05f, 1f)));
                     material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.65f, 0.5f, 1f, 1f)));
                     material.EnableKeyword("UNITY_UI_CLIP_RECT");
@@ -696,7 +698,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
                 CreateStencilMask(new Rect(-0.5f, -0.5f, 0.5f, 1f)),
                 CreateUiDraw(material =>
                 {
-                    ConfigureSpecular(material, Color.white, 0.85f);
+                    // Keep albedo visible while exercising the normal/specular surface stack.
+                    ConfigureSpecular(material, Color.white * 0.1f, 0.85f);
                     material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.9f, 0.08f, 0.05f, 1f)));
                     material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.65f, 0.5f, 1f, 1f)));
                     material.SetFloat("_StencilComp", (float)CompareFunction.Equal);
@@ -722,7 +725,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
         var color = RenderUiLit(
             material =>
             {
-                ConfigureSpecular(material, Color.white, 0.85f);
+                // Keep albedo visible while exercising the normal/specular surface stack.
+                ConfigureSpecular(material, Color.white * 0.1f, 0.85f);
                 material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.05f, 0.05f, 1f, 1f)));
                 material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.65f, 0.5f, 1f, 1f)));
                 material.SetFloat("_ColorMask", 2f);
@@ -852,7 +856,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
             {
                 CreateUiDraw(material =>
                 {
-                    ConfigureSpecular(material, Color.white, 0.85f);
+                    // Keep albedo visible while exercising the normal/specular surface stack.
+                    ConfigureSpecular(material, Color.white * 0.1f, 0.85f);
                     ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
                     material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.9f, 0.08f, 0.05f, 1f)));
                     material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
@@ -879,7 +884,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
                 CreateStencilMask(new Rect(-0.5f, -0.5f, 0.5f, 1f)),
                 CreateUiDraw(material =>
                 {
-                    ConfigureSpecular(material, Color.white, 0.85f);
+                    // Keep albedo visible while exercising the normal/specular surface stack.
+                    ConfigureSpecular(material, Color.white * 0.1f, 0.85f);
                     ConfigureLitTextureMode(material, 2f, 1f, 2f);
                     material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.9f, 0.08f, 0.05f, 1f)));
                     material.SetTexture("_NormalMap3D", CreateTexture3D(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
@@ -906,7 +912,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
         var color = RenderUiLit(
             material =>
             {
-                ConfigureSpecular(material, Color.white, 0.85f);
+                // Keep albedo visible while exercising the normal/specular surface stack.
+                ConfigureSpecular(material, Color.white * 0.1f, 0.85f);
                 ConfigureLitTextureMode(material, 1f, 0.75f, 2f);
                 material.SetTexture("_BaseMap", CreateSolidTexture(new Color(0.05f, 0.05f, 1f, 1f)));
                 material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
@@ -1014,6 +1021,7 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
             foreach (var draw in draws)
             {
                 var material = new Material(shader);
+                NovaLitTestTextures.UseDiffuseDefaults(material);
                 material.SetFloat("_RenderType", 2);
                 material.SetFloat("_TransparentBlendMode", 0);
                 material.SetFloat("_Cull", (float)CullMode.Off);

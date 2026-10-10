@@ -174,6 +174,7 @@ public sealed class NovaBuiltInUberLitMinimumSmokeTests
         var previousAmbientLight = RenderSettings.ambientLight;
         var previousAmbientIntensity = RenderSettings.ambientIntensity;
         var material = new Material(shader);
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         var actualMesh = mesh ?? CreateQuad(Color.white);
         var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
         var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);

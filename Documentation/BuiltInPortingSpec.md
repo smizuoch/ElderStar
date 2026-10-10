@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Compare controlled original URP and Built-in frames, repair any uncovered feature differences, then finish samples and migration. Normal packing, surface UVs, parallax, samplers and fog are render-tested. Both Unity versions pass package-cache and standalone-player smoke; rebuild final packages after the feature fixes.
+Current TODO: Deliver material GUID migration and a runnable sample scene, then finish installation/camera documentation and the final feature matrix. Lit diffuse-energy correction passes EditMode 124/124 and PlayMode 672/672 on Unity 2022.3.22f1 and 6000.3.23f1; fresh 48 Unlit image comparisons also pass. Rebuild final packages and players after the remaining additions.
 
 Completion worklist (2026-10-10):
 

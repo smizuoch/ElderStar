@@ -44,6 +44,8 @@ public static class NovaPackagePlayerBuilder
                     material.SetColor("_TintColor", new Color(0.6f, 0.3f, 0.05f, 1));
                     if (pair[0].EndsWith("UberLit"))
                     {
+                        material.SetFloat("_LitWorkflowMode", 1);
+                        material.SetFloat("_Metallic", 0);
                         material.SetFloat("_EnvironmentReflections", 0);
                         material.SetFloat("_SpecularHighlights", 0);
                         ParticlesUberLitMaterialPostProcessor.SetupMaterialKeywords(material);

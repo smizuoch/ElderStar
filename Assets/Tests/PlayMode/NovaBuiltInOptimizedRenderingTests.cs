@@ -31,6 +31,7 @@ namespace Nova.Tests.PlayMode
         public void OptimizedForwardRenderingMatchesOriginal(string kind, string renderName, int renderType)
         {
             var material = new Material(Shader.Find("Nova/Particles/" + kind));
+            NovaLitTestTextures.UseDiffuseDefaults(material);
             var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
             var cameraObject = new GameObject("Optimized shader camera", typeof(Camera));
             var target = new RenderTexture(64, 64, 24);

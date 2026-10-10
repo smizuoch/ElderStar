@@ -20,6 +20,20 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     private const int RenderSize = 128;
     private const int TextureSize = 8;
 
+    [TestCase(0)]
+    [TestCase(1)]
+    public void FullyReflectiveSurfaceDoesNotRetainDiffuseWhenReflectionsAreDisabled(int workflow)
+    {
+        var sample = RenderEnvironment(material =>
+        {
+            ConfigureReflections(material, enabled: false, metallic: 1f);
+            material.SetFloat("_LitWorkflowMode", workflow);
+            material.SetColor("_SpecularColor", Color.white);
+            material.SetFloat("_SpecularHighlights", 0f);
+        }, ambient: Color.white, lightIntensity: 1f);
+        Assert.That(Luminance(sample.Center), Is.LessThan(0.005f), sample.Center.ToString());
+    }
+
     [Test]
     public void LitSurfaceMapsShareBaseMirrorAndFilter(
         [Values(0, 1, 2)] int mode,
@@ -316,10 +330,14 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     public void UberLitEnvironmentReflectionsPreserveAmbientApproximation()
     {
         var ambientOnly = RenderEnvironment(
-            material => ConfigureReflections(material, enabled: false),
+            material =>
+            {
+                ConfigureSpecularReflections(material, Color.white * 0.4f);
+                material.SetFloat("_EnvironmentReflections", 0f);
+            },
             ambient: new Color(0.18f, 0.18f, 0.18f, 1f));
         var ambientAndReflection = RenderEnvironment(
-            material => ConfigureReflections(material, enabled: true),
+            material => ConfigureSpecularReflections(material, Color.white * 0.4f),
             ambient: new Color(0.18f, 0.18f, 0.18f, 1f));
 
         Assert.That(Luminance(ambientOnly.Center), Is.GreaterThan(0.02f), ambientOnly.Center.ToString());

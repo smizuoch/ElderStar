@@ -189,6 +189,8 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
         var previousActive = RenderTexture.active;
 
         var material = new Material(shader);
+
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         var casterMaterial = new Material(Shader.Find("Standard") ?? Shader.Find("Diffuse"));
         var receiverMesh = mesh ?? CreateReceiverPlane(Color.white);
         var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);

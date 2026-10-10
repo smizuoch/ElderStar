@@ -3,6 +3,15 @@ using UnityEngine;
 
 internal static class NovaLitTestTextures
 {
+    // Common color/mask/shadow fixtures need a diffuse surface. NOVA's original
+    // default is white specular, which has zero diffuse after energy conservation.
+    internal static void UseDiffuseDefaults(Material material)
+    {
+        if (!material.HasProperty("_LitWorkflowMode")) return;
+        material.SetFloat("_LitWorkflowMode", 1f);
+        material.SetFloat("_Metallic", 0f);
+    }
+
     // Surface-map tests vary _BaseMapMode. Keep their albedo input identical across modes
     // now that the forward path correctly samples the matching base-map texture too.
     internal static void MatchBaseMapMode(Material material)

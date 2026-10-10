@@ -22,6 +22,7 @@ namespace Nova.Tests.PlayMode
             var cameraObject = new GameObject("Particle test camera", typeof(Camera));
             var particleObject = new GameObject("NOVA particles", typeof(ParticleSystem));
             var material = new Material(Shader.Find(shaderName));
+            NovaLitTestTextures.UseDiffuseDefaults(material);
             var target = new RenderTexture(128, 128, 24);
             var image = new Texture2D(128, 128, TextureFormat.RGBA32, false);
             var mesh = new Mesh();

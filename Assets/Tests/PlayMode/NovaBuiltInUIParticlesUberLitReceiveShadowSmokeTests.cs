@@ -132,7 +132,7 @@ public sealed class NovaBuiltInUIParticlesUberLitReceiveShadowSmokeTests
                 material.SetFloat("_TintColorMode", 0f);
                 material.SetColor("_TintColor", new Color(0.15f, 1f, 0.15f, 1f));
             },
-            mesh: CreateReceiverQuad(new Color(1f, 0.65f, 1f, 0.72f)),
+            mesh: CreateReceiverQuad(new Color(1f, 0.8f, 1f, 0.72f)),
             background: new Color(0.02f, 0.04f, 0.14f, 1f));
 
         AssertReceivesShadow(sample);
@@ -237,6 +237,8 @@ public sealed class NovaBuiltInUIParticlesUberLitReceiveShadowSmokeTests
         var previousActive = RenderTexture.active;
 
         var material = new Material(shader);
+
+        NovaLitTestTextures.UseDiffuseDefaults(material);
         var maskMaterial = includeStencilMask ? new Material(shader) : null;
         var casterMaterial = new Material(Shader.Find("Standard") ?? Shader.Find("Diffuse"));
         var receiverMesh = mesh ?? CreateReceiverQuad(Color.white);

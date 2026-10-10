@@ -45,6 +45,23 @@ half NovaComputeLambertDiffuse(float3 normalWS, float3 lightDirectionWS)
     return saturate(dot(NovaSafeNormalize(normalWS), NovaSafeNormalize(lightDirectionWS)));
 }
 
+half3 NovaComputeDiffuseAlbedo(half3 albedo, half metallic, half3 specularColor)
+{
+    #if defined(_SPECULAR_SETUP)
+    half reflectivity = max(specularColor.r, max(specularColor.g, specularColor.b));
+    return albedo * (1.0h - saturate(reflectivity));
+    #else
+    return albedo * (0.96h * (1.0h - saturate(metallic)));
+    #endif
+}
+
+half NovaNormalizedBlinnPhongLobe(half ndoth, half exponent)
+{
+    // Normalized Blinn-Phong distribution with the quarter microfacet factor.
+    // This remains a Built-in approximation of URP's GGX distribution.
+    return pow(ndoth, exponent) * ((exponent + 2.0h) / 25.13274123h);
+}
+
 NovaBuiltInMainLight NovaGetMainLight(float3 normalWS)
 {
     NovaBuiltInMainLight lightData;

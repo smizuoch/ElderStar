@@ -2,6 +2,16 @@
 
 ## Completion audit, 2026-10-10
 
+Lit diffuse energy now follows the original BRDF workflow: metallic uses
+0.96 * (1 - metallic), and specular uses 1 - max(specular RGB). This applies to
+ambient, main and additional diffuse light. Fully reflective surfaces therefore
+retain no diffuse light when highlights and environment reflections are disabled.
+The direct specular lobe is normalized Blinn-Phong, still **Approximate** relative
+to URP GGX; match smoothness and lighting by eye when migrating glossy materials.
+Common color/mask/shadow fixtures now explicitly choose a diffuse material, while
+combined reflection tests choose partial reflectivity so both contributions exist.
+No acceptance threshold or golden image was changed.
+
 Fresh controlled original-URP/port captures now compare 24 material cases on each
 Uber shader. The 48 Unlit comparisons pass mean RGB error <= 0.01, maximum channel
 error <= 0.08 and at most 1% of pixels above 0.02 mean RGB error, on Unity 6000.3.23f1,

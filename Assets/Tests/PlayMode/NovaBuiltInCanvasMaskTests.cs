@@ -26,6 +26,7 @@ namespace Nova.Tests.PlayMode
             var imageType = FindUiType("RawImage");
             var maskType = FindUiType(stencil ? "Mask" : "RectMask2D");
             var material = new Material(Shader.Find(shaderName));
+            NovaLitTestTextures.UseDiffuseDefaults(material);
             var texture = new Texture2D(2, 2);
             texture.SetPixels(Enumerable.Repeat(Color.green, 4).ToArray());
             texture.Apply();
