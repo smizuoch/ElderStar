@@ -300,7 +300,7 @@ public sealed class NovaBuiltInUberLitCompileTests
         Assert.That(uiLitText, Does.Not.Contain("NovaComputeLitForwardBaseColor"));
         Assert.That(uiLitText, Does.Contain("\"LightMode\" = \"ForwardAdd\""));
         Assert.That(uiLitText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
-        Assert.That(distortionText, Does.Not.Contain("DistortedUvBuffer"));
+        Assert.That(distortionText, Does.Contain("DistortedUvBuffer"));
         Assert.That(matrixText, Does.Contain("Phase 7.1 UI UberLit Minimum Forward Status"));
         Assert.That(matrixText, Does.Contain("Distortion runtime remains Pending"));
         Assert.That(matrixText, Does.Contain("optimizer/replacer runtime behavior remains Pending"));

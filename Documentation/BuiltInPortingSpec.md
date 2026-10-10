@@ -15,13 +15,13 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Built-in distortion runtime. UI reflection, shared particle features, additional mesh lights and Canvas masks now have rendering coverage.
+Current TODO: Optimized shader generator/replacer output compilation and rendering. Distortion camera behavior now passes controlled rendering and lifecycle tests.
 
 Completion worklist (2026-10-10):
 
 - [x] UI UberLit environment reflections and shared particle features (all four shaders).
 - [x] UI UberLit additional lights and Canvas masks.
-- [ ] Built-in distortion runtime and rendering/cleanup tests.
+- [x] Built-in distortion runtime and rendering/cleanup tests.
 - [ ] Optimized shader generator/replacer output compilation and rendering.
 - [ ] Samples, migration utilities, installation and camera setup documentation.
 - [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.

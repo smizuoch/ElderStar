@@ -1,49 +1,30 @@
 Shader "Hidden/Nova/Particles/ApplyDistortion"
 {
-    Properties
-        {
-        }
-
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
-
+        Cull Off ZWrite Off ZTest Always
         Pass
         {
-            Tags { "LightMode" = "ForwardBase" }
-            ZWrite Off
-            Cull Off
-
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #include "BuiltIn/NovaBuiltInCore.cginc"
-
-            struct appdata
+            sampler2D _MainTex;
+            sampler2D _ScreenSpaceUvTexture;
+            v2f_img vert(appdata_img v)
             {
-                float4 vertex : POSITION;
-                fixed4 color : COLOR;
-            };
-
-            struct v2f
-            {
-                float4 vertex : SV_POSITION;
-                fixed4 color : COLOR;
-            };
-
-            v2f vert(appdata v)
-            {
-                v2f o;
-                o.vertex = NovaObjectToClipPos(v.vertex);
-                o.color = v.color;
+                v2f_img o;
+                o.pos = NovaObjectToClipPos(v.vertex);
+                o.uv = v.texcoord;
                 return o;
             }
-
-            fixed4 frag(v2f i) : SV_Target
+            half4 frag(v2f_img i) : SV_Target
             {
-                return i.color;
+                float2 offset = tex2D(_ScreenSpaceUvTexture, i.uv).rg * 2 - 1;
+                return tex2D(_MainTex, saturate(i.uv + offset));
             }
             ENDCG
         }
     }
-    Fallback Off}
+    Fallback Off
+}

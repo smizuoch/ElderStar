@@ -63,48 +63,29 @@ Shader "Nova/Particles/Distortion"
     SubShader
     {
         Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
-
         Pass
         {
-            Tags { "LightMode" = "ForwardBase" }
+            Name "DistortedUvBuffer"
+            Tags { "LightMode" = "DistortedUvBuffer" }
+            Blend One One
             ZWrite Off
-            Cull Off
-
+            ZTest Always
+            Cull [_Cull]
+            ColorMask RG
             CGPROGRAM
+            #pragma target 3.5
             #pragma vertex vert
             #pragma fragment frag
-            #pragma shader_feature_local _ _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR _DEPTH_FADE_ENABLED _DISSOLVE_TRANSITION_ENABLED _FADE_TRANSITION_ENABLED _FLOW_MAP_ENABLED _FLOW_MAP_TARGET_ALPHA_TRANSITION _FLOW_MAP_TARGET_BASE _SOFT_PARTICLES_ENABLED
+            #pragma multi_compile_instancing
+            #pragma shader_feature_local_fragment _ _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR
+            #pragma shader_feature_local _FLOW_MAP_ENABLED
+            #pragma shader_feature_local _FLOW_MAP_TARGET_BASE
+            #pragma shader_feature_local _FLOW_MAP_TARGET_ALPHA_TRANSITION
+            #pragma shader_feature_local _ _FADE_TRANSITION_ENABLED _DISSOLVE_TRANSITION_ENABLED
+            #pragma shader_feature_local _SOFT_PARTICLES_ENABLED
+            #pragma shader_feature_local _DEPTH_FADE_ENABLED
             #include "BuiltIn/NovaBuiltInCore.cginc"
-            #include "BuiltIn/NovaBuiltInDepth.cginc"
-
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                fixed4 color : COLOR;
-            };
-
-            struct v2f
-            {
-                float4 vertex : SV_POSITION;
-                fixed4 color : COLOR;
-                float4 screenPosition : TEXCOORD0;
-            };
-
-            v2f vert(appdata v)
-            {
-                v2f o;
-                o.vertex = NovaObjectToClipPos(v.vertex);
-                o.screenPosition = NovaComputeScreenPos(o.vertex);
-                o.color = v.color;
-                return o;
-            }
-
-            fixed4 frag(v2f i) : SV_Target
-            {
-                float2 screenUV = NovaScreenUV(i.screenPosition);
-                i.color.rgb += fixed3(screenUV, 0.0) * 0.0;
-                return i.color;
-            }
+            #include "BuiltIn/NovaBuiltInDistortion.cginc"
             ENDCG
         }
     }

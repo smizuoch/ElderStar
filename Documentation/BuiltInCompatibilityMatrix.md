@@ -30,6 +30,26 @@ per-pixel additional lights are needed. The shared additional-light suite covers
 names. Real world-space Canvas `Mask` and `RectMask2D` tests exercise both UI shader names
 using UGUI in the test project; the distributable NOVA package still has no UGUI or URP dependency.
 
+Distortion now uses `Nova.Runtime.Core.Scripts.ScreenSpaceDistortion`, a Built-in camera
+component. Add it to each camera and place it before other image effects in the component
+order. It accumulates `DistortedUvBuffer` draws into a half-float texture, then applies the
+original signed offset encoding to the camera color. A Resources material retains the hidden
+apply shader in player builds. `_MainTex` is bound explicitly while preserving the original
+hidden shader's zero public properties. Base/flow UV transforms, custom coordinates, channel
+selection, normal unpacking, mirror sampling, separate XY intensity, alpha transitions,
+soft particles and depth fade use the original property/keyword surface.
+
+Distortion is **Approximate**: `OnRenderImage` order replaces URP's render-pass event, and
+depth testing uses the Built-in opaque camera depth texture (not transparent depth writes).
+Per-camera layer and frustum filtering, renderer visibility and culling are respected.
+The camera's depth-texture flag is retained on disable because other effects may need it;
+materials, command buffers and temporary offset targets are released. XR stereo, reflection
+and preview cameras bypass the effect; use mono cameras for this fallback. Large scenes incur
+a renderer enumeration per effect camera per frame. This implementation does not use URP or
+RenderGraph assemblies. The controlled camera tests cover positive/negative/vertical offsets,
+zero/XY-zero intensity, disabling, occlusion, layers, alpha dissolve, soft particles, depth
+fade and front-face culling. Final sample-scene and player validation remain on the worklist.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.

@@ -104,6 +104,10 @@ public sealed class NovaBuiltInCompatibilityLayerTests
             {
                 text += File.ReadAllText(Path.Combine(BuiltInIncludeRoot, "NovaBuiltInParticleFeatures.cginc"));
             }
+            if (text.Contains("BuiltIn/NovaBuiltInDistortion.cginc"))
+            {
+                text += File.ReadAllText(Path.Combine(BuiltInIncludeRoot, "NovaBuiltInDistortion.cginc"));
+            }
             Assert.That(text, Does.Contain("BuiltIn/NovaBuiltInCore.cginc"), path);
             Assert.That(text, Does.Contain("NovaObjectToClipPos"), path);
         }
