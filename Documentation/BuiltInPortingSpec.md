@@ -15,7 +15,17 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Phase 7.3A TODO: implement `Nova/UIParticles/UberLit` receive-shadow behavior in the existing one-pass Built-in/UI `ForwardBase` approximation.
+Current TODO: UI UberLit environment reflections. Receive shadows are implemented; extend the existing rendering tests to UI before changing its shader.
+
+Completion worklist (2026-10-10):
+
+- [ ] UI UberLit environment reflections, shared particle features, additional lights, and Canvas masks.
+- [ ] Built-in distortion runtime and rendering/cleanup tests.
+- [ ] Optimized shader generator/replacer output compilation and rendering.
+- [ ] Samples, migration utilities, installation and camera setup documentation.
+- [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.
+- [ ] Full EditMode and graphics-enabled PlayMode on installed Unity 2022.3 and Unity 6; compiler diagnostics.
+- [ ] Final visual regression with explicit thresholds; preserve all existing golden images and baselines.
 
 ## Risk-Ordered TODO
 

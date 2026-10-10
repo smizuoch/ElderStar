@@ -31,7 +31,11 @@ public sealed class NovaBuiltInUIParticlesUberUnlitInteractionCompileTests
             {
                 compileCase.Configure(material, ownedObjects);
                 SetupUberUnlit(material);
-                Shader.WarmupAllShaders();
+                for (var pass = 0; pass < material.passCount; pass++)
+                {
+                    ShaderUtil.CompilePass(material, pass, true);
+                    Assert.That(ShaderUtil.IsPassCompiled(material, pass), Is.True, "Pass " + pass);
+                }
 
                 foreach (var expectedKeyword in compileCase.ExpectedKeywords)
                 {

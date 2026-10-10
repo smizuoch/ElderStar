@@ -319,7 +319,11 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
             try
             {
                 SetupUberUnlit(material);
-                Shader.WarmupAllShaders();
+                for (var pass = 0; pass < material.passCount; pass++)
+                {
+                    ShaderUtil.CompilePass(material, pass, true);
+                    Assert.That(ShaderUtil.IsPassCompiled(material, pass), Is.True, "Pass " + pass);
+                }
 
                 var blockingMessages = ShaderUtil.GetShaderMessages(shader)
                     .Where(IsBlockingShaderMessage)

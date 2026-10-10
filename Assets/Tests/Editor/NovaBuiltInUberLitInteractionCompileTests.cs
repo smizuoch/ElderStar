@@ -296,7 +296,11 @@ public sealed class NovaBuiltInUberLitInteractionCompileTests
                     compileCase.Material.EnableKeyword(keyword);
                 }
 
-                Shader.WarmupAllShaders();
+                for (var pass = 0; pass < compileCase.Material.passCount; pass++)
+                {
+                    ShaderUtil.CompilePass(compileCase.Material, pass, true);
+                    Assert.That(ShaderUtil.IsPassCompiled(compileCase.Material, pass), Is.True, "Pass " + pass);
+                }
 
                 var blockingMessages = ShaderUtil.GetShaderMessages(shader)
                     .Where(IsBlockingShaderMessage)

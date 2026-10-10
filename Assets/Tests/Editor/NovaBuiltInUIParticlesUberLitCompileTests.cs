@@ -317,7 +317,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(combinedText, Does.Contain("_NormalMapBumpScale"));
         Assert.That(combinedText, Does.Not.Contain("UniversalFragmentPBR"));
         Assert.That(combinedText, Does.Not.Contain("ForwardAdd"));
-        Assert.That(combinedText, Does.Not.Contain("NovaSampleEnvironmentReflection"));
+        Assert.That(combinedText, Does.Contain("NovaSampleEnvironmentReflection"));
     }
 
     [Test]
@@ -565,7 +565,11 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
                     compileCase.Material.EnableKeyword(keyword);
                 }
 
-                Shader.WarmupAllShaders();
+                for (var pass = 0; pass < compileCase.Material.passCount; pass++)
+                {
+                    ShaderUtil.CompilePass(compileCase.Material, pass, true);
+                    Assert.That(ShaderUtil.IsPassCompiled(compileCase.Material, pass), Is.True, "Pass " + pass);
+                }
 
                 var blockingMessages = ShaderUtil.GetShaderMessages(shader)
                     .Where(IsBlockingShaderMessage)

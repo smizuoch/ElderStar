@@ -29,6 +29,7 @@ half _SmoothnessMapChannelsX;
 half _BaseMapProgress;
 half _BaseMapSliceCount;
 half _LitReceiveShadows;
+half _EnvironmentReflections;
 
 struct NovaUILitSurfaceData
 {
@@ -244,7 +245,15 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
     half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS);
     half3 diffuseColor = surfaceData.albedo * (direct + ambient);
     half3 specularColor = NovaComputeUILitSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS) * directShadow;
-    return half4(diffuseColor + specularColor, surfaceData.alpha);
+    half3 environmentReflection = half3(0.0h, 0.0h, 0.0h);
+    #if defined(_ENVIRONMENT_REFLECTIONS_ENABLED)
+    environmentReflection = NovaSampleEnvironmentReflection(
+        NovaReflectViewDirection(viewDirectionWS, surfaceData.normalWS), surfaceData.smoothness)
+        * NovaComputeEnvironmentReflectionStrength(surfaceData.albedo, surfaceData.metallic,
+            surfaceData.specularColor, surfaceData.smoothness)
+        * step(0.5h, _EnvironmentReflections);
+    #endif
+    return half4(diffuseColor + specularColor + environmentReflection, surfaceData.alpha);
 }
 
 half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS)

@@ -5,9 +5,18 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+namespace Nova.Tests.PlayMode
+{
+[TestFixture("Nova/Particles/UberLit")]
+[TestFixture("Nova/UIParticles/UberLit")]
 public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
 {
-    private const string LitShaderName = "Nova/Particles/UberLit";
+    private readonly string LitShaderName;
+
+    public NovaBuiltInUberLitEnvironmentReflectionSmokeTests(string shaderName)
+    {
+        LitShaderName = shaderName;
+    }
     private const int RenderSize = 128;
     private const int TextureSize = 8;
 
@@ -228,7 +237,7 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
         material.SetFloat("_Smoothness", 0.9f);
     }
 
-    private static RenderSample RenderEnvironment(
+    private RenderSample RenderEnvironment(
         Action<Material> configureMaterial,
         Action<Material> configureAfterSetup = null,
         Color? ambient = null,
@@ -335,7 +344,7 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
         }
     }
 
-    private static ShadowSample RenderReceiveShadowEnvironment(Action<Material> configureMaterial)
+    private ShadowSample RenderReceiveShadowEnvironment(Action<Material> configureMaterial)
     {
         var shader = Shader.Find(LitShaderName);
         Assert.That(shader, Is.Not.Null, LitShaderName);
@@ -687,4 +696,5 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
             return $"lit {Lit}, shadow {Shadow}";
         }
     }
+}
 }

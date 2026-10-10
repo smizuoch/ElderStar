@@ -1,5 +1,16 @@
 # Built-in Compatibility Matrix
 
+## Completion audit, 2026-10-10
+
+UI UberLit environment reflections now sample the Built-in reflection cubemap using the same
+normal, metallic/specular and smoothness approximation as particle UberLit. Both the
+`_EnvironmentReflections` property and `_ENVIRONMENT_REFLECTIONS_ENABLED` keyword gate the contribution.
+This is **Approximate**: no URP BRDF, reflection-probe blending or box projection is reproduced;
+the fallback is the renderer's first Built-in reflection probe (or the scene custom/default cubemap).
+The shared reflection suite exercises both shader names: toggles, surface maps, normal scale,
+ambient, alpha clipping, tint and receive-shadow interaction. Historical phase entries below
+describe their original verification scope; they are not a final completion claim.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.
