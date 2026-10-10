@@ -11,6 +11,16 @@ The shared reflection suite exercises both shader names: toggles, surface maps, 
 ambient, alpha clipping, tint and receive-shadow interaction. Historical phase entries below
 describe their original verification scope; they are not a final completion claim.
 
+Particle and UI UberLit now execute the common particle color/alpha/UV stack before lighting,
+including 2D/array/3D base maps, channel extraction, tone mapping, tint, custom coordinates,
+flow, parallax, both alpha-transition textures, emission, rim/luminance transparency, depth
+effects and vertex deformation. The shared forward include packs interpolators for shader
+target 3.5. Original property names, keywords, editors and pass names remain intact.
+The common color suite runs the same 53 cases against all four Uber shaders with controlled
+ambient lighting; no threshold or golden-image changes were made. The prior Lit texture-mode
+tests used only 2D albedo even in array/3D modes; their fixtures now supply the identical albedo
+in the selected texture dimension. Existing Lit approximation limitations still apply.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.

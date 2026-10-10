@@ -49,9 +49,15 @@ half _Metallic;
 half _MetallicMapChannelsX;
 half _Smoothness;
 half _SmoothnessMapChannelsX;
+#ifndef NOVA_PARTICLE_FEATURES_INCLUDED
 half _BaseMapProgress;
+#endif
+#ifndef NOVA_PARTICLE_FEATURES_INCLUDED
 half _BaseMapSliceCount;
+#endif
+#ifndef NOVA_PARTICLE_FEATURES_INCLUDED
 half _BaseMapRowCount;
+#endif
 half _LitReceiveShadows;
 half _EnvironmentReflections;
 

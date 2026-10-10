@@ -26,8 +26,12 @@ half _Metallic;
 half _MetallicMapChannelsX;
 half _Smoothness;
 half _SmoothnessMapChannelsX;
+#ifndef NOVA_PARTICLE_FEATURES_INCLUDED
 half _BaseMapProgress;
+#endif
+#ifndef NOVA_PARTICLE_FEATURES_INCLUDED
 half _BaseMapSliceCount;
+#endif
 half _LitReceiveShadows;
 half _EnvironmentReflections;
 
@@ -184,13 +188,11 @@ half3 NovaUILitTangentToWorldNormal(half3 normalTS, float3 normalWS, float3 tang
 
 NovaUILitSurfaceData NovaResolveUILitSurfaceData(
     half4 baseColor,
-    float2 uv,
+    float3 litCoord,
     float3 normalWS,
     float3 tangentWS,
     float3 bitangentWS)
 {
-    float3 litCoord = NovaResolveUILitTextureCoord(uv);
-
     NovaUILitSurfaceData surfaceData;
     surfaceData.albedo = baseColor.rgb;
     surfaceData.alpha = baseColor.a;
@@ -199,6 +201,13 @@ NovaUILitSurfaceData NovaResolveUILitSurfaceData(
     surfaceData.smoothness = NovaResolveUILitSmoothness(litCoord);
     surfaceData.normalWS = NovaUILitTangentToWorldNormal(NovaResolveUINormalMap(litCoord), normalWS, tangentWS, bitangentWS);
     return surfaceData;
+}
+
+NovaUILitSurfaceData NovaResolveUILitSurfaceData(
+    half4 baseColor, float2 uv, float3 normalWS, float3 tangentWS, float3 bitangentWS)
+{
+    return NovaResolveUILitSurfaceData(baseColor, NovaResolveUILitTextureCoord(uv),
+        normalWS, tangentWS, bitangentWS);
 }
 
 half3 NovaComputeUILitSpecularApproximation(

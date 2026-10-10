@@ -15,11 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: UI UberLit environment reflections. Receive shadows are implemented; extend the existing rendering tests to UI before changing its shader.
+Current TODO: UI UberLit additional lights and Canvas masks. Environment reflections and the shared particle feature stack now pass graphics-enabled rendering tests.
 
 Completion worklist (2026-10-10):
 
-- [ ] UI UberLit environment reflections, shared particle features, additional lights, and Canvas masks.
+- [x] UI UberLit environment reflections and shared particle features (all four shaders).
+- [ ] UI UberLit additional lights and Canvas masks.
 - [ ] Built-in distortion runtime and rendering/cleanup tests.
 - [ ] Optimized shader generator/replacer output compilation and rendering.
 - [ ] Samples, migration utilities, installation and camera setup documentation.

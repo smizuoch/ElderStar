@@ -733,6 +733,7 @@ public sealed class NovaBuiltInUberLitSurfaceSmokeTests
 
     private static void SetupUberLit(Material material)
     {
+        NovaLitTestTextures.MatchBaseMapMode(material);
         InvokeStatic("Nova.Editor.Core.Scripts.ParticlesUberLitMaterialPostProcessor", "SetupMaterialKeywords", material);
         InvokeStatic("Nova.Editor.Core.Scripts.ParticlesUberLitMaterialPostProcessor", "SetupMaterialBlendMode", material);
     }

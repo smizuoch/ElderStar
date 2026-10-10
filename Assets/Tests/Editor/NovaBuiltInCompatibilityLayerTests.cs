@@ -100,6 +100,10 @@ public sealed class NovaBuiltInCompatibilityLayerTests
         foreach (var path in targetShaderPaths)
         {
             var text = File.ReadAllText(path);
+            if (text.Contains("BuiltIn/NovaBuiltInParticleFeatures.cginc"))
+            {
+                text += File.ReadAllText(Path.Combine(BuiltInIncludeRoot, "NovaBuiltInParticleFeatures.cginc"));
+            }
             Assert.That(text, Does.Contain("BuiltIn/NovaBuiltInCore.cginc"), path);
             Assert.That(text, Does.Contain("NovaObjectToClipPos"), path);
         }

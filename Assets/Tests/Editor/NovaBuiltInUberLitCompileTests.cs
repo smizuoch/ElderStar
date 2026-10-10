@@ -126,7 +126,7 @@ public sealed class NovaBuiltInUberLitCompileTests
     [Test]
     public void UberLitMinimumForwardBasePassUsesBuiltInLitHelpersOnly()
     {
-        var shaderText = File.ReadAllText(ShaderPath);
+        var shaderText = File.ReadAllText(ShaderPath) + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInParticleFeatures.cginc");
         var helperText = File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInUberLit.cginc");
         var lightingText = File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInLighting.cginc");
         var combinedText = shaderText + "\n" + helperText + "\n" + lightingText;
@@ -136,10 +136,10 @@ public sealed class NovaBuiltInUberLitCompileTests
         Assert.That(shaderText, Does.Contain("ZWrite [_ZWrite]"));
         Assert.That(shaderText, Does.Contain("Cull [_Cull]"));
         Assert.That(shaderText, Does.Contain("ZTest [_ZTest]"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInCore.cginc"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInTexture.cginc"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInLighting.cginc"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUberLit.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInCore.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInTexture.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInLighting.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInUberLit.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
         Assert.That(shaderText, Does.Contain("NovaObjectToWorldNormal"));
         Assert.That(combinedText, Does.Contain("NOVA_SAMPLE_TEX2D(baseMap"));

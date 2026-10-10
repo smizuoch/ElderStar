@@ -129,7 +129,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
     [Test]
     public void UIParticlesUberLitMinimumForwardPassUsesBuiltInUiLitHelpersOnly()
     {
-        var shaderText = File.ReadAllText(ShaderPath);
+        var shaderText = File.ReadAllText(ShaderPath) + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInParticleFeatures.cginc");
         var combinedText = shaderText + "\n"
             + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInLighting.cginc")
             + "\n"
@@ -141,10 +141,10 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(shaderText, Does.Contain("Cull [_Cull]"));
         Assert.That(shaderText, Does.Contain("ZTest [_ZTest]"));
         Assert.That(shaderText, Does.Contain("ColorMask [_ColorMask]"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInCore.cginc"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInTexture.cginc"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInLighting.cginc"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUI.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInCore.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInTexture.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInLighting.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInUI.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
         Assert.That(shaderText, Does.Contain("NovaObjectToWorldNormal"));
         Assert.That(combinedText, Does.Contain("NOVA_SAMPLE_TEX2D(baseMap"));
@@ -153,7 +153,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(combinedText, Does.Contain("NovaUIClipAlpha"));
         Assert.That(combinedText, Does.Contain("NovaComputeMinimumLitColor"));
         Assert.That(combinedText, Does.Contain("NovaComputeAmbientApproximation"));
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInShadow.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInShadow.cginc"));
         Assert.That(shaderText, Does.Contain("NovaTransferShadowCoord"));
         Assert.That(shaderText, Does.Contain("NovaComputeShadowAttenuation"));
         Assert.That(combinedText, Does.Contain("NovaUILitReceiveShadowsEnabled"));
@@ -296,14 +296,14 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
     [Test]
     public void UIParticlesUberLitSurfaceApproximationUsesUiScopedHelpers()
     {
-        var shaderText = File.ReadAllText(ShaderPath);
+        var shaderText = File.ReadAllText(ShaderPath) + File.ReadAllText("Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInParticleFeatures.cginc");
         var helperPath = "Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInUIParticlesUberLit.cginc";
         Assert.That(File.Exists(helperPath), Is.True, helperPath);
 
         var helperText = File.ReadAllText(helperPath);
         var combinedText = shaderText + "\n" + helperText;
 
-        Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUIParticlesUberLit.cginc"));
+        Assert.That(shaderText, Does.Contain("NovaBuiltInUIParticlesUberLit.cginc"));
         Assert.That(shaderText, Does.Contain("NovaResolveUILitSurfaceData"));
         Assert.That(shaderText, Does.Contain("NovaComputeUILitForwardBaseColor"));
         Assert.That(combinedText, Does.Contain("NovaUIClipAlpha"));
@@ -316,7 +316,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(combinedText, Does.Contain("NovaComputeUILitSpecularApproximation"));
         Assert.That(combinedText, Does.Contain("_NormalMapBumpScale"));
         Assert.That(combinedText, Does.Not.Contain("UniversalFragmentPBR"));
-        Assert.That(combinedText, Does.Not.Contain("ForwardAdd"));
+        Assert.That(shaderText, Does.Contain("#define NOVA_UI_LIT 1"));
         Assert.That(combinedText, Does.Contain("NovaSampleEnvironmentReflection"));
     }
 

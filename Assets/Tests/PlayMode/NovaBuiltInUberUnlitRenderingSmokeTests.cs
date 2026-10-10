@@ -6,9 +6,20 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+namespace Nova.Tests.PlayMode
+{
+[TestFixture("Nova/Particles/UberUnlit")]
+[TestFixture("Nova/UIParticles/UberUnlit")]
+[TestFixture("Nova/Particles/UberLit")]
+[TestFixture("Nova/UIParticles/UberLit")]
 public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
 {
-    private const string ShaderName = "Nova/Particles/UberUnlit";
+    private readonly string ShaderName;
+
+    public NovaBuiltInUberUnlitRenderingSmokeTests(string shaderName)
+    {
+        ShaderName = shaderName;
+    }
     private const int TextureSize = 4;
     private const int RenderSize = 64;
 
@@ -962,7 +973,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         Assert.That(color.g, Is.GreaterThan(0.18f), color.ToString());
     }
 
-    private static Color RenderUberUnlit(
+    private Color RenderUberUnlit(
         Color baseMapColor,
         Color tintColor,
         Color vertexColor,
@@ -990,7 +1001,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             new UnityEngine.Object[] { texture });
     }
 
-    private static Color RenderAlphaTransition(Texture transitionTexture, float progress, int mode)
+    private Color RenderAlphaTransition(Texture transitionTexture, float progress, int mode)
     {
         return RenderUberUnlit(
             material => ConfigureAlphaTransition(material, mode, progress, 0, m => m.SetTexture("_AlphaTransitionMap", transitionTexture)),
@@ -998,7 +1009,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             ownedObjects: new UnityEngine.Object[] { transitionTexture });
     }
 
-    private static Color RenderSecondAlphaTransition(Texture mainTexture, Texture secondTexture, int secondBlendMode)
+    private Color RenderSecondAlphaTransition(Texture mainTexture, Texture secondTexture, int secondBlendMode)
     {
         return RenderUberUnlit(
             material => ConfigureAlphaTransition(material, 2, 0.5f, 0, m =>
@@ -1026,7 +1037,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         configureMap(material);
     }
 
-    private static Color RenderEmissionAreaAll(float intensity)
+    private Color RenderEmissionAreaAll(float intensity)
     {
         return RenderUberUnlit(
             material => ConfigureEmission(material, 1, 0, 0, intensity, m =>
@@ -1036,7 +1047,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             }));
     }
 
-    private static Color RenderEmissionAreaAlpha(float baseAlpha, bool keepEdgeTransparency, bool renderTransparent = false)
+    private Color RenderEmissionAreaAlpha(float baseAlpha, bool keepEdgeTransparency, bool renderTransparent = false)
     {
         return RenderUberUnlit(
             material => ConfigureEmission(material, 3, 0, 0, 1f, m =>
@@ -1062,7 +1073,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         configure(material);
     }
 
-    private static Color RenderUberUnlit(
+    private Color RenderUberUnlit(
         Action<Material> configureMaterial,
         Mesh mesh = null,
         Color? background = null,
@@ -1071,7 +1082,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         return RenderUberUnlitSamples(configureMaterial, new[] { new Vector2(0.5f, 0.5f) }, mesh, background, ownedObjects)[0];
     }
 
-    private static Color[] RenderUberUnlitSamples(
+    private Color[] RenderUberUnlitSamples(
         Action<Material> configureMaterial,
         IReadOnlyList<Vector2> normalizedSamplePositions,
         Mesh mesh = null,
@@ -1088,9 +1099,13 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         var cameraObject = new GameObject("NovaBuiltInUberUnlitSmokeCamera");
         var quadObject = new GameObject("NovaBuiltInUberUnlitSmokeQuad");
         var objectsToDestroy = ownedObjects?.ToList() ?? new List<UnityEngine.Object>();
+        var previousAmbientMode = RenderSettings.ambientMode;
+        var previousAmbientLight = RenderSettings.ambientLight;
 
         try
         {
+            RenderSettings.ambientMode = AmbientMode.Flat;
+            RenderSettings.ambientLight = Color.white;
             material.SetFloat("_Cull", (float)CullMode.Off);
             material.SetFloat("_ZTest", (float)CompareFunction.LessEqual);
             material.SetFloat("_RenderType", 0);
@@ -1130,6 +1145,8 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         }
         finally
         {
+            RenderSettings.ambientMode = previousAmbientMode;
+            RenderSettings.ambientLight = previousAmbientLight;
             UnityEngine.Object.DestroyImmediate(cameraObject);
             UnityEngine.Object.DestroyImmediate(quadObject);
             UnityEngine.Object.DestroyImmediate(readback);
@@ -1143,7 +1160,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         }
     }
 
-    private static Color RenderRimTransparency(bool enabled, bool inverse, float progress, float sharpness, Vector3 normal)
+    private Color RenderRimTransparency(bool enabled, bool inverse, float progress, float sharpness, Vector3 normal)
     {
         return RenderUberUnlit(
             material =>
@@ -1161,7 +1178,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             background: Color.black);
     }
 
-    private static Color[] RenderLuminanceTransparencySamples(bool inverse, float progress, float sharpness)
+    private Color[] RenderLuminanceTransparencySamples(bool inverse, float progress, float sharpness)
     {
         var texture = CreateHorizontalSplitTexture(
             new Color(0.35f, 0.35f, 0.35f, 1f),
@@ -1185,7 +1202,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             ownedObjects: new UnityEngine.Object[] { texture });
     }
 
-    private static Color RenderLuminanceTransparency(Color baseColor, bool inverse, float progress, float sharpness)
+    private Color RenderLuminanceTransparency(Color baseColor, bool inverse, float progress, float sharpness)
     {
         return RenderUberUnlit(
             material =>
@@ -1202,7 +1219,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             background: Color.black);
     }
 
-    private static Color RenderCombinedTransparency(bool rim, bool luminance, Vector3 normal)
+    private Color RenderCombinedTransparency(bool rim, bool luminance, Vector3 normal)
     {
         return RenderUberUnlit(
             material =>
@@ -1316,6 +1333,12 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
     {
         InvokeStatic("Nova.Editor.Core.Scripts.ParticlesUberUnlitMaterialPostProcessor", "SetupMaterialKeywords", material);
         InvokeStatic("Nova.Editor.Core.Scripts.ParticlesUberUnlitMaterialPostProcessor", "SetupMaterialBlendMode", material);
+        if (material.HasProperty("_EnvironmentReflections"))
+        {
+            material.SetFloat("_EnvironmentReflections", 0f);
+            material.SetFloat("_SpecularHighlights", 0f);
+            InvokeStatic("Nova.Editor.Core.Scripts.ParticlesUberLitMaterialPostProcessor", "SetupMaterialKeywords", material);
+        }
     }
 
     private static void InvokeStatic(string typeName, string methodName, Material material)
@@ -1329,4 +1352,5 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         Assert.That(method, Is.Not.Null, $"{typeName}.{methodName}");
         method.Invoke(null, new object[] { material });
     }
+}
 }

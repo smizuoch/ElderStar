@@ -343,67 +343,7 @@ Shader "Nova/Particles/UberLit"
             #pragma shader_feature_local_fragment _ADDITIONAL_LIGHT_SHADOWS
             #pragma shader_feature_local_fragment _FORWARD_PLUS
             #pragma shader_feature_local_fragment _CLUSTER_LIGHT_LOOP
-            #include "BuiltIn/NovaBuiltInCore.cginc"
-            #include "BuiltIn/NovaBuiltInTexture.cginc"
-            #include "BuiltIn/NovaBuiltInLighting.cginc"
-            #include "BuiltIn/NovaBuiltInShadow.cginc"
-            #include "BuiltIn/NovaBuiltInUberLit.cginc"
-
-            NOVA_DECLARE_TEX2D(_BaseMap);
-
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-                float4 tangent : TANGENT;
-                float2 uv : TEXCOORD0;
-                fixed4 color : COLOR;
-            };
-
-            struct v2f
-            {
-                float4 pos : SV_POSITION;
-                float3 positionWS : TEXCOORD0;
-                float3 normalWS : TEXCOORD1;
-                float3 tangentWS : TEXCOORD2;
-                float3 bitangentWS : TEXCOORD3;
-                float2 uv : TEXCOORD4;
-                float3 litUvAndProgress : TEXCOORD5;
-                NOVA_SHADOW_COORDS(6)
-                fixed4 color : COLOR;
-            };
-
-            fixed4 _TintColor;
-            fixed _Cutoff;
-
-            v2f vert(appdata v)
-            {
-                v2f o;
-                o.pos = NovaObjectToClipPos(v.vertex);
-                o.positionWS = NovaObjectToWorld(v.vertex.xyz);
-                o.normalWS = NovaObjectToWorldNormal(v.normal);
-                o.tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
-                o.bitangentWS = NovaCreateBitangent(o.normalWS, o.tangentWS, v.tangent.w);
-                o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
-                o.litUvAndProgress = NovaResolveLitTextureCoord(o.uv, _BaseMapProgress, _BaseMapSliceCount);
-                o.color = v.color;
-                NovaTransferShadowCoord(o, o.positionWS);
-                return o;
-            }
-
-            fixed4 frag(v2f i) : SV_Target
-            {
-                half4 baseColor = NovaResolveMinimumLitBaseColor(_BaseMap, i.uv, _TintColor, i.color);
-                return NovaApplyLitForwardBase(
-                    baseColor,
-                    i.litUvAndProgress,
-                    i.normalWS,
-                    i.tangentWS,
-                    i.bitangentWS,
-                    NovaWorldSpaceViewDir(i.positionWS),
-                    _Cutoff,
-                    NovaComputeShadowAttenuation(i, i.positionWS));
-            }
+            #include "BuiltIn/NovaBuiltInParticleFeatures.cginc"
             ENDCG
         }
 
@@ -479,68 +419,7 @@ Shader "Nova/Particles/UberLit"
             #pragma shader_feature_local_fragment _ADDITIONAL_LIGHT_SHADOWS
             #pragma shader_feature_local_fragment _FORWARD_PLUS
             #pragma shader_feature_local_fragment _CLUSTER_LIGHT_LOOP
-            #include "BuiltIn/NovaBuiltInCore.cginc"
-            #include "BuiltIn/NovaBuiltInTexture.cginc"
-            #include "BuiltIn/NovaBuiltInLighting.cginc"
-            #include "BuiltIn/NovaBuiltInShadow.cginc"
-            #include "BuiltIn/NovaBuiltInUberLit.cginc"
-
-            NOVA_DECLARE_TEX2D(_BaseMap);
-
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-                float4 tangent : TANGENT;
-                float2 uv : TEXCOORD0;
-                fixed4 color : COLOR;
-            };
-
-            struct v2f
-            {
-                float4 pos : SV_POSITION;
-                float3 positionWS : TEXCOORD0;
-                float3 normalWS : TEXCOORD1;
-                float3 tangentWS : TEXCOORD2;
-                float3 bitangentWS : TEXCOORD3;
-                float2 uv : TEXCOORD4;
-                float3 litUvAndProgress : TEXCOORD5;
-                NOVA_LIGHTING_COORDS(6, 7)
-                fixed4 color : COLOR;
-            };
-
-            fixed4 _TintColor;
-            fixed _Cutoff;
-
-            v2f vert(appdata v)
-            {
-                v2f o;
-                o.pos = NovaObjectToClipPos(v.vertex);
-                o.positionWS = NovaObjectToWorld(v.vertex.xyz);
-                o.normalWS = NovaObjectToWorldNormal(v.normal);
-                o.tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
-                o.bitangentWS = NovaCreateBitangent(o.normalWS, o.tangentWS, v.tangent.w);
-                o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
-                o.litUvAndProgress = NovaResolveLitTextureCoord(o.uv, _BaseMapProgress, _BaseMapSliceCount);
-                o.color = v.color;
-                NovaTransferBuiltInAddLightCoord(o);
-                return o;
-            }
-
-            fixed4 frag(v2f i) : SV_Target
-            {
-                half4 baseColor = NovaResolveMinimumLitBaseColor(_BaseMap, i.uv, _TintColor, i.color);
-                return NovaApplyLitForwardAdd(
-                    baseColor,
-                    i.litUvAndProgress,
-                    i.normalWS,
-                    i.tangentWS,
-                    i.bitangentWS,
-                    i.positionWS,
-                    NovaWorldSpaceViewDir(i.positionWS),
-                    _Cutoff,
-                    NovaComputeBuiltInAddLightAttenuation(i, i.positionWS));
-            }
+            #include "BuiltIn/NovaBuiltInParticleFeatures.cginc"
             ENDCG
         }
 
