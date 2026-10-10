@@ -934,7 +934,7 @@ Shader "Nova/UIParticles/UberUnlit"
                 color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
                 #endif
 
-                NovaApplyWorldFog(color, _WorldSpaceCameraPos.xyz - i.viewDirWS);
+                NovaApplyEyeFog(color, i.screenPosition.z);
                 return color;
             }
             ENDCG

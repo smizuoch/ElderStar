@@ -2,6 +2,16 @@
 
 ## Completion audit, 2026-10-10
 
+Fresh controlled original-URP/port captures now compare 24 material cases on each
+Uber shader. The 48 Unlit comparisons pass mean RGB error <= 0.01, maximum channel
+error <= 0.08 and at most 1% of pixels above 0.02 mean RGB error, on Unity 6000.3.23f1,
+Windows Direct3D12, Gamma. This caught an orthographic view-direction difference:
+the port now uses the camera's constant view direction, matching the original.
+Unlit fog uses its existing eye-depth varying so this correction does not break fog.
+The 48 Lit frames are diagnostic, with separate lighting acceptance tests; no exact
+BRDF equality is claimed. `Tests/Visual` contains the capture and comparison tools.
+No original golden image or stored visual baseline was changed.
+
 All four Uber shaders now apply scene Linear, Exponential and ExponentialSquared
 fog after their color/lighting stack. ForwardAdd attenuates toward black to avoid
 adding the fog color once per light. Fog uses world/view depth without another

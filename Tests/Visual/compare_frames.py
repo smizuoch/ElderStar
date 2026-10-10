@@ -1,0 +1,85 @@
+"""Compare fresh original/port captures without reading or changing golden images.
+
+Unlit common features are gated at mean RGB error <= 0.01, max channel error
+<= 0.08 and at most 1% of pixels exceeding 0.02 mean RGB error (all normalized).
+Lit images are reported separately: their documented BRDF approximation is
+validated by the lighting PlayMode suites, not by claiming URP pixel equality.
+"""
+import argparse
+import json
+from pathlib import Path
+
+SHADERS = ("Particles_UberUnlit", "UIParticles_UberUnlit", "Particles_UberLit", "UIParticles_UberLit")
+CASES = ("base", "vertex-color", "tint", "channel", "mirror", "tritone", "pentone", "greyscale", "gradient", "fade", "dissolve", "second-transition", "flow", "parallax", "emission", "luminance", "rim", "vertex-deformation", "array", "volume", "alpha-blend", "additive", "multiply", "cutout")
+EXPECTED = {f"{shader}__{case}.ppm" for shader in SHADERS for case in CASES}
+
+
+def measure(reference, actual):
+    if not reference or len(reference) != len(actual) or len(reference) % 3:
+        raise ValueError("Expected matching, nonempty RGB data")
+    delta = [abs(a - b) / 255 for a, b in zip(reference, actual)]
+    bad_pixels = sum(sum(delta[i:i + 3]) / 3 > 0.02 for i in range(0, len(delta), 3))
+    return {"mean_error": sum(delta) / len(delta), "max_error": max(delta), "bad_pixel_fraction": bad_pixels / (len(delta) // 3)}
+
+
+def within_thresholds(metrics):
+    return metrics["mean_error"] <= 0.01 and metrics["max_error"] <= 0.08 and metrics["bad_pixel_fraction"] <= 0.01
+
+
+def validate_inventory(reference, actual):
+    if reference != EXPECTED or actual != EXPECTED:
+        raise ValueError(f"Expected exactly {len(EXPECTED)} captures per pipeline; missing reference={sorted(EXPECTED-reference)}, missing actual={sorted(EXPECTED-actual)}, extra={sorted((reference|actual)-EXPECTED)}")
+
+
+def run(reference, actual, report):
+    from PIL import Image, ImageChops, ImageDraw
+    validate_inventory({p.name for p in reference.glob("*.ppm")}, {p.name for p in actual.glob("*.ppm")})
+    report.mkdir(parents=True, exist_ok=True)
+    results = []
+    for shader in SHADERS:
+        for page in range(4):
+            sheet = Image.new("RGB", (3 * 128 + 32, 6 * 156 + 28), "#181b22")
+            draw = ImageDraw.Draw(sheet)
+            draw.text((8, 8), "Original URP        Built-in           Difference x4", fill="white")
+            for row, case in enumerate(CASES[page * 6:page * 6 + 6]):
+                filename = f"{shader}__{case}.ppm"
+                a = Image.open(reference / filename).convert("RGB")
+                b = Image.open(actual / filename).convert("RGB")
+                if a.size != (128, 128) or b.size != a.size:
+                    raise ValueError(f"Unexpected dimensions: {filename}")
+                metrics = measure(a.tobytes(), b.tobytes())
+                exact = shader.endswith("UberUnlit")
+                passed = within_thresholds(metrics)
+                if case == "base":
+                    for frame in (a, b):
+                        bg = frame.getpixel((0, 0))
+                        pixels = frame.get_flattened_data() if hasattr(frame, "get_flattened_data") else frame.getdata()
+                        coverage = sum(max(abs(c-d) for c,d in zip(pixel,bg)) > 8 for pixel in pixels) / (128*128)
+                        if coverage < 0.1:
+                            raise ValueError(f"No visible base quad: {filename}")
+                results.append({"shader": shader, "case": case, "exact_gate": exact, "passed": passed if exact else None, **metrics})
+                y = 28 + row * 156
+                label = "APPROXIMATE" if not exact else "PASS" if passed else "FAIL"
+                draw.text((8, y), f"{case}  {label}  mean={metrics['mean_error']:.4f}", fill="#9fe2b8" if passed else "#f5b58c")
+                diff = ImageChops.difference(a, b).point(lambda value: min(255, value * 4))
+                for col, frame in enumerate((a, b, diff)):
+                    sheet.paste(frame, (8 + col * 132, y + 18))
+            sheet.save(report / f"{shader}-{page + 1}.png")
+    (report / "metrics.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
+    rows = ["# Original / Built-in visual comparison", "", "Fresh controlled captures; existing golden images are untouched.", "", "Unlit gates: mean RGB error ≤ 0.01; maximum channel error ≤ 0.08; fraction of pixels with mean RGB error > 0.02 ≤ 0.01. Values are normalized to 0–1. Lit differences are diagnostic because lighting is an explicit approximation.", "", "| Shader | Feature | Status | Mean | Maximum | Bad pixel fraction |", "|---|---|---|---:|---:|---:|"]
+    for item in results:
+        status = "PASS" if item["passed"] else "FAIL" if item["exact_gate"] else "Approximate"
+        rows.append(f"| {item['shader']} | {item['case']} | {status} | {item['mean_error']:.5f} | {item['max_error']:.5f} | {item['bad_pixel_fraction']:.5f} |")
+    (report / "report.md").write_text("\n".join(rows) + "\n", encoding="utf-8")
+    failures = [item for item in results if item["exact_gate"] and not item["passed"]]
+    print(json.dumps({"captures": len(results), "exact_failures": len(failures), "failing_cases": [f"{item['shader']}/{item['case']}" for item in failures]}))
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--reference", type=Path, required=True)
+    parser.add_argument("--actual", type=Path, required=True)
+    parser.add_argument("--report", type=Path, required=True)
+    args = parser.parse_args()
+    raise SystemExit(run(args.reference, args.actual, args.report))

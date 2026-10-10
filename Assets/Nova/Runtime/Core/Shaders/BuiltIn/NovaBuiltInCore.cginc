@@ -41,7 +41,8 @@ float3 NovaCreateBitangent(float3 normalWS, float3 tangentWS, float tangentSign)
 
 float3 NovaWorldSpaceViewDir(float3 positionWS)
 {
-    return _WorldSpaceCameraPos.xyz - positionWS;
+    // Match the original pipeline's constant direction for orthographic cameras.
+    return unity_OrthoParams.w > 0.5 ? UNITY_MATRIX_V[2].xyz : _WorldSpaceCameraPos.xyz - positionWS;
 }
 
 float3 NovaSafeNormalize(float3 value)
