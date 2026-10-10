@@ -385,6 +385,8 @@ namespace Nova.Editor.Core.Scripts
         public static void SetupMaterialKeywords(Material material)
         {
             ParticlesUberUnlitMaterialPostProcessor.SetupMaterialKeywords(material);
+            // Built-in schedules ForwardAdd but does not supply URP's lighting keyword.
+            SetKeyword(material, "_ADDITIONAL_LIGHTS", true);
             SetKeyword(material, ShaderKeywords.ReceiveShadowsEnabled, GetFloat(material, "_LitReceiveShadows") > 0.5f);
             SetKeyword(material, ShaderKeywords.SpecularHighlightsEnabled, GetFloat(material, "_SpecularHighlights") > 0.5f);
             SetKeyword(material, ShaderKeywords.EnvironmentReflectionsEnabled, GetFloat(material, "_EnvironmentReflections") > 0.5f);

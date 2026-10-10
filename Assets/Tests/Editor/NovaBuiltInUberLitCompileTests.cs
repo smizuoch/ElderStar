@@ -298,7 +298,7 @@ public sealed class NovaBuiltInUberLitCompileTests
         var matrixText = File.ReadAllText(MatrixPath);
 
         Assert.That(uiLitText, Does.Not.Contain("NovaComputeLitForwardBaseColor"));
-        Assert.That(uiLitText, Does.Not.Contain("\"LightMode\" = \"ForwardAdd\""));
+        Assert.That(uiLitText, Does.Contain("\"LightMode\" = \"ForwardAdd\""));
         Assert.That(uiLitText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
         Assert.That(distortionText, Does.Not.Contain("DistortedUvBuffer"));
         Assert.That(matrixText, Does.Contain("Phase 7.1 UI UberLit Minimum Forward Status"));

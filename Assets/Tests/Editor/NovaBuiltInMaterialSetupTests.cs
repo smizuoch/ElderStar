@@ -7,6 +7,18 @@ using UnityEngine.Rendering;
 
 public sealed class NovaBuiltInMaterialSetupTests
 {
+    [TestCase("Nova/Particles/UberLit")]
+    [TestCase("Nova/UIParticles/UberLit")]
+    public void LitSetupEnablesBuiltInAdditionalLights(string shaderName)
+    {
+        using (var scope = NewMaterialScope(shaderName))
+        {
+            SetupUberLit(scope.Material);
+            Assert.That(scope.Material.IsKeywordEnabled("_ADDITIONAL_LIGHTS"), Is.True,
+                "Built-in does not set URP's additional-light keyword; lit materials must opt into their ForwardAdd pass.");
+        }
+    }
+
     [Test]
     public void UberUnlitSetupAppliesRenderQueueTagsBlendAndDepthState()
     {

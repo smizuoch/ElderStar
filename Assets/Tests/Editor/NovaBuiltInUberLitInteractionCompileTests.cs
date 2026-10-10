@@ -240,7 +240,7 @@ public sealed class NovaBuiltInUberLitInteractionCompileTests
         var matrixText = File.ReadAllText(MatrixPath);
 
         Assert.That(uiLitText, Does.Not.Contain("NovaComputeLitForwardBaseColor"));
-        Assert.That(uiLitText, Does.Not.Contain("\"LightMode\" = \"ForwardAdd\""));
+        Assert.That(uiLitText, Does.Contain("\"LightMode\" = \"ForwardAdd\""));
         Assert.That(uiLitText, Does.Not.Contain("\"LightMode\" = \"ShadowCaster\""));
         Assert.That(distortionText, Does.Not.Contain("DistortedUvBuffer"));
         Assert.That(editorText, Does.Contain("Phase 2 preserves the optimizer API surface only"));

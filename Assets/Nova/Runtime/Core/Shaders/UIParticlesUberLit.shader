@@ -354,6 +354,85 @@ Shader "Nova/UIParticles/UberLit"
             #include "BuiltIn/NovaBuiltInParticleFeatures.cginc"
             ENDCG
         }
+
+        Pass
+        {
+            Name "ForwardAdd"
+            Tags { "LightMode" = "ForwardAdd" }
+            Blend One One
+            ZWrite Off
+            Cull [_Cull]
+            Lighting Off
+            ZTest [_ZTest]
+            ColorMask [_ColorMask]
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma target 3.5
+            #pragma require 2darray
+            #pragma multi_compile_fwdadd_fullshadows
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _SHADOWS_SOFT
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX
+            #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile _ _FORWARD_PLUS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
+            #pragma shader_feature_local _ DEBUG_DISPLAY
+            #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
+            #pragma shader_feature_local_fragment _ALPHAMODULATE_ENABLED
+            #pragma shader_feature_local_fragment _ALPHATEST_ENABLED
+            #pragma shader_feature_local _RECEIVE_SHADOWS_ENABLED
+            #pragma shader_feature_local _SPECULAR_HIGHLIGHTS_ENABLED
+            #pragma shader_feature_local _ENVIRONMENT_REFLECTIONS_ENABLED
+            #pragma shader_feature_local _SPECULAR_SETUP
+            #pragma shader_feature_local _NORMAL_MAP_ENABLED
+            #pragma shader_feature_local_fragment _METALLIC_MAP_ENABLED
+            #pragma shader_feature_local_fragment _SMOOTHNESS_MAP_ENABLED
+            #pragma shader_feature_local_fragment _SPECULAR_MAP_ENABLED
+            #pragma shader_feature_local _BASE_MAP_MODE_2D _BASE_MAP_MODE_2D_ARRAY _BASE_MAP_MODE_3D
+            #pragma shader_feature_local_vertex _BASE_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_fragment _BASE_MAP_CHANNEL_ENABLED
+            #pragma shader_feature_local_fragment _ _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR
+            #pragma shader_feature_local_fragment _ _BASE_MAP_TONE_MODE_TRITONE _BASE_MAP_TONE_MODE_PENTONE
+            #pragma shader_feature_local _ _TINT_AREA_ALL _TINT_AREA_RIM
+            #pragma shader_feature_local _ _TINT_COLOR_ENABLED _TINT_MAP_ENABLED _TINT_MAP_3D_ENABLED _TINT_MAP_MODE_2D_ARRAY
+            #pragma shader_feature_local_vertex _TINT_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local _FLOW_MAP_ENABLED
+            #pragma shader_feature_local _FLOW_MAP_TARGET_BASE
+            #pragma shader_feature_local _FLOW_MAP_TARGET_TINT
+            #pragma shader_feature_local _FLOW_MAP_TARGET_EMISSION
+            #pragma shader_feature_local _FLOW_MAP_TARGET_ALPHA_TRANSITION
+            #pragma shader_feature_local _PARALLAX_MAP_TARGET_BASE
+            #pragma shader_feature_local _PARALLAX_MAP_TARGET_TINT
+            #pragma shader_feature_local _PARALLAX_MAP_TARGET_EMISSION
+            #pragma shader_feature_local _PARALLAX_MAP_MODE_2D _PARALLAX_MAP_MODE_2D_ARRAY _PARALLAX_MAP_MODE_3D
+            #pragma shader_feature_local_vertex _PARALLAX_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_fragment _ _GREYSCALE_ENABLED _GRADIENT_MAP_ENABLED
+            #pragma shader_feature_local _ _FADE_TRANSITION_ENABLED _DISSOLVE_TRANSITION_ENABLED
+            #pragma shader_feature_local _ALPHA_TRANSITION_MAP_MODE_2D _ALPHA_TRANSITION_MAP_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_MODE_3D
+            #pragma shader_feature_local _ _ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE _ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY
+            #pragma shader_feature_local _ _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D
+            #pragma shader_feature_local_vertex _ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_vertex _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local _ _EMISSION_AREA_ALL _EMISSION_AREA_MAP _EMISSION_AREA_ALPHA
+            #pragma shader_feature_local _EMISSION_MAP_MODE_2D _EMISSION_MAP_MODE_2D_ARRAY _EMISSION_MAP_MODE_3D
+            #pragma shader_feature_local _ _EMISSION_COLOR_COLOR _EMISSION_COLOR_BASECOLOR _EMISSION_COLOR_MAP
+            #pragma shader_feature_local_vertex _EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_fragment _TRANSPARENCY_BY_LUMINANCE
+            #pragma shader_feature_local _TRANSPARENCY_BY_RIM
+            #pragma shader_feature_local _SOFT_PARTICLES_ENABLED
+            #pragma shader_feature_local _DEPTH_FADE_ENABLED
+            #pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED
+            #define NOVA_UI_LIT 1
+            #include "BuiltIn/NovaBuiltInCore.cginc"
+            #include "BuiltIn/NovaBuiltInShadow.cginc"
+            #include "BuiltIn/NovaBuiltInParticleFeatures.cginc"
+            ENDCG
+        }
     }
     Fallback Off
     CustomEditor "Nova.Editor.Core.Scripts.UIParticlesUberLitGUI"

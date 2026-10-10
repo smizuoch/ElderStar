@@ -179,7 +179,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
     }
 
     [Test]
-    public void UIParticlesUberLitPassTopologyStaysUiOnlyForPhase72A()
+    public void UIParticlesUberLitPassTopologySupportsBuiltInForwardLighting()
     {
         var shader = Shader.Find(ShaderName);
         Assert.That(shader, Is.Not.Null, ShaderName);
@@ -193,9 +193,9 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
                 .Select(match => match.Groups[1].Value)
                 .ToArray();
 
-            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase" }));
+            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd" }));
             Assert.That(material.FindPass("ForwardBase"), Is.GreaterThanOrEqualTo(0));
-            Assert.That(material.FindPass("ForwardAdd"), Is.LessThan(0));
+            Assert.That(material.FindPass("ForwardAdd"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("ShadowCaster"), Is.LessThan(0));
             Assert.That(material.FindPass("DepthOnly"), Is.LessThan(0));
             Assert.That(material.FindPass("DepthNormals"), Is.LessThan(0));

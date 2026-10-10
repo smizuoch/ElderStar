@@ -21,6 +21,15 @@ ambient lighting; no threshold or golden-image changes were made. The prior Lit 
 tests used only 2D albedo even in array/3D modes; their fixtures now supply the identical albedo
 in the selected texture dimension. Existing Lit approximation limitations still apply.
 
+UI UberLit now also has a Built-in `ForwardAdd` pass for MeshRenderer-based UI particle
+renderers. It applies additional point/spot light attenuation to diffuse and specular terms,
+preserving alpha, rect clipping, stencil and ColorMask. This is **Approximate**: Unity's
+CanvasRenderer does not schedule the same per-light mesh forward loop. Native Canvas graphics
+use the base-pass ambient/main-light approximation; use MeshRenderer-based particles when
+per-pixel additional lights are needed. The shared additional-light suite covers both shader
+names. Real world-space Canvas `Mask` and `RectMask2D` tests exercise both UI shader names
+using UGUI in the test project; the distributable NOVA package still has no UGUI or URP dependency.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.

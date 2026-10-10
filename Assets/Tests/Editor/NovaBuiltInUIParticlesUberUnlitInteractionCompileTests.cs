@@ -189,7 +189,7 @@ public sealed class NovaBuiltInUIParticlesUberUnlitInteractionCompileTests
         foreach (var shaderFile in shaderFiles)
         {
             var text = File.ReadAllText(shaderFile);
-            Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""ForwardAdd"""), shaderFile);
+            Assert.That(text.Contains(@"""LightMode"" = ""ForwardAdd"""), Is.EqualTo(shaderFile.Contains("UIParticlesUberLit")), shaderFile);
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""ShadowCaster"""), shaderFile);
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""DepthOnly"""), shaderFile);
             Assert.That(text, Does.Not.Contain(@"""LightMode"" = ""DepthNormals"""), shaderFile);

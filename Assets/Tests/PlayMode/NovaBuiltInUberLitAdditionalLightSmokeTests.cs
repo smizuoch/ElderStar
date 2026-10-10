@@ -5,9 +5,17 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+namespace Nova.Tests.PlayMode
+{
+[TestFixture("Nova/Particles/UberLit")]
+[TestFixture("Nova/UIParticles/UberLit")]
 public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
 {
-    private const string LitShaderName = "Nova/Particles/UberLit";
+    private readonly string LitShaderName;
+    public NovaBuiltInUberLitAdditionalLightSmokeTests(string shaderName)
+    {
+        LitShaderName = shaderName;
+    }
     private const int RenderSize = 144;
     private const int TextureSize = 8;
 
@@ -217,7 +225,7 @@ public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
         material.SetFloat("_Smoothness", 0.9f);
     }
 
-    private static RenderSample RenderAdditional(
+    private RenderSample RenderAdditional(
         Action<Material> configureMaterial,
         AdditionalLightCase? additionalLight = null,
         Action<Material> configureAfterSetup = null,
@@ -539,4 +547,5 @@ public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
             light.shadows = LightShadows.None;
         }
     }
+}
 }

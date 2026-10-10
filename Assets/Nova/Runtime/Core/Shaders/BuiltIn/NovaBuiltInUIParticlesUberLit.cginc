@@ -270,4 +270,18 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
     return NovaComputeUILitForwardBaseColor(surfaceData, viewDirectionWS, 1.0h);
 }
 
+half4 NovaComputeUILitForwardAddColor(NovaUILitSurfaceData surfaceData,
+    float3 positionWS, float3 viewDirectionWS, half attenuation)
+{
+    #if defined(_ADDITIONAL_LIGHTS)
+    float3 lightDirectionWS = NovaGetBuiltInAddLightDirection(positionWS);
+    half3 diffuse = surfaceData.albedo * NovaGetBuiltInAddLightColor()
+        * NovaComputeLambertDiffuse(surfaceData.normalWS, lightDirectionWS);
+    half3 specular = NovaComputeUILitSpecularApproximation(surfaceData, lightDirectionWS, viewDirectionWS);
+    return half4((diffuse + specular) * saturate(attenuation) * saturate(surfaceData.alpha), 0.0h);
+    #else
+    return 0;
+    #endif
+}
+
 #endif
