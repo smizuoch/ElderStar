@@ -107,11 +107,12 @@ corresponding 2D, array or 3D resource rather than relying on a 2D-only fixture.
 
 `Tests/Visual` captures 24 controlled configurations for each original URP and
 ported Uber shader in isolated Unity 6000.3.23f1 projects using Direct3D12/Gamma.
-All 48 Unlit comparisons must satisfy normalized mean RGB error <= 0.01,
+All 96 common-surface comparisons must satisfy normalized mean RGB error <= 0.01,
 maximum channel error <= 0.08 and <= 1% of pixels with mean RGB error > 0.02.
 Missing frames, mismatched dimensions and invisible base geometry fail the check.
-The 48 Lit frames are diagnostic: exact URP BRDF equality is deliberately not
-claimed. Their lighting and interaction acceptance comes from PlayMode assertions.
+The 48 Lit frames use a diffuse dielectric with specular/reflections disabled;
+they gate common-surface behavior without claiming full URP BRDF equality.
+Lighting, shadows and reflection acceptance additionally comes from PlayMode assertions.
 Existing golden images are untouched; captures are freshly generated evidence.
 
 The full test commands and package/player fixtures are described in the repository's

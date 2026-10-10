@@ -1,9 +1,9 @@
 """Compare fresh original/port captures without reading or changing golden images.
 
-Unlit common features are gated at mean RGB error <= 0.01, max channel error
+Common features on all four shaders are gated at mean RGB error <= 0.01, max channel error
 <= 0.08 and at most 1% of pixels exceeding 0.02 mean RGB error (all normalized).
-Lit images are reported separately: their documented BRDF approximation is
-validated by the lighting PlayMode suites, not by claiming URP pixel equality.
+Lit captures use a controlled diffuse surface with specular/reflections disabled.
+Their BRDF approximation is additionally validated by the lighting PlayMode suites.
 """
 import argparse
 import json
@@ -57,22 +57,22 @@ def run(reference, actual, report):
                         coverage = sum(max(abs(c-d) for c,d in zip(pixel,bg)) > 8 for pixel in pixels) / (128*128)
                         if coverage < 0.1:
                             raise ValueError(f"No visible base quad: {filename}")
-                results.append({"shader": shader, "case": case, "exact_gate": exact, "passed": passed if exact else None, **metrics})
+                results.append({"shader": shader, "case": case, "lit_approximation": not exact, "passed": passed, **metrics})
                 y = 28 + row * 156
-                label = "APPROXIMATE" if not exact else "PASS" if passed else "FAIL"
+                label = "PASS" if passed else "FAIL"
                 draw.text((8, y), f"{case}  {label}  mean={metrics['mean_error']:.4f}", fill="#9fe2b8" if passed else "#f5b58c")
                 diff = ImageChops.difference(a, b).point(lambda value: min(255, value * 4))
                 for col, frame in enumerate((a, b, diff)):
                     sheet.paste(frame, (8 + col * 132, y + 18))
             sheet.save(report / f"{shader}-{page + 1}.png")
     (report / "metrics.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
-    rows = ["# Original / Built-in visual comparison", "", "Fresh controlled captures; existing golden images are untouched.", "", "Unlit gates: mean RGB error ≤ 0.01; maximum channel error ≤ 0.08; fraction of pixels with mean RGB error > 0.02 ≤ 0.01. Values are normalized to 0–1. Lit differences are diagnostic because lighting is an explicit approximation.", "", "| Shader | Feature | Status | Mean | Maximum | Bad pixel fraction |", "|---|---|---|---:|---:|---:|"]
+    rows = ["# Original / Built-in visual comparison", "", "Fresh controlled captures; existing golden images are untouched.", "", "All 96 common-surface captures are gated: mean RGB error ≤ 0.01; maximum channel error ≤ 0.08; fraction of pixels with mean RGB error > 0.02 ≤ 0.01. Values are normalized to 0–1. Lit uses a diffuse dielectric with specular/reflections disabled here; BRDF, shadows and reflection acceptance also require the dedicated PlayMode tests.", "", "| Shader | Feature | Status | Mean | Maximum | Bad pixel fraction |", "|---|---|---|---:|---:|---:|"]
     for item in results:
-        status = "PASS" if item["passed"] else "FAIL" if item["exact_gate"] else "Approximate"
+        status = "PASS" if item["passed"] else "FAIL"
         rows.append(f"| {item['shader']} | {item['case']} | {status} | {item['mean_error']:.5f} | {item['max_error']:.5f} | {item['bad_pixel_fraction']:.5f} |")
     (report / "report.md").write_text("\n".join(rows) + "\n", encoding="utf-8")
-    failures = [item for item in results if item["exact_gate"] and not item["passed"]]
-    print(json.dumps({"captures": len(results), "exact_failures": len(failures), "failing_cases": [f"{item['shader']}/{item['case']}" for item in failures]}))
+    failures = [item for item in results if not item["passed"]]
+    print(json.dumps({"captures": len(results), "failures": len(failures), "failing_cases": [f"{item['shader']}/{item['case']}" for item in failures]}))
     return 1 if failures else 0
 
 

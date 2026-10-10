@@ -619,7 +619,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             new Color(0.1f, 0.1f, 0.1f, 1f));
 
         var color = RenderUberUnlit(
-            material => ConfigureAlphaTransition(material, 2, 0.5f, 2, m =>
+            material => ConfigureAlphaTransition(material, 2, 0.5f, 1, m =>
             {
                 m.SetTexture("_AlphaTransitionMap2DArray", texture);
                 m.SetFloat("_AlphaTransitionMapProgress", 0.45f);
@@ -688,6 +688,51 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         var average = RenderSecondAlphaTransition(mainTextureWithSecond, secondTexture, secondBlendMode: 1);
 
         Assert.That(noSecond.r, Is.GreaterThan(average.r + 0.18f), $"No second {noSecond}, average {average}");
+    }
+
+    [TestCase(1, false, 0)]
+    [TestCase(2, false, 0)]
+    [TestCase(1, true, 0)]
+    [TestCase(2, true, 0)]
+    [TestCase(1, false, 1)]
+    [TestCase(2, false, 1)]
+    [TestCase(1, true, 1)]
+    [TestCase(2, true, 1)]
+    [TestCase(1, false, 2)]
+    [TestCase(2, false, 2)]
+    [TestCase(1, true, 2)]
+    [TestCase(2, true, 2)]
+    public void TransitionArrayAndVolumeSelectFramesAndRows(int mapMode, bool randomRow, int secondBlend)
+    {
+        Color Render(bool high)
+        {
+            var lowColor = new Color(0.1f, 0.1f, 0.1f, 1);
+            var highColor = new Color(0.9f, 0.9f, 0.9f, 1);
+            Texture texture = mapMode == 1
+                ? (Texture)CreateTexture2DArray(lowColor, lowColor, highColor, highColor)
+                : CreateTexture3D(lowColor, lowColor, highColor, highColor);
+            var second = secondBlend > 0;
+            var prefix = second ? "_AlphaTransitionMapSecondTexture" : "_AlphaTransitionMap";
+            return RenderUberUnlit(material => ConfigureAlphaTransition(material, 2, 0.5f, second ? 0 : mapMode, m =>
+            {
+                m.SetTexture("_BaseMap", Texture2D.whiteTexture);
+                if (second) m.SetTexture("_AlphaTransitionMap", Texture2D.whiteTexture);
+                m.SetFloat("_AlphaTransitionSecondTextureBlendMode", secondBlend);
+                m.SetFloat("_AlphaTransitionMapSecondTextureMapMode", mapMode);
+                m.SetFloat("_AlphaTransitionProgressSecondTexture", 0.5f);
+                m.SetTexture(prefix + (mapMode == 1 ? "2DArray" : "3D"), texture);
+                m.SetFloat(prefix + "Progress", randomRow ? 0.1f : high ? 0.7f : 0.1f);
+                m.SetFloat(prefix + "SliceCount", 4);
+                m.SetFloat(prefix + "RandomRowSelectionEnabled", randomRow ? 1 : 0);
+                m.SetFloat(prefix + "RandomRowCoord", 1);
+                m.SetFloat(prefix + "RowCount", 2);
+            }), mesh: CreateQuad(Color.white, customCoord1: new Vector4(high ? 1.2f : 0, 0, 0, 0)),
+                background: Color.black, ownedObjects: new[] { texture });
+        }
+        var low = Render(false);
+        var high = Render(true);
+        Assert.That(high.r, Is.GreaterThan(low.r + 0.2f), $"low {low}, high {high}");
+        if (secondBlend != 1) Assert.That(low.r, Is.LessThan(0.04f), low.ToString());
     }
 
     [Test]

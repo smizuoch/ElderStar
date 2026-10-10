@@ -28,7 +28,9 @@ python Tests/Visual/compare_frames.py --reference <original-captures> --actual <
 ```
 
 The comparator fails on missing frames, mismatched dimensions, invisible base
-geometry, or Unlit differences above any documented threshold. It outputs JSON,
+geometry, or any of the 96 common-surface differences above the documented thresholds. It outputs JSON,
 Markdown and contact sheets showing original, port and amplified difference.
-Lit frames are diagnostic because their BRDF is an explicit approximation; the
-lighting rendering tests provide their feature-specific acceptance checks.
+Lit frames use a controlled diffuse dielectric with specular/reflections disabled.
+Their common material stack must meet the same image thresholds; the dedicated
+lighting rendering tests additionally check the documented BRDF approximation,
+shadows and reflections. This does not claim full URP PBR equality.
