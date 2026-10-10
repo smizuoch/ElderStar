@@ -2,6 +2,15 @@
 
 ## Completion audit, 2026-10-10
 
+All four Uber shaders now apply scene Linear, Exponential and ExponentialSquared
+fog after their color/lighting stack. ForwardAdd attenuates toward black to avoid
+adding the fog color once per light. Fog uses world/view depth without another
+interpolator; orthographic cameras work too. This is Approximate: the original
+interpolates clip-derived fog data, whereas this port evaluates view depth per
+fragment (near-plane-relative). This avoids the Built-in clip-depth limitation
+on orthographic cameras; match the scene fog distances when migrating. The fog
+tests cover the three modes with perspective and orthographic cameras.
+
 Base and Lit surface textures now use Unity's separate texture/sampler macros.
 Point, bilinear and trilinear mirror keywords select the corresponding inline
 sampler for 2D/array/3D resources, including normal, metallic, smoothness and

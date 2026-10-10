@@ -266,6 +266,7 @@ Shader "Nova/UIParticles/UberUnlit"
             #pragma multi_compile_instancing
             #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
+            #pragma multi_compile_fog
             #pragma target 3.5
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
@@ -307,6 +308,7 @@ Shader "Nova/UIParticles/UberUnlit"
             #pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #include "BuiltIn/NovaBuiltInCore.cginc"
+            #include "BuiltIn/NovaBuiltInFog.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInDepth.cginc"
             #include "BuiltIn/NovaBuiltInUI.cginc"
@@ -932,6 +934,7 @@ Shader "Nova/UIParticles/UberUnlit"
                 color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
                 #endif
 
+                NovaApplyWorldFog(color, _WorldSpaceCameraPos.xyz - i.viewDirWS);
                 return color;
             }
             ENDCG

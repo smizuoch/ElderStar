@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.TestTools;
 
 namespace Nova.Tests.PlayMode
 {
@@ -22,6 +24,66 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
     }
     private const int TextureSize = 4;
     private const int RenderSize = 64;
+
+    [UnityTest]
+    public IEnumerator UberShadersApplySceneFogLinear() => AssertSceneFog(FogMode.Linear);
+
+    [UnityTest]
+    public IEnumerator UberShadersApplySceneFogExponential() => AssertSceneFog(FogMode.Exponential);
+
+    [UnityTest]
+    public IEnumerator UberShadersApplySceneFogExponentialSquared() => AssertSceneFog(FogMode.ExponentialSquared);
+
+    [UnityTest]
+    public IEnumerator UberShadersApplySceneFogPerspectiveLinear() => AssertSceneFog(FogMode.Linear, false);
+
+    [UnityTest]
+    public IEnumerator UberShadersApplySceneFogPerspectiveExponential() => AssertSceneFog(FogMode.Exponential, false);
+
+    [UnityTest]
+    public IEnumerator UberShadersApplySceneFogPerspectiveExponentialSquared() => AssertSceneFog(FogMode.ExponentialSquared, false);
+
+    private IEnumerator AssertSceneFog(FogMode mode, bool orthographic = true)
+    {
+        Color Render()
+        {
+            var texture = CreateSolidTexture(Color.white);
+            return RenderUberUnlit(material => material.SetTexture("_BaseMap", texture),
+                ownedObjects: new[] { texture }, orthographic: orthographic);
+        }
+        var oldEnabled = RenderSettings.fog;
+        var oldMode = RenderSettings.fogMode;
+        var oldColor = RenderSettings.fogColor;
+        var oldDensity = RenderSettings.fogDensity;
+        var oldStart = RenderSettings.fogStartDistance;
+        var oldEnd = RenderSettings.fogEndDistance;
+        try
+        {
+            RenderSettings.fog = false;
+            yield return null; // Unity publishes fog globals at the frame boundary.
+            var clear = Render();
+            RenderSettings.fog = true;
+            RenderSettings.fogMode = mode;
+            RenderSettings.fogColor = Color.blue;
+            RenderSettings.fogDensity = 3f;
+            RenderSettings.fogStartDistance = 0f;
+            RenderSettings.fogEndDistance = 0.5f;
+            yield return null;
+            var fogged = Render();
+            Assert.That(clear.r, Is.GreaterThan(0.5f), clear.ToString());
+            Assert.That(fogged.r, Is.LessThan(0.08f), fogged.ToString());
+            Assert.That(fogged.b, Is.GreaterThan(0.7f), fogged.ToString());
+        }
+        finally
+        {
+            RenderSettings.fog = oldEnabled;
+            RenderSettings.fogMode = oldMode;
+            RenderSettings.fogColor = oldColor;
+            RenderSettings.fogDensity = oldDensity;
+            RenderSettings.fogStartDistance = oldStart;
+            RenderSettings.fogEndDistance = oldEnd;
+        }
+    }
 
     [Test]
     public void UberUnlitRendersBaseMap2D()
@@ -1131,9 +1193,10 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         Action<Material> configureMaterial,
         Mesh mesh = null,
         Color? background = null,
-        IEnumerable<UnityEngine.Object> ownedObjects = null)
+        IEnumerable<UnityEngine.Object> ownedObjects = null,
+        bool orthographic = true)
     {
-        return RenderUberUnlitSamples(configureMaterial, new[] { new Vector2(0.5f, 0.5f) }, mesh, background, ownedObjects)[0];
+        return RenderUberUnlitSamples(configureMaterial, new[] { new Vector2(0.5f, 0.5f) }, mesh, background, ownedObjects, orthographic)[0];
     }
 
     private Color[] RenderUberUnlitSamples(
@@ -1141,7 +1204,8 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         IReadOnlyList<Vector2> normalizedSamplePositions,
         Mesh mesh = null,
         Color? background = null,
-        IEnumerable<UnityEngine.Object> ownedObjects = null)
+        IEnumerable<UnityEngine.Object> ownedObjects = null,
+        bool orthographic = true)
     {
         var shader = Shader.Find(ShaderName);
         Assert.That(shader, Is.Not.Null, ShaderName);
@@ -1174,7 +1238,7 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             var camera = cameraObject.AddComponent<Camera>();
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = background ?? new Color(0.01f, 0.01f, 0.01f, 1f);
-            camera.orthographic = true;
+            camera.orthographic = orthographic;
             camera.orthographicSize = 0.75f;
             camera.nearClipPlane = 0.01f;
             camera.farClipPlane = 10f;

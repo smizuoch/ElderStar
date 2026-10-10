@@ -285,6 +285,7 @@ Shader "Nova/Particles/UberLit"
             #pragma multi_compile_instancing
             #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
+            #pragma multi_compile_fog
             #pragma target 3.5
             #pragma multi_compile_fwdbase
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
@@ -363,6 +364,7 @@ Shader "Nova/Particles/UberLit"
             #pragma multi_compile_instancing
             #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
+            #pragma multi_compile_fog
             #pragma target 3.5
             #pragma multi_compile_fwdadd_fullshadows
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY

@@ -2,6 +2,7 @@
 #define NOVA_PARTICLE_FEATURES_INCLUDED
 
 #include "NovaBuiltInCore.cginc"
+#include "NovaBuiltInFog.cginc"
 #include "NovaBuiltInTexture.cginc"
 #include "NovaBuiltInDepth.cginc"
 #include "NovaBuiltInUI.cginc"
@@ -674,6 +675,7 @@ half4 frag(v2f i) : SV_Target
     color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
     #endif
 
+    NovaApplyWorldFog(color, i.positionWS);
     return color;
 }
 

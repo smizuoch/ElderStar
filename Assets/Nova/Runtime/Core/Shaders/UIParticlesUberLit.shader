@@ -292,6 +292,7 @@ Shader "Nova/UIParticles/UberLit"
             #pragma multi_compile_instancing
             #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
+            #pragma multi_compile_fog
             #pragma target 3.5
             #pragma require 2darray
             #pragma multi_compile_fwdbase
@@ -373,6 +374,7 @@ Shader "Nova/UIParticles/UberLit"
             #pragma multi_compile_instancing
             #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
+            #pragma multi_compile_fog
             #pragma target 3.5
             #pragma require 2darray
             #pragma multi_compile_fwdadd_fullshadows

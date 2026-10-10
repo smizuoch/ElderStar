@@ -260,6 +260,7 @@ Shader "Nova/Particles/UberUnlit"
             #pragma multi_compile_instancing
             #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
+            #pragma multi_compile_fog
             #pragma target 3.5
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
@@ -302,6 +303,7 @@ Shader "Nova/Particles/UberUnlit"
             #pragma shader_feature_local _SHADOW_CASTER_ALPHA_TEST_ENABLED
             #pragma shader_feature_local _CASTING_PUNCTUAL_LIGHT_SHADOW
             #include "BuiltIn/NovaBuiltInCore.cginc"
+            #include "BuiltIn/NovaBuiltInFog.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInDepth.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
@@ -918,6 +920,7 @@ Shader "Nova/Particles/UberUnlit"
                 color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
                 #endif
 
+                NovaApplyWorldFog(color, _WorldSpaceCameraPos.xyz - i.viewDirWS);
                 return color;
             }
             ENDCG
