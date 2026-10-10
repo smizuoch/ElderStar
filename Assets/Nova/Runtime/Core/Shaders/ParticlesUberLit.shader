@@ -282,6 +282,8 @@ Shader "Nova/Particles/UberLit"
 
             CGPROGRAM
             #pragma vertex vert
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
             #pragma target 3.5
             #pragma multi_compile_fwdbase
@@ -358,6 +360,8 @@ Shader "Nova/Particles/UberLit"
 
             CGPROGRAM
             #pragma vertex vert
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
             #pragma target 3.5
             #pragma multi_compile_fwdadd_fullshadows
@@ -433,6 +437,8 @@ Shader "Nova/Particles/UberLit"
 
             CGPROGRAM
             #pragma vertex vertSceneSelection
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment fragSceneHighlight
             #pragma target 3.5
             #pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED
@@ -452,6 +458,8 @@ Shader "Nova/Particles/UberLit"
 
             struct NovaEditorAttributes
             {
+                fixed4 color : COLOR;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
@@ -479,6 +487,7 @@ Shader "Nova/Particles/UberLit"
 
             NovaEditorVaryings vertSceneSelection(NovaEditorAttributes v)
             {
+                NOVA_SETUP_PARTICLE(v)
                 NovaEditorVaryings o;
                 NovaEditorApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.vertex = NovaObjectToClipPos(v.vertex);
@@ -502,6 +511,8 @@ Shader "Nova/Particles/UberLit"
 
             CGPROGRAM
             #pragma vertex vertPicking
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment fragScenePicking
             #pragma target 3.5
             #pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED
@@ -520,6 +531,8 @@ Shader "Nova/Particles/UberLit"
 
             struct NovaPickingAttributes
             {
+                fixed4 color : COLOR;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
@@ -547,6 +560,7 @@ Shader "Nova/Particles/UberLit"
 
             NovaPickingVaryings vertPicking(NovaPickingAttributes v)
             {
+                NOVA_SETUP_PARTICLE(v)
                 NovaPickingVaryings o;
                 NovaPickingApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.vertex = NovaObjectToClipPos(v.vertex);
@@ -571,6 +585,8 @@ Shader "Nova/Particles/UberLit"
 
             CGPROGRAM
             #pragma vertex vertDepthOnly
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment fragDepthOnly
             #pragma target 3.5
             #pragma require 2darray
@@ -672,6 +688,7 @@ Shader "Nova/Particles/UberLit"
 
             struct NovaDepthAttributes
             {
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
@@ -704,6 +721,7 @@ Shader "Nova/Particles/UberLit"
 
             NovaDepthVaryings vertDepthOnly(NovaDepthAttributes v)
             {
+                NOVA_SETUP_PARTICLE(v)
                 NovaDepthVaryings o;
                 NovaDepthApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.vertex = NovaObjectToClipPos(v.vertex);
@@ -778,6 +796,8 @@ Shader "Nova/Particles/UberLit"
 
             CGPROGRAM
             #pragma vertex vertShadowCaster
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment fragShadowCaster
             #pragma target 3.5
             #pragma require 2darray
@@ -857,6 +877,7 @@ Shader "Nova/Particles/UberLit"
 
             struct NovaShadowAttributes
             {
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
@@ -892,6 +913,7 @@ Shader "Nova/Particles/UberLit"
 
             NovaShadowVaryings vertShadowCaster(NovaShadowAttributes v)
             {
+                NOVA_SETUP_PARTICLE(v)
                 NovaShadowVaryings o;
                 NovaShadowApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.pos = NovaShadowCasterClipPos(v.vertex, v.normal);

@@ -170,6 +170,7 @@ float _VertexDeformationBaseValue;
 
 struct appdata
 {
+    UNITY_VERTEX_INPUT_INSTANCE_ID
     float4 vertex : POSITION;
     float3 normal : NORMAL;
     float4 tangent : TANGENT;
@@ -206,6 +207,7 @@ struct v2f
 
 v2f vert(appdata v)
 {
+    NOVA_SETUP_PARTICLE(v)
     v2f o = (v2f)0;
     #if defined(_VERTEX_DEFORMATION_ENABLED)
     float2 vertexDeformationUv = NovaTransformUV(v.uv, _VertexDeformationMap_ST);

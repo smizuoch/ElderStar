@@ -289,6 +289,8 @@ Shader "Nova/UIParticles/UberLit"
 
             CGPROGRAM
             #pragma vertex vert
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
             #pragma target 3.5
             #pragma require 2darray
@@ -368,6 +370,8 @@ Shader "Nova/UIParticles/UberLit"
 
             CGPROGRAM
             #pragma vertex vert
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
             #pragma target 3.5
             #pragma require 2darray

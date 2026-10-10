@@ -263,6 +263,8 @@ Shader "Nova/UIParticles/UberUnlit"
 
             CGPROGRAM
             #pragma vertex vert
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
             #pragma fragment frag
             #pragma target 3.5
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
@@ -465,6 +467,7 @@ Shader "Nova/UIParticles/UberUnlit"
 
             struct appdata
             {
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float4 tangent : TANGENT;
@@ -498,6 +501,7 @@ Shader "Nova/UIParticles/UberUnlit"
 
             v2f vert(appdata v)
             {
+                NOVA_SETUP_PARTICLE(v)
                 v2f o;
                 #if defined(_VERTEX_DEFORMATION_ENABLED)
                 float2 vertexDeformationUv = NovaTransformUV(v.uv, _VertexDeformationMap_ST);

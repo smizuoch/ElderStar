@@ -2,6 +2,7 @@
 #define NOVA_BUILTIN_CORE_INCLUDED
 
 #include "UnityCG.cginc"
+#include "NovaBuiltInParticleInstancing.cginc"
 
 float3 NovaObjectToWorld(float3 positionOS)
 {

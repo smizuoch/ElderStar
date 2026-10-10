@@ -75,8 +75,10 @@ Shader "Nova/Particles/Distortion"
             CGPROGRAM
             #pragma target 3.5
             #pragma vertex vert
-            #pragma fragment frag
             #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
+            #pragma fragment frag
+
             #pragma shader_feature_local_fragment _ _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR
             #pragma shader_feature_local _FLOW_MAP_ENABLED
             #pragma shader_feature_local _FLOW_MAP_TARGET_BASE

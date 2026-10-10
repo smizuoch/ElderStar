@@ -76,6 +76,18 @@ module for its editor tooling; no URP package or assembly is required. Editor te
 inspectors and repair actual ParticleSystemRenderer vertex streams. Billboard rendering tests
 verify all four Uber shaders with particle color and Custom1 transition progress.
 
+Particle GPU instancing now uses Unity's Built-in procedural instancing helpers with NOVA's
+original transform/packed-color/Custom1/Custom2 buffer layout. All five visible shaders expose
+procedural variants; forward, additional-light, depth, shadow and existing editor passes initialize
+instance transforms before deformation. Tests check each shader/pass compiles and render two
+independently positioned/colored particles with independent Custom1/Custom2 transitions.
+Distortion tests also exercise billboard and GPU mesh ParticleSystemRenderer draws through the
+camera effect. Mesh instancing requires a supported graphics backend, Mesh rendering, Enable
+GPU Instancing and NOVA's prescribed vertex streams; the inspector's Fix Now action sets those
+streams. On platforms without mesh instancing support, use the tested non-instanced particle path.
+These checks cover Windows D3D11 on the installed editors; other graphics backends require
+their own platform validation.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.

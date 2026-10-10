@@ -53,8 +53,8 @@ float2 NovaDistortionUv(float2 uv, float4 st, half angle, half angleCoord, float
 
 v2f vert(appdata v)
 {
+    NOVA_SETUP_PARTICLE(v)
     v2f o = (v2f)0;
-    UNITY_SETUP_INSTANCE_ID(v);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
     o.pos = NovaObjectToClipPos(v.vertex);
     o.screenPosition = NovaComputeScreenPos(o.pos);

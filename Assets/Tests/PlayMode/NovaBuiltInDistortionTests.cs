@@ -19,6 +19,8 @@ namespace Nova.Tests.PlayMode
         [TestCase("soft particles", false)]
         [TestCase("depth fade", false)]
         [TestCase("cull front", false)]
+        [TestCase("particle system", true)]
+        [TestCase("particle mesh", true)]
         public void CameraDistortionRespectsMaterialAndVisibility(string scenario, bool shouldDistort)
         {
             var type = AppDomain.CurrentDomain.GetAssemblies()
@@ -27,7 +29,9 @@ namespace Nova.Tests.PlayMode
             Assert.That(type, Is.Not.Null, "The Built-in camera component is missing.");
             var cameraObject = new GameObject("Distortion test camera", typeof(Camera));
             var background = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            var particle = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            var particle = scenario.StartsWith("particle ")
+                ? new GameObject("Distortion ParticleSystem", typeof(ParticleSystem))
+                : GameObject.CreatePrimitive(PrimitiveType.Quad);
             var backgroundMaterial = new Material(Shader.Find("Nova/Particles/UberUnlit"));
             var distortionMaterial = new Material(Shader.Find("Nova/Particles/Distortion"));
             var gradient = new Texture2D(64, 4, TextureFormat.RGBA32, false);
@@ -82,6 +86,36 @@ namespace Nova.Tests.PlayMode
                 }
                 Setup("ParticlesDistortionMaterialPostProcessor", distortionMaterial);
                 particle.GetComponent<Renderer>().sharedMaterial = distortionMaterial;
+                if (scenario.StartsWith("particle "))
+                {
+                    var particles = particle.GetComponent<ParticleSystem>();
+                    particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    var main = particles.main;
+                    main.startSpeed = 0;
+                    main.startSize = 1;
+                    main.startLifetime = 100;
+                    var emission = particles.emission;
+                    emission.enabled = false;
+                    particle.GetComponent<ParticleSystemRenderer>().SetActiveVertexStreams(
+                        new System.Collections.Generic.List<ParticleSystemVertexStream>
+                        {
+                            ParticleSystemVertexStream.Position, ParticleSystemVertexStream.Color,
+                            ParticleSystemVertexStream.UV, ParticleSystemVertexStream.UV2,
+                            ParticleSystemVertexStream.Custom1XYZW, ParticleSystemVertexStream.Custom2XYZW
+                        });
+                    if (scenario == "particle mesh")
+                    {
+                        var renderer = particle.GetComponent<ParticleSystemRenderer>();
+                        renderer.renderMode = ParticleSystemRenderMode.Mesh;
+                        renderer.mesh = background.GetComponent<MeshFilter>().sharedMesh;
+                        renderer.enableGPUInstancing = true;
+                        distortionMaterial.enableInstancing = true;
+                        Assert.That(renderer.supportsMeshInstancing, Is.True);
+                    }
+                    particles.Emit(new ParticleSystem.EmitParams { position = Vector3.zero, velocity = Vector3.zero,
+                        startLifetime = 100, startSize = 1, startColor = Color.white }, 1);
+                    particles.Simulate(0.01f, true, false);
+                }
                 particle.GetComponent<Renderer>().enabled = scenario != "disabled renderer";
                 particle.layer = 8;
                 if (scenario == "occluded") particle.transform.position = new Vector3(0, 0, 2);
