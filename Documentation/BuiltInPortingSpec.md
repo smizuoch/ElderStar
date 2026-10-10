@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Verify Lit normal packing/scale and original surface-map UV parity; then repair missing parallax texture modes/targets found in the feature audit. Unity 6 package-cache tests pass and its standalone player build is running. Samples, migration and final visual comparison remain.
+Current TODO: Verify all parallax texture modes/targets; then audit sampler overrides and fog against the original. Both Unity versions pass package-cache and standalone-player smoke. Samples, migration and final visual comparison remain; rebuild final packages after the feature fixes.
 
 Completion worklist (2026-10-10):
 
@@ -26,9 +26,9 @@ Completion worklist (2026-10-10):
 - [x] Complete original editor APIs/inspectors and actual billboard ParticleSystem/vertex-stream coverage.
 - [x] Particle mesh instancing and distortion particle rendering.
 - [x] Distortion editor selection and picking.
-- [ ] Isolated UPM installation, package-cache include resolution and player build validation.
+- [x] Isolated UPM installation, package-cache include resolution and player build validation (repeat on final package).
 - [ ] Samples, migration utilities, installation and camera setup documentation.
-- [ ] Audit imported normal-map packing and Lit surface-map UV behavior against the original.
+- [x] Audit imported normal-map packing and Lit surface-map UV behavior against the original.
 - [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.
 - [ ] Full EditMode and graphics-enabled PlayMode on installed Unity 2022.3 and Unity 6; compiler diagnostics.
 - [ ] Final visual regression with explicit thresholds; preserve all existing golden images and baselines.

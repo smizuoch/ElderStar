@@ -421,6 +421,60 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
         Assert.That(color.g, Is.GreaterThan(color.r + 0.1f), color.ToString());
     }
 
+    [TestCase(0, 1)]
+    [TestCase(1, 1)]
+    [TestCase(2, 1)]
+    [TestCase(0, 2)]
+    [TestCase(1, 2)]
+    [TestCase(2, 2)]
+    [TestCase(0, 4)]
+    [TestCase(1, 4)]
+    [TestCase(2, 4)]
+    public void ParallaxMovesEveryTextureModeAndTarget(int mode, int target)
+    {
+        Color Render(float strength)
+        {
+            var pattern = CreateHorizontalSplitTexture(Color.black, Color.white, TextureSize / 2);
+            var solid = CreateSolidTexture(target == 4 ? Color.black : Color.white);
+            Texture height = mode == 0 ? (Texture)CreateSolidTexture(Color.white)
+                : mode == 1 ? CreateTexture2DArray(Color.white, Color.white)
+                : (Texture)CreateTexture3D(Color.white, Color.white);
+            return RenderUberUnlitSamples(material =>
+            {
+                material.SetTexture("_BaseMap", target == 1 ? pattern : solid);
+                material.SetFloat("_BaseMapMode", 0f);
+                if (target == 2)
+                {
+                    material.SetFloat("_TintAreaMode", 1f);
+                    material.SetFloat("_TintColorMode", 1f);
+                    material.SetTexture("_TintMap", pattern);
+                    material.SetFloat("_TintBlendRate", 1f);
+                }
+                if (target == 4)
+                {
+                    material.SetFloat("_EmissionAreaType", 2f);
+                    material.SetFloat("_EmissionColorType", 0f);
+                    material.SetColor("_EmissionColor", Color.white);
+                    material.SetTexture("_EmissionMap", pattern);
+                    material.SetFloat("_EmissionMapChannelsX", 0f);
+                    material.SetFloat("_EmissionIntensity", 1f);
+                }
+                material.SetTexture(mode == 0 ? "_ParallaxMap" : mode == 1 ? "_ParallaxMap2DArray" : "_ParallaxMap3D", height);
+                material.SetFloat("_ParallaxMapMode", mode);
+                material.SetFloat("_ParallaxMapSliceCount", 2f);
+                material.SetFloat("_ParallaxMapTarget", target);
+                material.SetFloat("_ParallaxMapChannel", 0f);
+                material.SetFloat("_ParallaxStrength", strength);
+            }, new[] { new Vector2(0.48f, 0.5f) },
+                mesh: CreateQuad(Color.white, skewForParallax: true),
+                ownedObjects: new UnityEngine.Object[] { pattern, solid, height })[0];
+        }
+        var disabled = Render(0f);
+        var enabled = Render(1f);
+        Assert.That(enabled.r, Is.GreaterThan(disabled.r + 0.25f),
+            $"mode {mode}, target {target}: off {disabled}, on {enabled}");
+    }
+
     [Test]
     public void UberUnlitGreyscaleAffectsOutput()
     {

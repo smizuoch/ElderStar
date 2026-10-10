@@ -2,6 +2,12 @@
 
 ## Completion audit, 2026-10-10
 
+Parallax now applies to Base, Tint and Emission with 2D, array and 3D height maps
+in all four Uber shaders. A 36-case render test compares disabled/enabled offsets
+at a texture boundary; 31 cases failed before the missing branches were restored.
+The prior 2D Base-only smoke remains. Camera/tangent conventions remain an
+Approximate part of parallax; the original property and target flags are retained.
+
 Lit normal maps now decode Unity's imported normal packing through `UnpackNormal`
 before scaling XY, matching original NOVA's reconstruct-Z-then-scale convention.
 The D3D11 tests import a real DXT5 normal texture and compare it with a raw flat

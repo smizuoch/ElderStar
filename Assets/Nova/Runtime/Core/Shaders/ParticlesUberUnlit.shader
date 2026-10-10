@@ -626,7 +626,7 @@ Shader "Nova/Particles/UberUnlit"
                     NovaEmissionMapProgress(emissionMapProgress, _EmissionMapSliceCount, _EmissionMapRowCount, emissionRandomValue));
                 #endif
                 o.parallaxUvAndProgress = float3(v.uv, 0.0h);
-                #if defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT)
+                #if defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT) || defined(_PARALLAX_MAP_TARGET_EMISSION)
                     #if defined(_PARALLAX_MAP_MODE_2D_ARRAY)
                     o.parallaxUvAndProgress.xy = NovaTransformUV(v.uv, _ParallaxMap2DArray_ST);
                     #elif defined(_PARALLAX_MAP_MODE_3D)
@@ -792,7 +792,7 @@ Shader "Nova/Particles/UberUnlit"
                     #endif
                 #endif
 
-                #if defined(_PARALLAX_MAP_MODE_2D) && (defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT))
+                #if defined(_PARALLAX_MAP_TARGET_BASE) || defined(_PARALLAX_MAP_TARGET_TINT) || defined(_PARALLAX_MAP_TARGET_EMISSION)
                 half4 parallaxMap = SampleParallaxMap(i.parallaxUvAndProgress.xy, i.parallaxUvAndProgress.z);
                 half parallaxHeight = NovaSelectChannel(parallaxMap, _ParallaxMapChannel);
                 half2 parallaxOffset = NovaParallaxOffset(parallaxHeight, _ParallaxStrength, i.viewDirTS);
@@ -801,6 +801,9 @@ Shader "Nova/Particles/UberUnlit"
                     #endif
                     #if defined(_PARALLAX_MAP_TARGET_TINT)
                     tintUv += parallaxOffset;
+                    #endif
+                    #if defined(_PARALLAX_MAP_TARGET_EMISSION)
+                    emissionUv += parallaxOffset;
                     #endif
                 #endif
 
