@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Finish installation and standalone player/sample validation from the final release tarball, then record the delivery evidence. Full canonical EditMode passes 143/143 and PlayMode passes 727/727 on both Unity versions; all 96 fresh visual comparisons pass. The final matrix resolves 65 feature groups and retains historical reports separately.
+Current TODO: None required for the completed Built-in port. On both Unity 2022.3.22f1 and 6000.3.23f1, EditMode passes 143/143, PlayMode passes 727/727, final tarball tests pass 3/3, and standalone player/sample execution passes. All 96 fresh visual comparisons pass. The matrix resolves 65 feature groups with explicit limits and fallbacks. See [VerificationReport.md](VerificationReport.md) for exact artifacts and evidence.
 
 Completion worklist (2026-10-10):
 
@@ -26,7 +26,7 @@ Completion worklist (2026-10-10):
 - [x] Complete original editor APIs/inspectors and actual billboard ParticleSystem/vertex-stream coverage.
 - [x] Particle mesh instancing and distortion particle rendering.
 - [x] Distortion editor selection and picking.
-- [ ] Repeat isolated UPM installation, package-cache include resolution and standalone player/sample validation on the final release tarball.
+- [x] Repeat isolated UPM installation, package-cache include resolution and standalone player/sample validation on the final release tarball.
 - [x] Samples, migration utilities, installation and camera setup documentation.
 - [x] Audit imported normal-map packing and Lit surface-map UV behavior against the original.
 - [x] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.

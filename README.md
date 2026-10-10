@@ -60,6 +60,11 @@ materials preserves their properties, keywords and queue and supports Undo.
 
 ## Compatibility and verification
 
+The [2026-10-10 release verification report](Documentation/VerificationReport.md)
+records passing EditMode (143), PlayMode (727) and installed-package (3) tests on
+each tested Unity version, all 96 visual comparisons, and both standalone players.
+It also links the local release tarball and Windows demo.
+
 Lit lighting uses a Built-in approximation with normal, metallic/specular and
 smoothness maps, main/additional lights, shadows and reflection probes. It does
 not reproduce URP's GGX BRDF, Forward+, probe volumes or probe blending/box projection.

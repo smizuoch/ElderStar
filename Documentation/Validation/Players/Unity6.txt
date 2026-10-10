@@ -1,0 +1,3 @@
+PASS: 6000.3.23f1
+Six original shaders found. Four Uber color renders passed. Distortion offset and disable passed.
+Packaged showcase loaded, five particle systems simulated and its rendered image passed.
