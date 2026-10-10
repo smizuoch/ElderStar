@@ -4,6 +4,8 @@ using System.Linq;
 using Nova.Editor.Core.Scripts.Optimizer;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
+using UnityEditor.SceneManagement;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using UnityEngine;
 
@@ -11,6 +13,29 @@ namespace Nova.Tests.PackageImport
 {
     public sealed class NovaInstalledPackageTests
     {
+        [Test]
+        public void PackageManagerImportsShowcaseWithResolvableMaterialsAndParticles()
+        {
+            var package = PackageInfo.FindForAssetPath("Packages/jp.co.cyberagent.nova.builtin/package.json");
+            var samples = Sample.FindByPackage(package.name, package.version).ToArray();
+            Assert.That(samples.Length, Is.EqualTo(1));
+            var sample = samples[0];
+            Assert.That(sample.Import(Sample.ImportOptions.OverridePreviousImports | Sample.ImportOptions.HideImportWindow), Is.True);
+            var path = sample.importPath.Replace('\\', '/') + "/NovaShowcase.unity";
+            Assert.That(File.Exists(path), Is.True);
+            var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            try
+            {
+                var roots = scene.GetRootGameObjects();
+                Assert.That(roots.SelectMany(r => r.GetComponentsInChildren<ParticleSystem>()).Count(), Is.EqualTo(5));
+                var materials = roots.SelectMany(r => r.GetComponentsInChildren<Renderer>()).SelectMany(r => r.sharedMaterials).ToArray();
+                Assert.That(materials.All(m => m != null && m.shader != null && m.shader.isSupported), Is.True);
+                Assert.That(roots.SelectMany(r => r.GetComponentsInChildren<Camera>()).Single()
+                    .GetComponents<Component>().Any(c => c != null && c.GetType().Name == "ScreenSpaceDistortion"), Is.True);
+            }
+            finally { EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single); }
+        }
+
         [Test]
         public void ExternalPackageImportsWithoutUrpAndAllOriginalShaderNamesCompile()
         {

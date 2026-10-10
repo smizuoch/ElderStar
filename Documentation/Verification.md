@@ -33,7 +33,13 @@ Run the shell regression checks with:
 ```bash
 bash Tests/Shell/test-unity-env.sh
 python3 Tests/Shell/test_unity_runners.py
+python3 Tests/Docs/test_release_documentation.py
+python3 Tests/Visual/test_compare_frames.py
 ```
+
+The visual comparator requires Pillow. Follow [the capture instructions](../Tests/Visual/README.md)
+to produce fresh original and Built-in frames; all 96 comparisons must pass.
+The completed release evidence is in [VerificationReport.md](VerificationReport.md).
 
 Never pass `-nographics` to the rendering tests. Do not use
 `Shader.WarmupAllShaders()` as a substitute for shader diagnostics: tests use
@@ -44,7 +50,9 @@ camera/particle/UI rendering checks. Golden images are not rewritten by these co
 
 `Tests/PackageImport` is copied into Assets of an isolated Built-in test project.
 It checks external/tarball package import, all six original shader names, compilation
-of all 48 optimizer outputs and package-relative include paths. Pass
+of all 48 optimizer outputs, package-relative include paths, and native Package
+Manager sample import with resolved materials and five particle systems. All three
+tests must pass. Pass
 `-novaRequireCache` when testing a tarball to require a Library/PackageCache path.
 
 `Scripts/Unity/NovaPackageBootstrap.cs` can be copied to that project's Assets/Editor.
@@ -61,6 +69,18 @@ under the isolated project's Build folder. Run that player with graphics enabled
 NovaPackageSmoke.exe -batchmode -force-d3d11 -novaReport <absolute-report-path> -logFile <absolute-log-path>
 ```
 
-The player verifies shader retention, four Uber color renders and distortion behavior,
-then writes PASS or FAIL and exits accordingly. It does not contact external services.
+The builder imports the packaged showcase through Package Manager and includes it
+in the standalone build. The player verifies shader retention, four Uber color renders
+and distortion behavior, then loads that showcase, simulates its five particle systems
+and checks the rendered frame. It writes the frame as `<report-path>.ppm`, writes PASS
+or FAIL and exits accordingly. It does not contact external services.
+
+To watch the packaged showcase in the standalone player, run without `-batchmode`:
+
+```text
+NovaPackageSmoke.exe -novaShowcase -screen-fullscreen 0 -screen-width 960 -screen-height 640
+```
+
+This mode keeps the sample playing until the window is closed. Edit material and
+camera controls in the imported Unity scene; the standalone showcase is a visual demo.
 The fixtures are test infrastructure and are not included in the NOVA package.

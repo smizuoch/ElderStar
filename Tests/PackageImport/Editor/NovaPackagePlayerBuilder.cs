@@ -4,6 +4,7 @@ using Nova.Editor.Core.Scripts;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 public static class NovaPackagePlayerBuilder
@@ -56,6 +57,19 @@ public static class NovaPackagePlayerBuilder
                 EditorUtility.SetDirty(material);
             }
             AssetDatabase.SaveAssets();
+            var package = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/jp.co.cyberagent.nova.builtin/package.json");
+            var samples = Sample.FindByPackage(package.name, package.version);
+            string showcasePath = null;
+            foreach (var sample in samples)
+            {
+                if (!sample.Import(Sample.ImportOptions.OverridePreviousImports | Sample.ImportOptions.HideImportWindow))
+                    throw new InvalidOperationException("Could not import the packaged showcase.");
+                showcasePath = FileUtil.GetProjectRelativePath(Path.GetFullPath(
+                    Path.Combine(sample.importPath, "NovaShowcase.unity")).Replace('\\', '/'));
+                if (!showcasePath.StartsWith("Assets/", StringComparison.Ordinal) || !File.Exists(showcasePath))
+                    throw new InvalidOperationException("Sample scene could not be resolved to an Assets path: " + sample.importPath);
+            }
+            if (showcasePath == null) throw new InvalidOperationException("The package has no showcase sample.");
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             // Runtime smoke component is in the default runtime assembly.
             var type = AppDomain.CurrentDomain.GetAssemblies().SelectType("NovaPackagePlayerSmoke");
@@ -66,7 +80,7 @@ public static class NovaPackagePlayerBuilder
             PlayerSettings.runInBackground = true;
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
-                scenes = new[] { scenePath },
+                scenes = new[] { scenePath, showcasePath },
                 locationPathName = "Build/NovaPackageSmoke.exe",
                 target = BuildTarget.StandaloneWindows64,
                 options = BuildOptions.Development

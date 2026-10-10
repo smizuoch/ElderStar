@@ -4,30 +4,89 @@ using System.IO;
 using Nova.Runtime.Core.Scripts;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public sealed class NovaPackagePlayerSmoke : MonoBehaviour
 {
     private IEnumerator Start()
     {
+        if (Array.IndexOf(Environment.GetCommandLineArgs(), "-novaShowcase") >= 0)
+        {
+            SceneManager.LoadScene("NovaShowcase");
+            yield break;
+        }
         RenderSettings.ambientMode = AmbientMode.Flat;
         RenderSettings.ambientLight = Color.white;
         yield return null;
         yield return null;
         var reportPath = Argument("-novaReport", Path.Combine(Application.persistentDataPath, "nova-player-smoke.txt"));
+        if (!TryStage(Run, reportPath)) yield break;
+        DontDestroyOnLoad(gameObject);
+        if (!TryStage(() => SceneManager.LoadScene("NovaShowcase"), reportPath)) yield break;
+        yield return null;
+        yield return null;
+        if (!TryStage(() => VerifyShowcase(reportPath), reportPath)) yield break;
+        File.WriteAllText(reportPath, "PASS: " + Application.unityVersion +
+            "\nSix original shaders found. Four Uber color renders passed. Distortion offset and disable passed.\n" +
+            "Packaged showcase loaded, five particle systems simulated and its rendered image passed.\n");
+        Debug.Log("NOVA PLAYER SMOKE PASSED");
+        Application.Quit(0);
+    }
+
+    private static bool TryStage(Action validate, string reportPath)
+    {
         try
         {
-            Run();
-            File.WriteAllText(reportPath, "PASS: " + Application.unityVersion +
-                "\nSix original shaders found. Four Uber color renders passed. Distortion offset and disable passed.\n");
-            Debug.Log("NOVA PLAYER SMOKE PASSED");
-            Application.Quit(0);
+            validate();
+            return true;
         }
         catch (Exception exception)
         {
             File.WriteAllText(reportPath, "FAIL: " + exception);
             Debug.LogException(exception);
             Application.Quit(1);
+            return false;
         }
+    }
+
+    private static void VerifyShowcase(string reportPath)
+    {
+        var systems = FindObjectsOfType<ParticleSystem>();
+        if (systems.Length != 5) throw new Exception("Packaged showcase particle systems are missing.");
+        foreach (var system in systems) system.Simulate(2, true, true, true);
+        var camera = Camera.main;
+        if (camera == null || camera.GetComponent<ScreenSpaceDistortion>() == null)
+            throw new Exception("Packaged showcase camera/distortion is missing.");
+        var target = new RenderTexture(960, 640, 24);
+        var image = new Texture2D(960, 640, TextureFormat.RGB24, false);
+        camera.targetTexture = target;
+        camera.Render();
+        RenderTexture.active = target;
+        image.ReadPixels(new Rect(0, 0, 960, 640), 0, 0);
+        image.Apply();
+        var colored = 0;
+        foreach (var color in image.GetPixels())
+            if (Mathf.Max(color.r, color.g, color.b) - Mathf.Min(color.r, color.g, color.b) > 0.15f) colored++;
+        if (colored < 6000) throw new Exception("Packaged showcase produced too few colored pixels: " + colored);
+        // PPM avoids adding the optional ImageConversion module to the minimal test project.
+        var header = System.Text.Encoding.ASCII.GetBytes("P6\n960 640\n255\n");
+        var pixels = image.GetPixels32();
+        var ppm = new byte[header.Length + pixels.Length * 3];
+        header.CopyTo(ppm, 0);
+        var offset = header.Length;
+        for (var y = 639; y >= 0; y--)
+        for (var x = 0; x < 960; x++)
+        {
+            var color = pixels[y * 960 + x];
+            ppm[offset++] = color.r;
+            ppm[offset++] = color.g;
+            ppm[offset++] = color.b;
+        }
+        File.WriteAllBytes(reportPath + ".ppm", ppm);
+        camera.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(target);
+        Destroy(image);
     }
 
     private static void Run()
