@@ -478,27 +478,4 @@ namespace Nova.Editor.Core.Scripts.Optimizer
         ShadowCaster = 1 << 2,
     }
 
-    public static class OptimizedShaderGenerator
-    {
-        public static void Generate(string outputFolderPath)
-        {
-            Debug.LogWarning("Nova Built-in Phase 2 preserves the optimizer API surface only; shader generation is implemented in a later phase.");
-        }
-    }
-
-    public static class OptimizedShaderReplacer
-    {
-        public static void Replace(Settings settings)
-        {
-            Debug.LogWarning("Nova Built-in Phase 2 preserves the optimizer API surface only; shader replacement is implemented in a later phase.");
-        }
-
-        public sealed class Settings
-        {
-            public OptionalShaderPass OpaqueRequiredPasses { get; set; }
-            public OptionalShaderPass TransparentRequiredPasses { get; set; }
-            public OptionalShaderPass CutoutRequiredPasses { get; set; }
-            public string TargetFolderPath { get; set; }
-        }
-    }
 }

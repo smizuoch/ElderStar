@@ -50,6 +50,23 @@ RenderGraph assemblies. The controlled camera tests cover positive/negative/vert
 zero/XY-zero intensity, disabling, occlusion, layers, alpha dissolve, soft particles, depth
 fade and front-face culling. Final sample-scene and player validation remain on the worklist.
 
+Optimizer generation/replacement is now **Approximate** with executable coverage. The original
+48 particle shader names (2 shaders × 3 render types × 8 optional-pass combinations) are generated.
+All public properties and retained-pass keywords remain available, including vertex deformation;
+the generator strips optional passes rather than stripping alpha/deformation variants from
+opaque passes. ForwardBase, ForwardAdd, selection and picking remain. Built-in does not consume
+the original URP DepthNormals pass, so that option preserves its name without adding a URP pass;
+use the Built-in camera depth/normals replacement path described below. Omitting ShadowCaster
+also removes participation in Built-in camera depth textures. Choose that option only for effects
+that do not need shadows or camera depth.
+
+Includes use project asset paths so generated folders can move. Replacement is scoped to the
+requested Assets folder, records Undo, preserves serialized material settings/keywords/queue and
+saves modified assets. Regenerate shaders after updating NOVA. Tests compile all 48 outputs,
+check optional-pass selection and properties, persist replacements, and compare optimized versus
+original opaque/cutout/transparent color frames. UPM package-cache installation and player build
+coverage remain scheduled separately.
+
 Status values:
 
 - Exact: expected to match original behavior in Built-in.
