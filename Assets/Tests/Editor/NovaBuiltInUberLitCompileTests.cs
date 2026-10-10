@@ -142,7 +142,7 @@ public sealed class NovaBuiltInUberLitCompileTests
         Assert.That(shaderText, Does.Contain("NovaBuiltInUberLit.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
         Assert.That(shaderText, Does.Contain("NovaObjectToWorldNormal"));
-        Assert.That(combinedText, Does.Contain("NOVA_SAMPLE_TEX2D(baseMap"));
+        Assert.That(combinedText, Does.Contain("tex2D(baseMap"));
         Assert.That(combinedText, Does.Contain("NovaComputeMinimumLitColor"));
         Assert.That(combinedText, Does.Contain("NovaLitSurfaceData"));
         Assert.That(combinedText, Does.Contain("NovaResolveLitSurfaceData"));

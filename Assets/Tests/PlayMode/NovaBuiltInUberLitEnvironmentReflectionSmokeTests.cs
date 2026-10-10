@@ -21,6 +21,60 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     private const int TextureSize = 8;
 
     [Test]
+    public void LitSurfaceMapsShareBaseMirrorAndFilter(
+        [Values(0, 1, 2)] int mode,
+        [Values(FilterMode.Point, FilterMode.Bilinear, FilterMode.Trilinear)] FilterMode filter,
+        [Values(0.2f, 0.46f)] float u)
+    {
+        RenderSample Render(bool mirrored) => RenderEnvironment(material =>
+        {
+            ConfigureReflections(material, smoothness: 1f, metallic: 1f);
+            var baseMap = (Texture2D)material.GetTexture("_BaseMap");
+            baseMap.filterMode = filter;
+            var metallic = CreateSplitTexture(Color.black, Color.white);
+            metallic.filterMode = mirrored ? FilterMode.Point : filter;
+            material.SetFloat("_BaseMapMode", mode);
+            material.SetFloat("_BaseMapSliceCount", 2f);
+            material.SetFloat("_BaseMapMirrorSampling", mirrored ? 1f : 0f);
+            material.SetFloat("_MetallicMapChannelsX", 0f);
+            var suffix = mode == 0 ? "" : mode == 1 ? "2DArray" : "3D";
+            material.SetTexture("_MetallicMap" + suffix, ConvertTexture(metallic, mode));
+            if (mode != 0) material.SetTexture("_BaseMap" + suffix, ConvertTexture(baseMap, mode));
+            material.SetTextureScale("_BaseMap" + suffix, Vector2.zero);
+            material.SetTextureOffset("_BaseMap" + suffix, new Vector2(mirrored ? 2f - u : u, 0.5f));
+        });
+        var reference = Render(false);
+        var actual = Render(true);
+        Assert.That(ColorDistance(reference.Center, actual.Center), Is.LessThan(0.015f),
+            $"mode {mode}, {filter}, u {u}: expected {reference.Center}, actual {actual.Center}");
+    }
+
+    private static Texture ConvertTexture(Texture2D source, int mode)
+    {
+        if (mode == 0) return source;
+        Texture result;
+        if (mode == 1)
+        {
+            var array = new Texture2DArray(source.width, source.height, 2, TextureFormat.RGBA32, false);
+            array.SetPixels(source.GetPixels(), 0);
+            array.SetPixels(source.GetPixels(), 1);
+            array.Apply();
+            result = array;
+        }
+        else
+        {
+            var volume = new Texture3D(source.width, source.height, 2, TextureFormat.RGBA32, false);
+            volume.SetPixels(source.GetPixels().Concat(source.GetPixels()).ToArray());
+            volume.Apply();
+            result = volume;
+        }
+        result.filterMode = source.filterMode;
+        result.wrapMode = source.wrapMode;
+        UnityEngine.Object.DestroyImmediate(source);
+        return result;
+    }
+
+    [Test]
     public void LitSurfaceMapsKeepOriginalUvWhenBaseFlowIsEnabled()
     {
         RenderSample Render(bool flow) => RenderEnvironment(material =>
@@ -743,6 +797,8 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
                      "_MetallicMap",
                      "_SmoothnessMap",
                      "_FlowMap",
+                     "_BaseMap2DArray", "_BaseMap3D",
+                     "_MetallicMap2DArray", "_MetallicMap3D",
                  })
         {
             if (!material.HasProperty(property))

@@ -2,6 +2,15 @@
 
 ## Completion audit, 2026-10-10
 
+Base and Lit surface textures now use Unity's separate texture/sampler macros.
+Point, bilinear and trilinear mirror keywords select the corresponding inline
+sampler for 2D/array/3D resources, including normal, metallic, smoothness and
+specular maps. The 36-case Lit render suite compares mirrored samples and shared
+filtering with explicitly configured reference textures; all 36 failed before
+this fix. This is Exact for the tested D3D11 sampling path. Coupled-sampler
+backends retain texture-import filtering with mirrored UVs (Approximate); set
+matching texture filter modes there. Other graphics APIs still need platform validation.
+
 Parallax now applies to Base, Tint and Emission with 2D, array and 3D height maps
 in all four Uber shaders. A 36-case render test compares disabled/enabled offsets
 at a texture boundary; 31 cases failed before the missing branches were restored.

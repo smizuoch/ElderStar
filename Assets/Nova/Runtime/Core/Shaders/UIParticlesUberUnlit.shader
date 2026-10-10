@@ -671,11 +671,11 @@ Shader "Nova/UIParticles/UberUnlit"
             {
                 uv = NovaApplyBaseMirror(uv);
                 #if defined(_BASE_MAP_MODE_2D_ARRAY)
-                return NOVA_SAMPLE_TEX2D_ARRAY(_BaseMap2DArray, uv, progress);
+                return NOVA_SAMPLE_BASE_TEX2D_ARRAY(_BaseMap2DArray, uv, progress);
                 #elif defined(_BASE_MAP_MODE_3D)
-                return NOVA_SAMPLE_TEX3D_LOD(_BaseMap3D, float3(uv, progress), 0.0);
+                return NOVA_SAMPLE_BASE_TEX3D_LOD(_BaseMap3D, float3(uv, progress), 0.0);
                 #else
-                return NOVA_SAMPLE_TEX2D(_BaseMap, uv);
+                return NOVA_SAMPLE_BASE_TEX2D(_BaseMap, uv);
                 #endif
             }
 

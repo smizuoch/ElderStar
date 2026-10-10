@@ -43,7 +43,7 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInDepth.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
         Assert.That(shaderText, Does.Contain("NovaComputeScreenPos"));
-        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_BaseMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_BASE_TEX2D(_BaseMap"));
         Assert.That(shaderText, Does.Contain("NovaSoftParticleFactor"));
         Assert.That(shaderText, Does.Contain("NovaDepthFadeFactor"));
         Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D_LOD(_VertexDeformationMap"));

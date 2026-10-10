@@ -9,7 +9,7 @@ half4 NovaResolveMinimumLitBaseColor(
     half4 tintColor,
     half4 vertexColor)
 {
-    half4 color = NOVA_SAMPLE_TEX2D(baseMap, uv);
+    half4 color = tex2D(baseMap, uv);
 
     #if defined(_TINT_AREA_ALL) && defined(_TINT_COLOR_ENABLED)
     color *= tintColor;
@@ -77,17 +77,17 @@ float3 NovaResolveLitTextureCoord(float2 uv, half progress, half sliceCount)
 }
 
 #if defined(_BASE_MAP_MODE_2D_ARRAY)
-#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
-#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
-#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
+#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX2D_ARRAY(map2DArray, (litCoord).xy, (litCoord).z)
 #elif defined(_BASE_MAP_MODE_3D)
-#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
-#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
-#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
+#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX3D_LOD(map3D, float3((litCoord).xy, (litCoord).z), 0.0)
 #else
-#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
-#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
-#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_TEX2D(map2D, (litCoord).xy)
+#define NovaSampleLitScalarMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX2D(map2D, (litCoord).xy)
+#define NovaSampleLitColorMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX2D(map2D, (litCoord).xy)
+#define NovaSampleLitNormalMap(map2D, map2DArray, map3D, litCoord) NOVA_SAMPLE_BASE_TEX2D(map2D, (litCoord).xy)
 #endif
 
 half NovaResolveMetallic(float3 litCoord)

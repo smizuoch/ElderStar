@@ -147,7 +147,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(shaderText, Does.Contain("NovaBuiltInUI.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
         Assert.That(shaderText, Does.Contain("NovaObjectToWorldNormal"));
-        Assert.That(combinedText, Does.Contain("NOVA_SAMPLE_TEX2D(baseMap"));
+        Assert.That(combinedText, Does.Contain("tex2D(baseMap"));
         Assert.That(shaderText, Does.Contain("_TintColor"));
         Assert.That(shaderText, Does.Contain("i.color"));
         Assert.That(combinedText, Does.Contain("NovaUIClipAlpha"));

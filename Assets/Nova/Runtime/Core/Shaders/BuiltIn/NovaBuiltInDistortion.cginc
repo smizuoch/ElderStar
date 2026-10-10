@@ -99,7 +99,7 @@ half4 frag(v2f i) : SV_Target
     i.flowTransitionUv.zw += flow;
     #endif
     #endif
-    half4 source = NOVA_SAMPLE_TEX2D(_BaseMap, NovaApplyBaseMirror(i.baseUv));
+    half4 source = NOVA_SAMPLE_BASE_TEX2D(_BaseMap, NovaApplyBaseMirror(i.baseUv));
     if (_BaseMapUnpackNormal > 0.5) source = half4((UnpackNormal(source) + 1) * 0.5, 1);
     half2 offset = half2(NovaSelectChannel(source, _BaseMapChannelsX), NovaSelectChannel(source, _BaseMapChannelsY)) * 2 - 1;
     half intensity = _DistortionIntensity + NovaGetCustomCoord(_DistortionIntensityCoord, i.customCoord1, i.customCoord2);

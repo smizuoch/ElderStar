@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Verify all parallax texture modes/targets; then audit sampler overrides and fog against the original. Both Unity versions pass package-cache and standalone-player smoke. Samples, migration and final visual comparison remain; rebuild final packages after the feature fixes.
+Current TODO: Finish sampler regression checks and connect scene fog using failing render tests. Parallax passes on both versions. Both Unity versions pass package-cache and standalone-player smoke. Samples, migration and final visual comparison remain; rebuild final packages after the feature fixes.
 
 Completion worklist (2026-10-10):
 

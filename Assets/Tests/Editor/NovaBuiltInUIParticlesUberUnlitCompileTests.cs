@@ -45,9 +45,9 @@ public sealed class NovaBuiltInUIParticlesUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("BuiltIn/NovaBuiltInUberUnlit.cginc"));
         Assert.That(shaderText, Does.Contain("NovaObjectToClipPos"));
         Assert.That(shaderText, Does.Contain("SampleBaseMap"));
-        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D(_BaseMap"));
-        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX2D_ARRAY(_BaseMap2DArray"));
-        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_TEX3D_LOD(_BaseMap3D"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_BASE_TEX2D(_BaseMap"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_BASE_TEX2D_ARRAY(_BaseMap2DArray"));
+        Assert.That(shaderText, Does.Contain("NOVA_SAMPLE_BASE_TEX3D_LOD(_BaseMap3D"));
         Assert.That(shaderText, Does.Contain("NovaApplyBaseMapChannel"));
         Assert.That(shaderText, Does.Contain("NovaApplyBaseMapTone"));
         Assert.That(shaderText, Does.Contain("NovaApplyTintColor"));
