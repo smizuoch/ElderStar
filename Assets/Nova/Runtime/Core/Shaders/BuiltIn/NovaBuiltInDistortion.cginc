@@ -58,6 +58,10 @@ v2f vert(appdata v)
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
     o.pos = NovaObjectToClipPos(v.vertex);
     o.screenPosition = NovaComputeScreenPos(o.pos);
+    #if UNITY_UV_STARTS_AT_TOP
+    // Match camera depth, whose orientation differs from this command-buffer target.
+    o.screenPosition.y = o.screenPosition.w - o.screenPosition.y;
+    #endif
     o.screenPosition.z = -UnityObjectToViewPos(v.vertex).z;
     o.customCoord1 = v.customCoord1;
     o.customCoord2 = v.customCoord2;

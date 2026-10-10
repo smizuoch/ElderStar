@@ -94,6 +94,10 @@ soft particles and depth fade use the original property/keyword surface.
 
 Distortion is **Approximate**: `OnRenderImage` order replaces URP's render-pass event, and
 depth testing uses the Built-in opaque camera depth texture (not transparent depth writes).
+On top-origin graphics APIs the command-buffer offset target is sampled with a Y flip;
+the distortion vertex path similarly corrects its camera-depth coordinates. Off-center
+upper/lower render tests and a localized opaque occluder guard against mirrored effects
+and depth reads. Center-only smoke tests did not expose that orientation mismatch.
 Per-camera layer and frustum filtering, renderer visibility and culling are respected.
 The camera's depth-texture flag is retained on disable because other effects may need it;
 materials, command buffers and temporary offset targets are released. XR stereo, reflection

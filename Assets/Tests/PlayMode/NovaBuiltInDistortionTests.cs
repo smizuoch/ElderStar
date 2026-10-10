@@ -21,6 +21,11 @@ namespace Nova.Tests.PlayMode
         [TestCase("cull front", false)]
         [TestCase("particle system", true)]
         [TestCase("particle mesh", true)]
+        [TestCase("upper", true)]
+        [TestCase("lower", true)]
+        [TestCase("upper occluded", false)]
+        [TestCase("upper local visible", true)]
+        [TestCase("upper local occluded", false)]
         public void CameraDistortionRespectsMaterialAndVisibility(string scenario, bool shouldDistort)
         {
             var type = AppDomain.CurrentDomain.GetAssemblies()
@@ -38,6 +43,7 @@ namespace Nova.Tests.PlayMode
             var offset = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);
             var target = new RenderTexture(128, 128, 24);
             var readback = new Texture2D(128, 128, TextureFormat.RGBA32, false);
+            GameObject localOccluder = null;
             var previous = RenderTexture.active;
             try
             {
@@ -118,7 +124,23 @@ namespace Nova.Tests.PlayMode
                 }
                 particle.GetComponent<Renderer>().enabled = scenario != "disabled renderer";
                 particle.layer = 8;
-                if (scenario == "occluded") particle.transform.position = new Vector3(0, 0, 2);
+                var offCenter = scenario.StartsWith("upper") || scenario == "lower";
+                var sampleY = scenario.StartsWith("upper") ? 96 : scenario == "lower" ? 32 : 64;
+                if (offCenter)
+                {
+                    particle.transform.position = new Vector3(0, scenario == "lower" ? -0.5f : 0.5f, 0);
+                    particle.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+                }
+                if (scenario.EndsWith("occluded")) particle.transform.position += new Vector3(0, 0, 2);
+                if (scenario.Contains("local"))
+                {
+                    background.transform.position = new Vector3(0, 0, 3);
+                    particle.transform.position = new Vector3(0, 0.5f, 2);
+                    localOccluder = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                    localOccluder.transform.position = new Vector3(0, scenario.EndsWith("visible") ? -0.5f : 0.5f, 1);
+                    localOccluder.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+                    localOccluder.GetComponent<Renderer>().sharedMaterial = backgroundMaterial;
+                }
                 var camera = cameraObject.GetComponent<Camera>();
                 camera.transform.position = new Vector3(0, 0, -3);
                 camera.orthographic = true;
@@ -133,32 +155,36 @@ namespace Nova.Tests.PlayMode
                 if (scenario == "camera layer") camera.cullingMask &= ~(1 << 8);
                 var effect = (Behaviour)cameraObject.AddComponent(type);
                 effect.enabled = false;
-                var baseline = Read(camera, target, readback);
+                var baseline = Read(camera, target, readback, sampleY);
+                var oppositeBaseline = readback.GetPixel(64, 128 - sampleY);
                 effect.enabled = true;
-                var distorted = Read(camera, target, readback);
+                var distorted = Read(camera, target, readback, sampleY);
+                if (offCenter)
+                    Assert.That(Vector4.Distance(readback.GetPixel(64, 128 - sampleY), oppositeBaseline), Is.LessThan(0.015f),
+                        "Distortion must stay at the renderer's projected position, not its vertical mirror.");
                 if (scenario == "negative") Assert.That(distorted.r, Is.LessThan(baseline.r - 0.08f), $"before {baseline}, after {distorted}");
                 else if (scenario == "vertical") Assert.That(distorted.g, Is.GreaterThan(baseline.g + 0.08f), $"before {baseline}, after {distorted}");
                 else if (shouldDistort) Assert.That(distorted.r, Is.GreaterThan(baseline.r + 0.08f), $"before {baseline}, after {distorted}");
                 else Assert.That(Vector4.Distance(distorted, baseline), Is.LessThan(0.025f), $"before {baseline}, after {distorted}");
                 effect.enabled = false;
-                var restored = Read(camera, target, readback);
+                var restored = Read(camera, target, readback, sampleY);
                 Assert.That(Mathf.Abs(restored.r - baseline.r), Is.LessThan(0.015f), "Disabling must restore the original frame.");
             }
             finally
             {
                 RenderTexture.active = previous;
                 foreach (var obj in new UnityEngine.Object[] { cameraObject, background, particle, backgroundMaterial,
-                    distortionMaterial, gradient, offset, target, readback }) UnityEngine.Object.DestroyImmediate(obj);
+                    distortionMaterial, gradient, offset, target, readback, localOccluder }) UnityEngine.Object.DestroyImmediate(obj);
             }
         }
 
-        private static Color Read(Camera camera, RenderTexture target, Texture2D readback)
+        private static Color Read(Camera camera, RenderTexture target, Texture2D readback, int sampleY = 64)
         {
             camera.Render();
             RenderTexture.active = target;
             readback.ReadPixels(new Rect(0, 0, 128, 128), 0, 0);
             readback.Apply();
-            return readback.GetPixel(64, 64);
+            return readback.GetPixel(64, sampleY);
         }
 
         private static void Setup(string name, Material material)
