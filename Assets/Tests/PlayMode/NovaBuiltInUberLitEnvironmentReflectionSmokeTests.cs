@@ -21,6 +21,99 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     private const int TextureSize = 8;
 
     [Test]
+    public void LitSurfaceMapsKeepOriginalUvWhenBaseFlowIsEnabled()
+    {
+        RenderSample Render(bool flow) => RenderEnvironment(material =>
+        {
+            ConfigureReflections(material, smoothness: 1f, metallic: 1f);
+            material.SetTexture("_MetallicMap", CreateSplitTexture(Color.black, Color.white));
+            material.SetFloat("_MetallicMapChannelsX", 0f);
+            if (flow)
+            {
+                material.SetTexture("_FlowMap", CreateSolidTexture(new Color(1f, 0.5f, 0f, 1f)));
+                material.SetFloat("_FlowMapTarget", 1f);
+                material.SetFloat("_FlowIntensity", 0.4f);
+            }
+        });
+        var original = Render(false);
+        var flowed = Render(true);
+        Assert.That(ColorDistance(original.Left, original.Right), Is.GreaterThan(0.08f));
+        Assert.That(ColorDistance(original.Center, flowed.Center), Is.LessThan(0.01f),
+            $"original {original.Center}, flowed {flowed.Center}");
+    }
+
+    [Test]
+    public void LitNormalMapUsesUnityImportedDxt5Packing()
+    {
+#if UNITY_EDITOR
+        var folder = "Assets/NovaNormalImportVerification_" + Guid.NewGuid().ToString("N");
+        var path = folder + "/Flat.png";
+        try
+        {
+            System.IO.Directory.CreateDirectory(folder);
+            System.IO.File.WriteAllBytes(path, Convert.FromBase64String(
+                "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGUlEQVR4nGNoaPj/nxLMMGrAqAGjBgwXAwBRLf4fp8kMJwAAAABJRU5ErkJggg=="));
+            UnityEditor.AssetDatabase.ImportAsset(path, UnityEditor.ImportAssetOptions.ForceSynchronousImport);
+            var importer = (UnityEditor.TextureImporter)UnityEditor.AssetImporter.GetAtPath(path);
+            importer.textureType = UnityEditor.TextureImporterType.NormalMap;
+            importer.convertToNormalmap = false;
+            importer.sRGBTexture = false;
+            importer.isReadable = true; // Clone the compressed resource without destroying the imported asset.
+            importer.SetPlatformTextureSettings(new UnityEditor.TextureImporterPlatformSettings
+            {
+                name = "Standalone", overridden = true,
+                format = UnityEditor.TextureImporterFormat.DXT5, maxTextureSize = 32,
+                textureCompression = UnityEditor.TextureImporterCompression.CompressedHQ,
+            });
+            importer.SaveAndReimport();
+            var imported = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            Assert.That(imported.format, Is.EqualTo(TextureFormat.DXT5));
+            var reference = RenderEnvironment(material =>
+            {
+                ConfigureReflections(material, smoothness: 1f, metallic: 1f);
+                material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.5f, 0.5f, 1f, 1f)));
+            });
+            var actual = RenderEnvironment(material =>
+            {
+                ConfigureReflections(material, smoothness: 1f, metallic: 1f);
+                material.SetTexture("_NormalMap", UnityEngine.Object.Instantiate(imported));
+            });
+            Assert.That(ColorDistance(reference.Center, actual.Center), Is.LessThan(0.02f),
+                $"raw {reference.Center}, imported {actual.Center}");
+        }
+        finally
+        {
+            UnityEditor.AssetDatabase.DeleteAsset(folder);
+        }
+#else
+        Assert.Ignore("Texture import verification requires the Editor.");
+#endif
+    }
+
+    [TestCase(0.25f)]
+    [TestCase(2f)]
+    public void LitNormalBumpScaleMatchesOriginalReconstructThenScale(float scale)
+    {
+        // Original NOVA's UnpackNormalScale reconstructs Z before scaling XY.
+        const float x = 0.6f;
+        var scaled = new Vector3(x * scale, 0f, Mathf.Sqrt(1f - x * x)).normalized;
+        var reference = RenderEnvironment(material =>
+        {
+            ConfigureReflections(material, smoothness: 1f, metallic: 1f);
+            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(scaled.x * 0.5f + 0.5f, 0.5f, scaled.z * 0.5f + 0.5f, 1f)));
+            material.SetFloat("_NormalMapBumpScale", 1f);
+        });
+        var actual = RenderEnvironment(material =>
+        {
+            ConfigureReflections(material, smoothness: 1f, metallic: 1f);
+            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(x * 0.5f + 0.5f, 0.5f, 0.9f, 1f)));
+            material.SetFloat("_NormalMapBumpScale", scale);
+        });
+        Assert.That(ColorDistance(reference.Center, actual.Center), Is.LessThan(0.02f),
+            $"expected {reference.Center}, actual {actual.Center}, scale {scale}");
+    }
+
+    [Test]
     public void UberLitEnvironmentReflectionsAffectOutput()
     {
         var disabled = RenderEnvironment(material => ConfigureReflections(material, enabled: false));
@@ -139,13 +232,13 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
         var low = RenderEnvironment(material =>
         {
             ConfigureReflections(material, smoothness: 1f, metallic: 1f);
-            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f)));
+            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.85f, 0.5f, 0.857f, 1f)));
             material.SetFloat("_NormalMapBumpScale", 0.1f);
         });
         var high = RenderEnvironment(material =>
         {
             ConfigureReflections(material, smoothness: 1f, metallic: 1f);
-            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f)));
+            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.85f, 0.5f, 0.857f, 1f)));
             material.SetFloat("_NormalMapBumpScale", 1f);
         });
 
@@ -649,6 +742,7 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
                      "_SpecularMap",
                      "_MetallicMap",
                      "_SmoothnessMap",
+                     "_FlowMap",
                  })
         {
             if (!material.HasProperty(property))

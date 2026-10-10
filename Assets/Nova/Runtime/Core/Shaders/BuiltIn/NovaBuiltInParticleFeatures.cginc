@@ -642,7 +642,7 @@ half4 frag(v2f i) : SV_Target
 
     #if defined(NOVA_UI_LIT)
     NovaUILitSurfaceData surfaceData = NovaResolveUILitSurfaceData(color,
-        float3(baseUv, i.baseUvAndProgress.z), i.normalWS, i.tangentWS.xyz, particleBitangentWS);
+        i.baseUvAndProgress, i.normalWS, i.tangentWS.xyz, particleBitangentWS);
     #if defined(UNITY_PASS_FORWARDADD)
     color = NovaComputeUILitForwardAddColor(surfaceData, i.positionWS, particleViewDirWS,
         NovaComputeBuiltInAddLightAttenuation(i, i.positionWS));
@@ -652,7 +652,7 @@ half4 frag(v2f i) : SV_Target
     #endif
     #else
     NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(color,
-        float3(baseUv, i.baseUvAndProgress.z), i.normalWS, i.tangentWS.xyz, particleBitangentWS);
+        i.baseUvAndProgress, i.normalWS, i.tangentWS.xyz, particleBitangentWS);
     #if defined(UNITY_PASS_FORWARDADD)
     color = NovaComputeLitForwardAddColor(surfaceData, i.positionWS, particleViewDirWS,
         NovaComputeBuiltInAddLightAttenuation(i, i.positionWS));

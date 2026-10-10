@@ -155,10 +155,9 @@ half3 NovaResolveUINormalMap(float3 litCoord)
 {
     #if defined(_NORMAL_MAP_ENABLED)
     half4 packedNormal = NovaSampleUILitNormalMap(_NormalMap, _NormalMap2DArray, _NormalMap3D, litCoord);
-    half3 normalTS;
-    normalTS.xy = packedNormal.xy * 2.0h - 1.0h;
+    // Decode Unity's platform packing before applying NOVA's bump scale.
+    half3 normalTS = UnpackNormal(packedNormal);
     normalTS.xy *= _NormalMapBumpScale;
-    normalTS.z = sqrt(saturate(1.0h - dot(normalTS.xy, normalTS.xy)));
     return NovaSafeNormalize(normalTS);
     #else
     return half3(0.0h, 0.0h, 1.0h);

@@ -2,6 +2,15 @@
 
 ## Completion audit, 2026-10-10
 
+Lit normal maps now decode Unity's imported normal packing through `UnpackNormal`
+before scaling XY, matching original NOVA's reconstruct-Z-then-scale convention.
+The D3D11 tests import a real DXT5 normal texture and compare it with a raw flat
+normal; analytic scale tests cover strengths below and above one. Both Lit shaders
+keep their original surface-map UVs when flow changes the albedo UV, as the original
+`fragUnlit` modifies its input by value. Existing synthetic bump-strength fixtures
+now use a tilted normal with nonzero Z: a exactly tangent normal has no direction
+change under positive XY scaling. Their thresholds and all golden images are unchanged.
+
 UI UberLit environment reflections now sample the Built-in reflection cubemap using the same
 normal, metallic/specular and smoothness approximation as particle UberLit. Both the
 `_EnvironmentReflections` property and `_ENVIRONMENT_REFLECTIONS_ENABLED` keyword gate the contribution.

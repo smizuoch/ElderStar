@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Repeat packaged player validation on Unity 6, then finish samples, migration and the feature audit. Unity 2022 external/tarball package import and standalone player smoke pass.
+Current TODO: Verify Lit normal packing/scale and original surface-map UV parity; then repair missing parallax texture modes/targets found in the feature audit. Unity 6 package-cache tests pass and its standalone player build is running. Samples, migration and final visual comparison remain.
 
 Completion worklist (2026-10-10):
 

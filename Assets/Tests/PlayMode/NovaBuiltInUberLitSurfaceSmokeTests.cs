@@ -315,13 +315,13 @@ public sealed class NovaBuiltInUberLitSurfaceSmokeTests
         var low = RenderLit(material =>
         {
             ConfigureSpecular(material, Color.white, 0.8f);
-            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f)));
+            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.85f, 0.5f, 0.857f, 1f)));
             material.SetFloat("_NormalMapBumpScale", 0.15f);
         }, LightCase.Angled(Color.white, 2.4f));
         var high = RenderLit(material =>
         {
             ConfigureSpecular(material, Color.white, 0.8f);
-            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(1f, 0.5f, 0.5f, 1f)));
+            material.SetTexture("_NormalMap", CreateSolidTexture(new Color(0.85f, 0.5f, 0.857f, 1f)));
             material.SetFloat("_NormalMapBumpScale", 1f);
         }, LightCase.Angled(Color.white, 2.4f));
 
