@@ -1,7 +1,7 @@
 {
     "name": "Nova.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": ["Nova"],
     "includePlatforms": [
         "Editor"
     ],

@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Deliver material GUID migration and a runnable sample scene, then finish installation/camera documentation and the final feature matrix. Lit diffuse-energy correction passes EditMode 124/124 and PlayMode 672/672 on Unity 2022.3.22f1 and 6000.3.23f1; fresh 48 Unlit image comparisons also pass. Rebuild final packages and players after the remaining additions.
+Current TODO: Finish the original-feature audit and replace historical Pending matrix entries with current evidence and explicit fallbacks. Migration passes 12 cases and the packaged showcase passes 7 cases on both Unity versions. Off-center distortion and localized depth pass 19 cases on both versions. Then run the final full suites, visual regression and rebuilt package players.
 
 Completion worklist (2026-10-10):
 
@@ -27,7 +27,7 @@ Completion worklist (2026-10-10):
 - [x] Particle mesh instancing and distortion particle rendering.
 - [x] Distortion editor selection and picking.
 - [x] Isolated UPM installation, package-cache include resolution and player build validation (repeat on final package).
-- [ ] Samples, migration utilities, installation and camera setup documentation.
+- [x] Samples, migration utilities, installation and camera setup documentation.
 - [x] Audit imported normal-map packing and Lit surface-map UV behavior against the original.
 - [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.
 - [ ] Full EditMode and graphics-enabled PlayMode on installed Unity 2022.3 and Unity 6; compiler diagnostics.
