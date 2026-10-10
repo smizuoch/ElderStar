@@ -15,6 +15,7 @@ RESULT_PATH="${PROJECT_PATH}/Logs/Unity/${SELECTED_VERSION}/PlayMode.xml"
 LOG_PATH="${PROJECT_PATH}/Logs/Unity/${SELECTED_VERSION}/PlayMode-Editor.log"
 
 mkdir -p "$(dirname "${RESULT_PATH}")"
+rm -f -- "${RESULT_PATH}"
 
 PROJECT_PATH_WINDOWS="$(wslpath -w "${UNITY_PROJECT_PATH}")"
 RESULT_PATH_WINDOWS="$(wslpath -w "${RESULT_PATH}")"
@@ -35,3 +36,5 @@ nova_print_unity_invocation \
     -testPlatform PlayMode \
     -testResults "${RESULT_PATH_WINDOWS}" \
     -logFile "${LOG_PATH_WINDOWS}"
+
+nova_validate_test_results "${RESULT_PATH}"

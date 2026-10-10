@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Verify isolated UPM installation, package-cache include resolution and player builds.
+Current TODO: Repeat packaged player validation on Unity 6, then finish samples, migration and the feature audit. Unity 2022 external/tarball package import and standalone player smoke pass.
 
 Completion worklist (2026-10-10):
 
@@ -28,6 +28,7 @@ Completion worklist (2026-10-10):
 - [x] Distortion editor selection and picking.
 - [ ] Isolated UPM installation, package-cache include resolution and player build validation.
 - [ ] Samples, migration utilities, installation and camera setup documentation.
+- [ ] Audit imported normal-map packing and Lit surface-map UV behavior against the original.
 - [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.
 - [ ] Full EditMode and graphics-enabled PlayMode on installed Unity 2022.3 and Unity 6; compiler diagnostics.
 - [ ] Final visual regression with explicit thresholds; preserve all existing golden images and baselines.
