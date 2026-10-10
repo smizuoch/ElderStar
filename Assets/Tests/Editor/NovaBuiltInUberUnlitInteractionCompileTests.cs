@@ -12,7 +12,7 @@ public sealed class NovaBuiltInUberUnlitInteractionCompileTests
 {
     private const string ShaderName = "Nova/Particles/UberUnlit";
     private const string ShaderPath = "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader";
-    private const string MatrixPath = "Documentation/BuiltInCompatibilityMatrix.md";
+    private const string MatrixPath = "Documentation/BuiltInVerificationHistory.md";
 
     [Test]
     public void UberUnlitBuiltInPassTopologyRemainsPhase46AContract()

@@ -12,7 +12,7 @@ public sealed class NovaBuiltInUIParticlesUberUnlitInteractionCompileTests
 {
     private const string ShaderName = "Nova/UIParticles/UberUnlit";
     private const string ShaderPath = "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader";
-    private const string MatrixPath = "Documentation/BuiltInCompatibilityMatrix.md";
+    private const string MatrixPath = "Documentation/BuiltInVerificationHistory.md";
 
     [Test]
     public void UIParticlesUberUnlitComplexInteractionKeywordSetsHaveNoBlockingCompilerMessages()

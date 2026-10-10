@@ -20,6 +20,23 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     private const int RenderSize = 128;
     private const int TextureSize = 8;
 
+    [Test]
+    public void SpecularWorkflowReflectionIgnoresTheUnusedMetallicControl()
+    {
+        var low = RenderEnvironment(material =>
+        {
+            ConfigureSpecularReflections(material, new Color(0.4f, 0.6f, 1f));
+            material.SetFloat("_Metallic", 0f);
+        });
+        var high = RenderEnvironment(material =>
+        {
+            ConfigureSpecularReflections(material, new Color(0.4f, 0.6f, 1f));
+            material.SetFloat("_Metallic", 1f);
+        });
+        Assert.That(Luminance(low.Center), Is.GreaterThan(0.02f));
+        Assert.That(Vector4.Distance(low.Center, high.Center), Is.LessThan(0.005f), $"low {low.Center}, high {high.Center}");
+    }
+
     [TestCase(0)]
     [TestCase(1)]
     public void FullyReflectiveSurfaceDoesNotRetainDiffuseWhenReflectionsAreDisabled(int workflow)

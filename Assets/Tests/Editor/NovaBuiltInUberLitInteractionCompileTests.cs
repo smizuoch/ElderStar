@@ -12,7 +12,7 @@ public sealed class NovaBuiltInUberLitInteractionCompileTests
 {
     private const string ShaderName = "Nova/Particles/UberLit";
     private const string ShaderPath = "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader";
-    private const string MatrixPath = "Documentation/BuiltInCompatibilityMatrix.md";
+    private const string MatrixPath = "Documentation/BuiltInVerificationHistory.md";
 
     private static readonly string[] ForbiddenTokens =
     {

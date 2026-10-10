@@ -13,7 +13,7 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
 {
     private const string ShaderName = "Nova/UIParticles/UberLit";
     private const string ShaderPath = "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader";
-    private const string MatrixPath = "Documentation/BuiltInCompatibilityMatrix.md";
+    private const string MatrixPath = "Documentation/BuiltInVerificationHistory.md";
 
     private static readonly string[] LitProperties =
     {

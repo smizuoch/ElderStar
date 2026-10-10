@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Finish the original-feature audit and replace historical Pending matrix entries with current evidence and explicit fallbacks. Migration passes 12 cases and the packaged showcase passes 7 cases on both Unity versions. Off-center distortion and localized depth pass 19 cases on both versions. Then run the final full suites, visual regression and rebuilt package players.
+Current TODO: Complete final graphics PlayMode, fresh visual comparisons, tarball installation and standalone player/sample validation. The final matrix resolves 65 feature groups and retains historical reports separately. Full canonical EditMode passes 143/143 on both Unity 2022.3.22f1 and 6000.3.23f1.
 
 Completion worklist (2026-10-10):
 
@@ -29,7 +29,7 @@ Completion worklist (2026-10-10):
 - [x] Isolated UPM installation, package-cache include resolution and player build validation (repeat on final package).
 - [x] Samples, migration utilities, installation and camera setup documentation.
 - [x] Audit imported normal-map packing and Lit surface-map UV behavior against the original.
-- [ ] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.
+- [x] Review all original properties/keywords/features against implementation; resolve every pending matrix entry with evidence and documented fallbacks.
 - [ ] Full EditMode and graphics-enabled PlayMode on installed Unity 2022.3 and Unity 6; compiler diagnostics.
 - [ ] Final visual regression with explicit thresholds; preserve all existing golden images and baselines.
 

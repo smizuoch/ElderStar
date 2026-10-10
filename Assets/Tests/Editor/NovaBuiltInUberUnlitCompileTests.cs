@@ -92,7 +92,7 @@ public sealed class NovaBuiltInUberUnlitCompileTests
     public void UberUnlitDepthNormalsDecisionIsDocumentedForPhase45B()
     {
         var shaderText = File.ReadAllText(ShaderPath);
-        var matrixText = File.ReadAllText("Documentation/BuiltInCompatibilityMatrix.md");
+        var matrixText = File.ReadAllText("Documentation/BuiltInVerificationHistory.md");
 
         Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
         Assert.That(matrixText, Does.Contain("Phase 4.5B"));
