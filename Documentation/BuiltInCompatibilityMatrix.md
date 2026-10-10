@@ -95,6 +95,12 @@ even when distortion intensity is zero. Render-target tests verify both identifi
 
 Status values:
 
+Player-build coverage exposed an SM3.5 interpolator overflow in the ForwardAdd
+directional-cookie/screen-shadow combination. The common Lit path now reconstructs screen
+coordinates from its existing world-position stream, freeing one interpolator. A regression
+test compiles this exact keyword combination for both Lit shaders; depth-effect rendering
+remains covered by the common color suite. Player validation continues separately.
+
 - Exact: expected to match original behavior in Built-in.
 - Approximate: expected to work with a documented Built-in-specific difference.
 - Unsupported: not planned unless a later design changes the porting approach.

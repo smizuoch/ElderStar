@@ -196,11 +196,10 @@ struct v2f
     float3 alphaTransitionUvAndProgress : TEXCOORD9;
     float3 alphaTransitionSecondUvAndProgress : TEXCOORD10;
     float3 emissionUvAndProgress : TEXCOORD11;
-    float4 screenPosition : TEXCOORD12;
     #if defined(UNITY_PASS_FORWARDADD)
-    NOVA_LIGHTING_COORDS(13, 14)
+    NOVA_LIGHTING_COORDS(12, 13)
     #else
-    NOVA_SHADOW_COORDS(13)
+    NOVA_SHADOW_COORDS(12)
     #endif
     fixed4 color : COLOR;
 };
@@ -220,8 +219,6 @@ v2f vert(appdata v)
     #endif
 
     o.pos = NovaObjectToClipPos(v.vertex);
-    o.screenPosition = NovaComputeScreenPos(o.pos);
-    o.screenPosition.z = -UnityObjectToViewPos(v.vertex).z;
     float3 positionWS = NovaObjectToWorld(v.vertex.xyz);
     o.normalWS = NovaObjectToWorldNormal(v.normal);
     o.positionWS = positionWS;
@@ -491,6 +488,12 @@ void ApplyEmissionColor(inout half4 color, half4 emissionMap, half emissionInten
 
 half4 frag(v2f i) : SV_Target
 {
+    #if defined(_SOFT_PARTICLES_ENABLED) || defined(_DEPTH_FADE_ENABLED)
+    // Reconstruct from the world position already carried for lighting. Keeping a
+    // separate screen-position interpolator exceeds SM3.5's limit with cookie shadows.
+    float4 screenPosition = NovaComputeScreenPos(NovaWorldToClipPos(i.positionWS));
+    screenPosition.z = -mul(UNITY_MATRIX_V, float4(i.positionWS, 1)).z;
+    #endif
     float3 particleViewDirWS = NovaWorldSpaceViewDir(i.positionWS);
     float3 particleBitangentWS = cross(i.normalWS, i.tangentWS.xyz) * i.tangentWS.w;
     float3 particleViewDirTS = float3(dot(particleViewDirWS, i.tangentWS.xyz),
@@ -622,11 +625,11 @@ half4 frag(v2f i) : SV_Target
     #endif
 
     #if defined(_SOFT_PARTICLES_ENABLED)
-    color.a *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity);
+    color.a *= NovaSoftParticleFactor(screenPosition, _SoftParticlesIntensity);
     #endif
 
     #if defined(_DEPTH_FADE_ENABLED)
-    color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.screenPosition);
+    color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, screenPosition);
     #endif
 
     #if defined(NOVA_UI_LIT)
