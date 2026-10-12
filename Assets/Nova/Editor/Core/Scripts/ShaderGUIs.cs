@@ -42,10 +42,11 @@ namespace Nova.Editor.Core.Scripts
             SetupTransparencyKeywords(material);
             SetKeyword(material, ShaderKeywords.VertexDeformationEnabled, material.GetTexture("_VertexDeformationMap") != null);
 
-            var isUiShader = IsUiShader(material);
-            var shadowCasterEnabled = !isUiShader && GetFloat(material, "_ShadowCasterEnabled") > 0.5f;
+            var shadowCasterEnabled = GetFloat(material, "_ShadowCasterEnabled") > 0.5f;
             material.SetShaderPassEnabled("ShadowCaster", shadowCasterEnabled);
-            SetKeyword(material, ShaderKeywords.ShadowCasterAlphaTestEnabled, shadowCasterEnabled && GetFloat(material, "_ShadowCasterAlphaTestEnabled") > 0.5f);
+            // Preserve original material state even when the pass is disabled or absent on UI shaders.
+            if (shadowCasterEnabled)
+                SetKeyword(material, ShaderKeywords.ShadowCasterAlphaTestEnabled, GetFloat(material, "_ShadowCasterAlphaTestEnabled") > 0.5f);
         }
 
         public static void SetupMaterialBlendMode(Material material)
@@ -192,6 +193,15 @@ namespace Nova.Editor.Core.Scripts
             SetKeyword(material, ShaderKeywords.AlphaTransitionBlendSecondTexMultiply, hasSecond && secondBlend == AlphaTransitionBlendMode.Multiply);
 
             var secondMode = (AlphaTransitionMapMode)GetFloat(material, "_AlphaTransitionMapSecondTextureMapMode");
+            // Match original NOVA's migration of materials authored before the independent second-map mode.
+            if (secondMode == AlphaTransitionMapMode.SingleTexture)
+            {
+                if (mapMode == AlphaTransitionMapMode.FlipBook && material.GetTexture("_AlphaTransitionMapSecondTexture2DArray") != null)
+                    secondMode = AlphaTransitionMapMode.FlipBook;
+                else if (mapMode == AlphaTransitionMapMode.FlipBookBlending && material.GetTexture("_AlphaTransitionMapSecondTexture3D") != null)
+                    secondMode = AlphaTransitionMapMode.FlipBookBlending;
+                material.SetFloat("_AlphaTransitionMapSecondTextureMapMode", (float)secondMode);
+            }
             SetKeyword(material, ShaderKeywords.AlphaTransitionMapSecondTextureMode2D, secondActive && secondMode == AlphaTransitionMapMode.SingleTexture);
             SetKeyword(material, ShaderKeywords.AlphaTransitionMapSecondTextureMode2DArray, secondActive && secondMode == AlphaTransitionMapMode.FlipBook);
             SetKeyword(material, ShaderKeywords.AlphaTransitionMapSecondTextureMode3D, secondActive && secondMode == AlphaTransitionMapMode.FlipBookBlending);
