@@ -10,7 +10,7 @@ UV transforms and custom coordinates;Random row selection;Mirror samplers;Channe
 Tritone and pentone;Tint color and maps;Tint rim;Flow targets;Parallax targets;
 Greyscale and gradient;Alpha transition;Second alpha transition;Emission;
 Rim and luminance transparency;Soft particles;Depth fade;Vertex deformation;
-Billboard particles;Mesh particle instancing;Scene selection and picking;
+Billboard particles;Mesh particle instancing;Instanced stereo;Scene selection and picking;
 Shadow caster;DepthOnly;DepthNormals;Fog;Metallic and specular workflows;
 Normal maps;Surface maps;Main light;Additional lights;Receive shadows;
 Ambient and light probes;Environment reflections;Lightmaps and vertex lighting;

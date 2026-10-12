@@ -22,6 +22,10 @@ half _AlphaTransitionProgress, _AlphaTransitionProgressCoord, _DissolveSharpness
 half _AlphaTransitionMapRotation, _AlphaTransitionMapRotationCoord;
 float4 _AlphaTransitionMapRotationOffsets;
 half _SoftParticlesIntensity, _DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, _ZTest;
+#if defined(NOVA_DISTORTION_GRABPASS)
+UNITY_DECLARE_SCREENSPACE_TEXTURE(_NovaDistortionGrabTexture);
+float _NovaCameraDistortionActive;
+#endif
 
 struct appdata
 {
@@ -40,6 +44,9 @@ struct v2f
     float4 screenPosition : TEXCOORD2;
     float4 customCoord1 : TEXCOORD3;
     float4 customCoord2 : TEXCOORD4;
+    #if defined(NOVA_DISTORTION_GRABPASS)
+    float4 grabPosition : TEXCOORD5;
+    #endif
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
@@ -58,7 +65,9 @@ v2f vert(appdata v)
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
     o.pos = NovaObjectToClipPos(v.vertex);
     o.screenPosition = NovaComputeScreenPos(o.pos);
-    #if UNITY_UV_STARTS_AT_TOP
+    #if defined(NOVA_DISTORTION_GRABPASS)
+    o.grabPosition = ComputeGrabScreenPos(o.pos);
+    #elif UNITY_UV_STARTS_AT_TOP
     // Match camera depth, whose orientation differs from this command-buffer target.
     o.screenPosition.y = o.screenPosition.w - o.screenPosition.y;
     #endif
@@ -89,9 +98,8 @@ void NovaDistortionDepthTest(float4 screenPosition)
     if (_ZTest == 7) clip(difference + 0.001);
 }
 
-half4 frag(v2f i) : SV_Target
+half2 NovaDistortionOffset(v2f i)
 {
-    NovaDistortionDepthTest(i.screenPosition);
     #if defined(_FLOW_MAP_ENABLED) || defined(_FLOW_MAP_TARGET_BASE) || defined(_FLOW_MAP_TARGET_ALPHA_TRANSITION)
     half4 flowSource = NOVA_SAMPLE_TEX2D(_FlowMap, i.flowTransitionUv.xy);
     half2 flow = half2(NovaSelectChannel(flowSource, _FlowMapChannelsX), NovaSelectChannel(flowSource, _FlowMapChannelsY)) * 2 - 1;
@@ -120,6 +128,28 @@ half4 frag(v2f i) : SV_Target
     #if defined(_DEPTH_FADE_ENABLED)
     offset *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.screenPosition);
     #endif
-    return half4(offset, 0, 0);
+    return offset;
+}
+
+half4 frag(v2f i) : SV_Target
+{
+    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+    #if defined(NOVA_DISTORTION_GRABPASS)
+    // The ordinary camera compositor owns the effect when present. Avatars and
+    // stereo cameras instead use this shader-only path with hardware depth testing.
+    clip(0.5 - _NovaCameraDistortionActive);
+    float2 offset = NovaDistortionOffset(i) * 2;
+    float2 uv = i.grabPosition.xy / i.grabPosition.w;
+    #if defined(UNITY_SINGLE_PASS_STEREO)
+    offset *= unity_StereoScaleOffset[unity_StereoEyeIndex].xy;
+    uv = UnityStereoClamp(uv + offset, unity_StereoScaleOffset[unity_StereoEyeIndex]);
+    #else
+    uv = saturate(uv + offset);
+    #endif
+    return UNITY_SAMPLE_SCREENSPACE_TEXTURE(_NovaDistortionGrabTexture, uv);
+    #else
+    NovaDistortionDepthTest(i.screenPosition);
+    return half4(NovaDistortionOffset(i), 0, 0);
+    #endif
 }
 #endif

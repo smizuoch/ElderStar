@@ -26,7 +26,8 @@ namespace Nova.Tests.Editor
             var material = new Material(Shader.Find(shaderName));
             try
             {
-                Assert.That(material.renderQueue, Is.EqualTo(2000));
+                // Shader-only avatar distortion must capture the scene after transparents.
+                Assert.That(material.renderQueue, Is.EqualTo(shaderName.EndsWith("/Distortion") ? 3100 : 2000));
                 Assert.That(material.GetTag("RenderType", false), Is.EqualTo(renderType));
                 Assert.That(material.GetTag("IgnoreProjector", false), Is.EqualTo("True").IgnoreCase);
                 Assert.That(material.GetTag("PreviewType", false), Is.EqualTo("Plane"));

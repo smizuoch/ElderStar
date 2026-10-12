@@ -64,12 +64,16 @@ Shader "Hidden/Nova/LegacyBuiltIn/ParticlesDistortion"
     {
         Tags
         {
+            "Queue" = "Transparent+100"
+            "VRCFallback" = "Hidden"
             "RenderType" = "Transparent"
             "IgnoreProjector" = "True"
             "PreviewType" = "Plane"
             "PerformanceChecks" = "False"
         }
         UsePass "Nova/Particles/Distortion/DISTORTEDUVBUFFER"
+        GrabPass { "_NovaDistortionGrabTexture" }
+        UsePass "Nova/Particles/Distortion/AVATARDISTORTION"
         UsePass "Nova/Particles/Distortion/SCENESELECTIONPASS"
         UsePass "Nova/Particles/Distortion/PICKING"
     }

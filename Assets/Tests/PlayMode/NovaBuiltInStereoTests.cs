@@ -11,21 +11,29 @@ namespace Nova.Tests.PlayMode
         [TestCase("Nova/UIParticles/UberUnlit", false)]
         [TestCase("Nova/Particles/UberLit", false)]
         [TestCase("Nova/UIParticles/UberLit", false)]
+        [TestCase("Nova/Particles/Distortion", false)]
         [TestCase("Nova/Particles/UberUnlit", true)]
         [TestCase("Nova/UIParticles/UberUnlit", true)]
         [TestCase("Nova/Particles/UberLit", true)]
         [TestCase("Nova/UIParticles/UberLit", true)]
-        public void InstancedStereoWritesBothEyeSlices(string shaderName, bool softParticles)
+        [TestCase("Nova/Particles/UberUnlit", false, "DepthOnly")]
+        [TestCase("Nova/Particles/UberLit", false, "DepthOnly")]
+        [TestCase("Nova/Particles/UberUnlit", false, "ShadowCaster")]
+        [TestCase("Nova/Particles/UberLit", false, "ShadowCaster")]
+        public void InstancedStereoWritesBothEyeSlices(string shaderName, bool softParticles, string depthPass = null)
         {
             var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
             var mesh = Object.Instantiate(quad.GetComponent<MeshFilter>().sharedMesh);
             mesh.colors = Enumerable.Repeat(Color.white, mesh.vertexCount).ToArray();
-            var material = new Material(Shader.Find(shaderName)) { enableInstancing = true };
-            var target = new RenderTexture(32, 32, 0) { dimension = TextureDimension.Tex2DArray, volumeDepth = 2 };
+            if (shaderName.EndsWith("/Distortion")) mesh.vertices = mesh.vertices.Select(v => v + Vector3.forward * .5f).ToArray();
+            var material = new Material(Shader.Find(shaderName.EndsWith("/Distortion")
+                ? "Hidden/NovaTests/StereoDistortionProbe" : shaderName)) { enableInstancing = true };
+            var target = new RenderTexture(32, 32, 24) { dimension = TextureDimension.Tex2DArray, volumeDepth = 2 };
             var read = new Texture2D(32, 32, TextureFormat.RGBA32, false);
             var previous = RenderTexture.active;
             var stereoGlobals = new ComputeBuffer(68, 16, ComputeBufferType.Constant);
             var depth = new Texture2DArray(4, 4, 2, TextureFormat.RFloat, false, true);
+            var grab = new Texture2DArray(4, 4, 2, TextureFormat.RGBA32, false, true);
             try
             {
                 target.Create();
@@ -36,6 +44,14 @@ namespace Nova.Tests.PlayMode
                 material.SetTexture("_BaseMap", Texture2D.whiteTexture);
                 material.EnableKeyword("_BASE_MAP_MODE_2D");
                 material.EnableKeyword("STEREO_INSTANCING_ON");
+                var distortion = shaderName.EndsWith("/Distortion");
+                if (distortion)
+                {
+                    grab.SetPixels(Enumerable.Repeat(Color.red, 16).ToArray(), 0);
+                    grab.SetPixels(Enumerable.Repeat(Color.green, 16).ToArray(), 1); grab.Apply();
+                    material.SetTexture("_NovaDistortionGrabTexture", grab);
+                    material.SetFloat("_DistortionIntensity", 0);
+                }
                 if (softParticles)
                 {
                     depth.SetPixels(Enumerable.Repeat(Color.white, 16).ToArray(), 0);
@@ -51,19 +67,34 @@ namespace Nova.Tests.PlayMode
                     for (var row = 0; row < 4; row++) constants[m * 4 + row] = Matrix4x4.identity.GetRow(row);
                 constants[66] = constants[67] = new Vector4(1, 1, 0, 0);
                 stereoGlobals.SetData(constants);
+                #if UNITY_EDITOR
+                var compilePass = material.FindPass(distortion ? "AvatarDistortion" : "ForwardBase");
+                UnityEditor.ShaderUtil.CompilePass(material, compilePass, true);
+                Assert.That(UnityEditor.ShaderUtil.GetShaderMessages(material.shader).Where(m => m.severity.ToString() == "Error").Select(m => m.message), Is.Empty);
+                #endif
                 using (var cmd = new CommandBuffer())
                 {
                     cmd.SetRenderTarget(target, 0, CubemapFace.Unknown, -1);
-                    cmd.ClearRenderTarget(false, true, Color.clear);
+                    cmd.ClearRenderTarget(true, true, Color.clear);
                     cmd.SetViewProjectionMatrices(Matrix4x4.identity, Matrix4x4.identity);
                     foreach (var name in new[] { "unity_StereoMatrixVP", "unity_StereoMatrixV", "unity_StereoMatrixP" })
                         cmd.SetGlobalMatrixArray(name, new[] { Matrix4x4.identity, Matrix4x4.identity });
                     cmd.EnableShaderKeyword("STEREO_INSTANCING_ON");
+                    cmd.SetSinglePassStereo(SinglePassStereoMode.Instancing);
                     cmd.SetGlobalVector("_ZBufferParams", new Vector4(999, 1, 9.99f, .01f));
                     cmd.SetGlobalConstantBuffer(stereoGlobals, Shader.PropertyToID("UnityStereoGlobals"), 0, 68 * 16);
+                    var drawMatrix = Matrix4x4.identity;
+                    if (depthPass != null)
+                    {
+                        var near = Matrix4x4.Translate(new Vector3(0, 0, SystemInfo.usesReversedZBuffer ? .75f : .25f));
+                        cmd.DrawMeshInstanced(mesh, 0, material, material.FindPass(depthPass), new[] { near, near }, 2);
+                        material.SetFloat("_ZTest", 4);
+                        drawMatrix = Matrix4x4.Translate(new Vector3(0, 0, SystemInfo.usesReversedZBuffer ? .25f : .75f));
+                    }
                     cmd.DrawMeshInstanced(mesh, 0, material,
-                        material.FindPass("ForwardBase"), new[] { Matrix4x4.identity, Matrix4x4.identity }, 2);
+                        material.FindPass(distortion ? "AvatarDistortion" : "ForwardBase"), new[] { drawMatrix, drawMatrix }, 2);
                     cmd.DisableShaderKeyword("STEREO_INSTANCING_ON");
+                    cmd.SetSinglePassStereo(SinglePassStereoMode.None);
                     Graphics.ExecuteCommandBuffer(cmd);
                 }
                 for (var eye = 0; eye < 2; eye++)
@@ -71,7 +102,12 @@ namespace Nova.Tests.PlayMode
                     Graphics.SetRenderTarget(target, 0, CubemapFace.Unknown, eye);
                     read.ReadPixels(new Rect(0, 0, 32, 32), 0, 0);
                     read.Apply();
-                    if (softParticles && eye == 0)
+                    if (distortion)
+                        Assert.That(Vector4.Distance(read.GetPixel(16, 16), eye == 0 ? Color.red : Color.green), Is.LessThan(.01f),
+                            "Eye " + eye + " sampled " + read.GetPixel(16, 16) + "; camera compositor flag=" + Shader.GetGlobalFloat("_NovaCameraDistortionActive"));
+                    if (depthPass != null)
+                        Assert.That(read.GetPixel(16, 16).a, Is.LessThan(.05f), depthPass + " must occlude the later geometry in eye " + eye);
+                    else if (softParticles && eye == 0)
                         Assert.That(read.GetPixels().Max(c => c.a), Is.LessThan(.05f), "Near geometry fades only the left eye.");
                     else Assert.That(read.GetPixels().Count(c => c.a > 0.9f), Is.GreaterThan(100),
                         shaderName + " eye " + eye + " must receive the particle, including its fragment alpha.");
@@ -83,7 +119,7 @@ namespace Nova.Tests.PlayMode
                 Shader.SetGlobalConstantBuffer("UnityStereoGlobals", (ComputeBuffer)null, 0, 0);
                 stereoGlobals.Dispose();
                 RenderTexture.active = previous;
-                foreach (var obj in new Object[] { quad, mesh, material, target, read, depth }) Object.DestroyImmediate(obj);
+                foreach (var obj in new Object[] { quad, mesh, material, target, read, depth, grab }) Object.DestroyImmediate(obj);
             }
         }
     }

@@ -14,6 +14,9 @@ namespace Nova.Runtime.Core.Scripts
         private Material applyMaterial;
         private Camera targetCamera;
         private static readonly int UvTexture = Shader.PropertyToID("_ScreenSpaceUvTexture");
+        private static readonly int CameraActive = Shader.PropertyToID("_NovaCameraDistortionActive");
+        private float previousCameraActive;
+        private bool rendering;
 
         public void Create()
         {
@@ -30,6 +33,7 @@ namespace Nova.Runtime.Core.Scripts
 
         private void OnDisable()
         {
+            OnPostRender();
             if (applyMaterial == null) return;
             if (Application.isPlaying) Destroy(applyMaterial);
             else DestroyImmediate(applyMaterial);
@@ -37,11 +41,28 @@ namespace Nova.Runtime.Core.Scripts
             // Leave the shared camera depth flag set: other effects may now depend on it.
         }
 
+        private bool CanComposite => applyMaterial != null && GraphicsSettings.currentRenderPipeline == null
+            && !targetCamera.stereoEnabled && targetCamera.cameraType != CameraType.Preview
+            && targetCamera.cameraType != CameraType.Reflection
+            && (_applyToSceneView || targetCamera.cameraType != CameraType.SceneView);
+
+        private void OnPreCull()
+        {
+            previousCameraActive = Shader.GetGlobalFloat(CameraActive);
+            Shader.SetGlobalFloat(CameraActive, CanComposite ? 1 : 0);
+            rendering = true;
+        }
+
+        private void OnPostRender()
+        {
+            if (!rendering) return;
+            Shader.SetGlobalFloat(CameraActive, previousCameraActive);
+            rendering = false;
+        }
+
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
-            if (applyMaterial == null || GraphicsSettings.currentRenderPipeline != null || targetCamera.stereoEnabled
-                || targetCamera.cameraType == CameraType.Preview || targetCamera.cameraType == CameraType.Reflection
-                || (!_applyToSceneView && targetCamera.cameraType == CameraType.SceneView))
+            if (!CanComposite)
             {
                 Graphics.Blit(source, destination);
                 return;

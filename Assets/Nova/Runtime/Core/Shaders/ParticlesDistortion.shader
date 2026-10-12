@@ -64,6 +64,8 @@ Shader "Nova/Particles/Distortion"
     {
         Tags
         {
+            "Queue" = "Transparent+100"
+            "VRCFallback" = "Hidden"
             "RenderType" = "Transparent"
             "IgnoreProjector" = "True"
             "PreviewType" = "Plane"
@@ -93,6 +95,34 @@ Shader "Nova/Particles/Distortion"
             #pragma shader_feature_local _SOFT_PARTICLES_ENABLED
             #pragma shader_feature_local _DEPTH_FADE_ENABLED
             #include "BuiltIn/NovaBuiltInCore.cginc"
+            #include "BuiltIn/NovaBuiltInDistortion.cginc"
+            ENDCG
+        }
+        // Avatars cannot install camera MonoBehaviours. A named grab is shared by
+        // distortion renderers on the camera, including instanced stereo eyes.
+        GrabPass { "_NovaDistortionGrabTexture" }
+        Pass
+        {
+            Name "AvatarDistortion"
+            Tags { "LightMode" = "ForwardBase" }
+            Blend One Zero
+            ZWrite Off
+            ZTest [_ZTest]
+            Cull [_Cull]
+            CGPROGRAM
+            #pragma target 3.5
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
+            #pragma shader_feature_local_fragment _ _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR
+            #pragma shader_feature_local _FLOW_MAP_ENABLED
+            #pragma shader_feature_local _FLOW_MAP_TARGET_BASE
+            #pragma shader_feature_local _FLOW_MAP_TARGET_ALPHA_TRANSITION
+            #pragma shader_feature_local _ _FADE_TRANSITION_ENABLED _DISSOLVE_TRANSITION_ENABLED
+            #pragma shader_feature_local _SOFT_PARTICLES_ENABLED
+            #pragma shader_feature_local _DEPTH_FADE_ENABLED
+            #define NOVA_DISTORTION_GRABPASS
             #include "BuiltIn/NovaBuiltInDistortion.cginc"
             ENDCG
         }

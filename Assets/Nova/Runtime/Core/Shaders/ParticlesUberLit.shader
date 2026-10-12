@@ -708,6 +708,7 @@ Shader "Nova/Particles/UberLit"
 
             struct NovaDepthVaryings
             {
+                UNITY_VERTEX_OUTPUT_STEREO
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float4 customCoord1 : TEXCOORD1;
@@ -733,6 +734,7 @@ Shader "Nova/Particles/UberLit"
             {
                 NOVA_SETUP_PARTICLE(v)
                 NovaDepthVaryings o;
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 NovaDepthApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.vertex = NovaObjectToClipPos(v.vertex);
                 #if defined(_BASE_MAP_MODE_2D_ARRAY)
@@ -795,6 +797,7 @@ Shader "Nova/Particles/UberLit"
 
             fixed4 fragDepthOnly(NovaDepthVaryings i) : SV_Target
             {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 #ifdef _ALPHATEST_ENABLED
                 clip(NovaDepthAlphaColor(i).a - _Cutoff);
                 #endif
@@ -909,6 +912,7 @@ Shader "Nova/Particles/UberLit"
 
             struct NovaShadowVaryings
             {
+                UNITY_VERTEX_OUTPUT_STEREO
                 V2F_SHADOW_CASTER;
                 float2 uv : TEXCOORD1;
                 float4 customCoord1 : TEXCOORD2;
@@ -937,6 +941,7 @@ Shader "Nova/Particles/UberLit"
             {
                 NOVA_SETUP_PARTICLE(v)
                 NovaShadowVaryings o;
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 NovaShadowApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.pos = NovaShadowCasterClipPos(v.vertex, v.normal);
                 #if defined(_BASE_MAP_MODE_2D_ARRAY)
@@ -1011,6 +1016,7 @@ Shader "Nova/Particles/UberLit"
 
             fixed4 fragShadowCaster(NovaShadowVaryings i) : SV_Target
             {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 #ifdef _SHADOW_CASTER_ALPHA_TEST_ENABLED
                 clip(NovaShadowAlphaColor(i).a - _ShadowCasterAlphaCutoff);
                 #endif

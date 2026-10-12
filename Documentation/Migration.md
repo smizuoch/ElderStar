@@ -57,11 +57,33 @@ backed-up `.mat` files while retaining their `.meta` files. Keep backups outside
 Library if needed across cache deletion. Binary/embedded legacy materials remain
 usable through the aliases; this optional text normalizer skips them.
 
-For soft particles and depth fade, enable `DepthTextureMode.Depth` on the camera.
-For distortion, add **NOVA > Screen Space Distortion** to each mono game camera;
-it enables depth automatically. Place it before other image effects in the camera's
-component order. Camera layers must include the distortion renderer and the opaque
-background must participate in the depth texture. Transparent depth is not used.
+For soft particles, enable `DepthTextureMode.Depth` on an ordinary game camera.
+The distance-based depth-fade control does not need a scene depth texture.
+Distortion now renders directly through a named GrabPass, with no camera script.
+Its default queue is 3100 so the background exists before capture. Original material
+values, textures and GUIDs remain; an explicit custom queue is still respected and
+must be placed after the background. This queue difference is necessary because
+Built-in has no URP renderer feature to schedule the effect separately.
+
+For the accumulated, camera-wide distortion approximation in ordinary projects,
+add **NOVA > Screen Space Distortion** to a mono game camera. It enables depth and
+suppresses the shader-only surface pass while compositing. Put it before other image
+effects. Camera layers and opaque depth participation still apply.
+
+For **VRChat PC avatars**, attach particle renderers/materials to the avatar without
+the camera component or other NOVA runtime scripts. The SDK does not allow arbitrary
+avatar scripts. Soft particles depend on the current world's depth texture; the
+avatar cannot force that world setting. Shader-only distortion samples the captured
+scene per surface, so overlapping distortions do not accumulate exactly like URP.
+Custom shaders/particles can also be hidden by viewers' VRChat Safety settings.
+See the official [allowed components](https://creators.vrchat.com/avatars/whitelisted-avatar-components/whitelisted-avatar-components/)
+and [shader fallback](https://creators.vrchat.com/avatars/shader-fallback-system/) references.
+
+VRChat SDK 3.10.5 requires mipmapped avatar textures to enable **Streaming Mip Maps**.
+This is a Texture Importer setting, not image/material conversion. The validation
+fixture backs up changed `.meta` files before enabling it on avatar dependencies.
+Use the SDK's validation and Build & Test on each target avatar; installing NOVA
+does not certify unrelated avatar assets, world depth, network behavior or PCVR hardware.
 
 After import, inspect lighting and blending in the target scene. Lit shading,
 reflection probes, shadows, fog and camera distortion use the documented Built-in

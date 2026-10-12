@@ -5,8 +5,12 @@ using UnityEngine;
 
 namespace Nova.Tests.PlayMode
 {
+    [TestFixture(true)]
+    [TestFixture(false)]
     public sealed class NovaBuiltInDistortionTests
     {
+        private readonly bool useCameraCompositor;
+        public NovaBuiltInDistortionTests(bool useCameraCompositor) { this.useCameraCompositor = useCameraCompositor; }
         [TestCase("enabled", true)]
         [TestCase("zero", false)]
         [TestCase("disabled renderer", false)]
@@ -153,11 +157,14 @@ namespace Nova.Tests.PlayMode
                 camera.clearFlags = CameraClearFlags.SolidColor;
                 camera.backgroundColor = Color.black;
                 if (scenario == "camera layer") camera.cullingMask &= ~(1 << 8);
-                var effect = (Behaviour)cameraObject.AddComponent(type);
-                effect.enabled = false;
+                var effect = useCameraCompositor ? (Behaviour)cameraObject.AddComponent(type) : null;
+                if (effect != null) effect.enabled = false;
+                var rendererEnabled = particle.GetComponent<Renderer>().enabled;
+                particle.GetComponent<Renderer>().enabled = false;
                 var baseline = Read(camera, target, readback, sampleY);
                 var oppositeBaseline = readback.GetPixel(64, 128 - sampleY);
-                effect.enabled = true;
+                particle.GetComponent<Renderer>().enabled = rendererEnabled;
+                if (effect != null) effect.enabled = true;
                 var distorted = Read(camera, target, readback, sampleY);
                 if (offCenter)
                     Assert.That(Vector4.Distance(readback.GetPixel(64, 128 - sampleY), oppositeBaseline), Is.LessThan(0.015f),
@@ -166,9 +173,10 @@ namespace Nova.Tests.PlayMode
                 else if (scenario == "vertical") Assert.That(distorted.g, Is.GreaterThan(baseline.g + 0.08f), $"before {baseline}, after {distorted}");
                 else if (shouldDistort) Assert.That(distorted.r, Is.GreaterThan(baseline.r + 0.08f), $"before {baseline}, after {distorted}");
                 else Assert.That(Vector4.Distance(distorted, baseline), Is.LessThan(0.025f), $"before {baseline}, after {distorted}");
-                effect.enabled = false;
+                if (effect != null) effect.enabled = false;
+                particle.GetComponent<Renderer>().enabled = false;
                 var restored = Read(camera, target, readback, sampleY);
-                Assert.That(Mathf.Abs(restored.r - baseline.r), Is.LessThan(0.015f), "Disabling must restore the original frame.");
+                Assert.That(Mathf.Abs(restored.r - baseline.r), Is.LessThan(0.015f), "Removing the distortion renderer must restore the original frame.");
             }
             finally
             {
