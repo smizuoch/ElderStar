@@ -161,8 +161,8 @@ Shader "Nova/UIParticles/UberLit"
             _AlphaTransitionMap("Alpha Transition Map", 2D) = "white" {}
             _AlphaTransitionMap2DArray("Alpha Transition Map 2D Array", 2DArray) = "" {}
             _AlphaTransitionMap3D("Alpha Transition Map 3D", 3D) = "" {}
-            _AlphaTransitionMapProgress("Alpha縲Transition Map Progress", Range(0.0, 1.0)) = 0.0
-            _AlphaTransitionMapProgressCoord("Alpha縲Transition Map Progress Coord", Float) = 0.0
+        _AlphaTransitionMapProgress("Alpha　Transition Map Progress", Range(0.0, 1.0)) = 0.0
+        _AlphaTransitionMapProgressCoord("Alpha　Transition Map Progress Coord", Float) = 0.0
             _AlphaTransitionMapOffsetXCoord("Alpha Transition Map Offset X Coord", Float) = 0.0
             _AlphaTransitionMapOffsetYCoord("Alpha Transition Map Offset Y Coord", Float) = 0.0
             _AlphaTransitionMapRotation("Alpha Transition Map Rotation", Range(0.0, 1.0)) = 0.0
@@ -178,8 +178,8 @@ Shader "Nova/UIParticles/UberLit"
             _AlphaTransitionMapSecondTexture("Alpha Transition Second Texture Map", 2D) = "white" {}
             _AlphaTransitionMapSecondTexture2DArray("Alpha Transition Second Texture Map 2D Array", 2DArray) = "" {}
             _AlphaTransitionMapSecondTexture3D("Alpha Transition Second Texture Map 3D", 3D) = "" {}
-            _AlphaTransitionMapSecondTextureProgress("Alpha縲Transition Map Second Texture  Progress", Range(0.0, 1.0)) = 0.0
-            _AlphaTransitionMapSecondTextureProgressCoord("Alpha縲Transition Map Second Texture  Progress Coord", Float) = 0.0
+        _AlphaTransitionMapSecondTextureProgress("Alpha　Transition Map Second Texture  Progress", Range(0.0, 1.0)) = 0.0
+        _AlphaTransitionMapSecondTextureProgressCoord("Alpha　Transition Map Second Texture  Progress Coord", Float) = 0.0
             _AlphaTransitionMapSecondTextureOffsetXCoord("Alpha Transition Second Texture Map Offset X Coord", Float) = 0.0
             _AlphaTransitionMapSecondTextureOffsetYCoord("Alpha Transition Second Texture Map Offset Y Coord", Float) = 0.0
             _AlphaTransitionMapSecondTextureRotation("Alpha Transition Map Second Texture Rotation", Range(0.0, 1.0)) = 0.0
