@@ -155,6 +155,21 @@ namespace Nova.Tests.Editor
             Assert.Throws<ArgumentException>(() => OptimizedShaderGenerator.Generate("../Outside"));
         }
 
+        [Test]
+        public void OriginalGeneratorAcceptsAssetsRootAsOutput()
+        {
+            var files = Directory.GetFiles(Folder + "/Generated shaders", "*.shader")
+                .Select(path => "Assets/" + Path.GetFileName(path)).ToArray();
+            Assert.That(files.Any(File.Exists), Is.False, "Do not overwrite an existing root shader.");
+            try
+            {
+                OptimizedShaderGenerator.Generate("Assets");
+                Assert.That(files.Length, Is.EqualTo(48));
+                Assert.That(files.All(path => AssetDatabase.LoadAssetAtPath<Shader>(path) != null), Is.True);
+            }
+            finally { foreach (var path in files) AssetDatabase.DeleteAsset(path); }
+        }
+
         private static string Name(string kind, RenderType renderType, OptionalShaderPass passes)
         {
             var names = new[] { OptionalShaderPass.DepthOnly, OptionalShaderPass.DepthNormals, OptionalShaderPass.ShadowCaster }

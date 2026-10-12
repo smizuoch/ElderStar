@@ -76,7 +76,8 @@ namespace Nova.Editor.Core.Scripts.Optimizer
                 throw new ArgumentException("Choose an output folder under Assets.", nameof(outputFolderPath));
             var output = Path.GetFullPath(outputFolderPath).Replace('\\', '/');
             var assets = Path.GetFullPath(Application.dataPath).Replace('\\', '/');
-            if (!output.StartsWith(assets + "/", StringComparison.OrdinalIgnoreCase))
+            if (!output.Equals(assets, StringComparison.OrdinalIgnoreCase) &&
+                !output.StartsWith(assets + "/", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException("Generated shaders must be saved under Assets.", nameof(outputFolderPath));
             var outputAssetPath = "Assets" + output.Substring(assets.Length);
             Directory.CreateDirectory(output);
