@@ -69,15 +69,15 @@ approximations in [the compatibility matrix](BuiltInCompatibilityMatrix.md).
 In particular, a fully metallic or white-specular material with both reflection
 options disabled has no diffuse light, as in the original BRDF workflow.
 
-To keep the original light intensity values, run **Tools > NOVA > Built-in >
-Match Original Lighting Settings**. This opt-in action uses linear light intensity
-when the project color space is Linear and enables color temperature, matching
-URP's per-frame settings. It saves Graphics Settings and supports Edit > Undo.
-It affects every light in the project, including non-NOVA materials, so the menu
-explains the change before applying it. Rerun it if you change color space later.
+The first import automatically applies the original light intensity defaults:
+linear intensity in Linear color space, gamma intensity in Gamma color space,
+and color temperature enabled. This affects all project lights, including other
+materials. The settings persist into standalone builds. The setup runs again
+after changing color space, but does not overwrite later manual edits or Undo
+on ordinary reloads. It does not change the project's color space itself.
 
-Fresh Built-in projects otherwise default to gamma light intensity, which produces
-different brightness in Linear projects even with identical material/shader math.
+The project-local **Tools > NOVA > Built-in > Automatic Initial Lighting Setup**
+checkbox opts out; the state lives in `ProjectSettings/NovaBuiltInSettings.asset`
+and can be versioned with the project. **Match Original Lighting Settings**
+remains an explicit, undoable reapply action. No material conversion is involved.
 See [Unity's light-intensity API documentation](https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Rendering.GraphicsSettings-lightsUseLinearIntensity.html).
-The port's Linear PBR visual comparison runs this same migration action; it does
-not silently change project settings when the package is imported.

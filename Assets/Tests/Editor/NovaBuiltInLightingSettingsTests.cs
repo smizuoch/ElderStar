@@ -9,12 +9,56 @@ namespace Nova.Tests.Editor
 {
     public sealed class NovaBuiltInLightingSettingsTests
     {
+        [TestCase(true)]
+        [TestCase(false)]
+        public void FirstProjectInitializationMatchesOriginalOnlyWhenEnabled(bool enabled)
+        {
+            var assembly = typeof(Nova.Editor.Core.Scripts.BuiltInLightingSettings).Assembly;
+            var stateType = assembly.GetType("Nova.Editor.Core.Scripts.BuiltInProjectSettings");
+            Assert.That(stateType, Is.Not.Null, "A fresh project must receive the original lighting defaults automatically.");
+            var state = (ScriptableObject)stateType.BaseType.GetProperty("instance").GetValue(null);
+            var snapshot = JsonUtility.ToJson(state);
+            var linear = GraphicsSettings.lightsUseLinearIntensity;
+            var temperature = GraphicsSettings.lightsUseColorTemperature;
+            var expected = QualitySettings.activeColorSpace == ColorSpace.Linear;
+            try
+            {
+                JsonUtility.FromJsonOverwrite("{\"automaticLightingSetup\":" + enabled.ToString().ToLowerInvariant() +
+                    ",\"initializedColorSpace\":-1}", state);
+                GraphicsSettings.lightsUseLinearIntensity = !expected;
+                GraphicsSettings.lightsUseColorTemperature = false;
+                var initialize = typeof(Nova.Editor.Core.Scripts.BuiltInLightingSettings).GetMethod("InitializeProject",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                Assert.That(initialize, Is.Not.Null);
+                initialize.Invoke(null, null);
+                Assert.That(GraphicsSettings.lightsUseLinearIntensity, Is.EqualTo(enabled ? expected : !expected));
+                Assert.That(GraphicsSettings.lightsUseColorTemperature, Is.EqualTo(enabled));
+                // Domain reloads must not repeatedly overwrite a user's later lighting edits or Undo.
+                GraphicsSettings.lightsUseLinearIntensity = !expected;
+                GraphicsSettings.lightsUseColorTemperature = false;
+                initialize.Invoke(null, null);
+                Assert.That(GraphicsSettings.lightsUseLinearIntensity, Is.EqualTo(!expected));
+                Assert.That(GraphicsSettings.lightsUseColorTemperature, Is.False);
+            }
+            finally
+            {
+                JsonUtility.FromJsonOverwrite(snapshot, state);
+                stateType.GetMethod("Persist").Invoke(state, null);
+                GraphicsSettings.lightsUseLinearIntensity = linear;
+                GraphicsSettings.lightsUseColorTemperature = temperature;
+                var asset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/GraphicsSettings.asset")[0];
+                Undo.ClearUndo(asset);
+                EditorUtility.SetDirty(asset);
+                AssetDatabase.SaveAssets();
+            }
+        }
+
         [Test]
         public void OriginalLightingSettingsPersistAndSupportUndo()
         {
             var type = AppDomain.CurrentDomain.GetAssemblies()
                 .Select(a => a.GetType("Nova.Editor.Core.Scripts.BuiltInLightingSettings")).FirstOrDefault(t => t != null);
-            Assert.That(type, Is.Not.Null, "Linear projects need an explicit migration action for URP light intensity settings.");
+            Assert.That(type, Is.Not.Null, "Original light intensity settings must remain available with Undo support.");
             var settings = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/GraphicsSettings.asset")[0];
             var savedLinear = GraphicsSettings.lightsUseLinearIntensity;
             var savedTemperature = GraphicsSettings.lightsUseColorTemperature;

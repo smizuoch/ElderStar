@@ -57,9 +57,11 @@ bundled source folder to avoid importing conflicting URP code. See
 [import instructions](Documentation/Migration.md) and
 [Fire001 verification](Documentation/DirectImportVerification.md).
 
-For original light intensity values in a Linear project, use **Tools > NOVA >
-Built-in > Match Original Lighting Settings**. This explicit, undoable action
-matches URP's intensity/color-temperature settings for the entire project.
+On first import (and after changing color space), NOVA automatically matches the
+original light intensity/color-temperature settings for the entire project.
+Later manual lighting edits survive reloads. The project-local **Tools > NOVA >
+Built-in > Automatic Initial Lighting Setup** toggle disables this behavior;
+**Match Original Lighting Settings** remains available with Undo support.
 
 The original optimizer APIs remain available:
 `OptimizedShaderGenerator.Generate("Assets/NovaOptimized")` and

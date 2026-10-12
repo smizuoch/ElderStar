@@ -15,7 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: No required direct-import item remains for the verified Fire001 prefab scope. Version 0.1.1 passes original-GUID import, unchanged effect import, 36 pixel-identical comparisons, both Unity suites/package acceptance and a Unity 6 standalone player. Optional next scope is additional third-party effects/platforms; the bundled URP demo scene remains outside prefab parity.
+Current TODO: First-install defaults and broader licensed effect compatibility (2026-10-12).
+
+- [x] Match original initial lighting settings automatically, with project-local opt-out and no repeated overwrite of later edits.
+- [ ] Verify untouched fresh material/Inspector defaults against original NOVA (fresh setup differential cases pass; visual corpus pending).
+- [ ] Exercise additional MIT/free NOVA prefabs and CC0 particle textures, retaining source/license/hash evidence.
+- [ ] Review differences, run both Unity suites and relevant visual/package checks, commit and update delivery.
 
 Direct-import worklist (2026-10-12):
 

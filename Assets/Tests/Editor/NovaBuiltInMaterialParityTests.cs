@@ -19,7 +19,7 @@ namespace Nova.Tests.Editor
         public static IEnumerable<TestCaseData> Cases()
         {
             foreach (var shader in Shaders)
-            for (var seed = 0; seed < 48; seed++)
+            for (var seed = -1; seed < 48; seed++)
                 yield return new TestCaseData(shader, seed);
         }
 
@@ -35,8 +35,11 @@ namespace Nova.Tests.Editor
             {
                 for (var step = 0; step < 3; step++)
                 {
-                    Configure(actual, seed + 101 * step, texture, array, volume);
-                    Configure(expected, seed + 101 * step, texture, array, volume);
+                    if (seed >= 0)
+                    {
+                        Configure(actual, seed + 101 * step, texture, array, volume);
+                        Configure(expected, seed + 101 * step, texture, array, volume);
+                    }
                     Setup(expected, true);
                     Setup(actual, false);
                     var context = shaderName + " seed=" + seed + " step=" + step;

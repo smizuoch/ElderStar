@@ -8,6 +8,44 @@ namespace Nova.Editor.Core.Scripts
     {
         private const string Menu = "Tools/NOVA/Built-in/Match Original Lighting Settings";
 
+        private const string AutomaticMenu = "Tools/NOVA/Built-in/Automatic Initial Lighting Setup";
+
+        [InitializeOnLoadMethod]
+        private static void ScheduleInitialSetup()
+        {
+            EditorApplication.delayCall += InitializeProject;
+        }
+
+        // Match the settings installed by the original pipeline, once per project/color space.
+        // Persisting them in GraphicsSettings also makes standalone players inherit the same values.
+        private static void InitializeProject()
+        {
+            if (!IsBuiltIn()) return;
+            var state = BuiltInProjectSettings.instance;
+            var colorSpace = (int)PlayerSettings.colorSpace;
+            if (!state.automaticLightingSetup || state.initializedColorSpace == colorSpace) return;
+            Apply();
+            state.initializedColorSpace = colorSpace;
+            state.Persist();
+        }
+
+        [MenuItem(AutomaticMenu)]
+        private static void ToggleAutomaticSetup()
+        {
+            var state = BuiltInProjectSettings.instance;
+            state.automaticLightingSetup = !state.automaticLightingSetup;
+            state.initializedColorSpace = -1;
+            state.Persist();
+            InitializeProject();
+        }
+
+        [MenuItem(AutomaticMenu, true)]
+        private static bool ValidateAutomaticSetup()
+        {
+            UnityEditor.Menu.SetChecked(AutomaticMenu, BuiltInProjectSettings.instance.automaticLightingSetup);
+            return IsBuiltIn();
+        }
+
         [MenuItem(Menu)]
         private static void ShowConfirmation()
         {
@@ -26,9 +64,12 @@ namespace Nova.Editor.Core.Scripts
             var asset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/GraphicsSettings.asset")[0];
             var settings = new SerializedObject(asset);
             Undo.SetCurrentGroupName("Match original NOVA lighting");
-            settings.FindProperty("m_LightsUseLinearIntensity").boolValue = QualitySettings.activeColorSpace == ColorSpace.Linear;
+            settings.FindProperty("m_LightsUseLinearIntensity").boolValue = PlayerSettings.colorSpace == ColorSpace.Linear;
             settings.FindProperty("m_LightsUseColorTemperature").boolValue = true;
             settings.ApplyModifiedProperties();
+            // The serialized asset may already match while native state was changed by a pipeline.
+            GraphicsSettings.lightsUseLinearIntensity = PlayerSettings.colorSpace == ColorSpace.Linear;
+            GraphicsSettings.lightsUseColorTemperature = true;
             AssetDatabase.SaveAssets();
         }
     }
