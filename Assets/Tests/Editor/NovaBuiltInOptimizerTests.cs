@@ -84,6 +84,30 @@ namespace Nova.Tests.Editor
             finally { Assert.That(AssetDatabase.MoveAsset(Folder + "/Moved", Folder + "/Generated shaders"), Is.Empty); }
         }
 
+        [TestCase("UberUnlit", RenderType.Opaque)]
+        [TestCase("UberLit", RenderType.Opaque)]
+        [TestCase("UberUnlit", RenderType.Cutout)]
+        [TestCase("UberLit", RenderType.Cutout)]
+        [TestCase("UberUnlit", RenderType.Transparent)]
+        [TestCase("UberLit", RenderType.Transparent)]
+        public void OpaqueOptimizationRemovesOriginalUnusedDepthAndShadowVariants(string kind, RenderType render)
+        {
+            var shader = Shader.Find($"Hidden/Nova/Particles/{kind}(Optimized {render} DepthOnly ShadowCaster)");
+            var source = File.ReadAllText(AssetDatabase.GetAssetPath(shader));
+            foreach (var pass in new[] { "DepthOnly", "ShadowCaster" })
+            {
+                var start = source.IndexOf("Name \"" + pass + "\"", StringComparison.Ordinal);
+                var program = source.IndexOf("CGPROGRAM", start, StringComparison.Ordinal);
+                var end = source.IndexOf("ENDCG", program, StringComparison.Ordinal);
+                var pragmas = source.Substring(program, end - program).Split('\n').Where(l => l.Contains("#pragma")).ToArray();
+                Assert.That(pragmas.Any(l => l.Contains("_BASE_MAP_MODE_2D")), Is.EqualTo(render != RenderType.Opaque), pass);
+                Assert.That(pragmas.Any(l => l.Contains("_FADE_TRANSITION_ENABLED")), Is.EqualTo(render != RenderType.Opaque), pass);
+                Assert.That(pragmas.Any(l => l.Contains("_VERTEX_DEFORMATION_ENABLED")), Is.True, pass);
+            }
+            var forward = source.Substring(source.IndexOf("\"LightMode\" = \"ForwardBase\"", StringComparison.Ordinal));
+            Assert.That(forward, Does.Contain("#pragma shader_feature_local _BASE_MAP_MODE_2D"));
+        }
+
         [TestCase(RenderType.Opaque, OptionalShaderPass.ShadowCaster)]
         [TestCase(RenderType.Cutout, OptionalShaderPass.DepthOnly)]
         [TestCase(RenderType.Transparent, OptionalShaderPass.None)]
