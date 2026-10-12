@@ -15,7 +15,16 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: None required for the completed Built-in port. On both Unity 2022.3.22f1 and 6000.3.23f1, EditMode passes 143/143, PlayMode passes 727/727, final tarball tests pass 3/3, and standalone player/sample execution passes. All 96 fresh visual comparisons pass. The matrix resolves 65 feature groups with explicit limits and fallbacks. See [VerificationReport.md](VerificationReport.md) for exact artifacts and evidence.
+Current TODO: Authoring parity follow-up (2026-10-12): restore missing Inspector foldout icons with failing tests, then audit original UI/API/declarations, material state transitions and optimizer behavior. The 2026-10-10 release evidence remains historical; rerun acceptance after these changes.
+
+Authoring parity worklist:
+
+- [ ] Restore and verify original Inspector resources and foldout interactions.
+- [ ] Compare every shader property declaration and original editor API/UI contract.
+- [ ] Differential-test material setup and shader reassignment, including legacy texture modes and multiple selection/Undo.
+- [ ] Restore practical optimizer behavior omitted by the initial port; verify resulting shaders and rendering.
+- [ ] Re-audit remaining compatibility differences, implement practical improvements, and document irreducible pipeline differences precisely.
+- [ ] Run both Unity suites and package/player verification; refresh delivery artifacts and evidence.
 
 Completion worklist (2026-10-10):
 
