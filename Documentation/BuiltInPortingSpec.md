@@ -15,16 +15,16 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Authoring parity follow-up (2026-10-12): restore missing Inspector foldout icons with failing tests, then audit original UI/API/declarations, material state transitions and optimizer behavior. The 2026-10-10 release evidence remains historical; rerun acceptance after these changes.
+Current TODO: No required item remains for the documented Windows scope. The authoring parity follow-up (2026-10-12) passed both editor suites, final tarball/player acceptance and 336 original/port comparisons. Delivery artifacts and evidence are refreshed. Optional next work: target-platform/XR acceptance and native mouse-driven Inspector validation.
 
 Authoring parity worklist:
 
-- [ ] Restore and verify original Inspector resources and foldout interactions.
-- [ ] Compare every shader property declaration and original editor API/UI contract.
-- [ ] Differential-test material setup and shader reassignment, including legacy texture modes and multiple selection/Undo.
-- [ ] Restore practical optimizer behavior omitted by the initial port; verify resulting shaders and rendering.
-- [ ] Re-audit remaining compatibility differences, implement practical improvements, and document irreducible pipeline differences precisely.
-- [ ] Run both Unity suites and package/player verification; refresh delivery artifacts and evidence.
+- [x] Restore and verify original Inspector resources, real GUI rendering and foldout preference persistence.
+- [x] Compare every shader property declaration and original editor API/UI contract.
+- [x] Differential-test material setup and shader reassignment, including legacy texture modes and multiple selection/Undo.
+- [x] Restore practical optimizer behavior omitted by the initial port; verify resulting shaders and rendering.
+- [x] Re-audit remaining compatibility differences, implement practical improvements, and document irreducible pipeline differences precisely.
+- [x] Run both Unity suites and package/player verification; refresh delivery artifacts and evidence.
 
 Completion worklist (2026-10-10):
 

@@ -48,3 +48,6 @@ commands. The Built-in fixture invokes the package's explicit lighting-settings
 migration action; URP already sets these flags every frame. Capture metadata
 records both flags. Using the default Built-in gamma-intensity setting in a Linear
 project is a different lighting input, not a valid equal-input BRDF comparison.
+Also repeat the common capture without `-novaPbr`, retaining `-novaMatchLighting`,
+to verify all 96 common-feature frames in Linear space. Full acceptance therefore
+covers 336 comparisons: 96 common and 72 PBR in each color space.

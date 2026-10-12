@@ -39,7 +39,8 @@ python3 Tests/Visual/test_compare_frames.py
 
 The visual comparator requires Pillow. Follow [the capture instructions](../Tests/Visual/README.md)
 to produce fresh original and Built-in frames; all 96 common-feature and 72 PBR
-comparisons must pass. Run `python3 Tests/Parity/test_original_contract.py` for
+comparisons in each of Gamma and Linear space must pass (336 total).
+Run `python3 Tests/Parity/test_original_contract.py` for
 the complete original ShaderLab and Inspector source/resource contracts.
 The completed release evidence is in [VerificationReport.md](VerificationReport.md).
 

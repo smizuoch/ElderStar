@@ -52,6 +52,10 @@ Use **Tools > NOVA > Built-in > Material Migration** to preview and migrate
 original text materials with backups. See [migration instructions](Documentation/Migration.md)
 for missing shader references, optimized materials and rollback.
 
+For original light intensity values in a Linear project, use **Tools > NOVA >
+Built-in > Match Original Lighting Settings**. This explicit, undoable action
+matches URP's intensity/color-temperature settings for the entire project.
+
 The original optimizer APIs remain available:
 `OptimizedShaderGenerator.Generate("Assets/NovaOptimized")` and
 `OptimizedShaderReplacer.Replace(settings)` in `Nova.Editor.Core.Scripts.Optimizer`.
@@ -60,14 +64,14 @@ materials preserves their properties, keywords and queue and supports Undo.
 
 ## Compatibility and verification
 
-The [2026-10-10 release verification report](Documentation/VerificationReport.md)
-records passing EditMode (143), PlayMode (727) and installed-package (3) tests on
-each tested Unity version, all 96 visual comparisons, and both standalone players.
+The [release verification report](Documentation/VerificationReport.md)
+records passing EditMode (416), PlayMode (763) and installed-package (3) tests on
+each tested Unity version, all 336 visual comparisons, and both standalone players.
 It also links the local release tarball and Windows demo.
 
-Lit lighting uses a Built-in approximation with normal, metallic/specular and
-smoothness maps, main/additional lights, shadows and reflection probes. It does
-not reproduce URP's GGX BRDF, Forward+, probe volumes or probe blending/box projection.
+Lit shading preserves the original GGX and environment Fresnel/roughness response
+with normal, metallic/specular and smoothness maps. Light scheduling, shadows and
+probe assignment use Built-in; URP Forward+ and probe volumes have no equivalent.
 CanvasRenderer additional lighting and camera distortion have documented limits.
 Texture arrays/3D textures require suitable hardware; untested graphics APIs are
 not certified by the Windows verification results.
