@@ -5,6 +5,7 @@ Shader "Hidden/Nova/Particles/ApplyDistortion"
         Cull Off ZWrite Off ZTest Always
         Pass
         {
+            Name "ApplyDistortion"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag

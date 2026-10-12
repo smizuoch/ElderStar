@@ -248,6 +248,7 @@ Shader "Nova/Particles/UberUnlit"
 
         Pass
         {
+            Name "ForwardBase"
             Tags { "LightMode" = "ForwardBase" }
             Blend [_BlendSrc] [_BlendDst]
             ZWrite [_ZWrite]

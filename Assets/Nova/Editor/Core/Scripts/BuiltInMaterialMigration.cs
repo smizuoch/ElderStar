@@ -28,12 +28,12 @@ namespace Nova.Editor.Core.Scripts
 
         private static readonly string[,] Shaders =
         {
-            { "Nova/Particles/UberUnlit", "1bc5c6a70411243779ce486a98012125", "4651e33d77f6bedcc896127e121e2eb6" },
-            { "Nova/Particles/UberLit", "65654f079f6f340b09f954eb6366ad5a", "30bca65b80428acc1b3b406943fb07ed" },
-            { "Nova/UIParticles/UberUnlit", "72225468864e7e849bc3e630d1756259", "776e3569165e363519e50f5106284c3c" },
-            { "Nova/UIParticles/UberLit", "5befadde7f2b6a9498dd225c31369d75", "6e936eaf27061e8b3f787102769ecc27" },
-            { "Nova/Particles/Distortion", "f16a2dd74da8941d6a883c14b1f26710", "85397f9e441dca7ef1ef3b5d59ec92a7" },
-            { "Hidden/Nova/Particles/ApplyDistortion", "4040547c0f97a42daaee2e90c4800bc5", "7319141515ca58ce5781606eef21f5d5" }
+            { "Nova/Particles/UberUnlit", "4651e33d77f6bedcc896127e121e2eb6", "1bc5c6a70411243779ce486a98012125" },
+            { "Nova/Particles/UberLit", "30bca65b80428acc1b3b406943fb07ed", "65654f079f6f340b09f954eb6366ad5a" },
+            { "Nova/UIParticles/UberUnlit", "776e3569165e363519e50f5106284c3c", "72225468864e7e849bc3e630d1756259" },
+            { "Nova/UIParticles/UberLit", "6e936eaf27061e8b3f787102769ecc27", "5befadde7f2b6a9498dd225c31369d75" },
+            { "Nova/Particles/Distortion", "85397f9e441dca7ef1ef3b5d59ec92a7", "f16a2dd74da8941d6a883c14b1f26710" },
+            { "Hidden/Nova/Particles/ApplyDistortion", "7319141515ca58ce5781606eef21f5d5", "4040547c0f97a42daaee2e90c4800bc5" }
         };
         private static readonly Regex ShaderReference = new Regex(
             @"(?m)^\s*m_Shader:\s*\{fileID:\s*4800000,\s*guid:\s*(?<guid>[a-fA-F0-9]{32}),\s*type:\s*3\s*\}");
@@ -150,7 +150,7 @@ namespace Nova.Editor.Core.Scripts
 
         private void OnGUI()
         {
-            EditorGUILayout.HelpBox("Migrate original NOVA 3.6 material shader references after installing the Built-in port. " +
+            EditorGUILayout.HelpBox("Original NOVA materials work without conversion. Optionally normalize previous Built-in shader aliases. " +
                 "Preview lists text .mat files only. Backups are saved under Library/NovaBuiltInMigration. " +
                 "Generated optimized shaders require manual reassignment and regeneration.", MessageType.Info);
             EditorGUI.BeginChangeCheck();

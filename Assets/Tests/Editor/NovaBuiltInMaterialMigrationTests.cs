@@ -22,16 +22,16 @@ namespace Nova.Tests.Editor
             AssetDatabase.DeleteAsset(Outside);
         }
 
-        [TestCase("Nova/Particles/UberUnlit", "1bc5c6a70411243779ce486a98012125")]
-        [TestCase("Nova/Particles/UberLit", "65654f079f6f340b09f954eb6366ad5a")]
-        [TestCase("Nova/UIParticles/UberUnlit", "72225468864e7e849bc3e630d1756259")]
-        [TestCase("Nova/UIParticles/UberLit", "5befadde7f2b6a9498dd225c31369d75")]
-        [TestCase("Nova/Particles/Distortion", "f16a2dd74da8941d6a883c14b1f26710")]
-        [TestCase("Hidden/Nova/Particles/ApplyDistortion", "4040547c0f97a42daaee2e90c4800bc5")]
+        [TestCase("Nova/Particles/UberUnlit", "4651e33d77f6bedcc896127e121e2eb6")]
+        [TestCase("Nova/Particles/UberLit", "30bca65b80428acc1b3b406943fb07ed")]
+        [TestCase("Nova/UIParticles/UberUnlit", "776e3569165e363519e50f5106284c3c")]
+        [TestCase("Nova/UIParticles/UberLit", "6e936eaf27061e8b3f787102769ecc27")]
+        [TestCase("Nova/Particles/Distortion", "85397f9e441dca7ef1ef3b5d59ec92a7")]
+        [TestCase("Hidden/Nova/Particles/ApplyDistortion", "7319141515ca58ce5781606eef21f5d5")]
         public void PreviewIsReadOnlyAndApplyPreservesMaterialDataWithBackup(string shaderName, string originalGuid)
         {
             var path = Folder + "/材質.mat";
-            var builtinGuid = CreateOriginalMaterial(path, shaderName, originalGuid);
+            var builtinGuid = CreatePreviousPortMaterial(path, shaderName, originalGuid);
             var originalBytes = File.ReadAllBytes(path);
             var plan = BuiltInMaterialMigration.Preview(Folder);
             Assert.That(plan.Entries.Count, Is.EqualTo(1));
@@ -51,9 +51,9 @@ namespace Nova.Tests.Editor
         [Test]
         public void MigrationPreservesBomLineEndingsAndUnrelatedGuidText()
         {
-            const string originalGuid = "1bc5c6a70411243779ce486a98012125";
+            const string originalGuid = "4651e33d77f6bedcc896127e121e2eb6";
             var path = Folder + "/Encoded.mat";
-            var builtinGuid = CreateOriginalMaterial(path, "Nova/Particles/UberUnlit", originalGuid);
+            var builtinGuid = CreatePreviousPortMaterial(path, "Nova/Particles/UberUnlit", originalGuid);
             var text = File.ReadAllText(path).Replace("\r\n", "\n").Replace("\n", "\r\n")
                 + "\r\n# unrelated reference " + originalGuid + "\r\n";
             var encoding = new System.Text.UTF8Encoding(true);
@@ -66,7 +66,7 @@ namespace Nova.Tests.Editor
         [Test]
         public void PreviewIsScopedAndReportsNonTextMaterials()
         {
-            CreateOriginalMaterial(Outside, "Nova/Particles/UberUnlit", "1bc5c6a70411243779ce486a98012125");
+            CreatePreviousPortMaterial(Outside, "Nova/Particles/UberUnlit", "4651e33d77f6bedcc896127e121e2eb6");
             var outsideBytes = File.ReadAllBytes(Outside);
             var current = new Material(Shader.Find("Nova/Particles/UberUnlit"));
             AssetDatabase.CreateAsset(current, Folder + "/AlreadyBuiltIn.mat");
@@ -88,8 +88,8 @@ namespace Nova.Tests.Editor
         [Test]
         public void ChangedMaterialInvalidatesTheWholePreviewBeforeAnyWrite()
         {
-            CreateOriginalMaterial(Folder + "/A.mat", "Nova/Particles/UberUnlit", "1bc5c6a70411243779ce486a98012125");
-            CreateOriginalMaterial(Folder + "/B.mat", "Nova/Particles/UberLit", "65654f079f6f340b09f954eb6366ad5a");
+            CreatePreviousPortMaterial(Folder + "/A.mat", "Nova/Particles/UberUnlit", "4651e33d77f6bedcc896127e121e2eb6");
+            CreatePreviousPortMaterial(Folder + "/B.mat", "Nova/Particles/UberLit", "30bca65b80428acc1b3b406943fb07ed");
             var plan = BuiltInMaterialMigration.Preview(Folder);
             var beforeA = File.ReadAllBytes(Folder + "/A.mat");
             File.AppendAllText(Folder + "/B.mat", "\n# changed after preview\n");
@@ -97,7 +97,7 @@ namespace Nova.Tests.Editor
             Assert.That(File.ReadAllBytes(Folder + "/A.mat"), Is.EqualTo(beforeA));
         }
 
-        private static string CreateOriginalMaterial(string path, string shaderName, string originalGuid)
+        private static string CreatePreviousPortMaterial(string path, string shaderName, string originalGuid)
         {
             var shader = Shader.Find(shaderName);
             Assert.That(shader, Is.Not.Null);

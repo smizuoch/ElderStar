@@ -15,7 +15,14 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: No required item remains for the documented Windows scope. The authoring parity follow-up (2026-10-12) passed both editor suites, final tarball/player acceptance and 336 original/port comparisons. Delivery artifacts and evidence are refreshed. Optional next work: target-platform/XR acceptance and native mouse-driven Inspector validation.
+Current TODO: Verify Fire001.unitypackage and support importing original NOVA effect assets without material conversion. The previous authoring validation did not establish direct unitypackage compatibility.
+
+Direct-import worklist (2026-10-12):
+
+- [ ] Resolve all six original shader GUIDs directly, retaining previously released Built-in GUIDs.
+- [ ] Import effect packages with bundled original NOVA dependencies without importing conflicting URP code or modifying effect assets.
+- [ ] Compare the untouched Fire001 prefab against original NOVA with deterministic particle simulation and actual rendering.
+- [ ] Verify Unity 2022.3 / Unity 6, review, update delivery and document precise limitations.
 
 Authoring parity worklist:
 
