@@ -9,6 +9,39 @@ namespace Nova.Tests.Editor
 {
     public sealed class NovaBuiltInLightingSettingsTests
     {
+        [Test]
+        public void LightingSetupPersistsOnlyGraphicsSettingsAndLeavesOtherEditsUnsaved()
+        {
+            var path = "Assets/NovaLightingSaveScope-" + Guid.NewGuid().ToString("N") + ".mat";
+            var material = new Material(Shader.Find("Nova/Particles/UberUnlit"));
+            var linear = GraphicsSettings.lightsUseLinearIntensity;
+            var temperature = GraphicsSettings.lightsUseColorTemperature;
+            try
+            {
+                AssetDatabase.CreateAsset(material, path);
+                var original = System.IO.File.ReadAllBytes(path);
+                material.SetFloat("_Cutoff", 0.123f);
+                EditorUtility.SetDirty(material);
+                GraphicsSettings.lightsUseColorTemperature = false;
+                Nova.Editor.Core.Scripts.BuiltInLightingSettings.Apply();
+                Assert.That(System.IO.File.ReadAllBytes(path), Is.EqualTo(original), "Initializing lighting must not save unrelated user edits.");
+                Assert.That(EditorUtility.IsDirty(material), Is.True);
+                var saved = System.IO.File.ReadAllText("ProjectSettings/GraphicsSettings.asset");
+                Assert.That(saved, Does.Contain("m_LightsUseColorTemperature: 1"));
+                Assert.That(saved, Does.Contain("m_LightsUseLinearIntensity: " + (PlayerSettings.colorSpace == ColorSpace.Linear ? "1" : "0")));
+            }
+            finally
+            {
+                AssetDatabase.DeleteAsset(path);
+                GraphicsSettings.lightsUseLinearIntensity = linear;
+                GraphicsSettings.lightsUseColorTemperature = temperature;
+                var settings = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/GraphicsSettings.asset")[0];
+                Undo.ClearUndo(settings);
+                EditorUtility.SetDirty(settings);
+                AssetDatabase.SaveAssets();
+            }
+        }
+
         [TestCase(true)]
         [TestCase(false)]
         public void FirstProjectInitializationMatchesOriginalOnlyWhenEnabled(bool enabled)

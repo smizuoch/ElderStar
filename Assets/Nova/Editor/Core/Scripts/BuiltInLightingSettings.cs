@@ -70,7 +70,7 @@ namespace Nova.Editor.Core.Scripts
             // The serialized asset may already match while native state was changed by a pipeline.
             GraphicsSettings.lightsUseLinearIntensity = PlayerSettings.colorSpace == ColorSpace.Linear;
             GraphicsSettings.lightsUseColorTemperature = true;
-            AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssetIfDirty(asset);
         }
     }
 }
