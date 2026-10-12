@@ -38,8 +38,11 @@ public static class NovaVrcAcceptance
     static double deadline;
 
     // Invoke only after the user authorizes a new private upload. This method
-    // refuses an existing blueprint and keeps an attempt record to avoid duplicates.
-    public static void UploadPrivate() => Run(async () =>
+    // rejects unrelated blueprints and keeps an attempt record. Resume requires an
+    // explicit matching ID and verifies ownership, name and Private status first.
+    public static void UploadPrivate() => UploadPrivate(false);
+    public static void ResumePrivate() => UploadPrivate(true);
+    static void UploadPrivate(bool resume) => Run(async () =>
     {
         foreach (var label in new[] { "aao-off", "aao-on" })
         {
@@ -47,11 +50,17 @@ public static class NovaVrcAcceptance
             Require(evidence.success && evidence.errors == 0, "AAO comparison must pass before upload: " + label);
         }
         Require(EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows64, "PC upload only.");
-        Require(!File.Exists(Output + "/upload-attempt.json"), "Upload already attempted; inspect the existing record before retrying.");
+        Require(File.Exists(Output + "/upload-attempt.json") == resume,
+            "Inspect the attempt record before selecting a new upload or an explicit resume.");
+        var arguments = Environment.GetCommandLineArgs();
+        var resumeIndex = Array.IndexOf(arguments, "-novaResumeAvatarId");
+        var resumeId = resumeIndex >= 0 && resumeIndex + 1 < arguments.Length ? arguments[resumeIndex + 1] : "";
+        Require(!resume || !string.IsNullOrEmpty(resumeId), "Resume requires the exact reserved avatar ID.");
         EditorSceneManager.OpenScene(Scene);
         var avatar = Object.FindObjectOfType<VRCAvatarDescriptor>().gameObject;
         var pipeline = avatar.GetComponent<PipelineManager>();
         Require(pipeline, "Validation avatar pipeline missing.");
+        Require(!resume || pipeline.blueprintId == resumeId, "Reserved ID does not match the owned scene.");
         foreach (var child in avatar.transform.Cast<Transform>().Where(t => t.name.StartsWith("NOVA Skinned ")).ToArray())
             Object.DestroyImmediate(child.gameObject);
         AddSkinnedProbes(avatar);
@@ -71,13 +80,19 @@ public static class NovaVrcAcceptance
             // Clear it only when the server confirms no such avatar exists.
             try
             {
-                await VRCApi.GetAvatar(pipeline.blueprintId, true);
-                throw new InvalidOperationException("Refusing to replace an existing remote avatar.");
+                var reserved = await VRCApi.GetAvatar(pipeline.blueprintId, true);
+                Require(resume && reserved.ID == resumeId && reserved.Name == "NOVA PC Validation"
+                    && reserved.ReleaseStatus == "private" && reserved.AuthorId == APIUser.CurrentUser.id,
+                    "Refusing to replace an unrelated remote avatar.");
+                report.avatarId = reserved.ID;
+                if (!string.IsNullOrEmpty(reserved.GetLatestAssetUrlForPlatform("standalonewindows")))
+                { report.uploadedPrivate = true; return; }
             }
-            catch (ApiErrorException e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound) { pipeline.blueprintId = ""; }
+            catch (ApiErrorException e) when (!resume && e.StatusCode == System.Net.HttpStatusCode.NotFound) { pipeline.blueprintId = ""; }
         }
         var data = new VRCAvatar { Name = "NOVA PC Validation", ReleaseStatus = "private", Tags = new List<string>(),
             Description = "Private PC validation of NOVA Shader Built-in 0.1.3 with Fire001 and AAO Trace And Optimize." };
+        report.avatarId = pipeline.blueprintId;
         File.WriteAllText(Output + "/upload-attempt.json", JsonUtility.ToJson(report, true));
         try
         {
@@ -488,4 +503,3 @@ public static class NovaVrcAcceptance
     { if (EditorApplication.timeSinceStartup > deadline) { report.error = "Timed out"; File.WriteAllText(Output + "/" + report.operation + ".json", JsonUtility.ToJson(report, true)); EditorApplication.Exit(2); } }
     static void Require(bool ok, string message) { if (!ok) throw new InvalidOperationException(message); }
 }
-

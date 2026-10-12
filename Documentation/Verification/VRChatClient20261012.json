@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-12",
+  "packageVersion": "0.1.3",
+  "unity": "2022.3.22f1",
+  "sdk": "3.10.5",
+  "aao": "1.9.20",
+  "avatarName": "NOVA PC Validation",
+  "upload": {
+    "success": true,
+    "privateVerified": true,
+    "windowsAssetPresent": true,
+    "errors": 0,
+    "shaderErrors": 0,
+    "reportSha256": "f7798f6543ce6417450a3cf447dafc5b0aade2a186ad1ac7d69b10a384671efe"
+  },
+  "resumeVerification": {
+    "sameAvatar": true,
+    "successfulExistingUploadReturnedWithoutBuild": true,
+    "errors": 0
+  },
+  "client": {
+    "loadedUploadedAvatarId": true,
+    "shaderDiagnosticLines": 0,
+    "logFilename": "output_log_2026-10-12_20-45-33.txt",
+    "logSha256AtVerification": "6515dcf60c5e1168dddbbda01cc037f50160971531708c34506ea39e7b0d1db8",
+    "visualInspection": [
+      "Fire001 visible and animating in the real client mirror",
+      "Four Uber shader panels visible in the mirror",
+      "AAO-merged checker/color skinned probes visible in mirror and direct view",
+      "GrabPass distortion visible over avatar torso"
+    ],
+    "fireRegion": {
+      "rectXYXY": [
+        499,
+        175,
+        522,
+        225
+      ],
+      "pixelsChangingByMoreThan8": 794,
+      "pixels": 1150
+    },
+    "frames": [
+      {
+        "filename": "client-mirror-01.png",
+        "sha256": "f6bc6beec661272e6a4860ed0eee019afdbfe20c433823eca44b94615d767510"
+      },
+      {
+        "filename": "client-mirror-02.png",
+        "sha256": "461e8d8d5802d43694fafe71bee0598c2a38e1021c4ddb27d9fdd3dccb068fbf"
+      }
+    ]
+  },
+  "limits": [
+    "Physical PCVR/headset not tested",
+    "Advanced AAO options and arbitrary third-party material/plugin combinations not covered",
+    "Final client verification uses the uploaded Private avatar, not the earlier local SDK Test Avatar entry"
+  ]
+}

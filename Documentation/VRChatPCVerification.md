@@ -105,12 +105,33 @@ cache in the acceptance build path.
 
 ## Upload and client status
 
-Actual new Private upload is explicitly authorized by the user. Final release
-installation, server acceptance and real VRChat-client rendering are separate
-remaining gates at the time of this report section; a successful local SDK build
-alone is not a completed upload or a client-rendering result. The earlier SDK Test
-Avatar was not visible to the user. A physical PCVR/headset/mirror test has not run.
-This section will be updated only with observed results.
+The new **NOVA PC Validation** avatar was uploaded as Private with the user's
+explicit authorization. The SDK upload completed with zero captured errors and
+zero shader errors. A fresh API read confirmed Private status and a Windows asset.
+The final upload uses AAO Trace And Optimize and package 0.1.3.
+
+A later ResumePrivate invocation with the exact uploaded ID verified its name,
+owner, Private status and Windows asset, then returned successfully without invoking
+a build or re-upload. The guarded resume path rejects an unrelated ID or owner.
+It requires an existing attempt record and the explicit -novaResumeAvatarId argument.
+UploadPrivate remains the separate entry point for a new upload.
+
+In the real VRChat client, the log confirms loading that same uploaded avatar at
+20:46:15 JST on 2026-10-12. The client mirror visibly renders Fire001, all four Uber
+panels, the AAO-merged checker/color meshes and distortion across the torso. The
+checker meshes are also visible directly beside the camera. Two client-window
+captures show the fire animating; 794 of 1,150 pixels in its fixed mirror region
+change by more than 8 channel levels. This is a motion observation, not an
+original/port visual-parity baseline. The client log has zero shader diagnostics.
+Local images: Exports/NovaVRCValidation/client-mirror-01.png and client-mirror-02.png.
+[Sanitized upload/client evidence](Verification/VRChatClient20261012.json) records
+checks and image hashes without publishing account IDs or proprietary screenshots.
+
+The earlier local SDK Test Avatar entry was not visible to the user; final client
+acceptance uses the uploaded Private avatar. PC desktop and mirror rendering are
+now checked. Physical PCVR/headset behavior is still untested; the separate stereo
+GPU tests do not replace that physical test. Advanced AAO options, arbitrary
+third-party combinations and world-specific depth inputs retain the limits above.
 
 ## Official references and limits
 

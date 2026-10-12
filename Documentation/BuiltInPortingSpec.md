@@ -15,7 +15,7 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Verify VRChat PC avatars in test-VRCLens using SDK 3.10.5 and Unity 2022.3.22f1. Preserve the existing avatars; build a dedicated NOVA validation copy.
+Current TODO: The 0.1.3 PC/AAO desktop acceptance is complete, including Private upload, client/mirror rendering and guarded upload resume. Next coverage: physical PCVR/headset behavior and advanced AAO configurations; neither is claimed by the desktop acceptance.
 
 AAO follow-up: reproduce the unsupported shaders in the actual SDK bundle with AAO absent, then compare the same avatar with AAO 1.9.20 Trace And Optimize defaults. Verify preserved textures, keywords, vertex streams and rendered frames; attribute and fix only demonstrated defects.
 
@@ -23,13 +23,14 @@ AAO follow-up: reproduce the unsupported shaders in the actual SDK bundle with A
 - [x] Diagnose SDK bundles containing zero NOVA GPU programs without AAO components: validation-only ClearCachedData caused unsupported bundles; standalone clear/reimport reproduction isolates it without SDK or AAO.
 - [x] Compare AAO-off/on builds, processed material/mesh data and deterministic images.
 - [x] Match UI UberLit compatibility-keyword declarations to particle UberLit, avoiding unused global/vertex permutations while preserving all keyword names; verify lighting, stereo and SDK bundles.
-- [ ] Record AAO compatibility scope and any required fix; complete PC upload verification and push.
+- [x] Record AAO compatibility scope and fixes; complete the Private PC upload and publish shader/package evidence.
 
 - [x] Reproduce and fix single-pass instanced stereo rendering, including per-eye depth sampling.
 - [x] Provide and test shader-only distortion for avatars, retaining the camera compositor for ordinary projects.
-- [ ] Install the package and unchanged Fire001, attach to a test avatar, and run the official SDK validation/build/test pipeline.
-- [ ] Inspect built avatar content and real rendered frames, check upload prerequisites and record any unverified client/headset/server steps.
-- [ ] Review official VRChat constraints, update compatibility evidence, run regressions, commit and push.
+- [x] Install package 0.1.3 and unchanged Fire001, attach to a test avatar, and pass the official SDK validation/build/upload pipeline with zero errors.
+- [x] Inspect built avatar content and real desktop/mirror frames, confirm Private Windows server registration, and explicitly retain the untested physical-headset limit.
+- [x] Review official VRChat constraints, update compatibility evidence and pass both full regression suites. Shader/package and client evidence are recorded in the focused commits.
+- [x] Commit and push the final client evidence and tested upload-resume fixture.
 
 The 0.1.2 initial-settings and licensed-asset worklist is verified; see AssetCorpusVerification.md for the strict corpus failures and explicit fallbacks.
 
