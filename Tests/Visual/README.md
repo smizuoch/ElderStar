@@ -89,3 +89,49 @@ package project's Runtime and Editor test harness folders. Invoke
 Run `Build/Fire001/Fire001Acceptance.exe -batchmode -force-d3d11 -novaReport <absolute-report.txt>`.
 Require exit code 0, PASS, and a visible PPM frame. The builder creates its own
 acceptance scene; it neither edits the source prefab nor imports the URP demo scene.
+
+## Licensed sample and initial-state corpus
+
+`NovaAssetCorpusCapture.cs` covers original NOVA 3.6 MIT samples plus the CC0
+Kenney Particle Pack 1.1. Pinned sources and input hashes are in
+`Documentation/Validation/AssetCorpus/sources.json`; acquire the assets separately.
+Use isolated original/port projects as above (URP 14 for Unity 2022, URP 17 for
+Unity 6). Copy original `Assets/Samples` verbatim into each project, and all 96 PNGs
+from the archive's transparent-particle folder into `Assets/Corpus/Kenney`.
+Keep the original NOVA shader GUIDs. Do not run material migration, convert shaders,
+open the original URP demo scenes, or copy original NOVA into the Built-in project.
+Unity may serialize old material defaults during its ordinary import/validation;
+that is recorded separately from the input hashes. The 13 effect prefabs stay intact.
+
+Copy this fixture into each PlayMode test assembly, with `NOVA_VISUAL_REFERENCE`
+defined only for the original. Run the installed editor with graphics enabled:
+
+```text
+-batchmode -force-d3d11 -projectPath <project> -runTests -testPlatform PlayMode
+-testFilter CaptureLicensedAssetCorpus -novaVisualOutput <empty-output-directory>
+-testResults <result.xml> -logFile <editor.log>
+```
+
+On 6000.3.23f1 only, also pass `-novaSkipUnity6FireCrash`: the official
+`pfb_eff_fire` triggers a native particle-renderer crash in both implementations.
+No exclusion applies to 2022.3.22f1. Require a passing capture XML and no shader
+errors. Run each pair in Gamma and Linear. The Built-in fixture asserts automatic
+lighting settings without calling the manual migration action. Capture uses normal
+game-camera frames; render-request APIs do not reproduce the original distortion
+feature's viewport/RTHandle behavior on Unity 6.
+
+```text
+python Tests/Visual/compare_corpus_frames.py --reference <original> --actual <port> --output <metrics.json>
+```
+
+Use `--unity6-fire-crash` only for the documented 500-frame Unity 6 run. Otherwise
+509 frames, 47 identical material/particle states and 13 visibly rendered effects
+are mandatory. Unity 6 requires 500/44/12. Thresholds match the existing comparator;
+the tool exits nonzero on the known six heal02 differences and never treats them
+as a pass. See `Documentation/AssetCorpusVerification.md` for their disposition.
+
+For a separate transparent-order fallback experiment, use `-novaOnlyPrefabs
+-novaOnlyHealSort -novaExplicitParticleOrder` in both projects. This assigns
+distinct renderer sortingOrder values on instantiated objects only. The nine
+resulting frames are diagnostic evidence, not unchanged-asset acceptance and not
+substitutes for the full strict corpus. Do not feed them to the full-inventory gate.
