@@ -161,8 +161,8 @@ Shader "Nova/UIParticles/UberLit"
             _AlphaTransitionMap("Alpha Transition Map", 2D) = "white" {}
             _AlphaTransitionMap2DArray("Alpha Transition Map 2D Array", 2DArray) = "" {}
             _AlphaTransitionMap3D("Alpha Transition Map 3D", 3D) = "" {}
-            _AlphaTransitionMapProgress("Alpha　Transition Map Progress", Range(0.0, 1.0)) = 0.0
-            _AlphaTransitionMapProgressCoord("Alpha　Transition Map Progress Coord", Float) = 0.0
+            _AlphaTransitionMapProgress("Alpha縲Transition Map Progress", Range(0.0, 1.0)) = 0.0
+            _AlphaTransitionMapProgressCoord("Alpha縲Transition Map Progress Coord", Float) = 0.0
             _AlphaTransitionMapOffsetXCoord("Alpha Transition Map Offset X Coord", Float) = 0.0
             _AlphaTransitionMapOffsetYCoord("Alpha Transition Map Offset Y Coord", Float) = 0.0
             _AlphaTransitionMapRotation("Alpha Transition Map Rotation", Range(0.0, 1.0)) = 0.0
@@ -178,8 +178,8 @@ Shader "Nova/UIParticles/UberLit"
             _AlphaTransitionMapSecondTexture("Alpha Transition Second Texture Map", 2D) = "white" {}
             _AlphaTransitionMapSecondTexture2DArray("Alpha Transition Second Texture Map 2D Array", 2DArray) = "" {}
             _AlphaTransitionMapSecondTexture3D("Alpha Transition Second Texture Map 3D", 3D) = "" {}
-            _AlphaTransitionMapSecondTextureProgress("Alpha　Transition Map Second Texture  Progress", Range(0.0, 1.0)) = 0.0
-            _AlphaTransitionMapSecondTextureProgressCoord("Alpha　Transition Map Second Texture  Progress Coord", Float) = 0.0
+            _AlphaTransitionMapSecondTextureProgress("Alpha縲Transition Map Second Texture  Progress", Range(0.0, 1.0)) = 0.0
+            _AlphaTransitionMapSecondTextureProgressCoord("Alpha縲Transition Map Second Texture  Progress Coord", Float) = 0.0
             _AlphaTransitionMapSecondTextureOffsetXCoord("Alpha Transition Second Texture Map Offset X Coord", Float) = 0.0
             _AlphaTransitionMapSecondTextureOffsetYCoord("Alpha Transition Second Texture Map Offset Y Coord", Float) = 0.0
             _AlphaTransitionMapSecondTextureRotation("Alpha Transition Map Second Texture Rotation", Range(0.0, 1.0)) = 0.0
@@ -302,14 +302,14 @@ Shader "Nova/UIParticles/UberLit"
             #pragma target 3.5
             #pragma require 2darray
             #pragma multi_compile_fwdbase
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-            #pragma multi_compile _ _SHADOWS_SOFT
-            #pragma multi_compile _ _ADDITIONAL_LIGHTS
-            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX
-            #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-            #pragma multi_compile _ _FORWARD_PLUS
-            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS
+            #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma shader_feature_local_fragment _SHADOWS_SOFT
+            #pragma shader_feature_local_fragment _ADDITIONAL_LIGHTS
+            #pragma shader_feature_local_fragment _ADDITIONAL_LIGHTS_VERTEX
+            #pragma shader_feature_local_fragment _ADDITIONAL_LIGHT_SHADOWS
+            #pragma shader_feature_local_fragment _FORWARD_PLUS
+            #pragma shader_feature_local_fragment _CLUSTER_LIGHT_LOOP
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #pragma shader_feature_local _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
@@ -384,14 +384,14 @@ Shader "Nova/UIParticles/UberLit"
             #pragma target 3.5
             #pragma require 2darray
             #pragma multi_compile_fwdadd_fullshadows
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-            #pragma multi_compile _ _SHADOWS_SOFT
-            #pragma multi_compile _ _ADDITIONAL_LIGHTS
-            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX
-            #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-            #pragma multi_compile _ _FORWARD_PLUS
-            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS
+            #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma shader_feature_local_fragment _SHADOWS_SOFT
+            #pragma shader_feature_local_fragment _ADDITIONAL_LIGHTS
+            #pragma shader_feature_local_fragment _ADDITIONAL_LIGHTS_VERTEX
+            #pragma shader_feature_local_fragment _ADDITIONAL_LIGHT_SHADOWS
+            #pragma shader_feature_local_fragment _FORWARD_PLUS
+            #pragma shader_feature_local_fragment _CLUSTER_LIGHT_LOOP
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #pragma shader_feature_local _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS

@@ -15,6 +15,37 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
     private const string ShaderPath = "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader";
     private const string MatrixPath = "Documentation/BuiltInVerificationHistory.md";
 
+    [Test]
+    public void CompatibilityKeywordsUseMaterialLocalFragmentVariantsLikeParticleLit()
+    {
+        var source = File.ReadAllText(ShaderPath);
+        foreach (var keyword in new[] { "_MAIN_LIGHT_SHADOWS", "_MAIN_LIGHT_SHADOWS_CASCADE", "_SHADOWS_SOFT",
+            "_ADDITIONAL_LIGHTS", "_ADDITIONAL_LIGHTS_VERTEX", "_ADDITIONAL_LIGHT_SHADOWS", "_FORWARD_PLUS", "_CLUSTER_LIGHT_LOOP" })
+        {
+            Assert.That(Regex.Matches(source, @"(?m)^\s*#pragma shader_feature_local_fragment " + keyword + @"\s*$").Count,
+                Is.EqualTo(2), keyword + " must remain declared in both passes without multiplying unused URP/vertex variants.");
+        }
+    }
+
+    [TestCase("Nova/Particles/UberLit", "SPOT", "SHADOWS_DEPTH")]
+    [TestCase("Nova/UIParticles/UberLit", "SPOT", "SHADOWS_DEPTH")]
+    [TestCase("Nova/Particles/UberLit", "POINT_COOKIE", "SHADOWS_CUBE")]
+    [TestCase("Nova/UIParticles/UberLit", "POINT_COOKIE", "SHADOWS_CUBE")]
+    public void StereoShadowedAdditionalLightsFitVertexOutputBudget(string shaderName, string light, string shadows)
+    {
+        var material = new Material(Shader.Find(shaderName)) { enableInstancing = true };
+        try
+        {
+            foreach (var keyword in new[] { light, shadows, "STEREO_INSTANCING_ON", "FOG_EXP2",
+                "_BASE_MAP_MODE_2D", "_ALPHA_TRANSITION_MAP_MODE_2D", "_EMISSION_MAP_MODE_2D", "_PARALLAX_MAP_MODE_2D" })
+                material.EnableKeyword(keyword);
+            ShaderUtil.CompilePass(material, material.FindPass("ForwardAdd"), true);
+            Assert.That(ShaderUtil.GetShaderMessages(material.shader)
+                .Where(m => m.severity.ToString() == "Error").Select(m => m.message), Is.Empty);
+        }
+        finally { UnityEngine.Object.DestroyImmediate(material); }
+    }
+
     private static readonly string[] LitProperties =
     {
         "_LitWorkflowMode",
