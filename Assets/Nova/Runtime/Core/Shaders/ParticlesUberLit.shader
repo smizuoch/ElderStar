@@ -625,6 +625,7 @@ Shader "Nova/Particles/UberLit"
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
+            #include "BuiltIn/NovaBuiltInBaseUV.cginc"
 
             NOVA_DECLARE_TEX2D(_BaseMap);
             NOVA_DECLARE_TEX2D_ARRAY(_BaseMap2DArray);
@@ -733,7 +734,13 @@ Shader "Nova/Particles/UberLit"
                 NovaDepthVaryings o;
                 NovaDepthApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.vertex = NovaObjectToClipPos(v.vertex);
-                o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
+                #if defined(_BASE_MAP_MODE_2D_ARRAY)
+                o.uv = NovaBaseUV(v.uv, _BaseMap2DArray_ST, v.customCoord1, v.customCoord2);
+                #elif defined(_BASE_MAP_MODE_3D)
+                o.uv = NovaBaseUV(v.uv, _BaseMap3D_ST, v.customCoord1, v.customCoord2);
+                #else
+                o.uv = NovaBaseUV(v.uv, _BaseMap_ST, v.customCoord1, v.customCoord2);
+                #endif
                 o.customCoord1 = v.customCoord1;
                 o.customCoord2 = v.customCoord2;
                 o.color = v.color;
@@ -839,6 +846,7 @@ Shader "Nova/Particles/UberLit"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInShadow.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
+            #include "BuiltIn/NovaBuiltInBaseUV.cginc"
 
             NOVA_DECLARE_TEX2D(_BaseMap);
             NOVA_DECLARE_TEX2D_ARRAY(_BaseMap2DArray);
@@ -925,7 +933,13 @@ Shader "Nova/Particles/UberLit"
                 NovaShadowVaryings o;
                 NovaShadowApplyVertexDeformation(v.vertex, v.normal, v.uv, v.customCoord1, v.customCoord2);
                 o.pos = NovaShadowCasterClipPos(v.vertex, v.normal);
-                o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
+                #if defined(_BASE_MAP_MODE_2D_ARRAY)
+                o.uv = NovaBaseUV(v.uv, _BaseMap2DArray_ST, v.customCoord1, v.customCoord2);
+                #elif defined(_BASE_MAP_MODE_3D)
+                o.uv = NovaBaseUV(v.uv, _BaseMap3D_ST, v.customCoord1, v.customCoord2);
+                #else
+                o.uv = NovaBaseUV(v.uv, _BaseMap_ST, v.customCoord1, v.customCoord2);
+                #endif
                 o.customCoord1 = v.customCoord1;
                 o.customCoord2 = v.customCoord2;
                 o.color = v.color;

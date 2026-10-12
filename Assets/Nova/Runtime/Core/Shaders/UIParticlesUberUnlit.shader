@@ -320,6 +320,7 @@ Shader "Nova/UIParticles/UberUnlit"
             #include "BuiltIn/NovaBuiltInDepth.cginc"
             #include "BuiltIn/NovaBuiltInUI.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
+            #include "BuiltIn/NovaBuiltInBaseUV.cginc"
 
             NOVA_DECLARE_TEX2D(_BaseMap);
             NOVA_DECLARE_TEX2D_ARRAY(_BaseMap2DArray);
@@ -535,11 +536,11 @@ Shader "Nova/UIParticles/UberUnlit"
                 half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
                 o.baseMapProgress = NovaBaseMapProgress(progress, _BaseMapSliceCount, _BaseMapRowCount, randomValue);
                 #if defined(_BASE_MAP_MODE_2D_ARRAY)
-                o.uv = NovaTransformUV(v.uv, _BaseMap2DArray_ST);
+                o.uv = NovaBaseUV(v.uv, _BaseMap2DArray_ST, v.customCoord1, v.customCoord2);
                 #elif defined(_BASE_MAP_MODE_3D)
-                o.uv = NovaTransformUV(v.uv, _BaseMap3D_ST);
+                o.uv = NovaBaseUV(v.uv, _BaseMap3D_ST, v.customCoord1, v.customCoord2);
                 #else
-                o.uv = NovaTransformUV(v.uv, _BaseMap_ST);
+                o.uv = NovaBaseUV(v.uv, _BaseMap_ST, v.customCoord1, v.customCoord2);
                 #endif
                 o.tintUv = v.uv;
                 #if defined(_TINT_MAP_ENABLED) || defined(_TINT_MAP_MODE_2D_ARRAY) || defined(_TINT_MAP_3D_ENABLED)

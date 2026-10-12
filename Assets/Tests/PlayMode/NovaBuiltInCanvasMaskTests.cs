@@ -34,6 +34,9 @@ namespace Nova.Tests.PlayMode
             material.SetFloat("_Cull", 0);
             material.SetInt("_BlendSrc", (int)BlendMode.SrcAlpha);
             material.SetInt("_BlendDst", (int)BlendMode.OneMinusSrcAlpha);
+            // Match an authored transparent material after the original Inspector's setup.
+            // Raw new Material(shader) uses queue 2000 in NOVA; its defaults have separate EditMode coverage.
+            material.renderQueue = (int)RenderQueue.Transparent;
             material.EnableKeyword("_BASE_MAP_MODE_2D");
             var previousAmbient = RenderSettings.ambientLight;
             var previousAmbientMode = RenderSettings.ambientMode;

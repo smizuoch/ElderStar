@@ -25,6 +25,71 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
     private const int TextureSize = 4;
     private const int RenderSize = 64;
 
+    [TestCase(0, false)]
+    [TestCase(1, false)]
+    [TestCase(2, false)]
+    [TestCase(0, true)]
+    [TestCase(1, true)]
+    [TestCase(2, true)]
+    public void BaseMapRotationAndCustomOffsetsMatchOriginalTransformOrder(int mode, bool custom)
+    {
+        var colors = (from y in Enumerable.Range(0, 32) from x in Enumerable.Range(0, 32)
+                      select new Color(x / 31f, y / 31f, 0.2f, 1)).ToArray();
+        Texture texture;
+        if (mode == 1)
+        {
+            var array = new Texture2DArray(32, 32, 2, TextureFormat.RGBA32, false);
+            array.SetPixels(colors, 0); array.SetPixels(colors, 1); array.Apply(); texture = array;
+        }
+        else if (mode == 2)
+        {
+            var volume = new Texture3D(32, 32, 2, TextureFormat.RGBA32, false);
+            volume.SetPixels(colors.Concat(colors).ToArray()); volume.Apply(); texture = volume;
+        }
+        else
+        {
+            var image = new Texture2D(32, 32, TextureFormat.RGBA32, false);
+            image.SetPixels(colors); image.Apply(); texture = image;
+        }
+        texture.filterMode = FilterMode.Point;
+        texture.wrapMode = TextureWrapMode.Clamp;
+        var property = mode == 1 ? "_BaseMap2DArray" : mode == 2 ? "_BaseMap3D" : "_BaseMap";
+        var data = custom ? new Vector4(0.125f, -0.125f, 0.125f, 0) : Vector4.zero;
+        var scale = new Vector2(0.5f, 0.25f);
+        var offset = new Vector2(0.125f, 0.25f);
+        var pivot = new Vector2(0.375f, 0.625f);
+        var angle = (0.25f + data.z) * Mathf.PI * 2;
+        var expectedMesh = CreateQuad(Color.white);
+        expectedMesh.uv = expectedMesh.uv.Select(uv =>
+        {
+            var d = uv - pivot;
+            var rotated = new Vector2(d.x * Mathf.Cos(angle) + d.y * Mathf.Sin(angle),
+                -d.x * Mathf.Sin(angle) + d.y * Mathf.Cos(angle)) + pivot;
+            return Vector2.Scale(rotated, scale) + offset + new Vector2(data.x, data.y);
+        }).ToArray();
+        var points = new[] { new Vector2(0.35f,0.35f), new Vector2(0.65f,0.35f), new Vector2(0.35f,0.65f), new Vector2(0.65f,0.65f) };
+        void Configure(Material m) { m.SetTexture(property, texture); m.SetFloat("_BaseMapMode", mode); m.SetFloat("_BaseMapSliceCount", 2); }
+        try
+        {
+            var expected = RenderUberUnlitSamples(Configure, points, expectedMesh);
+            var actual = RenderUberUnlitSamples(m =>
+            {
+                Configure(m);
+                m.SetTextureScale(property, scale); m.SetTextureOffset(property, offset);
+                m.SetFloat("_BaseMapRotation", 0.25f);
+                m.SetVector("_BaseMapRotationOffsets", new Vector4(0.125f, -0.125f, 0, 0));
+                if (custom)
+                {
+                    m.SetFloat("_BaseMapOffsetXCoord", 1); m.SetFloat("_BaseMapOffsetYCoord", 11);
+                    m.SetFloat("_BaseMapRotationCoord", 21);
+                }
+            }, points, CreateQuad(Color.white, customCoord1: data));
+            Assert.That(expected.Max(c => c.r + c.g), Is.GreaterThan(0.3f));
+            Assert.That(actual.Zip(expected, (a, b) => Vector4.Distance(a, b)).Max(), Is.LessThan(0.01f));
+        }
+        finally { UnityEngine.Object.DestroyImmediate(texture); }
+    }
+
     [UnityTest]
     public IEnumerator UberShadersApplySceneFogLinear() => AssertSceneFog(FogMode.Linear);
 

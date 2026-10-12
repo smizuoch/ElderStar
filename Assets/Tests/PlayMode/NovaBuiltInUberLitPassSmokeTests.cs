@@ -12,6 +12,62 @@ public sealed class NovaBuiltInUberLitPassSmokeTests
     private const int RenderSize = 128;
     private const int TextureSize = 4;
 
+    [TestCase(1, false)]
+    [TestCase(2, false)]
+    [TestCase(1, true)]
+    [TestCase(2, true)]
+    public void UberLitAlphaPassesUseSelectedBaseTextureTransform(int mode, bool shadow)
+    {
+        var pixels = Enumerable.Range(0, 16).Select(i => new Color(1, 1, 1, i % 4 < 2 ? 0 : 1)).ToArray();
+        Texture texture;
+        if (mode == 1)
+        {
+            var array = new Texture2DArray(4, 4, 2, TextureFormat.RGBA32, false);
+            array.SetPixels(pixels, 0);
+            array.SetPixels(pixels, 1);
+            array.Apply();
+            texture = array;
+        }
+        else
+        {
+            var volume = new Texture3D(4, 4, 2, TextureFormat.RGBA32, false);
+            volume.SetPixels(pixels.Concat(pixels).ToArray());
+            volume.Apply();
+            texture = volume;
+        }
+        texture.filterMode = FilterMode.Point;
+        texture.wrapMode = TextureWrapMode.Clamp;
+        try
+        {
+            Action<Material, float> configure = (material, x) =>
+            {
+                material.SetFloat("_BaseMapMode", mode);
+                var property = mode == 1 ? "_BaseMap2DArray" : "_BaseMap3D";
+                material.SetTexture(property, texture);
+                material.SetTextureScale(property, Vector2.zero);
+                material.SetTextureOffset(property, new Vector2(x, 0.5f));
+                material.SetFloat("_RenderType", 1);
+                material.SetFloat("_Cutoff", 0.5f);
+                material.SetFloat("_ShadowCasterEnabled", 1);
+                material.SetFloat("_ShadowCasterAlphaTestEnabled", 1);
+                material.SetFloat("_ShadowCasterAlphaCutoff", 0.5f);
+            };
+            if (shadow)
+            {
+                var empty = RenderShadowStats(m => configure(m, 0.1f));
+                var solid = RenderShadowStats(m => configure(m, 0.9f));
+                Assert.That(solid.ShadowPixels, Is.GreaterThan(empty.ShadowPixels + 80), $"empty {empty}, solid {solid}");
+            }
+            else
+            {
+                var empty = RenderDepthOnlyProbe(m => configure(m, 0.1f));
+                var solid = RenderDepthOnlyProbe(m => configure(m, 0.9f));
+                Assert.That(solid.g, Is.GreaterThan(empty.g + 0.5f), $"empty {empty}, solid {solid}");
+            }
+        }
+        finally { UnityEngine.Object.DestroyImmediate(texture); }
+    }
+
     [Test]
     public void UberLitShadowCasterCastsShadowWhenEnabled()
     {

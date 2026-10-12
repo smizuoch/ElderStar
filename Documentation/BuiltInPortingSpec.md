@@ -18,7 +18,8 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 Current TODO: First-install defaults and broader licensed effect compatibility (2026-10-12).
 
 - [x] Match original initial lighting settings automatically, with project-local opt-out and no repeated overwrite of later edits.
-- [ ] Verify untouched fresh material/Inspector defaults against original NOVA (fresh setup differential cases pass; visual corpus pending).
+- [x] Restore original fresh material queue and Inspector preview/projector tags; fresh state comparison and both EditMode suites pass.
+- [x] Fix Base Map rotation/custom UV offsets and Lit array/volume depth/shadow transforms; 28 new graphics tests pass.
 - [ ] Exercise additional MIT/free NOVA prefabs and CC0 particle textures, retaining source/license/hash evidence.
 - [ ] Review differences, run both Unity suites and relevant visual/package checks, commit and update delivery.
 

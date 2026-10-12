@@ -6,7 +6,7 @@
 #include "NovaBuiltInTexture.cginc"
 #include "NovaBuiltInDepth.cginc"
 #include "NovaBuiltInUI.cginc"
-#include "NovaBuiltInUberUnlit.cginc"
+#include "NovaBuiltInBaseUV.cginc"
 
 NOVA_DECLARE_TEX2D(_BaseMap);
 NOVA_DECLARE_TEX2D_ARRAY(_BaseMap2DArray);
@@ -230,11 +230,11 @@ v2f vert(appdata v)
     half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
     o.baseUvAndProgress.z = NovaBaseMapProgress(progress, _BaseMapSliceCount, _BaseMapRowCount, randomValue);
     #if defined(_BASE_MAP_MODE_2D_ARRAY)
-    o.baseUvAndProgress.xy = NovaTransformUV(v.uv, _BaseMap2DArray_ST);
+    o.baseUvAndProgress.xy = NovaBaseUV(v.uv, _BaseMap2DArray_ST, v.customCoord1, v.customCoord2);
     #elif defined(_BASE_MAP_MODE_3D)
-    o.baseUvAndProgress.xy = NovaTransformUV(v.uv, _BaseMap3D_ST);
+    o.baseUvAndProgress.xy = NovaBaseUV(v.uv, _BaseMap3D_ST, v.customCoord1, v.customCoord2);
     #else
-    o.baseUvAndProgress.xy = NovaTransformUV(v.uv, _BaseMap_ST);
+    o.baseUvAndProgress.xy = NovaBaseUV(v.uv, _BaseMap_ST, v.customCoord1, v.customCoord2);
     #endif
     o.tintUvAndProgress.xy = v.uv;
     #if defined(_TINT_MAP_ENABLED) || defined(_TINT_MAP_MODE_2D_ARRAY) || defined(_TINT_MAP_3D_ENABLED)
