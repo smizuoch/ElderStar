@@ -15,7 +15,15 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: Track remaining transparent-order/native Unity 6 limits and broaden artist-material coverage. The 0.1.2 initial-settings and licensed-asset worklist is verified; see AssetCorpusVerification.md for the strict corpus failures and explicit fallbacks.
+Current TODO: Verify VRChat PC avatars in test-VRCLens using SDK 3.10.5 and Unity 2022.3.22f1. Preserve the existing avatars; build a dedicated NOVA validation copy.
+
+- [ ] Reproduce and fix single-pass instanced stereo rendering, including per-eye depth sampling.
+- [ ] Provide and test shader-only distortion for avatars, retaining the camera compositor for ordinary projects.
+- [ ] Install the package and unchanged Fire001, attach to a test avatar, and run the official SDK validation/build/test pipeline.
+- [ ] Inspect built avatar content and real rendered frames, check upload prerequisites and record any unverified client/headset/server steps.
+- [ ] Review official VRChat constraints, update compatibility evidence, run regressions, commit and push.
+
+The 0.1.2 initial-settings and licensed-asset worklist is verified; see AssetCorpusVerification.md for the strict corpus failures and explicit fallbacks.
 
 - [x] Match original initial lighting settings automatically, with project-local opt-out and no repeated overwrite of later edits.
 - [x] Limit initial settings persistence to GraphicsSettings; the save-scope regression and lighting/Undo tests pass.

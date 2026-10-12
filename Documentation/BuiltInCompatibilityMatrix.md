@@ -58,6 +58,7 @@ corresponding 2D, array or 3D resource rather than relying on a 2D-only fixture.
 | Vertex deformation | Exact | Forward/depth/shadow/selection and custom-coordinate tests | Texture-driven position deformation and stream-driven offsets are carried into applicable passes. |
 | Billboard particles | Exact | Actual ParticleSystem vertex-color/custom-stream rendering | Configure the original NOVA vertex streams using the Inspector. |
 | Mesh particle instancing | Exact | Actual instanced mesh ParticleSystem rendering for all five visible shaders | Unity's Built-in particle instancing buffer provides transforms, colors and custom data; procedural instancing variants are compiled in applicable passes. |
+| Instanced stereo Uber color passes | Approximate | Eight GPU texture-array tests: four Uber shaders write both eyes and sample each eye's soft-particle depth | Built-in stereo macros carry the vertex eye index to fragments. Tested with explicit XR constant buffers on D3D11 without a headset; actual VRChat PCVR/headset verification remains separate. |
 | Fog | Approximate | 24 perspective/orthographic Linear/Exp/Exp2 cases and ForwardAdd diagnostics | Evaluates near-plane-relative view depth per fragment instead of URP's interpolated clip fog. ForwardAdd fades toward black; match scene fog distances when migrating. |
 
 ## Lighting and passes

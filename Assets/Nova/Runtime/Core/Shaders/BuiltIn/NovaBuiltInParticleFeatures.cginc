@@ -184,6 +184,7 @@ struct appdata
 // Pack the common feature stream and lighting into the SM3.5 interpolator budget.
 struct v2f
 {
+    UNITY_VERTEX_OUTPUT_STEREO
     float4 pos : SV_POSITION;
     float3 baseUvAndProgress : TEXCOORD0;
     float3 tintUvAndProgress : TEXCOORD1;
@@ -209,6 +210,7 @@ v2f vert(appdata v)
 {
     NOVA_SETUP_PARTICLE(v)
     v2f o = (v2f)0;
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
     #if defined(_VERTEX_DEFORMATION_ENABLED)
     float2 vertexDeformationUv = NovaTransformUV(v.uv, _VertexDeformationMap_ST);
     vertexDeformationUv.x += NovaGetCustomCoord(_VertexDeformationMapOffsetXCoord, v.customCoord1, v.customCoord2);
@@ -489,6 +491,7 @@ void ApplyEmissionColor(inout half4 color, half4 emissionMap, half emissionInten
 
 half4 frag(v2f i) : SV_Target
 {
+    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
     #if defined(_SOFT_PARTICLES_ENABLED) || defined(_DEPTH_FADE_ENABLED)
     // Reconstruct from the world position already carried for lighting. Keeping a
     // separate screen-position interpolator exceeds SM3.5's limit with cookie shadows.

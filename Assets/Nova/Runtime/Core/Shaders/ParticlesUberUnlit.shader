@@ -484,6 +484,7 @@ Shader "Nova/Particles/UberUnlit"
 
             struct v2f
             {
+                UNITY_VERTEX_OUTPUT_STEREO
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 half baseMapProgress : TEXCOORD1;
@@ -507,6 +508,7 @@ Shader "Nova/Particles/UberUnlit"
             {
                 NOVA_SETUP_PARTICLE(v)
                 v2f o;
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 #if defined(_VERTEX_DEFORMATION_ENABLED)
                 float2 vertexDeformationUv = NovaTransformUV(v.uv, _VertexDeformationMap_ST);
                 vertexDeformationUv.x += NovaGetCustomCoord(_VertexDeformationMapOffsetXCoord, v.customCoord1, v.customCoord2);
@@ -778,6 +780,7 @@ Shader "Nova/Particles/UberUnlit"
 
             fixed4 frag(v2f i) : SV_Target
             {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 float2 baseUv = i.uv;
                 float2 tintUv = i.tintUv;
                 float2 alphaTransitionUv = i.alphaTransitionUvAndProgress.xy;
