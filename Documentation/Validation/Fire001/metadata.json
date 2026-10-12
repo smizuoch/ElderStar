@@ -1,0 +1,123 @@
+{
+  "input_package": "Fire001.unitypackage",
+  "input_sha256": "1bf7b7b503bf2dd5b648c306e21230fbdc41d13610961f0a75d65ea30d8a1063",
+  "original_reference": "NOVA source bundled in this exact input package; URP 17.3.0",
+  "visual_engine": "6000.3.23f1",
+  "graphics_api": "Direct3D11",
+  "color_spaces": [
+    "Gamma",
+    "Linear"
+  ],
+  "views_degrees": [
+    0,
+    35,
+    80
+  ],
+  "times_seconds": [
+    0.25,
+    0.75,
+    1.5,
+    3,
+    5,
+    8
+  ],
+  "resolution": [
+    384,
+    384
+  ],
+  "comparisons": 36,
+  "max_channel_error": 0,
+  "particle_states_identical": true,
+  "unaltered_effect_assets": [
+    {
+      "path": "Assets/N2Studio/Textures/FireSeq1.png",
+      "sha256": "1c48af2dfaaef2d2b6a62d62251e6f4bc3f94d349203905254150b57ccdb82d3"
+    },
+    {
+      "path": "Assets/N2Studio/Materials/Fire001/Sparks.mat",
+      "sha256": "c1fe5783f7ef8ff39d8d939b0a4a85d5bcb7243a26b0536467b567c26c7e80e5"
+    },
+    {
+      "path": "Assets/N2Studio/Third-Party Notices.txt",
+      "sha256": "ec6b7cd9333d12ba0797029294c01923c665ed8e768dec7ef08635d7f7ffdc33"
+    },
+    {
+      "path": "Assets/N2Studio/Textures/PointGlow.png",
+      "sha256": "bbe84e541db75804356ad1b3bd63eb3fa4ed2055c4568c0ab3c99e6cb8cd2338"
+    },
+    {
+      "path": "Assets/N2Studio/Scenes/N2Studio_Demo.unity",
+      "sha256": "2650543f403ca4a4282bc959bdc4973e3a771f58e21d0dd912f9d76d83142e84"
+    },
+    {
+      "path": "Assets/N2Studio/Materials/Fire001/Fire.mat",
+      "sha256": "6ad051c8e1522f198bf3415516348b72746a288591f24b29b92793ac34c1d8f7"
+    },
+    {
+      "path": "Assets/N2Studio/Materials/Fire001/Smoke.mat",
+      "sha256": "50f96e7842d3b36e9d679793c911a24cce619d984a8f71431247f1ff0bf3c90c"
+    },
+    {
+      "path": "Assets/N2Studio/Prefabs/Fire001.prefab",
+      "sha256": "11cd5ae9a134cdb0b46fcac93dcfa494cb6b8cb8b8cd7a20aae8bc4be0e44894"
+    },
+    {
+      "path": "Assets/N2Studio/Textures/Smoke1.png",
+      "sha256": "a7a3374041dd18968e3e16e6d4be28d15f88fe51e60bb567b6aebbb0a26ecd00"
+    }
+  ],
+  "omitted_bundled_nova_assets": 63,
+  "validation": {
+    "2022.3.22f1": {
+      "edit": {
+        "passed": 425,
+        "log": "Logs/Completion/2022.3.22f1/direct-import-final-edit.xml"
+      },
+      "play": {
+        "passed": 771,
+        "log": "Logs/Completion/2022.3.22f1/direct-import-final-play.xml"
+      },
+      "installed_package": {
+        "passed": 12,
+        "log": "Logs/package-direct-tests2022.xml"
+      },
+      "installed_fire_render": {
+        "passed": 1,
+        "log": "Logs/package-direct-render2022.xml"
+      }
+    },
+    "6000.3.23f1": {
+      "edit": {
+        "passed": 425,
+        "log": "Logs/Completion/6000.3.23f1/direct-import-final-edit.xml"
+      },
+      "play": {
+        "passed": 771,
+        "log": "Logs/Completion/6000.3.23f1/direct-import-final-play.xml"
+      },
+      "installed_package": {
+        "passed": 12,
+        "log": "Logs/package-direct-tests6.xml"
+      },
+      "installed_fire_render": {
+        "passed": 1,
+        "log": "Logs/package-direct-render6.xml"
+      },
+      "standalone_fire": {
+        "result": "PASS",
+        "exit_code": 0,
+        "visible_fire_pixels": 4726,
+        "build_log": "Logs/package-direct-fire-build6b.log",
+        "player_log": "Logs/package-direct-fire-player6.log"
+      }
+    }
+  },
+  "release": {
+    "version": "0.1.1",
+    "filename": "jp.co.cyberagent.nova.builtin-0.1.1.tgz",
+    "bytes": 159795,
+    "sha256": "b89c8cfacb593f523c0a5eedfd5a2cf20f14ea565617f7d05263cfcb3f14e86b",
+    "file_count": 212
+  },
+  "implementation_commit": "9e81941"
+}

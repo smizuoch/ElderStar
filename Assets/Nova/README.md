@@ -20,10 +20,13 @@ Screen Space Distortion** to each distortion camera, before other image effects;
 it enables depth automatically. Mono game cameras are supported; XR stereo and
 reflection/preview cameras bypass this effect.
 
-Use **Tools > NOVA > Built-in > Material Migration** for a read-only preview and
-backed-up conversion of original text material GUIDs. See
-[migration](Documentation~/Migration.md) and [compatibility](Documentation~/Compatibility.md)
-for conversion steps and rendering differences.
+Original NOVA shader GUIDs resolve directly; material conversion is unnecessary.
+For effect packages that bundle original NOVA source, use **Assets > Import Package >
+NOVA Effect...**, select the original unitypackage and click Import. This retains
+the effect assets unchanged and omits conflicting bundled NOVA dependencies.
+Ordinary Unity import requires deselecting those bundled dependencies manually.
+Previous Built-in GUIDs remain usable through hidden shader aliases. See
+[import instructions](Documentation~/Migration.md) and [compatibility](Documentation~/Compatibility.md).
 
 Lit preserves the original GGX and environment Fresnel/roughness response. Use
 **Tools > NOVA > Built-in > Match Original Lighting Settings** to preserve original

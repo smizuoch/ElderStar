@@ -48,9 +48,14 @@ Enable a camera's `DepthTextureMode.Depth` for soft particles and depth fade.
 For distortion, add **NOVA > Screen Space Distortion** to the camera; it enables
 depth automatically. Put this component before other image effects.
 
-Use **Tools > NOVA > Built-in > Material Migration** to preview and migrate
-original text materials with backups. See [migration instructions](Documentation/Migration.md)
-for missing shader references, optimized materials and rollback.
+Original NOVA materials now work without conversion: all six original shader GUIDs
+are preserved. For an effect package such as **Fire001.unitypackage**, use
+**Assets > Import Package > NOVA Effect...**, select the original file, Import,
+and drag the prefab into a scene. The importer omits bundled original NOVA source
+and keeps effect assets unchanged. With ordinary Unity import, deselect that
+bundled source folder to avoid importing conflicting URP code. See
+[import instructions](Documentation/Migration.md) and
+[Fire001 verification](Documentation/DirectImportVerification.md).
 
 For original light intensity values in a Linear project, use **Tools > NOVA >
 Built-in > Match Original Lighting Settings**. This explicit, undoable action
@@ -64,10 +69,11 @@ materials preserves their properties, keywords and queue and supports Undo.
 
 ## Compatibility and verification
 
-The [release verification report](Documentation/VerificationReport.md)
-records passing EditMode (416), PlayMode (763) and installed-package (3) tests on
-each tested Unity version, all 336 visual comparisons, and both standalone players.
-It also links the local release tarball and Windows demo.
+The [0.1.1 direct-import report](Documentation/DirectImportVerification.md) records
+425 EditMode, 771 PlayMode and 12 installed-package tests on each editor version,
+plus 36 pixel-identical Fire001 comparisons. It links the current release tarball.
+The [previous 0.1.0 report](Documentation/VerificationReport.md) retains the broader
+336 controlled comparisons and showcase player evidence.
 
 Lit shading preserves the original GGX and environment Fresnel/roughness response
 with normal, metallic/specular and smoothness maps. Light scheduling, shadows and

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1
+
+- Resolve original NOVA shader GUIDs without rewriting imported material or prefab assets.
+- Retain previous Built-in GUIDs through hidden compatibility shaders; keep optional normalization with backups.
+- Import unchanged effect packages while omitting bundled original NOVA implementation dependencies.
+- Verify Fire001 against its bundled original shader with deterministic particle simulation and pixel comparisons.
+
 ## 0.1.0
 
 - Match all 889 original property declarations and 525 public/protected editor declarations; restore foldout icons and legacy material-state transitions.

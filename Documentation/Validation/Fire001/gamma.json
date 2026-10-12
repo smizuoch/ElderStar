@@ -1,0 +1,131 @@
+{
+  "particle_state_identical": true,
+  "frames": [
+    {
+      "frame": "0025-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0025-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0025-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0075-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0075-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0075-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0150-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0150-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0150-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0300-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0300-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0300-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0500-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0500-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0500-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0800-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0800-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "0800-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    }
+  ]
+}

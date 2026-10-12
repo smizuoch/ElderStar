@@ -1,4 +1,8 @@
-# Release verification — 2026-10-12
+# Previous 0.1.0 release verification — 2026-10-12
+
+For the current 0.1.1 package and unchanged Fire001 import acceptance, see
+[Direct import verification](DirectImportVerification.md). This page retains the
+earlier package/player hashes and broader controlled rendering evidence.
 
 NovaShaderBuilt-in 0.1.0 ports NOVA 3.6.0 to the Built-in Render Pipeline.
 This follow-up restores practical authoring and lighting parity and supersedes
