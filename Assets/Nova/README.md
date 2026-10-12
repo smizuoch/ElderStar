@@ -15,10 +15,12 @@ Select `Nova/Particles/UberUnlit`, `Nova/Particles/UberLit`,
 `Nova/Particles/Distortion` in a material's Shader menu. The original NOVA
 inspectors configure keywords and particle vertex streams.
 
-Enable `DepthTextureMode.Depth` for soft particles and depth fade. Add **NOVA >
-Screen Space Distortion** to each distortion camera, before other image effects;
-it enables depth automatically. Mono game cameras are supported; XR stereo and
-reflection/preview cameras bypass this effect.
+Soft particles need a camera depth texture. Distance-based depth fade uses eye
+distance and does not need scene depth. Distortion works without a camera component
+using a named GrabPass, including on PC VRChat avatars. For an ordinary mono
+project, **NOVA > Screen Space Distortion** optionally provides the accumulated
+camera compositor and enables camera depth automatically. See the documented
+differences for overlapping distortion, scene depth and stereo validation.
 
 Original NOVA shader GUIDs resolve directly; material conversion is unnecessary.
 For effect packages that bundle original NOVA source, use **Assets > Import Package >

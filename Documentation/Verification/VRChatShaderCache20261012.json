@@ -1,0 +1,11 @@
+{
+  "pristine": true,
+  "clearOnly": false,
+  "reimport": true,
+  "error": "",
+  "unity": "2022.3.22f1",
+  "platform": "Windows D3D11",
+  "aaoInstalled": false,
+  "sdkInstalled": false,
+  "shader": "Nova/Particles/Distortion"
+}

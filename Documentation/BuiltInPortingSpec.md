@@ -17,8 +17,16 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 Current TODO: Verify VRChat PC avatars in test-VRCLens using SDK 3.10.5 and Unity 2022.3.22f1. Preserve the existing avatars; build a dedicated NOVA validation copy.
 
-- [ ] Reproduce and fix single-pass instanced stereo rendering, including per-eye depth sampling.
-- [ ] Provide and test shader-only distortion for avatars, retaining the camera compositor for ordinary projects.
+AAO follow-up: reproduce the unsupported shaders in the actual SDK bundle with AAO absent, then compare the same avatar with AAO 1.9.20 Trace And Optimize defaults. Verify preserved textures, keywords, vertex streams and rendered frames; attribute and fix only demonstrated defects.
+
+- [x] Pack Lit interpolators to preserve SM3.5 with stereo plus shadowed ForwardAdd; reproduce the SDK variant compiler failure first.
+- [x] Diagnose SDK bundles containing zero NOVA GPU programs without AAO components: validation-only ClearCachedData caused unsupported bundles; standalone clear/reimport reproduction isolates it without SDK or AAO.
+- [x] Compare AAO-off/on builds, processed material/mesh data and deterministic images.
+- [x] Match UI UberLit compatibility-keyword declarations to particle UberLit, avoiding unused global/vertex permutations while preserving all keyword names; verify lighting, stereo and SDK bundles.
+- [ ] Record AAO compatibility scope and any required fix; complete PC upload verification and push.
+
+- [x] Reproduce and fix single-pass instanced stereo rendering, including per-eye depth sampling.
+- [x] Provide and test shader-only distortion for avatars, retaining the camera compositor for ordinary projects.
 - [ ] Install the package and unchanged Fire001, attach to a test avatar, and run the official SDK validation/build/test pipeline.
 - [ ] Inspect built avatar content and real rendered frames, check upload prerequisites and record any unverified client/headset/server steps.
 - [ ] Review official VRChat constraints, update compatibility evidence, run regressions, commit and push.

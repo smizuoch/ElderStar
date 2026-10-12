@@ -44,9 +44,11 @@ Select one of the original names in a material's Shader menu:
 
 `Hidden/Nova/Particles/ApplyDistortion` is retained automatically for the camera effect.
 Use the NOVA Inspector to configure material keywords and particle vertex streams.
-Enable a camera's `DepthTextureMode.Depth` for soft particles and depth fade.
-For distortion, add **NOVA > Screen Space Distortion** to the camera; it enables
-depth automatically. Put this component before other image effects.
+Enable a camera's `DepthTextureMode.Depth` for soft particles. Distance-based depth
+fade does not need scene depth. Distortion uses a named GrabPass automatically,
+so PC VRChat avatars need no NOVA camera component. For ordinary mono projects,
+**NOVA > Screen Space Distortion** optionally provides the accumulated camera
+compositor and enables depth. Put that component before other image effects.
 
 Original NOVA materials now work without conversion: all six original shader GUIDs
 are preserved. For an effect package such as **Fire001.unitypackage**, use
@@ -92,3 +94,6 @@ See the [feature compatibility matrix](Documentation/BuiltInCompatibilityMatrix.
 [controlled visual comparison](Tests/Visual/README.md). Tests include shader diagnostics,
 real camera/particle/Canvas rendering, migration, optimization, isolated UPM import
 and standalone players. Existing golden images are never rewritten by these tools.
+
+The [PC avatar and AAO report](Documentation/VRChatPCVerification.md) records SDK
+3.10.5 bundle rendering, AAO 1.9.20 default optimization and the 0.1.3 stereo fixes.

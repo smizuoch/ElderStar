@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.3
+
+- Carry the stereo eye index through particle color, depth and shadow passes, including per-eye depth texture sampling.
+- Add shader-only distortion for PC avatars through a named GrabPass; no camera component is needed. Keep the existing mono camera compositor for ordinary projects.
+- Use queue 3100 for fresh distortion materials so background capture occurs after transparents. Explicit material queues remain unchanged.
+- Hide distortion geometry when VRChat applies its shader fallback.
+- Pack Lit world normals into unused UV components so stereo shadowed additional lights compile within the original SM3.5 vertex-output limit.
+- Limit UI Lit legacy URP compatibility keywords to local fragment variants, matching particle Lit and avoiding unused global/vertex permutations.
+- Add real SDK bundle and AAO comparison fixtures, with shader support, material-state, vertex-stream and rendered-image checks.
+
 ## 0.1.2
 
 - Match original light intensity/color-temperature defaults on first import and color-space changes; preserve later manual edits and provide a project-local opt-out.

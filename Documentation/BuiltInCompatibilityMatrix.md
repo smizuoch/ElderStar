@@ -58,7 +58,7 @@ corresponding 2D, array or 3D resource rather than relying on a 2D-only fixture.
 | Vertex deformation | Exact | Forward/depth/shadow/selection and custom-coordinate tests | Texture-driven position deformation and stream-driven offsets are carried into applicable passes. |
 | Billboard particles | Exact | Actual ParticleSystem vertex-color/custom-stream rendering | Configure the original NOVA vertex streams using the Inspector. |
 | Mesh particle instancing | Exact | Actual instanced mesh ParticleSystem rendering for all five visible shaders | Unity's Built-in particle instancing buffer provides transforms, colors and custom data; procedural instancing variants are compiled in applicable passes. |
-| Instanced stereo | Approximate | Thirteen GPU texture-array tests: four Uber color passes, per-eye soft-particle depth, particle DepthOnly/ShadowCaster, and distortion eye textures | Built-in stereo macros carry the vertex eye index to fragments and depth slices. Tested with explicit XR constant buffers on D3D11/12 without a headset; actual VRChat PCVR/headset verification remains separate. |
+| Instanced stereo | Approximate | Four stereo shadowed ForwardAdd compiler regressions and thirteen GPU texture-array tests: four Uber color passes, per-eye soft-particle depth, particle DepthOnly/ShadowCaster, and distortion eye textures | Built-in stereo macros carry the vertex eye index to fragments and depth slices. Tested with explicit XR constant buffers on D3D11/12 without a headset; actual VRChat PCVR/headset verification remains separate. |
 | Fog | Approximate | 24 perspective/orthographic Linear/Exp/Exp2 cases and ForwardAdd diagnostics | Evaluates near-plane-relative view depth per fragment instead of URP's interpolated clip fog. ForwardAdd fades toward black; match scene fog distances when migrating. |
 
 ## Lighting and passes
@@ -139,3 +139,16 @@ remain byte-identical. Original URP demo scenes are outside this prefab test sco
 The full test commands and package/player fixtures are described in the repository's
 `Documentation/Verification.md`. The release verification report records actual
 run results. Historical phase counts are not current release acceptance results.
+
+VRChat PC / AAO 1.9.20: default Trace And Optimize preserves the tested Fire001
+particles and all five visible NOVA shader families. Actual SDK bundles with AAO
+off/on preserve NOVA material properties/keywords/texture dimensions and particle
+vertex streams. Eight added skinned probes exercise mesh merging, vertex color,
+UV1/UV2 custom coordinates and vertex deformation. Skinned renderer count falls
+23 to 19; three rendered frames differ by at most 1/255 in a channel. No AAO patch
+or shader-information registration is required for this tested default path.
+Unknown-shader handling is conservative: optional unused-UV/texture optimization
+is not guaranteed. Advanced AAO settings, arbitrary third-party plugins/materials,
+actual headset behavior and VRChat-world camera inputs need separate validation.
+See the repository's `Documentation/VRChatPCVerification.md` for the fixtures,
+root-cause isolation and upload/client verification status.

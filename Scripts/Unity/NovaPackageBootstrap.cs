@@ -10,11 +10,25 @@ public static class NovaPackageBootstrap
     private static PackRequest pack;
     private static AddRequest add;
     private static double deadline;
+    private const string Pending = "NovaPackageBootstrap.PendingSource";
+
+    [InitializeOnLoadMethod]
+    private static void ResumeAfterReload()
+    {
+        var source = SessionState.GetString(Pending, "");
+        if (!string.IsNullOrEmpty(source)) EditorApplication.delayCall += () => Add(source);
+    }
+
+    private static void Add(string source)
+    {
+        SessionState.SetString(Pending, source);
+        add = Client.Add(source);
+        BeginPolling();
+    }
 
     public static void Install()
     {
-        add = Client.Add("file:" + Argument("-novaPackageSource"));
-        BeginPolling();
+        Add("file:" + Argument("-novaPackageSource"));
     }
 
     public static void PackAndInstall()
@@ -37,6 +51,7 @@ public static class NovaPackageBootstrap
             if (!pack.IsCompleted) return;
             if (pack.Status != StatusCode.Success) { Finish(false, pack.Error.message); return; }
             Debug.Log("NOVA package archive: " + pack.Result.tarballPath);
+            SessionState.SetString(Pending, "file:" + pack.Result.tarballPath);
             add = Client.Add("file:" + pack.Result.tarballPath);
             pack = null;
         }
@@ -48,6 +63,7 @@ public static class NovaPackageBootstrap
     private static void Finish(bool success, string message)
     {
         EditorApplication.update -= Poll;
+        SessionState.EraseString(Pending);
         if (success) Debug.Log(message); else Debug.LogError(message);
         EditorApplication.Exit(success ? 0 : 1);
     }

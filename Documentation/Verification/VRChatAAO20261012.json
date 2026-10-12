@@ -1,0 +1,76 @@
+{
+  "unity": "2022.3.22f1",
+  "sdk": "3.10.5",
+  "aao": "1.9.20",
+  "platform": "Windows D3D11",
+  "settings": "Trace And Optimize defaults",
+  "sourceCommit": "cf46e56",
+  "runs": {
+    "aao-off": {
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 23,
+      "activeParticleRenderers": 5,
+      "novaMaterials": 12,
+      "bundleBytes": 26746150,
+      "magentaPixels": 0,
+      "shaderNames": [
+        "Nova/Particles/UberUnlit",
+        "Nova/UIParticles/UberUnlit",
+        "Nova/Particles/UberLit",
+        "Nova/UIParticles/UberLit",
+        "Nova/Particles/Distortion"
+      ],
+      "materialStatesPreserved": true,
+      "bundleSha256": "6a00267cbe68ee276eec18495da9bcf332d4bcdf04d041aa180dddf0e5591cc3"
+    },
+    "aao-on": {
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 19,
+      "activeParticleRenderers": 5,
+      "novaMaterials": 12,
+      "bundleBytes": 22583453,
+      "magentaPixels": 0,
+      "shaderNames": [
+        "Nova/Particles/UberUnlit",
+        "Nova/UIParticles/UberUnlit",
+        "Nova/Particles/UberLit",
+        "Nova/UIParticles/UberLit",
+        "Nova/Particles/Distortion"
+      ],
+      "materialStatesPreserved": true,
+      "bundleSha256": "1fd9c9284f8d0793e6794a68ae2aa1ea9c37f34ed5dbef67ea4221407def693c"
+    }
+  },
+  "images": [
+    {
+      "frame": "12",
+      "passed": true,
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "-04",
+      "passed": true,
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "-21",
+      "passed": true,
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    }
+  ],
+  "allPassed": true,
+  "packageVersion": "0.1.3",
+  "packageSha256": "e6eff62bc0a04cf2d18129a5dce5c66e27f9227807b7035ae76962c51899eaf3"
+}

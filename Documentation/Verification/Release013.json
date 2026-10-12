@@ -1,0 +1,57 @@
+{
+  "version": "0.1.3",
+  "archive": {
+    "sha256": "e6eff62bc0a04cf2d18129a5dce5c66e27f9227807b7035ae76962c51899eaf3",
+    "files": 216,
+    "allFilesMatchSource": true,
+    "bytes": 164877
+  },
+  "tests": {
+    "2022.3.22f1": {
+      "edit": {
+        "total": 447,
+        "passed": 447,
+        "failed": 0,
+        "sha256": "20de925c5af567af78085f17db7be458a39ac365898eb27168e14d350fbfd371",
+        "xml": "Logs/Completion/2022.3.22f1/vrc-packed-edit.xml"
+      },
+      "play": {
+        "total": 839,
+        "passed": 839,
+        "failed": 0,
+        "sha256": "93a5ae6ab9bc213cc1f2b79566d925524712411a14180e9adfb03d4b6a9c6e47",
+        "xml": "Logs/Completion/2022.3.22f1/vrc-packed-play.xml"
+      },
+      "package": {
+        "total": 16,
+        "passed": 16,
+        "failed": 0,
+        "sha256": "4442afd751ee8ff7a30dfac665b8909cceccbfee8187d1d8e104d46b5e6721ab",
+        "xml": "Logs/Package013-full-2022.3.22f1.xml"
+      }
+    },
+    "6000.3.23f1": {
+      "edit": {
+        "total": 447,
+        "passed": 447,
+        "failed": 0,
+        "sha256": "460b088fb295f00915a00b43d20f1d9b1259e2b16ecff9020f77c96aae576a9a",
+        "xml": "Logs/Completion/6000.3.23f1/vrc-packed-edit.xml"
+      },
+      "play": {
+        "total": 839,
+        "passed": 839,
+        "failed": 0,
+        "sha256": "abec18e15c28cc87a89aa25bd2b4e38a1e8b08c7913dcc10bd27b5ffe5f669e1",
+        "xml": "Logs/Completion/6000.3.23f1/vrc-packed-play.xml"
+      },
+      "package": {
+        "total": 16,
+        "passed": 16,
+        "failed": 0,
+        "sha256": "e027d6721c410e4ed78d01942a457a5b481093e0fe5c0f2bcb55e3ca6e298418",
+        "xml": "Logs/Package013-full-6000.3.23f1.xml"
+      }
+    }
+  }
+}
