@@ -21,6 +21,7 @@ Current TODO: First-install defaults and broader licensed effect compatibility (
 - [x] Limit initial settings persistence to GraphicsSettings; the save-scope regression and lighting/Undo tests pass.
 - [x] Restore original fresh material queue and Inspector preview/projector tags; fresh state comparison and both EditMode suites pass.
 - [x] Fix Base Map rotation/custom UV offsets and Lit array/volume depth/shadow transforms; 28 new graphics tests pass.
+- [x] Restore Custom Data flipbook progress and random-row selection in Lit depth/shadow passes; eight failing graphics cases now pass on both editors.
 - [ ] Exercise additional MIT/free NOVA prefabs and CC0 particle textures, retaining source/license/hash evidence.
 - [ ] Review differences, run both Unity suites and relevant visual/package checks, commit and update delivery.
 

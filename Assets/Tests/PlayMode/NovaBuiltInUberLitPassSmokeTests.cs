@@ -12,6 +12,65 @@ public sealed class NovaBuiltInUberLitPassSmokeTests
     private const int RenderSize = 128;
     private const int TextureSize = 4;
 
+    [TestCase(1, false, false)]
+    [TestCase(2, false, false)]
+    [TestCase(1, true, false)]
+    [TestCase(2, true, false)]
+    [TestCase(1, false, true)]
+    [TestCase(2, false, true)]
+    [TestCase(1, true, true)]
+    [TestCase(2, true, true)]
+    public void UberLitAlphaPassesUseCustomFlipbookProgressAndRow(int mode, bool shadow, bool row)
+    {
+        var emptyPixels = Enumerable.Repeat(new Color(1, 1, 1, 0), 16).ToArray();
+        var solidPixels = Enumerable.Repeat(Color.white, 16).ToArray();
+        Texture texture;
+        if (mode == 1)
+        {
+            var array = new Texture2DArray(4, 4, 2, TextureFormat.RGBA32, false);
+            array.SetPixels(emptyPixels, 0); array.SetPixels(solidPixels, 1); array.Apply(); texture = array;
+        }
+        else
+        {
+            var volume = new Texture3D(4, 4, 2, TextureFormat.RGBA32, false);
+            volume.SetPixels(emptyPixels.Concat(solidPixels).ToArray()); volume.Apply(); texture = volume;
+        }
+        texture.filterMode = FilterMode.Point;
+        texture.wrapMode = TextureWrapMode.Clamp;
+        void Configure(Material material)
+        {
+            material.SetFloat("_BaseMapMode", mode);
+            material.SetTexture(mode == 1 ? "_BaseMap2DArray" : "_BaseMap3D", texture);
+            material.SetFloat("_BaseMapSliceCount", 2);
+            material.SetFloat("_BaseMapRowCount", 2);
+            material.SetFloat("_BaseMapProgressCoord", row ? 0 : 1);
+            material.SetFloat("_BaseMapRandomRowCoord", row ? 1 : 0);
+            material.SetFloat("_BaseMapRandomRowSelectionEnabled", row ? 1 : 0);
+            material.SetFloat("_RenderType", 1);
+            material.SetFloat("_Cutoff", 0.5f);
+            material.SetFloat("_ShadowCasterEnabled", 1);
+            material.SetFloat("_ShadowCasterAlphaTestEnabled", 1);
+            material.SetFloat("_ShadowCasterAlphaCutoff", 0.5f);
+        }
+        try
+        {
+            var data = new Vector4(1, 0, 0, 0);
+            if (shadow)
+            {
+                var empty = RenderShadowStats(Configure);
+                var solid = RenderShadowStats(Configure, data);
+                Assert.That(solid.ShadowPixels, Is.GreaterThan(empty.ShadowPixels + 80));
+            }
+            else
+            {
+                var empty = RenderDepthOnlyProbe(Configure);
+                var solid = RenderDepthOnlyProbe(Configure, data);
+                Assert.That(solid.g, Is.GreaterThan(empty.g + 0.5f));
+            }
+        }
+        finally { UnityEngine.Object.DestroyImmediate(texture); }
+    }
+
     [TestCase(1, false)]
     [TestCase(2, false)]
     [TestCase(1, true)]
@@ -202,7 +261,7 @@ public sealed class NovaBuiltInUberLitPassSmokeTests
         Assert.That(Luminance(withAdditional), Is.GreaterThan(Luminance(withoutAdditional) + 0.04f), $"without {withoutAdditional}, with {withAdditional}");
     }
 
-    private static ShadowStats RenderShadowStats(Action<Material> configureMaterial)
+    private static ShadowStats RenderShadowStats(Action<Material> configureMaterial, Vector4 customCoord = default)
     {
         var shader = Shader.Find(ShaderName);
         Assert.That(shader, Is.Not.Null, ShaderName);
@@ -215,6 +274,9 @@ public sealed class NovaBuiltInUberLitPassSmokeTests
         var lightObject = new GameObject("NovaBuiltInUberLitShadowSmokeLight");
         var planeObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
         var casterObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        var casterMesh = UnityEngine.Object.Instantiate(casterObject.GetComponent<MeshFilter>().sharedMesh);
+        casterMesh.SetUVs(1, Enumerable.Repeat(customCoord, casterMesh.vertexCount).ToList());
+        casterObject.GetComponent<MeshFilter>().sharedMesh = casterMesh;
         var previousAmbientMode = RenderSettings.ambientMode;
         var previousAmbientLight = RenderSettings.ambientLight;
         var previousShadowDistance = QualitySettings.shadowDistance;
@@ -278,6 +340,7 @@ public sealed class NovaBuiltInUberLitPassSmokeTests
             UnityEngine.Object.DestroyImmediate(lightObject);
             UnityEngine.Object.DestroyImmediate(planeObject);
             UnityEngine.Object.DestroyImmediate(casterObject);
+            UnityEngine.Object.DestroyImmediate(casterMesh);
             UnityEngine.Object.DestroyImmediate(readback);
             UnityEngine.Object.DestroyImmediate(target);
             UnityEngine.Object.DestroyImmediate(material);
@@ -285,7 +348,7 @@ public sealed class NovaBuiltInUberLitPassSmokeTests
         }
     }
 
-    private static Color RenderDepthOnlyProbe(Action<Material> configureDepthMaterial)
+    private static Color RenderDepthOnlyProbe(Action<Material> configureDepthMaterial, Vector4 customCoord = default)
     {
         var shader = Shader.Find(ShaderName);
         Assert.That(shader, Is.Not.Null, ShaderName);
@@ -295,6 +358,7 @@ public sealed class NovaBuiltInUberLitPassSmokeTests
         var depthMaterial = new Material(shader);
         var probeMaterial = new Material(probeShader);
         var mesh = CreateQuad(Color.white);
+        mesh.SetUVs(1, Enumerable.Repeat(customCoord, mesh.vertexCount).ToList());
         var target = new RenderTexture(64, 64, 24, RenderTextureFormat.ARGB32);
         var readback = new Texture2D(64, 64, TextureFormat.RGBA32, false);
         var cameraObject = new GameObject("NovaBuiltInUberLitDepthOnlyProbeCamera");

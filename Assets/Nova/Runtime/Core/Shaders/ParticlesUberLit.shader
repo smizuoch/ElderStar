@@ -712,6 +712,7 @@ Shader "Nova/Particles/UberLit"
                 float2 uv : TEXCOORD0;
                 float4 customCoord1 : TEXCOORD1;
                 float4 customCoord2 : TEXCOORD2;
+                half baseProgress : TEXCOORD3;
                 fixed4 color : COLOR;
             };
 
@@ -741,20 +742,22 @@ Shader "Nova/Particles/UberLit"
                 #else
                 o.uv = NovaBaseUV(v.uv, _BaseMap_ST, v.customCoord1, v.customCoord2);
                 #endif
+                o.baseProgress = NovaBaseMapProgress(
+                    _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2),
+                    _BaseMapSliceCount, _BaseMapRowCount,
+                    NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2));
                 o.customCoord1 = v.customCoord1;
                 o.customCoord2 = v.customCoord2;
                 o.color = v.color;
                 return o;
             }
 
-            half4 NovaDepthSampleBaseMap(float2 uv)
+            half4 NovaDepthSampleBaseMap(float2 uv, half progress)
             {
                 uv = NovaApplyBaseMirror(uv);
                 #if defined(_BASE_MAP_MODE_2D_ARRAY)
-                half progress = NovaBaseMapProgress(_BaseMapProgress, _BaseMapSliceCount, _BaseMapRowCount, 0.0h);
                 return NOVA_SAMPLE_BASE_TEX2D_ARRAY(_BaseMap2DArray, uv, progress);
                 #elif defined(_BASE_MAP_MODE_3D)
-                half progress = NovaBaseMapProgress(_BaseMapProgress, _BaseMapSliceCount, _BaseMapRowCount, 0.0h);
                 return NOVA_SAMPLE_BASE_TEX3D_LOD(_BaseMap3D, float3(uv, progress), 0.0);
                 #else
                 return NOVA_SAMPLE_BASE_TEX2D(_BaseMap, uv);
@@ -769,7 +772,7 @@ Shader "Nova/Particles/UberLit"
                 baseUv += NovaFlowMapUvOffset(NOVA_SAMPLE_TEX2D(_FlowMap, NovaTransformUV(i.uv, _FlowMap_ST)), _FlowMapChannelsX, _FlowMapChannelsY, flowIntensity);
                 #endif
 
-                half4 color = NovaDepthSampleBaseMap(baseUv);
+                half4 color = NovaDepthSampleBaseMap(baseUv, i.baseProgress);
                 #if defined(_TINT_AREA_ALL) && defined(_TINT_COLOR_ENABLED)
                 half tintBlendRate = _TintBlendRate + NovaGetCustomCoord(_TintBlendRateCoord, i.customCoord1, i.customCoord2);
                 NovaApplyTintColor(color, _TintColor, tintBlendRate);
@@ -861,6 +864,8 @@ Shader "Nova/Particles/UberLit"
 
             fixed4 _TintColor;
             half _BaseMapProgress;
+            half _BaseMapProgressCoord;
+            half _BaseMapRandomRowCoord;
             half _BaseMapSliceCount;
             half _BaseMapRowCount;
             half _FlowMapChannelsX;
@@ -908,6 +913,7 @@ Shader "Nova/Particles/UberLit"
                 float2 uv : TEXCOORD1;
                 float4 customCoord1 : TEXCOORD2;
                 float4 customCoord2 : TEXCOORD3;
+                half baseProgress : TEXCOORD4;
                 fixed4 color : COLOR;
             };
 
@@ -940,20 +946,22 @@ Shader "Nova/Particles/UberLit"
                 #else
                 o.uv = NovaBaseUV(v.uv, _BaseMap_ST, v.customCoord1, v.customCoord2);
                 #endif
+                o.baseProgress = NovaBaseMapProgress(
+                    _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2),
+                    _BaseMapSliceCount, _BaseMapRowCount,
+                    NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2));
                 o.customCoord1 = v.customCoord1;
                 o.customCoord2 = v.customCoord2;
                 o.color = v.color;
                 return o;
             }
 
-            half4 NovaShadowSampleBaseMap(float2 uv)
+            half4 NovaShadowSampleBaseMap(float2 uv, half progress)
             {
                 uv = NovaApplyBaseMirror(uv);
                 #if defined(_BASE_MAP_MODE_2D_ARRAY)
-                half progress = NovaBaseMapProgress(_BaseMapProgress, _BaseMapSliceCount, _BaseMapRowCount, 0.0h);
                 return NOVA_SAMPLE_BASE_TEX2D_ARRAY(_BaseMap2DArray, uv, progress);
                 #elif defined(_BASE_MAP_MODE_3D)
-                half progress = NovaBaseMapProgress(_BaseMapProgress, _BaseMapSliceCount, _BaseMapRowCount, 0.0h);
                 return NOVA_SAMPLE_BASE_TEX3D_LOD(_BaseMap3D, float3(uv, progress), 0.0);
                 #else
                 return NOVA_SAMPLE_BASE_TEX2D(_BaseMap, uv);
@@ -971,7 +979,7 @@ Shader "Nova/Particles/UberLit"
                 }
                 #endif
 
-                half4 color = NovaShadowSampleBaseMap(baseUv);
+                half4 color = NovaShadowSampleBaseMap(baseUv, i.baseProgress);
                 #if defined(_TINT_AREA_ALL) && defined(_TINT_COLOR_ENABLED)
                 if (_ShadowCasterAlphaAffectedByTintColor >= 0.5h)
                 {
