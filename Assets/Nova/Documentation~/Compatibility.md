@@ -19,9 +19,9 @@ those reports do not override this matrix. No original golden image was changed.
 | --- | --- | --- | --- |
 | Package import | Exact | Phase1 and isolated external/tarball package fixtures | Runtime and editor assemblies use Built-in Unity APIs; no URP, SRP Core or RenderGraph dependency. |
 | Shader names | Exact | Phase1 discovery and standalone shader-retention checks | All six original names are preserved, including Hidden/Nova/Particles/ApplyDistortion. |
-| Material properties | Exact | Phase1 inventory/count/type assertions against BuiltInPortingSpec | Original public names and defaults remain, including obsolete compatibility properties. |
-| Custom editors | Exact | OriginalEditorApi and EditorSurface tests | Original GUI class names, public APIs, CustomEditor declarations and inspectors remain. |
-| Material setup | Exact | MaterialSetup and Keyword tests | Original material properties drive render state, keyword setup and particle stream configuration. |
+| Material properties | Exact | All 889 original ShaderLab declarations compared, including attributes, ranges, order and defaults | Original public names and defaults remain, including obsolete compatibility properties. |
+| Custom editors | Exact | 525 public/protected declarations, 14 original Inspector/helper source contracts, real OnGUI, multi-edit and Undo/Redo tests | Original class names, labels, CustomEditor declarations, foldout icons and saved preferences remain. Batch GUI tests cover Layout/Repaint and property edits; native mouse input has not been automated. |
+| Material setup | Exact | 720 differential state transitions against original processors plus shader reassignment | Render state, keyword setup and particle streams remain. Legacy second-transition texture mode migration and dormant shadow-alpha state match the original. |
 | Material migration | Approximate | MaterialMigration tests: six GUIDs, backups, scope, stale plans, BOM/newlines | Converts text .mat assets with original 3.6 GUIDs. Binary/embedded materials and generated optimized GUIDs require extraction or manual shader reassignment; see Migration.md. |
 | Samples | Exact | Showcase tests plus generated scene image | Package Manager imports a playable scene with four particle variants and moving distortion; the generator preserves the active saved scene and refuses overwrites. |
 
@@ -64,14 +64,14 @@ corresponding 2D, array or 3D resource rather than relying on a 2D-only fixture.
 
 | Feature | Status | Evidence | Reason / fallback |
 | --- | --- | --- | --- |
-| Metallic and specular workflows | Approximate | Lit surface, diffuse-energy and combined-light tests | Diffuse energy follows the original 0.96*(1-metallic) or 1-max(specular) rule. Direct specular uses normalized Blinn-Phong instead of URP GGX; tune smoothness under the target lights. |
+| Metallic and specular workflows | Approximate | Analytic GPU tests and 72 original/port PBR frame comparisons | Original GGX direct BRDF, diffuse energy, F0 and roughness math are preserved without URP includes. Light selection/attenuation and ambient data still come from Built-in; match scene light/probe settings after migration. |
 | Normal maps | Approximate | Imported DXT5 packing, normal scale and 2D/array/3D tests | Unity normal packing is decoded before XY scale, as in the original. Built-in tangent/normal interpolation differs; use correct imported normals and particle tangents. |
-| Surface maps | Approximate | Metallic/specular/smoothness channel and texture-mode tests | Sampling, channel selection and shared base filtering are retained, but their BRDF response follows the Built-in approximation; tune surface strengths in the target scene. |
+| Surface maps | Approximate | Metallic/specular/smoothness channel and texture-mode tests, original PBR captures | Sampling, channel selection, shared base filtering and original BRDF response are retained. Final lighting uses Built-in light/probe inputs; match those scene inputs when migrating. |
 | Main light | Approximate | Direction/color/intensity and normal-map rendering | Built-in ForwardBase supplies the main directional light. URP light selection differs; configure a directional key light for matching scenes. |
 | Additional lights | Approximate | Shared point/spot/range/direction tests for both Lit shaders | ForwardAdd uses Built-in attenuation and shadows, with alpha and UI clipping preserved. Set per-pixel lights/Quality pixel-light count appropriately; it is not a Forward+ light loop. |
 | Receive shadows | Approximate | Lit/UI directional receiver, toggles and combined-feature tests | Built-in attenuation affects direct light, leaving ambient/reflections separate. Bias, cascades and filtering follow Built-in Light/Quality settings; retune them after migration. |
 | Ambient and light probes | Approximate | Ambient, normal and reflection interaction tests | Built-in SH with a flat-ambient floor replaces URP SH/APV sampling. Use Built-in light probes or ambient lighting; APV data is not consumed. |
-| Environment reflections | Approximate | Both Lit shaders: toggles, workflows, normal/surface maps and interaction tests | Samples the first Built-in reflection cubemap with a smoothness mip approximation. No probe blending or box projection; use one suitable probe or a custom/default cubemap. |
+| Environment reflections | Approximate | Both Lit shaders: analytic roughness response and original captures with mip-colored cubemaps/view angles | Original perceptual-roughness mip selection, surface reduction and grazing Fresnel are preserved. Probe assignment/capture uses Built-in. Original NOVA also omits probe-blending/box-projection shader variants; use one suitable probe or a custom/default cubemap. |
 | Lightmaps and vertex lighting | Not Applicable | Original ParticlesUberLitForward.hlsl input/GI initialization | Original NOVA uses SH (or Unity 6 APV), has no lightmap UV path and sets vertexLighting to zero. The port does not add those absent paths. |
 | Scene selection and picking | Approximate | Particle Uber and Distortion editor-pass rendering | Original pass names and selection IDs remain. Alpha/deformation are rendered, but Unity's editor invocation differs by pipeline; use normal Built-in selection tooling. |
 | Shadow caster | Approximate | Caster alpha/deformation, receive-shadow and compile tests | Uses Built-in ShadowCaster bias/variants. Enable the original caster controls and renderer shadow casting; retune light bias. UI shaders originally had no caster pass. |
@@ -98,7 +98,7 @@ corresponding 2D, array or 3D resource rather than relying on a 2D-only fixture.
 | RenderGraph | Not Applicable | Runtime/editor assembly and source dependency checks | Built-in does not schedule URP RenderGraph passes; the camera effect replaces their visible function. |
 | URP compatibility mode | Not Applicable | Original version-specific renderer API audit | Built-in has no URP render-graph compatibility toggle. |
 | Optimizer enum and names | Exact | Optimizer tests for all 48 generated names | Original OptionalShaderPass API and 2 shaders x 3 render types x 8 optional-pass naming combinations remain. |
-| Optimizer pass stripping | Approximate | All 48 outputs compiled; rendering equivalence tests | DepthOnly/ShadowCaster are stripped as requested; the DepthNormals flag preserves naming but adds no URP pass. Keep ShadowCaster for Built-in camera depth. |
+| Optimizer pass stripping | Approximate | All 48 outputs compiled; rendering equivalence and opaque keyword-reduction tests | Original opaque depth/shadow variant reduction is preserved. DepthOnly/ShadowCaster are stripped as requested; the DepthNormals flag preserves naming but adds no URP pass. Keep ShadowCaster for Built-in camera depth. |
 | Optimizer includes | Approximate | Package-cache compilation and moved-output-folder test | Includes resolve through the current Built-in package asset path rather than original URP includes. Regenerate after moving/replacing the source package; output must be under Assets. |
 | Material replacement | Exact | Scoped replacement, persistence and Undo tests | Original names are resolved after generation; material values, keywords, queue and Undo are preserved. |
 | Platform scope | Approximate | Windows graphics-enabled editor/player and image comparisons | Verified on Direct3D11/12 with SM3.5, texture arrays/3D textures and half-float targets. Other GPUs/APIs/mobile/Web/XR need platform validation; use supported texture modes and mono rendering. |
@@ -113,6 +113,9 @@ Missing frames, mismatched dimensions and invisible base geometry fail the check
 The 48 Lit frames use a diffuse dielectric with specular/reflections disabled;
 they gate common-surface behavior without claiming full URP BRDF equality.
 Lighting, shadows and reflection acceptance additionally comes from PlayMode assertions.
+Another 72 original/port captures exercise both Lit shaders with metallic/specular
+workflows, three smoothness values, three light/view angles, direct GGX and
+environment Fresnel/mip response. All use the same image thresholds above.
 Existing golden images are untouched; captures are freshly generated evidence.
 
 The full test commands and package/player fixtures are described in the repository's

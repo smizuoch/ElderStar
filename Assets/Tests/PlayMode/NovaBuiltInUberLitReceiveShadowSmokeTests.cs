@@ -193,8 +193,8 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
         NovaLitTestTextures.UseDiffuseDefaults(material);
         var casterMaterial = new Material(Shader.Find("Standard") ?? Shader.Find("Diffuse"));
         var receiverMesh = mesh ?? CreateReceiverPlane(Color.white);
-        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
-        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);
+        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGBFloat);
+        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBAFloat, false);
         var cameraObject = new GameObject("NovaBuiltInUberLitShadowCamera");
         var receiverObject = new GameObject("NovaBuiltInUberLitShadowReceiver");
         var depthProxyObject = new GameObject("NovaBuiltInUberLitShadowDepthProxy");
@@ -278,7 +278,7 @@ public sealed class NovaBuiltInUberLitReceiveShadowSmokeTests
             camera.backgroundColor = actualBackground;
             camera.depthTextureMode = DepthTextureMode.Depth;
             camera.targetTexture = target;
-            camera.allowHDR = false;
+            camera.allowHDR = true;
             camera.allowMSAA = false;
             camera.Render();
 

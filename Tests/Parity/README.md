@@ -27,3 +27,20 @@ including legacy second-map migration and dormant shadow-alpha state, must match
 These are source/API reference contracts, not visual golden images. Never regenerate
 them from the port to conceal a discrepancy. New additions to the port's public API
 are allowed; removal or alteration of the original contract fails verification.
+
+`NovaBuiltInInspectorInteractionTests` executes each original ShaderGUI with real
+MaterialEditor Layout/Repaint events, populated texture/effect branches, multiple
+selection, Undo/Redo and foldout preference recreation. It does not synthesize
+native mouse input. Sixteen shader reassignment combinations preserve common
+values while applying the target render state. Optimizer coverage includes the
+original opaque depth/shadow keyword reduction and Assets-root output.
+
+PBR response is independently compared to original NOVA with URP 17.3.0 (see
+`Tests/Visual`). Direct GGX, roughness floors, F0, environment Fresnel/surface
+reduction and perceptual-roughness mip mapping follow that reference's
+`ShaderLibrary/BRDF.hlsl` and `GlobalIllumination.hlsl`. No SRP runtime dependency
+is introduced. The 36 analytic GPU cases failed 32 times on the former lighting
+model and all passed after replacement. Older surface/light tests now read HDR
+targets to avoid clipping the sharper GGX peak; their comparison thresholds were
+not relaxed. A transparency fixture uses a weaker light so the background remains
+brighter than the metal surface, preserving its intended alpha-blend assertion.

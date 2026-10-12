@@ -218,19 +218,8 @@ half3 NovaComputeUILitSpecularApproximation(
     return half3(0.0h, 0.0h, 0.0h);
     #else
     half ndotl = NovaComputeLambertDiffuse(surfaceData.normalWS, lightDirectionWS);
-    half3 halfDirectionWS = NovaSafeNormalize(NovaSafeNormalize(lightDirectionWS) + NovaSafeNormalize(viewDirectionWS));
-    half ndoth = saturate(dot(NovaSafeNormalize(surfaceData.normalWS), halfDirectionWS));
-    half exponent = lerp(8.0h, 96.0h, surfaceData.smoothness);
-
-    #if defined(_SPECULAR_SETUP)
-    half3 specularColor = surfaceData.specularColor;
-    half specularStrength = 1.0h;
-    #else
-    half3 specularColor = lerp(half3(0.04h, 0.04h, 0.04h), surfaceData.albedo, surfaceData.metallic);
-    half specularStrength = lerp(0.25h, 1.0h, surfaceData.metallic);
-    #endif
-
-    half specularTerm = NovaNormalizedBlinnPhongLobe(ndoth, exponent) * surfaceData.smoothness * ndotl * specularStrength;
+    half3 specularColor = NovaSpecularReflectance(surfaceData.albedo, surfaceData.metallic, surfaceData.specularColor);
+    half specularTerm = NovaGgxSpecular(surfaceData.normalWS, lightDirectionWS, viewDirectionWS, surfaceData.smoothness) * ndotl;
     return specularColor * specularTerm * NovaGetMainLightColor();
     #endif
 }
@@ -259,7 +248,8 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
     environmentReflection = NovaSampleEnvironmentReflection(
         NovaReflectViewDirection(viewDirectionWS, surfaceData.normalWS), surfaceData.smoothness)
         * NovaComputeEnvironmentReflectionStrength(surfaceData.albedo, surfaceData.metallic,
-            surfaceData.specularColor, surfaceData.smoothness)
+            surfaceData.specularColor, surfaceData.smoothness,
+            dot(NovaSafeNormalize(surfaceData.normalWS), NovaSafeNormalize(viewDirectionWS)))
         * step(0.5h, _EnvironmentReflections);
     #endif
     return half4(diffuseColor + specularColor + environmentReflection, surfaceData.alpha);

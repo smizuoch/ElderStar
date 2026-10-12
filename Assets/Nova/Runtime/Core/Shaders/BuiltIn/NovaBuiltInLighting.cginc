@@ -55,11 +55,33 @@ half3 NovaComputeDiffuseAlbedo(half3 albedo, half metallic, half3 specularColor)
     #endif
 }
 
-half NovaNormalizedBlinnPhongLobe(half ndoth, half exponent)
+half3 NovaSpecularReflectance(half3 albedo, half metallic, half3 specularColor)
 {
-    // Normalized Blinn-Phong distribution with the quarter microfacet factor.
-    // This remains a Built-in approximation of URP's GGX distribution.
-    return pow(ndoth, exponent) * ((exponent + 2.0h) / 25.13274123h);
+    #if defined(_SPECULAR_SETUP)
+    return specularColor;
+    #else
+    return lerp(half3(0.04h, 0.04h, 0.04h), albedo, metallic);
+    #endif
+}
+
+float NovaRoughness(half smoothness)
+{
+    float perceptualRoughness = 1.0 - saturate(smoothness);
+    return max(perceptualRoughness * perceptualRoughness, 0.0078125);
+}
+
+half NovaGgxSpecular(float3 normalWS, float3 lightDirectionWS, float3 viewDirectionWS, half smoothness)
+{
+    // Same GGX distribution and joint visibility/Fresnel approximation used by
+    // original NOVA's UniversalFragmentPBR, expressed without an SRP dependency.
+    float3 lightDirection = NovaSafeNormalize(lightDirectionWS);
+    float3 halfDirection = NovaSafeNormalize(lightDirection + NovaSafeNormalize(viewDirectionWS));
+    float noH = saturate(dot(NovaSafeNormalize(normalWS), halfDirection));
+    float loH = saturate(dot(lightDirection, halfDirection));
+    float roughness = NovaRoughness(smoothness);
+    float roughnessSquared = max(roughness * roughness, 0.00006103515625);
+    float d = noH * noH * (roughnessSquared - 1.0) + 1.00001;
+    return roughnessSquared / (d * d * max(0.1, loH * loH) * (roughness * 4.0 + 2.0));
 }
 
 NovaBuiltInMainLight NovaGetMainLight(float3 normalWS)
@@ -97,7 +119,8 @@ float3 NovaReflectViewDirection(float3 viewDirectionWS, float3 normalWS)
 
 half3 NovaSampleEnvironmentReflection(float3 reflectionDirectionWS, half smoothness)
 {
-    half mip = lerp(6.0h, 0.0h, saturate(smoothness));
+    half perceptualRoughness = 1.0h - saturate(smoothness);
+    half mip = perceptualRoughness * (1.7h - 0.7h * perceptualRoughness) * 6.0h;
     half4 encodedEnvironment = UNITY_SAMPLE_TEXCUBE_LOD(unity_SpecCube0, NovaSafeNormalize(reflectionDirectionWS), mip);
     return DecodeHDR(encodedEnvironment, unity_SpecCube0_HDR);
 }
@@ -106,18 +129,21 @@ half3 NovaComputeEnvironmentReflectionStrength(
     half3 albedo,
     half metallic,
     half3 specularColor,
-    half smoothness)
+    half smoothness,
+    half normalDotView)
 {
-    half clampedSmoothness = saturate(smoothness);
-
+    half3 reflectionColor = NovaSpecularReflectance(albedo, metallic, specularColor);
     #if defined(_SPECULAR_SETUP)
-    half3 reflectionColor = saturate(specularColor);
+    half reflectivity = max(specularColor.r, max(specularColor.g, specularColor.b));
     #else
-    half3 reflectionColor = lerp(half3(0.04h, 0.04h, 0.04h), albedo, saturate(metallic));
+    half reflectivity = 0.04h + 0.96h * metallic;
     #endif
-
-    half workflowStrength = lerp(0.30h, 1.0h, saturate(metallic));
-    return reflectionColor * workflowStrength * clampedSmoothness;
+    float roughness = NovaRoughness(smoothness);
+    half grazing = saturate(smoothness + reflectivity);
+    half fresnel = 1.0h - saturate(normalDotView);
+    fresnel *= fresnel;
+    fresnel *= fresnel;
+    return lerp(reflectionColor, grazing, fresnel) / (roughness * roughness + 1.0);
 }
 
 half3 NovaApplyEnvironmentReflection(half3 litColor, half3 environmentReflection)

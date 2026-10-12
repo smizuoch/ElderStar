@@ -32,5 +32,13 @@ geometry, or any of the 96 common-surface differences above the documented thres
 Markdown and contact sheets showing original, port and amplified difference.
 Lit frames use a controlled diffuse dielectric with specular/reflections disabled.
 Their common material stack must meet the same image thresholds; the dedicated
-lighting rendering tests additionally check the documented BRDF approximation,
-shadows and reflections. This does not claim full URP PBR equality.
+lighting rendering tests additionally check light scheduling, shadows and reflections.
+
+For PBR parity, repeat each capture command with `-novaPbr` and a separate empty
+capture directory. This produces 72 frames: two Lit shaders, two workflows, three
+smoothness values (0, 0.3, 0.7), three light/view angles (0, 30, 60 degrees), and
+direct/environment lighting. The environment cubemap has a different color per
+mip, so the comparison checks roughness mip selection as well as Fresnel.
+Run the same comparator with `--pbr`. Every frame must contain visible geometry
+and meet the unchanged thresholds. These controlled inputs isolate the original
+BRDF math; they do not establish equality of pipeline light/probe assignment.

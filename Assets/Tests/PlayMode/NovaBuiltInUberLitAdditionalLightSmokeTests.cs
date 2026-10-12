@@ -250,8 +250,8 @@ public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
 
         NovaLitTestTextures.UseDiffuseDefaults(material);
         var actualMesh = mesh ?? CreateQuad(Color.white);
-        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
-        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);
+        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGBFloat);
+        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBAFloat, false);
         var cameraObject = new GameObject("NovaBuiltInUberLitAdditionalCamera");
         var meshObject = new GameObject("NovaBuiltInUberLitAdditionalMesh");
         var mainLightObject = new GameObject("NovaBuiltInUberLitAdditionalMainLight");
@@ -299,7 +299,7 @@ public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = background ?? new Color(0.01f, 0.01f, 0.01f, 1f);
             camera.targetTexture = target;
-            camera.allowHDR = false;
+            camera.allowHDR = true;
             camera.allowMSAA = false;
             camera.Render();
 

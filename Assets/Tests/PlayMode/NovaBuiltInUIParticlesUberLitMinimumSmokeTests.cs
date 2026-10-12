@@ -809,7 +809,7 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
                 material.SetTexture("_BaseMap", CreateSolidTexture(new Color(1f, 0.05f, 0.05f, 0.25f)));
                 material.SetTexture("_NormalMap2DArray", CreateTextureArray(new Color(0.5f, 0.5f, 1f, 1f), new Color(0.88f, 0.5f, 1f, 1f)));
             },
-            LightCase.Front(Color.white, 2.2f),
+            LightCase.Front(Color.white, 0.08f),
             Color.black,
             CreateQuad(new Color(1f, 1f, 1f, 0.8f)),
             background);
@@ -823,7 +823,7 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
                 material.SetFloat("_TintColorMode", 0f);
                 material.SetColor("_TintColor", new Color(0.12f, 1f, 0.12f, 1f));
             },
-            LightCase.Front(Color.white, 2.2f),
+            LightCase.Front(Color.white, 0.08f),
             Color.black,
             CreateQuad(new Color(1f, 0.6f, 1f, 1f)),
             background);
@@ -837,7 +837,7 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
                 material.SetFloat("_TintColorMode", 0f);
                 material.SetColor("_TintColor", new Color(0.12f, 1f, 0.12f, 1f));
             },
-            LightCase.Front(Color.white, 2.2f),
+            LightCase.Front(Color.white, 0.08f),
             Color.black,
             CreateQuad(new Color(1f, 0.6f, 1f, 0.55f)),
             background);
@@ -1005,8 +1005,8 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
         var previousAmbientMode = RenderSettings.ambientMode;
         var previousAmbientLight = RenderSettings.ambientLight;
         var previousAmbientIntensity = RenderSettings.ambientIntensity;
-        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
-        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);
+        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGBFloat);
+        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBAFloat, false);
         var cameraObject = new GameObject("NovaBuiltInUIParticlesUberLitCamera");
         var lightObject = new GameObject("NovaBuiltInUIParticlesUberLitLight");
         var ownedObjects = new List<UnityEngine.Object> { target, readback, cameraObject, lightObject };
@@ -1066,7 +1066,7 @@ public sealed class NovaBuiltInUIParticlesUberLitMinimumSmokeTests
             camera.farClipPlane = 10f;
             camera.transform.position = new Vector3(0f, 0f, -2f);
             camera.targetTexture = target;
-            camera.allowHDR = false;
+            camera.allowHDR = true;
             camera.allowMSAA = false;
             camera.Render();
 

@@ -12,6 +12,42 @@ public sealed class NovaBuiltInUberLitSurfaceSmokeTests
     private const int TextureSize = 8;
 
     [Test]
+    public void DirectSpecularMatchesOriginalGgxResponse(
+        [Values("Nova/Particles/UberLit", "Nova/UIParticles/UberLit")] string shaderName,
+        [Values(0, 1)] int workflow,
+        [Values(0f, 0.3f, 0.7f)] float smoothness,
+        [Values(false, true)] bool angled)
+    {
+        var intensity = smoothness > 0.5f ? 0.015f : 0.6f;
+        var light = angled ? LightCase.Angled(Color.white, intensity) : LightCase.Front(Color.white, intensity);
+        Color Render(bool enabled) => RenderLit(material =>
+        {
+            material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+            material.SetFloat("_LitWorkflowMode", workflow);
+            material.SetFloat("_Metallic", 0.75f);
+            material.SetColor("_SpecularColor", Color.white * 0.5f);
+            material.SetFloat("_Smoothness", smoothness);
+            material.SetFloat("_SpecularHighlights", enabled ? 1 : 0);
+            material.SetFloat("_EnvironmentReflections", 0);
+        }, light, shaderName: shaderName).Center;
+
+        var direction = -(light.Rotation * Vector3.forward);
+        var halfVector = (direction + Vector3.back).normalized;
+        var noH = Vector3.Dot(Vector3.back, halfVector);
+        var loH = Vector3.Dot(direction, halfVector);
+        var roughness = Mathf.Max((1 - smoothness) * (1 - smoothness), 0.0078125f);
+        var roughnessSquared = Mathf.Max(roughness * roughness, 0.00006103515625f);
+        var denominator = noH * noH * (roughnessSquared - 1) + 1.00001f;
+        // URP BRDF.hlsl: GGX distribution with joint visibility/Fresnel approximation.
+        var expected = roughnessSquared / (denominator * denominator * Mathf.Max(0.1f, loH * loH)
+            * (roughness * 4 + 2)) * Vector3.Dot(Vector3.back, direction) * intensity
+            * (workflow == 0 ? 0.5f : 0.76f);
+        var difference = Render(true).r - Render(false).r;
+        Assert.That(difference, Is.EqualTo(expected).Within(2f / 255f),
+            $"{shaderName}, workflow {workflow}, smoothness {smoothness}, angled {angled}");
+    }
+
+    [Test]
     public void UberLitMetallicAffectsSpecularResponse()
     {
         var low = RenderLit(material => ConfigureMetallic(material, 0f, 0.85f));
@@ -484,18 +520,21 @@ public sealed class NovaBuiltInUberLitSurfaceSmokeTests
         LightCase? lightCase = null,
         Color? ambient = null,
         Mesh mesh = null,
-        Color? background = null)
+        Color? background = null,
+        string shaderName = LitShaderName)
     {
-        var shader = Shader.Find(LitShaderName);
-        Assert.That(shader, Is.Not.Null, LitShaderName);
+        var shader = Shader.Find(shaderName);
+        Assert.That(shader, Is.Not.Null, shaderName);
 
         var previousAmbientMode = RenderSettings.ambientMode;
         var previousAmbientLight = RenderSettings.ambientLight;
         var previousAmbientIntensity = RenderSettings.ambientIntensity;
         var material = new Material(shader);
         var actualMesh = mesh ?? CreateQuad(Color.white);
-        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGB32);
-        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBA32, false);
+        // GGX's narrow peak can exceed one. Preserve HDR values so channel/map
+        // tests measure the material response instead of identical clipped white.
+        var target = new RenderTexture(RenderSize, RenderSize, 24, RenderTextureFormat.ARGBFloat);
+        var readback = new Texture2D(RenderSize, RenderSize, TextureFormat.RGBAFloat, false);
         var cameraObject = new GameObject("NovaBuiltInUberLitSurfaceCamera");
         var meshObject = new GameObject("NovaBuiltInUberLitSurfaceMesh");
         var lightObject = new GameObject("NovaBuiltInUberLitSurfaceLight");
@@ -530,7 +569,7 @@ public sealed class NovaBuiltInUberLitSurfaceSmokeTests
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = background ?? new Color(0.01f, 0.01f, 0.01f, 1f);
             camera.targetTexture = target;
-            camera.allowHDR = false;
+            camera.allowHDR = true;
             camera.allowMSAA = false;
             camera.Render();
 

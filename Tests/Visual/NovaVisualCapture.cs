@@ -27,6 +27,7 @@ public sealed class NovaVisualCapture
         var argIndex = Array.IndexOf(args, "-novaVisualOutput");
         Assert.That(argIndex, Is.GreaterThanOrEqualTo(0));
         var output = args[argIndex + 1];
+        var pbr = Array.IndexOf(args, "-novaPbr") >= 0;
         Directory.CreateDirectory(output);
         QualitySettings.antiAliasing = 0;
         RenderSettings.fog = false;
@@ -80,6 +81,27 @@ public sealed class NovaVisualCapture
         var readback = new Texture2D(Size, Size, TextureFormat.RGBA32, false);
         var names = new[] { "Nova/Particles/UberUnlit", "Nova/UIParticles/UberUnlit", "Nova/Particles/UberLit", "Nova/UIParticles/UberLit" };
         var cases = new[] { "base", "vertex-color", "tint", "channel", "mirror", "tritone", "pentone", "greyscale", "gradient", "fade", "dissolve", "second-transition", "flow", "parallax", "emission", "luminance", "rim", "vertex-deformation", "array", "volume", "alpha-blend", "additive", "multiply", "cutout" };
+        Cubemap environment = null;
+        if (pbr)
+        {
+            names = names.Where(name => name.EndsWith("UberLit")).ToArray();
+            cases = (from kind in new[] { "direct", "reflection" }
+                     from workflow in new[] { 0, 1 }
+                     from smoothness in new[] { 0, 1, 2 }
+                     from angle in new[] { 0, 30, 60 }
+                     select $"{kind}-{workflow}-{smoothness}-{angle}").ToArray();
+            RenderSettings.ambientLight = Color.black;
+            environment = new Cubemap(64, TextureFormat.RGBA32, true) { filterMode = FilterMode.Trilinear };
+            for (var mip = 0; mip < 7; mip++)
+            for (var face = 0; face < 6; face++)
+                environment.SetPixels(Enumerable.Repeat(new Color(1f - mip / 8f, 0.2f + mip / 8f, 0.4f, 1),
+                    (64 >> mip) * (64 >> mip)).ToArray(), (CubemapFace)face, mip);
+            environment.Apply(false);
+            RenderSettings.defaultReflectionMode = DefaultReflectionMode.Custom;
+            RenderSettings.customReflection = environment;
+            RenderSettings.reflectionIntensity = 1;
+            DynamicGI.UpdateEnvironment();
+        }
         yield return null;
         yield return null;
         foreach (var name in names)
@@ -101,6 +123,24 @@ public sealed class NovaVisualCapture
             mesh.colors = Enumerable.Repeat(feature == "vertex-color" ? new Color(0.3f,0.8f,0.5f,0.6f) : Color.white, 4).ToArray();
             mesh.tangents = Enumerable.Repeat(feature == "parallax" ? new Vector4(0.45f,0,0.89f,1) : new Vector4(1,0,0,1),4).ToArray();
             Configure(material, feature);
+            if (pbr)
+            {
+                var parts = feature.Split('-');
+                var reflection = parts[0] == "reflection";
+                var workflow = int.Parse(parts[1]);
+                var smoothness = new[] { 0f, 0.3f, 0.7f }[int.Parse(parts[2])];
+                var angle = int.Parse(parts[3]);
+                light.intensity = reflection ? 0f : smoothness > 0.5f ? 0.015f : 0.6f;
+                light.transform.rotation = Quaternion.Euler(0, reflection ? 0 : angle, 0);
+                mesh.normals = Enumerable.Repeat(Quaternion.Euler(0, reflection ? angle : 0, 0) * Vector3.back, 4).ToArray();
+                material.SetTexture("_BaseMap", Texture((x,y) => Color.white));
+                material.SetFloat("_LitWorkflowMode", workflow);
+                material.SetFloat("_Metallic", 0.75f);
+                material.SetColor("_SpecularColor", new Color(0.5f, 0.3f, 0.7f, 1));
+                material.SetFloat("_Smoothness", smoothness);
+                material.SetFloat("_EnvironmentReflections", reflection ? 1 : 0);
+                material.SetFloat("_SpecularHighlights", reflection ? 0 : 1);
+            }
             Setup(material, name.Contains("UberLit"));
             meshObject.GetComponent<MeshRenderer>().sharedMaterial = material;
             yield return null;
@@ -126,6 +166,7 @@ public sealed class NovaVisualCapture
         UnityEngine.Object.DestroyImmediate(mesh);
         UnityEngine.Object.DestroyImmediate(readback);
         UnityEngine.Object.DestroyImmediate(target);
+        if (environment != null) UnityEngine.Object.DestroyImmediate(environment);
     }
 
     private void Configure(Material m, string feature)

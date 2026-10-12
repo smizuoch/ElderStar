@@ -52,6 +52,21 @@ class ComparisonTests(unittest.TestCase):
             self.assertEqual(compare.run(reference, actual, root / "report"), 1,
                              "Lit common-surface captures must gate regressions too.")
 
+    def test_pbr_blank_frames_cannot_pass(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            reference, actual = root / "reference", root / "actual"
+            reference.mkdir()
+            actual.mkdir()
+            expected = {f"{shader}__{case}.ppm" for shader in compare.SHADERS[2:] for case in compare.PBR_CASES}
+            self.assertEqual(len(expected), 72)
+            for name in expected:
+                Image.new("RGB", (128, 128), "black").save(reference / name)
+                Image.new("RGB", (128, 128), "black").save(actual / name)
+            with self.assertRaises(ValueError):
+                compare.run(reference, actual, root / "report", pbr=True)
+
 
 if __name__ == "__main__":
     unittest.main()

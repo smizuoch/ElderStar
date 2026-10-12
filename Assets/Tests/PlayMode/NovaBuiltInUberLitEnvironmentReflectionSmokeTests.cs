@@ -21,6 +21,25 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     private const int TextureSize = 8;
 
     [Test]
+    public void EnvironmentReflectionMatchesOriginalRoughnessResponse(
+        [Values(0f, 0.4f, 1f)] float smoothness,
+        [Values(0, 1)] int workflow)
+    {
+        var sample = RenderEnvironment(material =>
+        {
+            ConfigureSpecularReflections(material, Color.white * 0.5f);
+            material.SetTexture("_BaseMap", CreateSolidTexture(Color.white));
+            material.SetFloat("_LitWorkflowMode", workflow);
+            material.SetFloat("_Metallic", 0.75f);
+            material.SetFloat("_Smoothness", smoothness);
+        });
+        var roughnessSquared = Mathf.Max(Mathf.Pow(1 - smoothness, 4), 0.00006103515625f);
+        // The fixture's -Z cubemap face has red = 1; head-on Fresnel is zero.
+        var expected = (workflow == 0 ? 0.5f : 0.76f) / (roughnessSquared + 1);
+        Assert.That(sample.Center.r, Is.EqualTo(expected).Within(2f / 255f));
+    }
+
+    [Test]
     public void SpecularWorkflowReflectionIgnoresTheUnusedMetallicControl()
     {
         var low = RenderEnvironment(material =>
@@ -231,10 +250,17 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     [Test]
     public void UberLitEnvironmentReflectionsRespondToSmoothness()
     {
-        var low = RenderEnvironment(material => ConfigureReflections(material, smoothness: 0.05f));
-        var high = RenderEnvironment(material => ConfigureReflections(material, smoothness: 1f));
+        Color Render(float smoothness) => RenderEnvironment(material =>
+        {
+            ConfigureReflections(material, smoothness: smoothness);
+            // Original GGX retains reflection on rough surfaces. Use a brighter
+            // metal to resolve its roughness change above the readback threshold.
+            material.SetTexture("_BaseMap", CreateSolidTexture(Color.white * 0.4f));
+        }).Center;
+        var low = Render(0.05f);
+        var high = Render(1f);
 
-        Assert.That(Luminance(high.Center), Is.GreaterThan(Luminance(low.Center) + 0.04f), $"low {low.Center}, high {high.Center}");
+        Assert.That(Luminance(high), Is.GreaterThan(Luminance(low) + 0.04f), $"low {low}, high {high}");
     }
 
     [Test]
@@ -391,7 +417,7 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
                 material.SetColor("_TintColor", new Color(0.1f, 1f, 0.1f, 1f));
             },
             ambient: new Color(0.18f, 0.18f, 0.18f, 1f),
-            lightIntensity: 0.8f,
+            lightIntensity: 1f,
             mesh: CreateQuad(new Color(1f, 0.55f, 1f, 1f)));
         var reflectionOnly = RenderEnvironment(material => ConfigureReflections(material, smoothness: 0.65f, metallic: 0.25f));
 
