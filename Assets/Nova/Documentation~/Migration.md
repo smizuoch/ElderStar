@@ -37,6 +37,19 @@ background must participate in the depth texture. Transparent depth is not used.
 
 After conversion, inspect lighting and blending in the target scene. Lit shading,
 reflection probes, shadows, fog and camera distortion use the documented Built-in
-approximations in [the compatibility matrix](BuiltInCompatibilityMatrix.md).
+approximations in [the compatibility matrix](Compatibility.md).
 In particular, a fully metallic or white-specular material with both reflection
 options disabled has no diffuse light, as in the original BRDF workflow.
+
+To keep the original light intensity values, run **Tools > NOVA > Built-in >
+Match Original Lighting Settings**. This opt-in action uses linear light intensity
+when the project color space is Linear and enables color temperature, matching
+URP's per-frame settings. It saves Graphics Settings and supports Edit > Undo.
+It affects every light in the project, including non-NOVA materials, so the menu
+explains the change before applying it. Rerun it if you change color space later.
+
+Fresh Built-in projects otherwise default to gamma light intensity, which produces
+different brightness in Linear projects even with identical material/shader math.
+See [Unity's light-intensity API documentation](https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Rendering.GraphicsSettings-lightsUseLinearIntensity.html).
+The port's Linear PBR visual comparison runs this same migration action; it does
+not silently change project settings when the package is imported.

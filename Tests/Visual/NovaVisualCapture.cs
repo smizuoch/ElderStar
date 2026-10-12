@@ -28,6 +28,15 @@ public sealed class NovaVisualCapture
         Assert.That(argIndex, Is.GreaterThanOrEqualTo(0));
         var output = args[argIndex + 1];
         var pbr = Array.IndexOf(args, "-novaPbr") >= 0;
+        if (Array.IndexOf(args, "-novaMatchLighting") >= 0)
+        {
+#if !NOVA_VISUAL_REFERENCE
+            var settingsType = AppDomain.CurrentDomain.GetAssemblies()
+                .Select(a => a.GetType("Nova.Editor.Core.Scripts.BuiltInLightingSettings")).FirstOrDefault(t => t != null);
+            Assert.That(settingsType, Is.Not.Null);
+            settingsType.GetMethod("Apply").Invoke(null, null);
+#endif
+        }
         Directory.CreateDirectory(output);
         QualitySettings.antiAliasing = 0;
         RenderSettings.fog = false;
@@ -159,7 +168,8 @@ public sealed class NovaVisualCapture
             foreach (var item in owned) UnityEngine.Object.DestroyImmediate(item);
             owned.Clear();
         }
-        File.WriteAllText(Path.Combine(output, "capture.txt"), Application.unityVersion + "\n" + SystemInfo.graphicsDeviceType + "\n" + QualitySettings.activeColorSpace + "\n" + names.Length * cases.Length + " frames\n");
+        File.WriteAllText(Path.Combine(output, "capture.txt"), Application.unityVersion + "\n" + SystemInfo.graphicsDeviceType + "\n" + QualitySettings.activeColorSpace + "\n" + names.Length * cases.Length + " frames\n" +
+            "lightsUseLinearIntensity=" + GraphicsSettings.lightsUseLinearIntensity + "\nlightsUseColorTemperature=" + GraphicsSettings.lightsUseColorTemperature + "\n");
         UnityEngine.Object.DestroyImmediate(cameraObject);
         UnityEngine.Object.DestroyImmediate(lightObject);
         UnityEngine.Object.DestroyImmediate(meshObject);

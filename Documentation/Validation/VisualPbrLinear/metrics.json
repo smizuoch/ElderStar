@@ -1,0 +1,650 @@
+[
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-0-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "direct-1-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-0-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "Particles_UberLit",
+    "case": "reflection-1-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-0-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "direct-1-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-0-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-0-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-0-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-0-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-1-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-1-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-1-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-2-0",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-2-30",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "shader": "UIParticles_UberLit",
+    "case": "reflection-1-2-60",
+    "lit_approximation": true,
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  }
+]

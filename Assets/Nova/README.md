@@ -25,10 +25,15 @@ backed-up conversion of original text material GUIDs. See
 [migration](Documentation~/Migration.md) and [compatibility](Documentation~/Compatibility.md)
 for conversion steps and rendering differences.
 
-Lit uses a normalized Blinn-Phong approximation instead of URP GGX. Reflection
-probe blending/box projection, Forward+, probe volumes, URP DepthNormals/debug
-and URP foveated rendering are not reproduced. The first Built-in reflection
-probe, forward lights and normal Built-in camera depth provide the documented fallbacks.
+Lit preserves the original GGX and environment Fresnel/roughness response. Use
+**Tools > NOVA > Built-in > Match Original Lighting Settings** to preserve original
+light intensities in Linear projects. This explicit, undoable action affects all
+project lights; importing the package does not change Graphics Settings.
+
+Forward+, probe volumes, URP DepthNormals/debug and URP foveated rendering are not
+reproduced. The first Built-in reflection probe, forward lights and camera depth
+provide the documented fallbacks. Original NOVA also omits reflection-probe
+blending/box-projection variants.
 
 Windows Direct3D11/12 is the verified platform scope, on Unity 2022.3.22f1 and
 6000.3.23f1. Other graphics APIs require their own platform validation.

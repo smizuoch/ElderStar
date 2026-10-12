@@ -1,5 +1,6 @@
 """Check that the release matrix resolves the original feature inventory explicitly."""
 from pathlib import Path
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,6 +22,13 @@ Optimizer includes;Material replacement;Material migration;Samples;Platform scop
 
 
 class ReleaseDocumentationTests(unittest.TestCase):
+    def test_package_relative_markdown_links_resolve(self):
+        package = ROOT / "Assets/Nova"
+        for path in [package / "README.md", *(package / "Documentation~").glob("*.md")]:
+            for target in re.findall(r"\]\(([^)]+)\)", path.read_text(encoding="utf-8")):
+                if "://" not in target and not target.startswith("#"):
+                    self.assertTrue((path.parent / target.split("#")[0]).exists(), f"{path.name}: {target}")
+
     def test_every_original_feature_has_one_final_status_and_evidence(self):
         text = (ROOT / "Documentation/BuiltInCompatibilityMatrix.md").read_text(encoding="utf-8")
         self.assertFalse("Pending" in text, "The current matrix must resolve every feature status.")
@@ -43,7 +51,10 @@ class ReleaseDocumentationTests(unittest.TestCase):
 
     def test_package_documentation_matches_repository(self):
         for source, shipped in [("BuiltInCompatibilityMatrix.md", "Compatibility.md"), ("Migration.md", "Migration.md")]:
-            self.assertEqual((ROOT / "Documentation" / source).read_bytes(),
+            expected = (ROOT / "Documentation" / source).read_bytes()
+            if source == "Migration.md":
+                expected = expected.replace(b"BuiltInCompatibilityMatrix.md", b"Compatibility.md")
+            self.assertEqual(expected,
                              (ROOT / "Assets/Nova/Documentation~" / shipped).read_bytes())
 
     def test_historical_claims_are_kept_separate(self):

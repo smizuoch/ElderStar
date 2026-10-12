@@ -42,3 +42,9 @@ mip, so the comparison checks roughness mip selection as well as Fresnel.
 Run the same comparator with `--pbr`. Every frame must contain visible geometry
 and meet the unchanged thresholds. These controlled inputs isolate the original
 BRDF math; they do not establish equality of pipeline light/probe assignment.
+
+Repeat the PBR capture in Linear color space with `-novaMatchLighting` on both
+commands. The Built-in fixture invokes the package's explicit lighting-settings
+migration action; URP already sets these flags every frame. Capture metadata
+records both flags. Using the default Built-in gamma-intensity setting in a Linear
+project is a different lighting input, not a valid equal-input BRDF comparison.
