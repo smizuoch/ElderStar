@@ -62,7 +62,13 @@ Shader "Hidden/Nova/LegacyBuiltIn/ParticlesDistortion"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags
+        {
+            "RenderType" = "Transparent"
+            "IgnoreProjector" = "True"
+            "PreviewType" = "Plane"
+            "PerformanceChecks" = "False"
+        }
         UsePass "Nova/Particles/Distortion/DISTORTEDUVBUFFER"
         UsePass "Nova/Particles/Distortion/SCENESELECTIONPASS"
         UsePass "Nova/Particles/Distortion/PICKING"

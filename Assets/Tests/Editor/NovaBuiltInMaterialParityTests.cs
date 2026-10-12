@@ -16,6 +16,44 @@ namespace Nova.Tests.Editor
             "Nova/UIParticles/UberLit", "Nova/Particles/Distortion"
         };
 
+        [TestCase("Nova/Particles/UberUnlit", "Opaque")]
+        [TestCase("Nova/Particles/UberLit", "Opaque")]
+        [TestCase("Nova/UIParticles/UberUnlit", "Opaque")]
+        [TestCase("Nova/UIParticles/UberLit", "Opaque")]
+        [TestCase("Nova/Particles/Distortion", "Transparent")]
+        public void FreshShaderTagsMatchOriginal(string shaderName, string renderType)
+        {
+            var material = new Material(Shader.Find(shaderName));
+            try
+            {
+                Assert.That(material.renderQueue, Is.EqualTo(2000));
+                Assert.That(material.GetTag("RenderType", false), Is.EqualTo(renderType));
+                Assert.That(material.GetTag("IgnoreProjector", false), Is.EqualTo("True").IgnoreCase);
+                Assert.That(material.GetTag("PreviewType", false), Is.EqualTo("Plane"));
+                Assert.That(material.GetTag("PerformanceChecks", false), Is.EqualTo("False").IgnoreCase);
+            }
+            finally { Object.DestroyImmediate(material); }
+        }
+
+        [TestCase("Nova/Particles/UberUnlit")]
+        [TestCase("Nova/Particles/UberLit")]
+        [TestCase("Nova/UIParticles/UberUnlit")]
+        [TestCase("Nova/UIParticles/UberLit")]
+        public void FreshMaterialUsesOriginalQueueBeforeInspectorValidation(string shaderName)
+        {
+            var material = new Material(Shader.Find(shaderName));
+            try
+            {
+                Assert.That(material.renderQueue, Is.EqualTo(2000), "Original SubShader has no Queue override.");
+                Assert.That(material.GetTag("RenderType", false), Is.EqualTo("Opaque"));
+                Assert.That(material.GetFloat("_RenderType"), Is.EqualTo(2), "The public transparent default is retained.");
+                Setup(material, false);
+                Assert.That(material.renderQueue, Is.EqualTo(3000), "Opening the Inspector applies the public default.");
+                Assert.That(material.GetTag("RenderType", false), Is.EqualTo("Transparent"));
+            }
+            finally { Object.DestroyImmediate(material); }
+        }
+
         public static IEnumerable<TestCaseData> Cases()
         {
             foreach (var shader in Shaders)

@@ -244,7 +244,13 @@ Shader "Hidden/Nova/LegacyBuiltIn/ParticlesUberUnlit"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "IgnoreProjector" = "True"
+            "PreviewType" = "Plane"
+            "PerformanceChecks" = "False"
+        }
 
         UsePass "Nova/Particles/UberUnlit/FORWARDBASE"
         UsePass "Nova/Particles/UberUnlit/SCENESELECTIONPASS"

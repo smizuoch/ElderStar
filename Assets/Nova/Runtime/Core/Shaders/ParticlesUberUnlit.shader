@@ -244,7 +244,13 @@ Shader "Nova/Particles/UberUnlit"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "IgnoreProjector" = "True"
+            "PreviewType" = "Plane"
+            "PerformanceChecks" = "False"
+        }
 
         Pass
         {

@@ -269,7 +269,13 @@ Shader "Hidden/Nova/LegacyBuiltIn/ParticlesUberLit"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "IgnoreProjector" = "True"
+            "PreviewType" = "Plane"
+            "PerformanceChecks" = "False"
+        }
 
         UsePass "Nova/Particles/UberLit/FORWARDBASE"
         UsePass "Nova/Particles/UberLit/FORWARDADD"

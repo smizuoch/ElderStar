@@ -265,7 +265,13 @@ Shader "Hidden/Nova/LegacyBuiltIn/UIParticlesUberLit"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "IgnoreProjector" = "True"
+            "PreviewType" = "Plane"
+            "PerformanceChecks" = "False"
+        }
 
         Stencil
         {

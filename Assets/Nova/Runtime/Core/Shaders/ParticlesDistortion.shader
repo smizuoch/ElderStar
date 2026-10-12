@@ -62,7 +62,13 @@ Shader "Nova/Particles/Distortion"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags
+        {
+            "RenderType" = "Transparent"
+            "IgnoreProjector" = "True"
+            "PreviewType" = "Plane"
+            "PerformanceChecks" = "False"
+        }
         Pass
         {
             Name "DistortedUvBuffer"
