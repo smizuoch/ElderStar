@@ -21,7 +21,7 @@ those reports do not override this matrix. No original golden image was changed.
 | Shader names | Exact | Phase1 discovery and standalone shader-retention checks | All six original names are preserved, including Hidden/Nova/Particles/ApplyDistortion. |
 | Material properties | Exact | All 889 original ShaderLab declarations compared, including attributes, ranges, order and defaults | Original public names and defaults remain, including obsolete compatibility properties. |
 | Custom editors | Exact | 525 public/protected declarations, 14 original Inspector/helper source contracts, real OnGUI, multi-edit and Undo/Redo tests | Original class names, labels, CustomEditor declarations, foldout icons and saved preferences remain. Batch GUI tests cover Layout/Repaint and property edits; native mouse input has not been automated. |
-| Material setup | Exact | 720 differential state transitions against original processors plus shader reassignment | Render state, keyword setup and particle streams remain. Legacy second-transition texture mode migration and dormant shadow-alpha state match the original. |
+| Material setup | Exact | 735 differential state transitions against original processors, raw/validated snapshots and shader reassignment | Render state, keyword setup and particle streams remain. Raw new materials retain original queue 2000; Inspector validation applies the configured queue. Preview/projector tags and legacy state migrations match. |
 | Material migration | Approximate | Six direct original-GUID imports, six legacy aliases, optional normalizer, unchanged Fire001 assets | Original standard shader references need no conversion, including embedded/binary references. Effect Import omits bundled NOVA source; ordinary all-selected Unity import can conflict. Old Built-in aliases remain usable; custom/optimized shader GUIDs require a port or regeneration. See Migration.md. |
 | Samples | Exact | Showcase tests plus generated scene image | Package Manager imports a playable scene with four particle variants and moving distortion; the generator preserves the active saved scene and refuses overwrites. |
 
@@ -34,13 +34,13 @@ corresponding 2D, array or 3D resource rather than relying on a 2D-only fixture.
 
 | Feature | Status | Evidence | Reason / fallback |
 | --- | --- | --- | --- |
-| Render state | Exact | MaterialSetup, minimum rendering and interaction tests | Opaque/cutout/transparent, alpha/additive/multiply, cull, queue, z-write override and z-test retain original controls. |
+| Render state | Approximate | MaterialSetup, minimum rendering, interaction and imported MIT sample comparisons | Material blend/cull/queue/depth controls match. Equal-depth transparent renderers with tied sort keys can composite differently across pipelines (heal02 sample). Set distinct renderer sortingOrder values when deterministic overlap is required; this is an explicit authoring fallback, not automatic asset conversion. |
 | Vertex color | Exact | Shared color and actual ParticleSystem tests | RGB and alpha streams affect all four Uber shaders. |
 | Vertex alpha progress | Exact | Shared color, particle Custom1/Custom2 and interaction tests | Vertex alpha can drive transition progress while retaining the original alpha interpretation. |
 | Alpha clipping | Exact | Color, DepthOnly, ShadowCaster and selection rendering tests | Cutoff and alpha-modulate behavior are preserved in applicable passes. |
 | Base texture modes | Exact | 2D/array/3D color and original-image comparisons | Slice/progress selection is implemented for all four shaders on capable hardware; see Platform scope. |
-| UV transforms and custom coordinates | Exact | Coordinate, deformation and ParticleSystem tests | Offsets, rotations/pivots, progress controls and custom streams use the original property mappings, including UI-specific stream layout. |
-| Random row selection | Exact | Base/tint/transition/emission row tests and interaction suite | Original row count and custom/random coordinate selection remain, including parallax and second transition. |
+| UV transforms and custom coordinates | Exact | Coordinate, deformation and ParticleSystem tests; 24 original-order Base UV graphics cases and four Lit alpha-pass texture-transform cases | Base rotations/pivots precede tiling/offset, followed by custom offsets. Array/volume transforms reach Lit depth/shadow passes. Original property mappings and UI-specific stream layout are retained. |
+| Random row selection | Exact | Base/tint/transition/emission row tests, interaction suite and eight Lit depth/shadow custom-progress/row cases | Original row count and custom/random coordinate selection remain, including parallax and second transition. Base progress is computed in the vertex stage as in original NOVA. |
 | Mirror samplers | Approximate | Original-image comparison and 36 Lit surface-sampler cases | D3D11/12 uses matching point/linear/trilinear mirror samplers. Coupled-sampler backends use mirrored UVs and texture-import filtering; configure matching filters on those platforms. |
 | Channel extraction | Exact | Shared base/channel tests and visual capture | Original color channel selection and texture-channel controls remain. |
 | Tritone and pentone | Exact | Shared tone tests and original-image comparison | Tone thresholds, colors and custom coordinates retain the original math. |
@@ -119,6 +119,21 @@ environment Fresnel/mip response. All use the same image thresholds above.
 The PBR suite also passes all 72 comparisons in Linear color space after the
 explicit lighting-settings migration aligns both pipelines' light inputs.
 Existing golden images are untouched; captures are freshly generated evidence.
+
+Additional 0.1.2 verification imports all 13 original MIT effect prefabs unchanged
+and exercises 96 CC0 textures on all four Uber shaders, with fresh/validated material
+snapshots in Gamma and Linear. The strict expanded corpus is not a universal parity
+pass: `pfb_eff_heal02` has six transparent-order differences per comparison run.
+Individual renderer captures match; tied transparency sorting is documented above.
+`pfb_eff_fire` also crashes natively in both original and port on Unity 6000.3.23f1,
+inside ParticleSystemRenderer::PrepareForRender; it is explicitly excluded only on
+that editor. Unity 2022.3.22f1 renders all 13. Use the verified 2022 editor for that
+prefab until the native engine fault is resolved. This is distinct from the supplied
+N2Studio `Fire001`, which passes its separate import/render/player checks.
+No manual material/shader conversion is used. Unity can serialize old material
+defaults during normal import/test startup in either pipeline; source input hashes
+and post-import differences are recorded separately. All 13 effect prefab files
+remain byte-identical. Original URP demo scenes are outside this prefab test scope.
 
 The full test commands and package/player fixtures are described in the repository's
 `Documentation/Verification.md`. The release verification report records actual

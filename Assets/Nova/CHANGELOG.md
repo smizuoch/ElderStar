@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.2
+
+- Match original light intensity/color-temperature defaults on first import and color-space changes; preserve later manual edits and provide a project-local opt-out.
+- Save only GraphicsSettings when applying lighting defaults, leaving unrelated unsaved assets untouched.
+- Restore original fresh material render queues and Inspector preview/projector tags.
+- Restore Base Map rotation, pivots and Custom Data UV offsets on all four Uber shaders, including applicable depth/shadow passes.
+- Use selected array/volume texture transforms in Lit depth and shadow alpha tests.
+- Restore Custom Data flipbook progress and random-row selection in Lit depth and shadow passes.
+- Validate untouched MIT NOVA samples and 96 CC0 Kenney textures against original NOVA; document transparent sort ties and a Unity 6 native particle crash shared by both pipelines.
+
 ## 0.1.1
 
 - Resolve original NOVA shader GUIDs without rewriting imported material or prefab assets.

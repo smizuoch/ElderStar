@@ -28,10 +28,11 @@ Ordinary Unity import requires deselecting those bundled dependencies manually.
 Previous Built-in GUIDs remain usable through hidden shader aliases. See
 [import instructions](Documentation~/Migration.md) and [compatibility](Documentation~/Compatibility.md).
 
-Lit preserves the original GGX and environment Fresnel/roughness response. Use
-**Tools > NOVA > Built-in > Match Original Lighting Settings** to preserve original
-light intensities in Linear projects. This explicit, undoable action affects all
-project lights; importing the package does not change Graphics Settings.
+Lit preserves the original GGX and environment Fresnel/roughness response.
+First import and color-space changes automatically match original intensity/color-
+temperature defaults for all project lights. Later manual edits survive reloads.
+Use **Tools > NOVA > Built-in > Automatic Initial Lighting Setup** to opt out,
+or **Match Original Lighting Settings** to reapply with Undo support.
 
 Forward+, probe volumes, URP DepthNormals/debug and URP foveated rendering are not
 reproduced. The first Built-in reflection probe, forward lights and camera depth
@@ -40,3 +41,9 @@ blending/box-projection variants.
 
 Windows Direct3D11/12 is the verified platform scope, on Unity 2022.3.22f1 and
 6000.3.23f1. Other graphics APIs require their own platform validation.
+
+Additional MIT/CC0 sample comparisons expose a remaining transparent-sort tie in
+the original heal02 prefab; distinct renderer sorting orders give a deterministic
+fallback. The official sample pfb_eff_fire crashes natively in both pipelines on
+6000.3.23f1; use the verified 2022.3.22f1 for that sample. These limits do not affect
+the separate supplied N2Studio Fire001 acceptance. See the compatibility matrix.
