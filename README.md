@@ -71,9 +71,12 @@ materials preserves their properties, keywords and queue and supports Undo.
 
 ## Compatibility and verification
 
-The [0.1.1 direct-import report](Documentation/DirectImportVerification.md) records
-425 EditMode, 771 PlayMode and 12 installed-package tests on each editor version,
-plus 36 pixel-identical Fire001 comparisons. It links the current release tarball.
+The [0.1.2 settings and asset report](Documentation/AssetCorpusVerification.md)
+records initial-state parity, 442 EditMode and 807 PlayMode tests per editor, plus
+MIT/CC0 asset comparisons. The expanded corpus exposes a remaining transparent-sort
+tie and a Unity 6 native sample crash; it is not a universal pixel-parity pass.
+The [0.1.1 direct-import report](Documentation/DirectImportVerification.md) retains
+the original unchanged Fire001 input/import and 36-frame comparison evidence.
 The [previous 0.1.0 report](Documentation/VerificationReport.md) retains the broader
 336 controlled comparisons and showcase player evidence.
 

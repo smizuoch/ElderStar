@@ -1,6 +1,7 @@
 # Previous 0.1.0 release verification — 2026-10-12
 
-For the current 0.1.1 package and unchanged Fire001 import acceptance, see
+For the current 0.1.2 package, see [initial settings and licensed assets](AssetCorpusVerification.md).
+For the earlier unchanged Fire001 acceptance, see
 [Direct import verification](DirectImportVerification.md). This page retains the
 earlier package/player hashes and broader controlled rendering evidence.
 

@@ -1,0 +1,4 @@
+PASS
+6000.3.23f1
+Direct3D11
+6 particle systems; 5 enabled renderers; visible fire pixels=4726

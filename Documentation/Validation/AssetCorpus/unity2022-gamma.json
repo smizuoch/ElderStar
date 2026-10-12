@@ -1,0 +1,3569 @@
+{
+  "identical_states": 47,
+  "visible_effects": 13,
+  "frames": [
+    {
+      "frame": "Particles_UberLit-fresh.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-circle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-circle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-circle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-circle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-circle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-dirt_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-dirt_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-dirt_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-fire_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-fire_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flame_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-flare_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-light_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-light_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-light_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-magic_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-magic_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-magic_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-magic_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-magic_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-muzzle_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-scorch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-scorch_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-scorch_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-scratch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-slash_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-slash_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-slash_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-slash_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-smoke_10.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-spark_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-star_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-symbol_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-symbol_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-trace_07_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-twirl_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-twirl_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-twirl_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-window_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-window_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-window_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-kenney-window_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberLit-validated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-fresh.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-circle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-circle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-circle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-circle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-circle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-dirt_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-dirt_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-dirt_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-fire_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-fire_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flame_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-flare_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-light_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-light_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-light_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-magic_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-magic_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-magic_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-magic_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-magic_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-muzzle_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-scorch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-scorch_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-scorch_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-scratch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-slash_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-slash_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-slash_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-slash_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-smoke_10.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-spark_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-star_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-symbol_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-symbol_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-trace_07_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-twirl_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-twirl_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-twirl_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-window_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-window_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-window_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-kenney-window_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "Particles_UberUnlit-validated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-fresh.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-circle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-circle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-circle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-circle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-circle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-dirt_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-dirt_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-dirt_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-fire_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-fire_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flame_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-flare_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-light_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-light_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-light_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-magic_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-magic_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-magic_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-magic_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-magic_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-muzzle_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-scorch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-scorch_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-scorch_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-scratch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-slash_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-slash_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-slash_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-slash_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-smoke_10.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-spark_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-star_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-symbol_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-symbol_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-trace_07_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-twirl_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-twirl_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-twirl_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-window_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-window_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-window_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-kenney-window_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberLit-validated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-fresh.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-circle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-circle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-circle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-circle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-circle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-dirt_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-dirt_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-dirt_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-fire_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-fire_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flame_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-flare_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-light_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-light_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-light_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-magic_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-magic_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-magic_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-magic_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-magic_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-muzzle_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-scorch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-scorch_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-scorch_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-scratch_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-slash_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-slash_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-slash_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-slash_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-smoke_10.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-spark_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_08.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-star_09.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-symbol_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-symbol_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_01_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_02_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_03_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_04_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_05.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_05_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_06.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_06_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_07.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-trace_07_rotated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-twirl_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-twirl_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-twirl_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-window_01.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-window_02.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-window_03.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-kenney-window_04.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "UIParticles_UberUnlit-validated.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura01-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_aura02-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_barrier01-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_bullet01-120-80.ppm",
+      "passed": true,
+      "mean_error": 1.7951516544117647e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_crystal-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fire-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_fireball_alpha-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal01-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal02-015-00.ppm",
+      "passed": false,
+      "mean_error": 0.0019861158981821898,
+      "max_error": 0.6705882352941176,
+      "bad_pixel_fraction": 0.008148193359375
+    },
+    {
+      "frame": "pfb_eff_heal02-015-35.ppm",
+      "passed": false,
+      "mean_error": 0.001820782430810866,
+      "max_error": 0.6666666666666666,
+      "bad_pixel_fraction": 0.0079345703125
+    },
+    {
+      "frame": "pfb_eff_heal02-015-80.ppm",
+      "passed": false,
+      "mean_error": 0.0017958298228145425,
+      "max_error": 0.6745098039215687,
+      "bad_pixel_fraction": 0.0078887939453125
+    },
+    {
+      "frame": "pfb_eff_heal02-050-00.ppm",
+      "passed": false,
+      "mean_error": 0.004961440142463236,
+      "max_error": 0.5647058823529412,
+      "bad_pixel_fraction": 0.0291595458984375
+    },
+    {
+      "frame": "pfb_eff_heal02-050-35.ppm",
+      "passed": false,
+      "mean_error": 0.004414218079810049,
+      "max_error": 0.5647058823529412,
+      "bad_pixel_fraction": 0.028289794921875
+    },
+    {
+      "frame": "pfb_eff_heal02-050-80.ppm",
+      "passed": false,
+      "mean_error": 0.004839070638020833,
+      "max_error": 0.5764705882352941,
+      "bad_pixel_fraction": 0.02886962890625
+    },
+    {
+      "frame": "pfb_eff_heal02-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal02-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_heal02-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_ice02-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_slash01-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_standard_all-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-015-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-015-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-015-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-050-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-050-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-050-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-120-00.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-120-35.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "frame": "pfb_eff_thunder_dist-120-80.ppm",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+[
+  {
+    "label": "sort-fallback",
+    "identical_states": 3,
+    "frames": [
+      {
+        "frame": "pfb_eff_heal02-015-00.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-015-35.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-015-80.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-050-00.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-050-35.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-050-80.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-120-00.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-120-35.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-120-80.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      }
+    ]
+  },
+  {
+    "label": "sort-fallback-linear",
+    "identical_states": 3,
+    "frames": [
+      {
+        "frame": "pfb_eff_heal02-015-00.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-015-35.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-015-80.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-050-00.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-050-35.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-050-80.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-120-00.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-120-35.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      },
+      {
+        "frame": "pfb_eff_heal02-120-80.ppm",
+        "passed": true,
+        "mean_error": 0.0,
+        "max_error": 0.0,
+        "bad_pixel_fraction": 0.0
+      }
+    ]
+  }
+]

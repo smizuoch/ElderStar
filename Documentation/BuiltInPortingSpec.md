@@ -15,15 +15,15 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: First-install defaults and broader licensed effect compatibility (2026-10-12).
+Current TODO: Track remaining transparent-order/native Unity 6 limits and broaden artist-material coverage. The 0.1.2 initial-settings and licensed-asset worklist is verified; see AssetCorpusVerification.md for the strict corpus failures and explicit fallbacks.
 
 - [x] Match original initial lighting settings automatically, with project-local opt-out and no repeated overwrite of later edits.
 - [x] Limit initial settings persistence to GraphicsSettings; the save-scope regression and lighting/Undo tests pass.
 - [x] Restore original fresh material queue and Inspector preview/projector tags; fresh state comparison and both EditMode suites pass.
 - [x] Fix Base Map rotation/custom UV offsets and Lit array/volume depth/shadow transforms; 28 new graphics tests pass.
 - [x] Restore Custom Data flipbook progress and random-row selection in Lit depth/shadow passes; eight failing graphics cases now pass on both editors.
-- [ ] Exercise additional MIT/free NOVA prefabs and CC0 particle textures, retaining source/license/hash evidence.
-- [ ] Review differences, run both Unity suites and relevant visual/package checks, commit and update delivery.
+- [x] Exercise 13 MIT NOVA prefabs and 96 CC0 textures; retain source/license/hash evidence and explicitly report 24 transparent-order differences across 2,018 comparisons.
+- [x] Review differences; both editors pass 442 EditMode, 807 graphics PlayMode and 16 installed-package tests. Fire001 has 36 exact frames and a passing Unity 6 standalone. Commit fixes and deliver 0.1.2 with documented limits.
 
 Direct-import worklist (2026-10-12):
 

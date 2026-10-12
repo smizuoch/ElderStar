@@ -1,0 +1,108 @@
+{
+  "version": "0.1.2",
+  "implementation_commit": "3b27cfc",
+  "package_git_tree": "21e4007767223758c4f5bd28d3e2feaedb42069f",
+  "editors": {
+    "2022.3.22f1": {
+      "graphics_api": "Direct3D11",
+      "tests": {
+        "edit": {
+          "passed": 442,
+          "total": 442,
+          "result": "Passed",
+          "xml": "Logs/Completion/2022.3.22f1/release012-edit.xml",
+          "sha256": "eca800ec1358c3558cbe7085c1c92dc1c2af93ea1e8185fe5c32aabced3824d0"
+        },
+        "play": {
+          "passed": 807,
+          "total": 807,
+          "result": "Passed",
+          "xml": "Logs/Completion/2022.3.22f1/release012-play.xml",
+          "sha256": "407b021631c40d5cb528fa0905cb1dffd92425e3a8eafbc988af463f0eb8447a"
+        },
+        "installed_package": {
+          "passed": 16,
+          "total": 16,
+          "result": "Passed",
+          "xml": "Logs/Package012-release-2022.xml",
+          "sha256": "53a08fa290776400f5d7e328a38e07d650f31cbea7b231fe4be14a63de709ba3"
+        }
+      },
+      "installed_fire001_captures": 36,
+      "unchanged_fire001_source_files": 9
+    },
+    "6000.3.23f1": {
+      "graphics_api": "Direct3D12",
+      "tests": {
+        "edit": {
+          "passed": 442,
+          "total": 442,
+          "result": "Passed",
+          "xml": "Logs/Completion/6000.3.23f1/release012-edit.xml",
+          "sha256": "6c8c3d4dda59e7a83a544c9f2c0d2bb7a94733034c88f6fa41c32394f6acb9e9"
+        },
+        "play": {
+          "passed": 807,
+          "total": 807,
+          "result": "Passed",
+          "xml": "Logs/Completion/6000.3.23f1/release012-play.xml",
+          "sha256": "ab576596589def469c85ab871984b56b046e9a3a13dd1363602e21f95f302a0f"
+        },
+        "installed_package": {
+          "passed": 16,
+          "total": 16,
+          "result": "Passed",
+          "xml": "Logs/Package012-release-6.xml",
+          "sha256": "0ccfa8fb1e7fa76e2b404b91aa4016ed556633c52dff7d6bcd53150a729b3508"
+        }
+      },
+      "installed_fire001_captures": 36,
+      "unchanged_fire001_source_files": 9
+    }
+  },
+  "archive": {
+    "filename": "jp.co.cyberagent.nova.builtin-0.1.2.tgz",
+    "bytes": 162096,
+    "files": 216,
+    "sha256": "03e982ac25b232aeb751e98c6bbfd6063b6c0616e84f077409691c705bc6f8bc",
+    "all_files_match_source": true,
+    "created_with": "Unity PackageManager.Client.Pack"
+  },
+  "licensed_corpus": {
+    "comparisons": 2018,
+    "passed": 1994,
+    "failed": 24,
+    "failing_effect": "pfb_eff_heal02",
+    "material_and_particle_states_identical": 182,
+    "source_effect_prefabs_unchanged": 13,
+    "unity6_native_crash_exclusion": "pfb_eff_fire",
+    "thresholds_changed": false,
+    "existing_golden_images_changed": false
+  },
+  "fire001_original_comparison": {
+    "comparisons": 36,
+    "pixel_identical": 36,
+    "graphics_api": "Direct3D11",
+    "editor": "6000.3.23f1",
+    "reference": "NOVA bundled in the supplied Fire001.unitypackage"
+  },
+  "other_tests": {
+    "documentation": 4,
+    "original_contract": 4,
+    "visual_comparators": 13,
+    "shell_runners": 2,
+    "shell_environment": "PASS"
+  },
+  "standalone_player": {
+    "result": "PASS",
+    "exit_code": 0,
+    "editor": "6000.3.23f1",
+    "graphics_api": "Direct3D11",
+    "particle_systems": 6,
+    "enabled_renderers": 5,
+    "visible_fire_pixels": 4726,
+    "build_log": "Logs/Package012-player-build.log",
+    "player_log": "Logs/Package012-player.log",
+    "result_sha256": "fc7b7469d0c3cc519740df790470e39fcb0243ba268a2077b85453c5cee4b6f0"
+  }
+}

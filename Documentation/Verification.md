@@ -42,7 +42,9 @@ to produce fresh original and Built-in frames; all 96 common-feature and 72 PBR
 comparisons in each of Gamma and Linear space must pass (336 total).
 Run `python3 Tests/Parity/test_original_contract.py` for
 the complete original ShaderLab and Inspector source/resource contracts.
-The completed release evidence is in [VerificationReport.md](VerificationReport.md).
+Current release evidence is in [AssetCorpusVerification.md](AssetCorpusVerification.md).
+The earlier [VerificationReport.md](VerificationReport.md) retains controlled
+0.1.0 comparisons; the expanded asset corpus explicitly records remaining failures.
 
 Never pass `-nographics` to the rendering tests. Do not use
 `Shader.WarmupAllShaders()` as a substitute for shader diagnostics: tests use

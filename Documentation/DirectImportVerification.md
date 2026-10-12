@@ -1,5 +1,8 @@
 # Unconverted Fire001 acceptance — 2026-10-12
 
+This page preserves the 0.1.1 acceptance evidence. Current 0.1.2 delivery and
+additional validation are in [the settings/asset report](AssetCorpusVerification.md).
+
 Version **0.1.1** imports the supplied Fire001 effect without changing its
 materials, prefab, textures or scene. The previous 0.1.0 release required material
 GUID conversion; its earlier parity report did not certify direct effect imports.
