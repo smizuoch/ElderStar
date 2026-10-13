@@ -106,6 +106,8 @@ namespace Nova.Runtime.Core.Scripts
                 // The original hidden shader has no ShaderLab Properties block.
                 // Bind the source explicitly without adding a public material property.
                 applyMaterial.SetTexture("_MainTex", source);
+                applyMaterial.SetFloat("_NovaDistortionForceAniso",
+                    QualitySettings.anisotropicFiltering == AnisotropicFiltering.ForceEnable ? 1 : 0);
                 Graphics.Blit(source, destination, applyMaterial);
             }
             finally

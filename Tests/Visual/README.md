@@ -135,3 +135,47 @@ For a separate transparent-order fallback experiment, use `-novaOnlyPrefabs
 distinct renderer sortingOrder values on instantiated objects only. The nine
 resulting frames are diagnostic evidence, not unchanged-asset acceptance and not
 substitutes for the full strict corpus. Do not feed them to the full-inventory gate.
+
+
+## Seeded material and public API comparison
+
+Copy `NovaRandomizedCapture.cs` and `NovaPublicApiCapture.cs` into the isolated
+PlayMode assembly described above. Prefix only the reference capture file with
+`#define NOVA_VISUAL_REFERENCE`. Use the pinned 96 CC0 PNGs in
+`Assets/Corpus/Kenney`. Use URP 14.0.10 on 2022.3.22f1 or URP 17.3.0 on
+6000.3.23f1. Copy `NovaRandomizedEnvironment.cs` into `Assets/Editor` and set each
+isolated project's color space through the Editor API:
+
+```text
+unity run <project> --editor-version <version> --format json -- -executeMethod NovaRandomizedEnvironment.SetColorSpace -novaColorSpace Linear -logFile <log>
+unity test <project> --editor-version <version> --mode PlayMode --filter CaptureRandomizedMaterialFrames --output <capture.xml> --format json -- -force-d3d11 -novaVisualOutput <empty-directory> -logFile <log>
+unity test <project> --editor-version <version> --mode PlayMode --filter "CapturePublicApiBehavior|CaptureRuntimeApiDeclarations" --output <api.xml> --format json -- -force-d3d11 -novaApiOutput <api.json> -novaRuntimeApiOutput <runtime-api.json> -logFile <log>
+python Tests/Visual/compare_randomized_frames.py --reference <original-directory> --actual <builtin-directory> --report <report-directory>
+```
+
+Repeat both sides in Gamma and Linear, on both editors, then repeat with
+`-novaDisableAnisotropy` on both sides. This produces 3,328 comparisons. Require passing capture
+XML, 416 images and 416 identical input JSON files per pair, matching capture
+metadata and the unchanged mean/max/bad-pixel thresholds. Require exact equality
+of all 188 editor-API output rows for each editor. Runtime declaration outputs
+are inventoried separately because URP inheritance/entry points are intentionally
+replaced; the dependency-free public warning constant must remain. Never use `-nographics`. The comparator
+rejects partial/stale runs, mismatched inputs/metadata, empty controls and visual
+failures. A successful Unity capture only certifies that capture/diagnostics ran;
+require the independent comparison command to exit zero as well.
+
+The fixture fixes MSAA/HDR/fog off, anisotropy ForceEnable, camera/lighting, random
+seed and custom streams (the explicit additional pass uses anisotropy Disable).
+It supplies opaque camera depth before transparency on
+both pipelines. Visible controls exclude the backdrop; soft-particle/distortion
+witnesses must change at least 100 pixels. Lit common-stack cases deliberately
+disable specular/reflections; retain the separate PBR suites described above.
+These files mutate an isolated test project's temporary scene/settings, never the
+user's avatar project. No original golden images are used or updated.
+
+Diagnostic flags `-novaDepthDiagnostic`, `-novaRawDistortion`, `-novaReadDepth`,
+`-novaNoSoftParticles`, and `-novaNoDepthFade` isolate depth/offset behavior. Their
+partial/different inputs cannot be used as full acceptance. Raw `.rgfloat` files
+are interleaved RG float32, bottom-to-top. End-of-frame depth readback alone is not
+reliable for RenderGraph transient resources; use the visible depth witness.
+See `Documentation/RandomizedParityVerification.md` for final evidence and limits.

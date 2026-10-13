@@ -7,10 +7,17 @@ Shader "Hidden/Nova/Particles/ApplyDistortion"
         {
             Name "ApplyDistortion"
             CGPROGRAM
+            #pragma target 3.5
             #pragma vertex vert
             #pragma fragment frag
             #include "BuiltIn/NovaBuiltInCore.cginc"
-            sampler2D _MainTex;
+            UNITY_DECLARE_TEX2D(_MainTex);
+            float _NovaDistortionForceAniso;
+            #if defined(UNITY_SEPARATE_TEXTURE_SAMPLER)
+            // URP's forced anisotropy is 9. Unity inline samplers support only
+            // 2/4/8/16; 8 is the nearest supported approximation (see matrix).
+            SamplerState nova_linear_clamp_aniso8_sampler;
+            #endif
             sampler2D _ScreenSpaceUvTexture;
             v2f_img vert(appdata_img v)
             {
@@ -28,7 +35,12 @@ Shader "Hidden/Nova/Particles/ApplyDistortion"
                 offsetUV.y = 1.0 - offsetUV.y;
                 #endif
                 float2 offset = tex2D(_ScreenSpaceUvTexture, offsetUV).rg * 2 - 1;
-                return tex2D(_MainTex, saturate(i.uv + offset));
+                float2 sourceUV = saturate(i.uv + offset);
+                #if defined(UNITY_SEPARATE_TEXTURE_SAMPLER)
+                if (_NovaDistortionForceAniso > 0.5)
+                    return _MainTex.Sample(nova_linear_clamp_aniso8_sampler, sourceUV);
+                #endif
+                return UNITY_SAMPLE_TEX2D(_MainTex, sourceUV);
             }
             ENDCG
         }
