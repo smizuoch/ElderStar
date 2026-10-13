@@ -50,7 +50,8 @@ namespace Nova.Tests.PlayMode
                     grab.SetPixels(Enumerable.Repeat(Color.red, 16).ToArray(), 0);
                     grab.SetPixels(Enumerable.Repeat(Color.green, 16).ToArray(), 1); grab.Apply();
                     material.SetTexture("_NovaDistortionGrabTexture", grab);
-                    material.SetFloat("_DistortionIntensity", 0);
+                    // Exercise a visible distortion sample: zero offsets intentionally discard.
+                    material.SetFloat("_DistortionIntensity", .1f);
                 }
                 if (softParticles)
                 {

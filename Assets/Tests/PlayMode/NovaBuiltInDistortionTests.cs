@@ -20,6 +20,9 @@ namespace Nova.Tests.PlayMode
         [TestCase("vertical", true)]
         [TestCase("negative", true)]
         [TestCase("xy zero", false)]
+        [TestCase("custom single", true)]
+        [TestCase("custom xy", true)]
+        [TestCase("custom vertical", true)]
         [TestCase("soft particles", false)]
         [TestCase("depth fade", false)]
         [TestCase("cull front", false)]
@@ -48,13 +51,14 @@ namespace Nova.Tests.PlayMode
             var target = new RenderTexture(128, 128, 24);
             var readback = new Texture2D(128, 128, TextureFormat.RGBA32, false);
             GameObject localOccluder = null;
+            Mesh customMesh = null;
             var previous = RenderTexture.active;
             try
             {
                 for (var y = 0; y < 4; y++)
                 for (var x = 0; x < 64; x++) gradient.SetPixel(x, y, new Color(x / 63f, y / 3f, 0, 1));
                 gradient.Apply();
-                var offsetColor = scenario == "vertical" ? new Color(0.5f, 1, 0, 1)
+                var offsetColor = scenario.EndsWith("vertical") ? new Color(0.5f, 1, 0, 1)
                     : scenario == "negative" ? new Color(0, 0.5f, 0, 1) : new Color(1, 0.5f, 0, 1);
                 offset.SetPixels(Enumerable.Repeat(offsetColor, 4).ToArray());
                 offset.Apply();
@@ -74,6 +78,18 @@ namespace Nova.Tests.PlayMode
                     distortionMaterial.SetFloat("_DistortionIntensityMode", 1);
                     distortionMaterial.SetFloat("_DistortionIntensityX", 0);
                     distortionMaterial.SetFloat("_DistortionIntensityY", 0);
+                }
+                if (scenario.StartsWith("custom "))
+                {
+                    distortionMaterial.SetFloat("_DistortionIntensity", 0);
+                    distortionMaterial.SetFloat("_DistortionIntensityX", 0);
+                    distortionMaterial.SetFloat("_DistortionIntensityY", 0);
+                    distortionMaterial.SetFloat("_DistortionIntensityMode", scenario == "custom single" ? 0 : 1);
+                    distortionMaterial.SetFloat(scenario == "custom single" ? "_DistortionIntensityCoord"
+                        : scenario == "custom xy" ? "_DistortionIntensityXCoord" : "_DistortionIntensityYCoord", 1);
+                    customMesh = UnityEngine.Object.Instantiate(particle.GetComponent<MeshFilter>().sharedMesh);
+                    customMesh.SetUVs(1, Enumerable.Repeat(Vector4.one, customMesh.vertexCount).ToList());
+                    particle.GetComponent<MeshFilter>().sharedMesh = customMesh;
                 }
                 if (scenario == "soft particles")
                 {
@@ -170,7 +186,7 @@ namespace Nova.Tests.PlayMode
                     Assert.That(Vector4.Distance(readback.GetPixel(64, 128 - sampleY), oppositeBaseline), Is.LessThan(0.015f),
                         "Distortion must stay at the renderer's projected position, not its vertical mirror.");
                 if (scenario == "negative") Assert.That(distorted.r, Is.LessThan(baseline.r - 0.08f), $"before {baseline}, after {distorted}");
-                else if (scenario == "vertical") Assert.That(distorted.g, Is.GreaterThan(baseline.g + 0.08f), $"before {baseline}, after {distorted}");
+                else if (scenario.EndsWith("vertical")) Assert.That(distorted.g, Is.GreaterThan(baseline.g + 0.08f), $"before {baseline}, after {distorted}");
                 else if (shouldDistort) Assert.That(distorted.r, Is.GreaterThan(baseline.r + 0.08f), $"before {baseline}, after {distorted}");
                 else Assert.That(Vector4.Distance(distorted, baseline), Is.LessThan(0.025f), $"before {baseline}, after {distorted}");
                 if (effect != null) effect.enabled = false;
@@ -182,7 +198,7 @@ namespace Nova.Tests.PlayMode
             {
                 RenderTexture.active = previous;
                 foreach (var obj in new UnityEngine.Object[] { cameraObject, background, particle, backgroundMaterial,
-                    distortionMaterial, gradient, offset, target, readback, localOccluder }) UnityEngine.Object.DestroyImmediate(obj);
+                    distortionMaterial, gradient, offset, target, readback, localOccluder, customMesh }) UnityEngine.Object.DestroyImmediate(obj);
             }
         }
 
