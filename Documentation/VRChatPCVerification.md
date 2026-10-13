@@ -1,5 +1,9 @@
 # VRChat PC and Avatar Optimizer verification
 
+For the 0.1.4 SDK/AAO bundle, overlap, reflected-camera and GPU-cost follow-up,
+see [Avatar parity and performance (2026-10-14)](AvatarParityPerformance.md).
+The client upload/mirror evidence below remains specific to 0.1.3.
+
 Date: 2026-10-12. Unity 2022.3.22f1, Windows D3D11, VRChat SDK 3.10.5,
 Avatar Optimizer (AAO) 1.9.20. Test project: the user-authorized test-VRCLens.
 The package has no VRChat, AAO, NDMF or URP runtime dependency.

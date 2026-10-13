@@ -15,6 +15,14 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+Avatar parity and performance (2026-10-14): zero-offset overlap and uniform-zero rasterization are fixed. Verification and measured tradeoffs are recorded in AvatarParityPerformance.md. Next acceptance TODO: the updated avatar in an actual VRChat client mirror, physical PCVR and additional GPUs; advanced AAO configurations remain outside the default-settings acceptance.
+
+- [x] Add failing overlap and mirror regressions before implementation; capture the existing behavior.
+- [x] Fix demonstrated differences with no additional screen copies by default; test against original behavior.
+- [x] Measure baseline/candidate GPU camera-render intervals at matched coverage, overlap counts and reflected views; retain raw observations and noise. This is not whole VRChat frame time.
+- [x] Run shader diagnostics and Unity 2022/6 regressions; verify the final source in SDK/AAO-built avatars and Unity rendering.
+- [x] Review remaining pipeline limitations and performance tradeoffs; commit tested changes for the authorized main merge/push. The acceptance scope above remains explicit.
+
 Shader-only follow-up (2026-10-13): sampler sharing can represent setting 9, and the tested GPU produced identical results for 9 and inline 8. Keep production unchanged until a real avatar mismatch and acceptable GPU cost justify a replacement. See ShaderOnlyCompatibilityResearch.md for experiments, alternatives and adoption gates.
 
 Current TODO (2026-10-13): extend validation to additional GPUs/graphics APIs and physical PCVR; retain the explicit 8x/9x compositor approximation. The API/feature inventory, six reproduced fixes, 3,328 passing image comparisons and full regression results are recorded in RandomizedParityVerification.md. The 0.1.3 PC/AAO desktop acceptance remains complete; physical PCVR and advanced AAO are outside that acceptance.
