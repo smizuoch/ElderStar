@@ -1,0 +1,9 @@
+{
+  "rows": [
+    "Nova.Runtime.Core.Scripts.DeprecationMessage field System.String CompatibilityScriptingAPIObsolete",
+    "Nova.Runtime.Core.Scripts.DeprecationMessage type : System.Object",
+    "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void .ctor()",
+    "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void Create()",
+    "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion type : UnityEngine.MonoBehaviour"
+  ]
+}

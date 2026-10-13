@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- Restore the original pipeline-independent public deprecation-warning type and constant.
+
+- Apply multiply blending to Lit albedo before lighting, preserving the original alpha-zero behavior.
+- Normalize random-row Custom Data progress before clamping, including values outside 0..1.
+- Preserve the sign of back-facing parallax offsets, retaining the near-singular denominator guard.
+- Match URP 17 PointClamp camera-depth sampling on Unity 6, including stereo arrays.
+- Approximate original forced 9x camera-distortion anisotropy with the nearest supported inline sampler (8x); other quality settings retain ordinary sampling.
+- Add reproducible licensed-texture/API comparisons: 3,328 image pairs pass unchanged thresholds; distinguish declaration coverage, exercised behavior and remaining approximations.
+
 ## 0.1.3
 
 - Carry the stereo eye index through particle color, depth and shadow passes, including per-eye depth texture sampling.

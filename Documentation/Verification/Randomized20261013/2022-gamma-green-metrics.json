@@ -1,0 +1,2920 @@
+{
+  "cases": 416,
+  "input_states_equal": 416,
+  "failures": 0,
+  "pixel_identical": 352,
+  "results": [
+    {
+      "case": "Particles_Distortion__000",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__001",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__002",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__003",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__004",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__005",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__006",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__007",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__008",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__009",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__010",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__011",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00784313725490196,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__012",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__013",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__014",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__015",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__016",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__017",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__018",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__019",
+      "passed": true,
+      "mean_error": 1.9068499795751634e-05,
+      "max_error": 0.054901960784313725,
+      "bad_pixel_fraction": 0.0001220703125
+    },
+    {
+      "case": "Particles_Distortion__020",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__021",
+      "passed": true,
+      "mean_error": 2.393535539215686e-07,
+      "max_error": 0.00784313725490196,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__022",
+      "passed": true,
+      "mean_error": 4.7870710784313725e-06,
+      "max_error": 0.043137254901960784,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__023",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__024",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__025",
+      "passed": true,
+      "mean_error": 3.191380718954248e-07,
+      "max_error": 0.00784313725490196,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__026",
+      "passed": true,
+      "mean_error": 3.0318116830065358e-06,
+      "max_error": 0.03137254901960784,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__027",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__028",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__029",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__030",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_Distortion__031",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__000",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__001",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__002",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__003",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__004",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__005",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__006",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__007",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__008",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__009",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__010",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__011",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__012",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__013",
+      "passed": true,
+      "mean_error": 3.191380718954248e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__014",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__015",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__016",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__017",
+      "passed": true,
+      "mean_error": 3.191380718954248e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__018",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__019",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__020",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__021",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__022",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__023",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__024",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__025",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__026",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__027",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__028",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__029",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__030",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__031",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__032",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__033",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__034",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__035",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__036",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__037",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__038",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__039",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__040",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__041",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__042",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__043",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__044",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__045",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__046",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__047",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__048",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__049",
+      "passed": true,
+      "mean_error": 2.393535539215686e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__050",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__051",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__052",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__053",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__054",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__055",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__056",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__057",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__058",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__059",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__060",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__061",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__062",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__063",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__064",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__065",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__066",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__067",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__068",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__069",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__070",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__071",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__072",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__073",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__074",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__075",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__076",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__077",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__078",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__079",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__080",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__081",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__082",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__083",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__084",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__085",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__086",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__087",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__088",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__089",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__090",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__091",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__092",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__093",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__094",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberLit__095",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__000",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__001",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__002",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__003",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__004",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__005",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__006",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__007",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__008",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__009",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__010",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__011",
+      "passed": true,
+      "mean_error": 3.9892258986928106e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__012",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__013",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__014",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__015",
+      "passed": true,
+      "mean_error": 2.393535539215686e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__016",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__017",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__018",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__019",
+      "passed": true,
+      "mean_error": 3.191380718954248e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__020",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__021",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__022",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__023",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__024",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__025",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__026",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__027",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__028",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__029",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__030",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__031",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__032",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__033",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__034",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__035",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__036",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__037",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__038",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__039",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__040",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__041",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__042",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__043",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__044",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__045",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__046",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__047",
+      "passed": true,
+      "mean_error": 3.9892258986928106e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__048",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__049",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__050",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__051",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__052",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__053",
+      "passed": true,
+      "mean_error": 3.9892258986928106e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__054",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__055",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__056",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__057",
+      "passed": true,
+      "mean_error": 7.978451797385621e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__058",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__059",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__060",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__061",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__062",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__063",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__064",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__065",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__066",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__067",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__068",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__069",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__070",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__071",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__072",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__073",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__074",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__075",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__076",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__077",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__078",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__079",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__080",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__081",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__082",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__083",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__084",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__085",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__086",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__087",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__088",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__089",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__090",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__091",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__092",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__093",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__094",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "Particles_UberUnlit__095",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__000",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__001",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__002",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__003",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__004",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__005",
+      "passed": true,
+      "mean_error": 2.393535539215686e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__006",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__007",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__008",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__009",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__010",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__011",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__012",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__013",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__014",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__015",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__016",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__017",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__018",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__019",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__020",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__021",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__022",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__023",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__024",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__025",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__026",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__027",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__028",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__029",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__030",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__031",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__032",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__033",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__034",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__035",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__036",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__037",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__038",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__039",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__040",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__041",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__042",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__043",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__044",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__045",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__046",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__047",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__048",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__049",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__050",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__051",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__052",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__053",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__054",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__055",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__056",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__057",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__058",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__059",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__060",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__061",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__062",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__063",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__064",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__065",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__066",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__067",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__068",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__069",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__070",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__071",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__072",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__073",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__074",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__075",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__076",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__077",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__078",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__079",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__080",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__081",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__082",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__083",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__084",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__085",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__086",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__087",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__088",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__089",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__090",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__091",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__092",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__093",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__094",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberLit__095",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__000",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__001",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__002",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__003",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__004",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__005",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__006",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__007",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__008",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__009",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__010",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__011",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__012",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__013",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__014",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__015",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__016",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__017",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__018",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__019",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__020",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__021",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__022",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__023",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__024",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__025",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__026",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__027",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__028",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__029",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__030",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__031",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__032",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__033",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__034",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__035",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__036",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__037",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__038",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__039",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__040",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__041",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__042",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__043",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__044",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__045",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__046",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__047",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__048",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__049",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__050",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__051",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__052",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__053",
+      "passed": true,
+      "mean_error": 2.393535539215686e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__054",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__055",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__056",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__057",
+      "passed": true,
+      "mean_error": 5.584916258169935e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__058",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__059",
+      "passed": true,
+      "mean_error": 1.595690359477124e-07,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__060",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__061",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__062",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__063",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__064",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__065",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__066",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__067",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__068",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__069",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__070",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__071",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__072",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__073",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__074",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__075",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__076",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__077",
+      "passed": true,
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__078",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__079",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__080",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__081",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__082",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__083",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__084",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__085",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__086",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__087",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__088",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__089",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__090",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__091",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__092",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__093",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__094",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    },
+    {
+      "case": "UIParticles_UberUnlit__095",
+      "passed": true,
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0
+    }
+  ]
+}

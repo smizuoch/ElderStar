@@ -15,7 +15,14 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
-Current TODO: The 0.1.3 PC/AAO desktop acceptance is complete, including Private upload, client/mirror rendering and guarded upload resume. Next coverage: physical PCVR/headset behavior and advanced AAO configurations; neither is claimed by the desktop acceptance.
+Current TODO (2026-10-13): extend validation to additional GPUs/graphics APIs and physical PCVR; retain the explicit 8x/9x compositor approximation. The API/feature inventory, six reproduced fixes, 3,328 passing image comparisons and full regression results are recorded in RandomizedParityVerification.md. The 0.1.3 PC/AAO desktop acceptance remains complete; physical PCVR and advanced AAO are outside that acceptance.
+
+- [x] Inventory every original public/protected API and shader property; distinguish declaration preservation from behavioral evidence.
+- [x] Add deterministic randomized licensed-texture/material captures, input-state checks and a strict comparison gate.
+- [x] Compare original/port, isolate failing seeds and add focused regression tests before fixes.
+- [x] Run Unity 2022/6 EditMode, graphics PlayMode and fresh original/port comparisons; inspect images and diagnostics.
+- [x] Record reproducible results, exact coverage and remaining differences, review and commit tested changes.
+- [x] Resolve the retained distortion gate failures without changing thresholds; all 3,328 comparisons pass, with forced 8x/9x sampling documented as Approximate.
 
 AAO follow-up: reproduce the unsupported shaders in the actual SDK bundle with AAO absent, then compare the same avatar with AAO 1.9.20 Trace And Optimize defaults. Verify preserved textures, keywords, vertex streams and rendered frames; attribute and fix only demonstrated defects.
 

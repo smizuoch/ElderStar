@@ -73,6 +73,13 @@ materials preserves their properties, keywords and queue and supports Undo.
 
 ## Compatibility and verification
 
+The [randomized API/feature audit](Documentation/RandomizedParityVerification.md)
+adds six reproduced fixes and 3,328 original/port comparisons, all within the
+unchanged thresholds (2,874 pixel-identical). Forced distortion filtering retains
+a documented 8x/9x approximation.
+Both editors pass 448 EditMode and 852 graphics PlayMode tests. The report
+separates preserved declarations, exercised API behavior and remaining limits.
+
 The [0.1.2 settings and asset report](Documentation/AssetCorpusVerification.md)
 records initial-state parity, 442 EditMode and 807 PlayMode tests per editor, plus
 MIT/CC0 asset comparisons. The expanded corpus exposes a remaining transparent-sort

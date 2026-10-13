@@ -1,0 +1,19 @@
+{
+  "rows": [
+    "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void .ctor(Boolean, UnityEngine.Shader)",
+    "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+    "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void Setup(UnityEngine.Rendering.RenderTargetIdentifier)",
+    "Nova.Runtime.Core.Scripts.ApplyDistortionPass type : UnityEngine.Rendering.Universal.ScriptableRenderPass",
+    "Nova.Runtime.Core.Scripts.DeprecationMessage field System.String CompatibilityScriptingAPIObsolete",
+    "Nova.Runtime.Core.Scripts.DeprecationMessage type : System.Object",
+    "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void .ctor(System.String)",
+    "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+    "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void OnCameraSetup(UnityEngine.Rendering.CommandBuffer, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+    "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void Setup(UnityEngine.Rendering.RTHandle)",
+    "Nova.Runtime.Core.Scripts.DistortedUvBufferPass type : UnityEngine.Rendering.Universal.ScriptableRenderPass",
+    "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void .ctor()",
+    "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void AddRenderPasses(UnityEngine.Rendering.Universal.ScriptableRenderer, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+    "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void Create()",
+    "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion type : UnityEngine.Rendering.Universal.ScriptableRendererFeature"
+  ]
+}

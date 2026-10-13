@@ -1,0 +1,515 @@
+{
+  "reference": "NOVA 3.6.0 / 1c6b88729f91c852c164ef71a32cc2bce83a1892",
+  "seed": 20261013,
+  "graphics": "Windows Direct3D11",
+  "licensed_inputs": "Documentation/Validation/AssetCorpus/sources.json",
+  "comparisons": 3328,
+  "failures": 0,
+  "pixel_identical": 2874,
+  "thresholds": {
+    "mean_rgb": 0.01,
+    "max_channel": 0.08,
+    "bad_pixel_fraction_over_mean_0_02": 0.01
+  },
+  "runs": [
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 361,
+      "name": "2022-linear-green",
+      "anisotropy": "ForceEnable",
+      "largest_channel_error": 0.0784313725490196,
+      "largest_mean_error": 1.6914317810457514e-05,
+      "largest_bad_pixel_fraction": 6.103515625e-05,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "4cc363c7214c2ef031ecd657d8d2f88b0be9bbecabbf39fd5167eb1755fcd877",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "40e02e2a81f931af54dc575fe5d561b2676043355e9bfbb676f709c1bde94fd0",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        }
+      ]
+    },
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 368,
+      "name": "2022-linear-disabled",
+      "anisotropy": "Disable",
+      "largest_channel_error": 0.011764705882352941,
+      "largest_mean_error": 6.382761437908496e-07,
+      "largest_bad_pixel_fraction": 0.0,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "0d1a8746ead93e4ca35a618c4fdc1e86ced69f16b3ba745d0e9a1abe507f7380",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "c359a9e8efcd81612a5a7d41d53650f062945a545a7f50676c20744f45376858",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        }
+      ]
+    },
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 352,
+      "name": "2022-gamma-green",
+      "anisotropy": "ForceEnable",
+      "largest_channel_error": 0.054901960784313725,
+      "largest_mean_error": 1.9068499795751634e-05,
+      "largest_bad_pixel_fraction": 0.0001220703125,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "752e46f87f8488be2fa318fa212576b5f1a07e1c32d5601f2e9472a7dd2ad8db",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "3a9f0b6ed6699102cba945a4d7807fe46c5d672d91e1b28432364b70a099ef2e",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        }
+      ]
+    },
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 356,
+      "name": "2022-gamma-disabled",
+      "anisotropy": "Disable",
+      "largest_channel_error": 0.011764705882352941,
+      "largest_mean_error": 3.9892258986928106e-07,
+      "largest_bad_pixel_fraction": 0.0,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "1829c785d4667c8a743e369aed77cbb216da23b61525fe4fffc468868631558c",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "d24a9d5989ee55100cd93d409b3f430778561e3163e39e44afc6f0d5db2cb8d9",
+          "metadata": [
+            "2022.3.22f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        }
+      ]
+    },
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 361,
+      "name": "6000-linear-green",
+      "anisotropy": "ForceEnable",
+      "largest_channel_error": 0.0784313725490196,
+      "largest_mean_error": 1.6914317810457514e-05,
+      "largest_bad_pixel_fraction": 6.103515625e-05,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "8e03ab50a723385e95d7548739f895ca3b27100b8531a895f3d337865682cf2b",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "52705bd57739dd0b1346c0a9ba2601621dc1cf50a27f4c101f7659c641476c5b",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        }
+      ]
+    },
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 368,
+      "name": "6000-linear-disabled",
+      "anisotropy": "Disable",
+      "largest_channel_error": 0.011764705882352941,
+      "largest_mean_error": 6.382761437908496e-07,
+      "largest_bad_pixel_fraction": 0.0,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "fdf133dae0d154f46460e044cc78541d8479649443bca401beae5cb572b050b7",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "1f301e3f9f2f53b276c4de759f8a2df74f49f67556ce9ddc88d5093d35602a90",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Linear",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        }
+      ]
+    },
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 352,
+      "name": "6000-gamma-green",
+      "anisotropy": "ForceEnable",
+      "largest_channel_error": 0.054901960784313725,
+      "largest_mean_error": 1.9068499795751634e-05,
+      "largest_bad_pixel_fraction": 0.0001220703125,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "78d2540084cf8b4bbbd94c87a5b947c101dfd0f652a926748c5694cefdb05cb6",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "7344c0cee9b257a7c679f84f63d110ceed05967a580662a96e81083e5d6f6213",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=ForceEnable"
+          ]
+        }
+      ]
+    },
+    {
+      "cases": 416,
+      "input_states_equal": 416,
+      "failures": 0,
+      "pixel_identical": 356,
+      "name": "6000-gamma-disabled",
+      "anisotropy": "Disable",
+      "largest_channel_error": 0.011764705882352941,
+      "largest_mean_error": 3.9892258986928106e-07,
+      "largest_bad_pixel_fraction": 0.0,
+      "capture_tests": [
+        {
+          "side": "Reference",
+          "result": "Passed",
+          "xml_sha256": "11d99315ebe8078773542636d2e2bdb1cd0e2b094063ab38e9e6e290bd77723c",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        },
+        {
+          "side": "Port",
+          "result": "Passed",
+          "xml_sha256": "8cbbbcdead00ac05d0b08fc00d30079c3b1978d9e734f376a9cb24efbda7d774",
+          "metadata": [
+            "6000.3.23f1",
+            "Direct3D11",
+            "Gamma",
+            "seed=20261013",
+            "416 frames",
+            "anisotropy=Disable"
+          ]
+        }
+      ]
+    }
+  ],
+  "regression_tests": [
+    {
+      "editor": "2022.3.22f1",
+      "mode": "edit",
+      "passed": 448,
+      "failed": 0,
+      "skipped": 0,
+      "xml_sha256": "d12a950037b55c4bcfd2fb7acb5b0428187b59e3ab3ca77a312097365978ffc4"
+    },
+    {
+      "editor": "2022.3.22f1",
+      "mode": "play",
+      "passed": 852,
+      "failed": 0,
+      "skipped": 0,
+      "xml_sha256": "de02b6195ed47c350003620e05dd2298bc8c3ecabf14b70b61995d9cb42e7bd7"
+    },
+    {
+      "editor": "6000.3.23f1",
+      "mode": "edit",
+      "passed": 448,
+      "failed": 0,
+      "skipped": 0,
+      "xml_sha256": "c210af8e664011c075aab5f15b67ee9962d1b22417587ac4dd77fcf0b0724610"
+    },
+    {
+      "editor": "6000.3.23f1",
+      "mode": "play",
+      "passed": 852,
+      "failed": 0,
+      "skipped": 0,
+      "xml_sha256": "c765ca95a8d73e5a641029fdaaadf4afe9005ce05c82f8aefc911d3a143d771e"
+    }
+  ],
+  "api_behavior": [
+    {
+      "editor": "2022",
+      "rows": 188,
+      "identical": true,
+      "reference_sha256": "be0b66965b741feae9f1e5b53f16331b3555844e08c3aa7ff589d5a10d201ab7",
+      "port_sha256": "be0b66965b741feae9f1e5b53f16331b3555844e08c3aa7ff589d5a10d201ab7"
+    },
+    {
+      "editor": "6000",
+      "rows": 188,
+      "identical": true,
+      "reference_sha256": "be0b66965b741feae9f1e5b53f16331b3555844e08c3aa7ff589d5a10d201ab7",
+      "port_sha256": "be0b66965b741feae9f1e5b53f16331b3555844e08c3aa7ff589d5a10d201ab7"
+    }
+  ],
+  "red_green": [
+    {
+      "name": "multiply-red",
+      "result": "Failed(Child)",
+      "total": 4,
+      "passed": 2,
+      "failed": 2,
+      "messages": [
+        "  Opaque whitened albedo RGBA(0.612, 0.580, 0.612, 1.000); Multiply RGBA(1.000, 1.000, 1.000, 0.000)\n  Expected: less than 0.0250000004f\n  But was:  1.19608939f\n",
+        "  Opaque whitened albedo RGBA(0.612, 0.580, 0.612, 1.000); Multiply RGBA(1.000, 1.000, 1.000, 0.000)\n  Expected: less than 0.0250000004f\n  But was:  1.19608939f\n"
+      ],
+      "xml_sha256": "8b5db202de5fcc8e2166eb47684dc2b34cf9936f530a9893f0719bad1c12bfd5"
+    },
+    {
+      "name": "multiply-green",
+      "result": "Passed",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "messages": [],
+      "xml_sha256": "26c4f3b22187e4236c8f6aaf15dedd546d5fac94441667734a21304cffbdf4fa"
+    },
+    {
+      "name": "math-red",
+      "result": "Failed(Child)",
+      "total": 7,
+      "passed": 4,
+      "failed": 3,
+      "messages": [
+        "  Expected: 0.0462579653f +/- 0.00100000005f\n  But was:  -0.0462579653f\n",
+        "  Expected: 0.824999988f +/- 0.00100000005f\n  But was:  0.625f\n",
+        "  Expected: 0.425000012f +/- 0.00100000005f\n  But was:  0.625f\n"
+      ],
+      "xml_sha256": "aa4f8cdd14432b12daff8e85300907e1cf4289837519c89bd2e4707def01aa73"
+    },
+    {
+      "name": "math-green",
+      "result": "Passed",
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "messages": [],
+      "xml_sha256": "0bcf5aa22a22edc06e7bfc6ac4f3ada99eaace3c6b7046595737c759de79b66c"
+    },
+    {
+      "name": "depth-red",
+      "result": "Failed(Child)",
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "messages": [
+        "  Expected: 0.100000001f +/- 0.00200000009f\n  But was:  0.418749988f\n",
+        "  Expected: 0.899999976f +/- 0.00200000009f\n  But was:  0.581250012f\n"
+      ],
+      "xml_sha256": "0c1702abe6b9d701ec18aa5fe70cefe9c213e922f9bd1fc48700568d04f78c45"
+    },
+    {
+      "name": "depth-green",
+      "result": "Passed",
+      "total": 22,
+      "passed": 22,
+      "failed": 0,
+      "messages": [],
+      "xml_sha256": "d1bc5f8f4926e778a94d2c0a28ec556e949c203b4c7f873ba9d989ee11725594"
+    },
+    {
+      "name": "depth-witness-red",
+      "result": "Failed(Child)",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "messages": [
+        "  Soft particles must change visible pixels; verify depth copy occurs before transparents.\n  Expected: greater than 100\n  But was:  0\n"
+      ],
+      "xml_sha256": "650bfc0d99ad8ecc6b519bf55bf4699f31808a0a47799984614a275ceeb73907"
+    },
+    {
+      "name": "runtime-constant-red",
+      "result": "Failed(Child)",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "messages": [
+        "  This original public declaration has no URP dependency.\n  Expected: not null\n  But was:  null\n"
+      ],
+      "xml_sha256": "3f33fcace3b5f0c85bd954ead4f9a4dd91e081b1590dcf63261c85070836f225"
+    },
+    {
+      "name": "runtime-constant-green",
+      "passed": 2,
+      "failed": 0,
+      "evidence": "One case in each of the final 448-case EditMode runs."
+    }
+  ],
+  "limits": [
+    "Finite randomized input coverage; declaration preservation does not imply every API input was exercised.",
+    "Forced anisotropic camera composition uses 8x instead of original forced 9x; inline sampler9 is rejected by Unity.",
+    "URP renderer/pass/RenderGraph APIs are not source-compatible with Built-in.",
+    "No new VRChat upload, AAO configuration, physical headset, non-Windows or other-GPU certification in this audit."
+  ],
+  "runtime_api_inventory": {
+    "original_declared_union": 21,
+    "original_per_editor": {
+      "2022": 15,
+      "6000": 21
+    },
+    "port_per_editor": {
+      "2022": 5,
+      "6000": 5
+    },
+    "capture_tests": [
+      {
+        "editor": "2022",
+        "side": "Reference",
+        "passed": 2,
+        "xml_sha256": "35144d89b45ebe1d30e5dcc3a22ad8e5aa97f109642bb280d37dc8104c08fe2f"
+      },
+      {
+        "editor": "2022",
+        "side": "Port",
+        "passed": 2,
+        "xml_sha256": "555a13acb64f62dbc1ba95ef38ea47a152d65c50fcf3e2b5334e6ce1c1ce8ca1"
+      },
+      {
+        "editor": "6000",
+        "side": "Reference",
+        "passed": 2,
+        "xml_sha256": "174aaba6d315cc62601a770809d28326eb7a7b74373579a2e021e9571fbcf728"
+      },
+      {
+        "editor": "6000",
+        "side": "Port",
+        "passed": 2,
+        "xml_sha256": "336f41669612ac87f4e4ff44e788c8117afb3183574c791c6e6978d2b202c414"
+      }
+    ]
+  }
+}
