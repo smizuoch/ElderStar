@@ -37,6 +37,25 @@ public static class NovaVrcAcceptance
     static Report report;
     static double deadline;
 
+    // Local recovery only. Never contacts VRChat or changes a remote avatar.
+    // Use after a native Editor crash interrupts the comparison's finally block.
+    public static void RestoreOwnedSceneAfterInterruptedComparison() => Run(async () =>
+    {
+        var receipt = JsonUtility.FromJson<Report>(File.ReadAllText(Output + "/upload-attempt.json"));
+        Require(receipt.uploadedPrivate && !string.IsNullOrEmpty(receipt.avatarId), "No completed private-upload receipt for this fixture.");
+        File.Copy(Scene, Output + "/scene-before-recovery-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".unity");
+        EditorSceneManager.OpenScene(Scene);
+        var avatar = Object.FindObjectOfType<VRCAvatarDescriptor>().gameObject;
+        Require(avatar.name == "NOVA PC Validation", "This is not the owned validation avatar.");
+        avatar.GetComponent<PipelineManager>().blueprintId = receipt.avatarId;
+        foreach (var child in avatar.transform.Cast<Transform>().Where(t => t.name.StartsWith("NOVA Overlap ")).ToArray())
+            Object.DestroyImmediate(child.gameObject);
+        var trace = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType("Anatawa12.AvatarOptimizer.TraceAndOptimize")).First(t => t != null);
+        if (!avatar.GetComponent(trace)) avatar.AddComponent(trace);
+        EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene(), Scene);
+        await Task.CompletedTask;
+    }, "restore-owned-scene");
+
     // Invoke only after the user authorizes a new private upload. This method
     // rejects unrelated blueprints and keeps an attempt record. Resume requires an
     // explicit matching ID and verifies ownership, name and Private status first.
@@ -132,6 +151,7 @@ public static class NovaVrcAcceptance
                 EditorUtility.SetDirty(material); AssetDatabase.SaveAssetIfDirty(material);
             }
             AddSkinnedProbes(avatar);
+            NovaVrcDistortionProbe.Prepare(avatar);
             report.sourceSkinnedMeshes = avatar.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length;
             var tagType = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType("Anatawa12.AvatarOptimizer.AvatarTagComponent")).First(t => t != null);
             var traceType = tagType.Assembly.GetType("Anatawa12.AvatarOptimizer.TraceAndOptimize", true);
@@ -152,6 +172,8 @@ public static class NovaVrcAcceptance
             report.sourceMaterialStates = MaterialStates(avatar);
             var sourceStreams = report.particleStreams;
             Capture(avatar, Object.FindObjectOfType<Camera>(), label + "-source.png");
+            Capture(avatar, Object.FindObjectOfType<Camera>(), label + "-source-mirror.png", 1.2f, true);
+            NovaVrcDistortionProbe.Verify(avatar, Output + "/" + label + "-source-overlap");
             EditorWindow.GetWindow<VRCSdkControlPanel>();
             await Task.Delay(3000);
             Require(VRCSdkControlPanel.TryGetBuilder<IVRCSdkAvatarBuilderApi>(out var builder), "SDK builder unavailable.");
@@ -180,6 +202,8 @@ public static class NovaVrcAcceptance
                 Capture(instance, Object.FindObjectOfType<Camera>(), label + "-bundle.png");
                 Capture(instance, Object.FindObjectOfType<Camera>(), label + "-bundle-04.png", .4f);
                 Capture(instance, Object.FindObjectOfType<Camera>(), label + "-bundle-21.png", 2.1f);
+                Capture(instance, Object.FindObjectOfType<Camera>(), label + "-bundle-mirror.png", 1.2f, true);
+                NovaVrcDistortionProbe.Verify(instance, Output + "/" + label + "-bundle-overlap");
                 Object.DestroyImmediate(instance);
             }
             finally { bundle.Unload(true); }
@@ -458,22 +482,36 @@ public static class NovaVrcAcceptance
             }).OrderBy(s => s, StringComparer.Ordinal).ToArray();
     }
 
-    static void Capture(GameObject avatar, Camera camera, string file, float time = 1.2f)
+    static void Capture(GameObject avatar, Camera camera, string file, float time = 1.2f, bool reflected = false)
     {
         foreach (var ps in avatar.GetComponentsInChildren<ParticleSystem>(true))
         { ps.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear); ps.useAutoRandomSeed = false; ps.randomSeed = 42; ps.Simulate(time, false, true); }
         var rt = new RenderTexture(768, 768, 24);
         var image = new Texture2D(768, 768, TextureFormat.RGB24, false);
         var previous = RenderTexture.active;
+        var previousView = camera.worldToCameraMatrix;
+        var previousCulling = GL.invertCulling;
+        var previousMirror = Shader.GetGlobalFloat("_VRChatMirrorMode");
         try
         {
+            if (reflected)
+            {
+                camera.worldToCameraMatrix = Matrix4x4.Scale(new Vector3(-1, 1, 1)) * previousView;
+                GL.invertCulling = !previousCulling;
+                Shader.SetGlobalFloat("_VRChatMirrorMode", 2);
+            }
             camera.targetTexture = rt; camera.Render(); RenderTexture.active = rt;
             image.ReadPixels(new Rect(0, 0, 768, 768), 0, 0); image.Apply();
             File.WriteAllBytes(Output + "/" + file, image.EncodeToPNG());
             report.magentaPixels = image.GetPixels32().Count(c => c.r > 245 && c.g < 10 && c.b > 245);
             Require(report.magentaPixels < 100, "Error-shader magenta detected in rendered frame: " + report.magentaPixels);
         }
-        finally { camera.targetTexture = null; RenderTexture.active = previous; Object.DestroyImmediate(rt); Object.DestroyImmediate(image); }
+        finally
+        {
+            camera.worldToCameraMatrix = previousView; GL.invertCulling = previousCulling;
+            Shader.SetGlobalFloat("_VRChatMirrorMode", previousMirror);
+            camera.targetTexture = null; RenderTexture.active = previous; Object.DestroyImmediate(rt); Object.DestroyImmediate(image);
+        }
     }
 
     static async void Run(Func<Task> action, string operation)
@@ -483,6 +521,10 @@ public static class NovaVrcAcceptance
         // scene after comparisons so temporary AAO/probe objects cannot accumulate.
         var sceneBackup = operation.StartsWith("aao-") && File.Exists(Scene) ? File.ReadAllBytes(Scene) : null;
         Directory.CreateDirectory(Output);
+        // A managed finally cannot run after a native Editor crash. Keep a disk
+        // copy as well so future interrupted comparisons can restore exact bytes.
+        if (sceneBackup != null)
+            File.WriteAllBytes(Output + "/" + operation + "-scene-before-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".unity", sceneBackup);
         Application.logMessageReceived += CountErrors;
         deadline = EditorApplication.timeSinceStartup + 3600;
         EditorApplication.update += Watchdog;

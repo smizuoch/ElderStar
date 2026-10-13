@@ -1,0 +1,258 @@
+[
+  {
+    "unity": "2022.3.22f1",
+    "case": "depth-fade-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "depth-fade-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "depth-fade-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "depth-fade-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "dissolve-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "dissolve-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "dissolve-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "dissolve-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "fade-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "fade-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "fade-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "fade-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "zero-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "zero-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "zero-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "2022.3.22f1",
+    "case": "zero-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "depth-fade-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "depth-fade-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "depth-fade-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "depth-fade-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "dissolve-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "dissolve-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "dissolve-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "dissolve-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "fade-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "fade-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "fade-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "fade-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "zero-False-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "zero-False-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "zero-True-overlap.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "unity": "6000.3.23f1",
+    "case": "zero-True-underlay.ppm",
+    "passed": true,
+    "mean_error": 0.0006204044117647058,
+    "max_error": 0.027450980392156862,
+    "bad_pixel_fraction": 0.0
+  }
+]
