@@ -3,12 +3,31 @@
 
 #include "NovaBuiltInCore.cginc"
 
+#if UNITY_VERSION >= 600000 && defined(UNITY_SEPARATE_TEXTURE_SAMPLER)
+// URP 17's deprecated sampler_CameraDepthTexture alias uses PointClamp.
+// Preserve that filtering for original NOVA soft particles, including XR arrays.
+    #if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
+    Texture2DArray<float> _CameraDepthTexture;
+    #else
+    Texture2D<float> _CameraDepthTexture;
+    #endif
+SamplerState nova_point_clamp_sampler;
+#else
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+#endif
 float4 _CameraDepthTexture_TexelSize;
 
 float NovaSampleSceneDepth01(float2 uv)
 {
+    #if UNITY_VERSION >= 600000 && defined(UNITY_SEPARATE_TEXTURE_SAMPLER)
+        #if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
+        return _CameraDepthTexture.SampleLevel(nova_point_clamp_sampler, float3(uv, unity_StereoEyeIndex), 0);
+        #else
+        return _CameraDepthTexture.SampleLevel(nova_point_clamp_sampler, uv, 0);
+        #endif
+    #else
     return SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv);
+    #endif
 }
 
 float NovaSampleRawCameraDepth(float2 uv)
