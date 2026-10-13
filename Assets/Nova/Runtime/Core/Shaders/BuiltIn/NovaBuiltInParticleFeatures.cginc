@@ -656,6 +656,12 @@ half4 frag(v2f i) : SV_Target
     clip(color.a - _Cutoff);
     #endif
 
+    // Original fragLit lights the alpha-modulated albedo returned by fragUnlit.
+    // Whiten the albedo before either light pass, rather than the final lit result.
+    #if defined(_ALPHAMODULATE_ENABLED)
+    color.rgb = lerp(half3(1.0, 1.0, 1.0), color.rgb, color.a);
+    #endif
+
     #if defined(NOVA_UI_LIT)
     NovaUILitSurfaceData surfaceData = NovaResolveUILitSurfaceData(color,
         i.baseUvAndProgress.xyz, interpolatedNormalWS, i.tangentWS.xyz, particleBitangentWS);
@@ -676,10 +682,6 @@ half4 frag(v2f i) : SV_Target
     color = NovaComputeLitForwardBaseColor(surfaceData, particleViewDirWS,
         NovaComputeShadowAttenuation(i, i.positionWS));
     #endif
-    #endif
-
-    #if defined(_ALPHAMODULATE_ENABLED) && !defined(UNITY_PASS_FORWARDADD)
-    color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
     #endif
 
     NovaApplyWorldFog(color, i.positionWS);

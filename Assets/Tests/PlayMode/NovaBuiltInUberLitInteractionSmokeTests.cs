@@ -13,6 +13,28 @@ public sealed class NovaBuiltInUberLitInteractionSmokeTests
     private const int TextureSize = 8;
 
     [Test]
+    public void MultiplyBlendModulatesAlbedoBeforeLightingLikeOriginal(
+        [Values("Nova/Particles/UberLit", "Nova/UIParticles/UberLit")] string shaderName,
+        [Values(0f, 1f)] float alpha)
+    {
+        void Configure(Material material, bool multiply)
+        {
+            material.shader = Shader.Find(shaderName);
+            NovaLitTestTextures.UseDiffuseDefaults(material);
+            material.SetFloat("_RenderType", multiply ? 2 : 0);
+            material.SetFloat("_TransparentBlendMode", 2);
+            // At alpha zero original fragUnlit supplies white ALBEDO to UniversalFragmentPBR.
+            // It does not replace the final lit color with white.
+            var color = !multiply && alpha == 0 ? Color.white : new Color(0.2f, 0.4f, 0.6f, multiply ? alpha : 1);
+            material.SetTexture("_BaseMap", CreateSolidTexture(color));
+        }
+        var opaque = RenderForward(m => Configure(m, false), background: Color.white, mainLightIntensity: 0.6f);
+        var multiplyResult = RenderForward(m => Configure(m, true), background: Color.white, mainLightIntensity: 0.6f);
+        Assert.That(ColorDistance(opaque.Center, multiplyResult.Center), Is.LessThan(0.025f),
+            $"Opaque whitened albedo {opaque.Center}; Multiply {multiplyResult.Center}");
+    }
+
+    [Test]
     public void UberLitComplexSurfaceLightingInteraction()
     {
         var simple = RenderForward(material => ConfigureMetallicSurface(material, 0f, 0.25f));

@@ -41,7 +41,9 @@ half NovaFlipBookBlendingProgressWithRandomRow(half progress, half sliceCount, h
     half safeRowCount = max(rowCount, 1.0h);
     half framesPerRow = safeSliceCount / safeRowCount;
     half selectedRow = clamp(floor(randomValue), 0.0h, safeRowCount - 1.0h);
-    half frameIndex = selectedRow * framesPerRow + saturate(progress) * framesPerRow;
+    // Custom Data can take progress outside 0..1. Original NOVA clamps only
+    // the normalized frame index, after the selected-row offset is applied.
+    half frameIndex = selectedRow * framesPerRow + progress * framesPerRow;
     half offset = 1.0h / safeSliceCount * 0.5h;
     return clamp((frameIndex + 0.5h) / safeSliceCount, offset, 1.0h - offset);
 }
@@ -321,7 +323,8 @@ half2 NovaParallaxOffset(half height, half strength, half3 viewDirTS)
     half scale = lerp(0.0h, 0.1h, saturate(strength));
     half3 view = normalize(viewDirTS);
     view.z += 0.42h;
-    return view.xy / max(abs(view.z), 0.0001h) * (-height * scale);
+    half denominator = abs(view.z) < 0.0001h ? (view.z < 0 ? -0.0001h : 0.0001h) : view.z;
+    return view.xy / denominator * (-height * scale);
 }
 
 #endif
