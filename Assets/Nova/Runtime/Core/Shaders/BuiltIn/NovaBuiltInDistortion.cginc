@@ -63,6 +63,15 @@ v2f vert(appdata v)
     NOVA_SETUP_PARTICLE(v)
     v2f o = (v2f)0;
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+    #if defined(NOVA_DISTORTION_GRABPASS)
+    // Uniform zero strength cannot contribute, regardless of sampled maps.
+    // Clip the entire primitive before rasterization. Custom Data can still
+    // supply nonzero strength, so only the unused-coordinate case is eligible.
+    bool uniformZero = _DistortionIntensityMode > 0.5
+        ? all(half4(_DistortionIntensityX, _DistortionIntensityY, _DistortionIntensityXCoord, _DistortionIntensityYCoord) == 0)
+        : all(half2(_DistortionIntensity, _DistortionIntensityCoord) == 0);
+    if (uniformZero) { o.pos = float4(2, 2, 2, 1); return o; }
+    #endif
     o.pos = NovaObjectToClipPos(v.vertex);
     o.screenPosition = NovaComputeScreenPos(o.pos);
     #if defined(NOVA_DISTORTION_GRABPASS)
@@ -139,6 +148,10 @@ half4 frag(v2f i) : SV_Target
     // stereo cameras instead use this shader-only path with hardware depth testing.
     clip(0.5 - _NovaCameraDistortionActive);
     float2 offset = NovaDistortionOffset(i) * 2;
+    // The URP accumulator contributes nothing for a zero offset. Writing the
+    // shared pre-distortion grab here would erase effects already drawn behind
+    // this surface, including fully faded or zero-intensity particles.
+    clip(any(offset != 0.0) ? 1.0 : -1.0);
     float2 uv = i.grabPosition.xy / i.grabPosition.w;
     #if defined(UNITY_SINGLE_PASS_STEREO)
     offset *= unity_StereoScaleOffset[unity_StereoEyeIndex].xy;

@@ -1,0 +1,114 @@
+[
+  {
+    "case": "aao-off-bundle-04.png",
+    "passed": true,
+    "mean_error": 2.6594839324618736e-08,
+    "max_error": 0.00392156862745098,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-21.png",
+    "passed": true,
+    "mean_error": 2.6594839324618736e-08,
+    "max_error": 0.00392156862745098,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-mirror.png",
+    "passed": true,
+    "mean_error": 3.1027312545388524e-08,
+    "max_error": 0.00392156862745098,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-False-depth-fade.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-False-dissolve.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-False-empty.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-False-fade.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-False-underlay.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-False-zero.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-True-depth-fade.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-True-dissolve.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-True-empty.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-True-fade.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-True-underlay.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle-overlap-True-zero.png",
+    "passed": true,
+    "mean_error": 0.0,
+    "max_error": 0.0,
+    "bad_pixel_fraction": 0.0
+  },
+  {
+    "case": "aao-off-bundle.png",
+    "passed": true,
+    "mean_error": 2.6594839324618736e-08,
+    "max_error": 0.00392156862745098,
+    "bad_pixel_fraction": 0.0
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInDistortion.cginc": "1c1494f4fd943a817c8008917f4a2d1b712ed1396e6f3610d4520c8285bb4242",
+  "Tests/Performance/NovaAvatarGpuBenchmark.cs": "99baea1b3fe23f775a7502a7413620e404496afabe4e666908a0f6d7d7751c2b",
+  "Tests/Performance/Editor/NovaAvatarGpuBenchmarkBuilder.cs": "19d6aa4ea8af62f2b7e70a1885803afb43d32bfcdf4422724733d145f4cd8e10",
+  "Tests/Performance/Native/NovaGpuTimer.cpp": "8c61bafda66ba6493e5a3f9d16efcdb0c27b8b902be8d2e1097716a75625f165",
+  "FinalPerfPlayer/NovaGpuBenchmark_Data/Managed/Assembly-CSharp.dll": "7d7aebfcf3a64e4f0cfbbbc7e40aaa9c134835210caee0e99f3ab420ec6d17fa",
+  "FinalPerfPlayer/NovaGpuBenchmark_Data/Plugins/x86_64/NovaGpuTimer.dll": "e54cf233c4fd70285efb461886903644014ea84745700d353881ea7eb275b80a"
+}

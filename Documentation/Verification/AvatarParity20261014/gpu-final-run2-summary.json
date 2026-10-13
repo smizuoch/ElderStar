@@ -1,0 +1,82 @@
+[
+  {
+    "scenario": "one",
+    "samples_per_variant": 768,
+    "paired_deltas_ms": [
+      0.0015280000000000016,
+      0.0015439999999999968,
+      0.001351999999999999
+    ],
+    "median_delta_ms": 0.0015280000000000016,
+    "delta_min_ms": 0.001351999999999999,
+    "delta_max_ms": 0.0015439999999999968,
+    "baseline_median_ms": 0.03872,
+    "baseline_p95_ms": 0.041568,
+    "candidate_median_ms": 0.04016,
+    "candidate_p95_ms": 0.043488
+  },
+  {
+    "scenario": "eight-active",
+    "samples_per_variant": 768,
+    "paired_deltas_ms": [
+      0.0029759999999999925,
+      0.0033200000000000035,
+      0.0034239999999999826
+    ],
+    "median_delta_ms": 0.0033200000000000035,
+    "delta_min_ms": 0.0029759999999999925,
+    "delta_max_ms": 0.0034239999999999826,
+    "baseline_median_ms": 0.112032,
+    "baseline_p95_ms": 0.405952,
+    "candidate_median_ms": 0.115168,
+    "candidate_p95_ms": 0.670176
+  },
+  {
+    "scenario": "eight-plus-32-zero",
+    "samples_per_variant": 768,
+    "paired_deltas_ms": [
+      -0.331176,
+      -0.331952,
+      -0.330944
+    ],
+    "median_delta_ms": -0.331176,
+    "delta_min_ms": -0.331952,
+    "delta_max_ms": -0.330944,
+    "baseline_median_ms": 0.446944,
+    "baseline_p95_ms": 2.699808,
+    "candidate_median_ms": 0.115376,
+    "candidate_p95_ms": 0.290656
+  },
+  {
+    "scenario": "32-active",
+    "samples_per_variant": 768,
+    "paired_deltas_ms": [
+      0.007727999999999957,
+      0.007063999999999959,
+      0.007368000000000041
+    ],
+    "median_delta_ms": 0.007368000000000041,
+    "delta_min_ms": 0.007063999999999959,
+    "delta_max_ms": 0.007727999999999957,
+    "baseline_median_ms": 0.366848,
+    "baseline_p95_ms": 2.537376,
+    "candidate_median_ms": 0.37425600000000003,
+    "candidate_p95_ms": 2.54064
+  },
+  {
+    "scenario": "mirror-eight-plus-16-zero",
+    "samples_per_variant": 768,
+    "paired_deltas_ms": [
+      -0.32930399999999993,
+      -0.328624,
+      -0.32952
+    ],
+    "median_delta_ms": -0.32930399999999993,
+    "delta_min_ms": -0.32952,
+    "delta_max_ms": -0.328624,
+    "baseline_median_ms": 0.554944,
+    "baseline_p95_ms": 3.105216,
+    "candidate_median_ms": 0.22592,
+    "candidate_p95_ms": 2.180704
+  }
+]

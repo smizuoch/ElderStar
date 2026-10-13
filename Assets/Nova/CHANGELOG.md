@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.1.4
+
+- Preserve existing distortion under zero-offset avatar surfaces, including completed fade/dissolve/depth fade. Adds no screen copy, pass, material property or runtime component.
+- Reject uniform-zero avatar distortion before rasterization while preserving Custom Data-driven strength. Measure active and invisible-layer workloads with an offscreen GPU timer; retain SDK/AAO bundle and reflected-camera regressions.
 
 - Restore the original pipeline-independent public deprecation-warning type and constant.
 

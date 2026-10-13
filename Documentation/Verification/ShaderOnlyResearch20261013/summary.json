@@ -1,0 +1,57 @@
+{
+  "scope": "Isolated sampler-sharing feasibility; production sources unchanged",
+  "graphics": "Windows D3D11 / NVIDIA GeForce RTX 5070 Ti",
+  "gpu_timing_measured": false,
+  "runs": [
+    {
+      "editor": "2022.3.22f1",
+      "result": "Passed",
+      "passed": 7,
+      "failed": 0,
+      "behavioral_cases": 6,
+      "compiler_exports": 1,
+      "observations": [
+        "NOVA_SAMPLER_RESEARCH unity=2022.3.22f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=2 renderTexture=False sharedMax=0 inline8Max=149 controlMax=94",
+        "NOVA_SAMPLER_RESEARCH unity=2022.3.22f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=9 renderTexture=False sharedMax=0 inline8Max=0 controlMax=157",
+        "NOVA_SAMPLER_RESEARCH unity=2022.3.22f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=16 renderTexture=False sharedMax=0 inline8Max=59 controlMax=157",
+        "NOVA_SAMPLER_RESEARCH unity=2022.3.22f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=2 renderTexture=True sharedMax=0 inline8Max=149 controlMax=94",
+        "NOVA_SAMPLER_RESEARCH unity=2022.3.22f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=9 renderTexture=True sharedMax=0 inline8Max=0 controlMax=157",
+        "NOVA_SAMPLER_RESEARCH unity=2022.3.22f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=16 renderTexture=True sharedMax=0 inline8Max=59 controlMax=157"
+      ],
+      "xml_sha256": "a16e20837af0f1dcd93bb4eecbc022d57c7464c412974484c71d53ccc0ab4ec8",
+      "compiled_program_sha256": "b3085a77facc4b33121b7d205ed11cdd3b618e7d162a0bc2dcc4a520bd4aa8fb",
+      "initial_attempt": "Failed in both editors: unused donor texture optimized away, sampler binding unrecognized. Visible-control checks also failed; these runs were not accepted."
+    },
+    {
+      "editor": "6000.3.23f1",
+      "result": "Passed",
+      "passed": 7,
+      "failed": 0,
+      "behavioral_cases": 6,
+      "compiler_exports": 1,
+      "observations": [
+        "NOVA_SAMPLER_RESEARCH unity=6000.3.23f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=2 renderTexture=False sharedMax=0 inline8Max=149 controlMax=94",
+        "NOVA_SAMPLER_RESEARCH unity=6000.3.23f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=9 renderTexture=False sharedMax=0 inline8Max=0 controlMax=157",
+        "NOVA_SAMPLER_RESEARCH unity=6000.3.23f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=16 renderTexture=False sharedMax=0 inline8Max=59 controlMax=157",
+        "NOVA_SAMPLER_RESEARCH unity=6000.3.23f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=2 renderTexture=True sharedMax=0 inline8Max=149 controlMax=94",
+        "NOVA_SAMPLER_RESEARCH unity=6000.3.23f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=9 renderTexture=True sharedMax=0 inline8Max=0 controlMax=157",
+        "NOVA_SAMPLER_RESEARCH unity=6000.3.23f1 device=NVIDIA GeForce RTX 5070 Ti api=Direct3D11 level=16 renderTexture=True sharedMax=0 inline8Max=59 controlMax=157"
+      ],
+      "xml_sha256": "d0da58037cd539d728d3c8b9ed2d23629b82564dae03de582b692a932bc4da20",
+      "compiled_program_sha256": "b3085a77facc4b33121b7d205ed11cdd3b618e7d162a0bc2dcc4a520bd4aa8fb",
+      "initial_attempt": "Failed in both editors: unused donor texture optimized away, sampler binding unrecognized. Visible-control checks also failed; these runs were not accepted."
+    }
+  ],
+  "source_sha256": {
+    "Tests/Research/SamplerSharing/NovaSamplerSharingResearch.cs": "15da9619577fe10cfae8383a1e3e679ab93e8094f3634ca08935c4327d8f8be1",
+    "Tests/Research/SamplerSharing/NovaSamplerSharingResearch.shader": "1d5443c915fbccf41aecdc136d3b14cf2be03bda9451825be55fbee881b86223"
+  },
+  "limits": [
+    "Per-texture quality; 512x512 nonmipmapped input and 64x64 output; 3 footprints per case",
+    "Shared-sampler branch has one source sample in compiled D3D instructions; GPU milliseconds were not measured",
+    "No serialized avatar, SDK/AAO build, mirror/stereo or other-GPU validation",
+    "Same-GPU setting 9 vs inline 8 equality does not establish universal equivalence",
+    "No production shader/API behavior changed"
+  ],
+  "disassembly_normalization": "Trailing whitespace removed and line endings normalized; compiled instructions unchanged."
+}

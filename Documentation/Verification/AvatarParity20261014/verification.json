@@ -1,0 +1,212 @@
+{
+  "package": "0.1.4",
+  "runtime_commit": "0bcb5c2",
+  "editors": {
+    "2022.3.22f1": {
+      "editmode": {
+        "result": "Passed",
+        "total": "448",
+        "passed": "448",
+        "failed": "0",
+        "sha256": "c5896b534b6627c0d801f3411e6e0747c7108a99c47caaa2c501c0c061aeed4e"
+      },
+      "playmode": {
+        "result": "Passed",
+        "total": "866",
+        "passed": "866",
+        "failed": "0",
+        "sha256": "ea8a4d80381e8c834af4bb60a3e09ddfccbf6a4bebd8ebf861c3cd32ac2084b0"
+      },
+      "overlap_red": {
+        "result": "Failed(Child)",
+        "total": "8",
+        "passed": "0",
+        "failed": "8",
+        "sha256": "ab1b46fee2af31201cb91e0e5ee2b4bf2f3389f6b2b8781396904614fb590ad5"
+      },
+      "distortion_and_stereo": {
+        "result": "Passed",
+        "total": "67",
+        "passed": "67",
+        "failed": "0",
+        "sha256": "19a01f46f02a68a0f3c6d9fde88d8c706fbd0e72dcfa4ec6312d7b544c2a103c"
+      }
+    },
+    "6000.3.23f1": {
+      "editmode": {
+        "result": "Passed",
+        "total": "448",
+        "passed": "448",
+        "failed": "0",
+        "sha256": "c58dd82432fe8ad72ce26ea56b9f8ad1719e411210c00d7fb11ec4a7a012a6e7"
+      },
+      "playmode": {
+        "result": "Passed",
+        "total": "866",
+        "passed": "866",
+        "failed": "0",
+        "sha256": "5adefdac1575cd7a4ad1215387cad7773fc467f5d1e86cc6861b1025c0d5eee9"
+      },
+      "overlap_red": {
+        "result": "Failed(Child)",
+        "total": "8",
+        "passed": "0",
+        "failed": "8",
+        "sha256": "3f828672cbe599974e624c2758995fd640a6cfdc7412c15c82f4b17886f215e0"
+      },
+      "distortion_and_stereo": {
+        "result": "Passed",
+        "total": "67",
+        "passed": "67",
+        "failed": "0",
+        "sha256": "fdedd7497b15671454d29a3a94bc3835807f2203ae01afa32cfcb3dae8568303"
+      }
+    }
+  },
+  "original_comparison_pairs": 32,
+  "original_comparison_failures": 0,
+  "gpu_runs": 2,
+  "gpu_intervals": 15360,
+  "witnesses": [
+    {
+      "block": 0,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 1,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 12,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 13,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 24,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "d1c86e0192875af61214e67439e65bd356941d1dc613183bff48b9f92099635c",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 25,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 36,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 37,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 48,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "d1c86e0192875af61214e67439e65bd356941d1dc613183bff48b9f92099635c",
+      "vertex_optimization_changes_pixels": false
+    },
+    {
+      "block": 49,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4101af0b868ce49482d65c50c0233a7e231f717b5e46205784b7aede9b178ea1",
+      "vertex_optimization_changes_pixels": false
+    }
+  ],
+  "scope": {
+    "graphics_api": "D3D11",
+    "mirror": "Unity reflected-camera matrices, not a new VRChat client mirror run",
+    "sdk": "3.10.5",
+    "aao": "1.9.20 defaults",
+    "physical_hmd": false,
+    "remote_upload_this_run": false
+  },
+  "sdk_aao": {
+    "off": {
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "magentaPixels": 0,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 23,
+      "activeParticleRenderers": 5,
+      "novaMaterials": 17,
+      "bundleBytes": 26684457,
+      "aaoVersion": "1.9.20",
+      "material_states_preserved": true,
+      "bundle_sha256": "8d7882dbd9dc62f7631bb1903676bb350b705bfd90c64c17ac54cec16ddd9137",
+      "report_sha256": "d0da1c5d5e542a77ffbf2e1f0fec7b9daedad8ab62efb941b535216e03603711"
+    },
+    "on": {
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "magentaPixels": 0,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 19,
+      "activeParticleRenderers": 5,
+      "novaMaterials": 17,
+      "bundleBytes": 22583268,
+      "aaoVersion": "1.9.20",
+      "material_states_preserved": true,
+      "bundle_sha256": "0aab2c1b6be9bbfad3fa1a1c253e45340c1a03e48ef8492480ad7365458561a4",
+      "report_sha256": "b8b16404e2f6dc45b25a6301bb8fe534b1c9b86856456e186458d420c216676d"
+    }
+  },
+  "sdk_aao_image_pairs": 16,
+  "sdk_aao_image_failures": 0,
+  "package_sha256": "ea6484948999bee301c55cb82f9004806e16aaf373e752908863a5cdb21c53f9",
+  "owned_scene_recovery": {
+    "success": true,
+    "errors": 0,
+    "private_blueprint_restored": true,
+    "temporary_overlap_probes_removed": true,
+    "remote_avatar_modified": false
+  }
+}
