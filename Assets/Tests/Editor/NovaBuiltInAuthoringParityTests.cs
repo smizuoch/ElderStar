@@ -11,6 +11,20 @@ namespace Nova.Tests.Editor
     public sealed class NovaBuiltInAuthoringParityTests
     {
         [Test]
+        public void OriginalPipelineIndependentRuntimeConstantRemainsAvailable()
+        {
+            var type = AppDomain.CurrentDomain.GetAssemblies()
+                .Select(a => a.GetType("Nova.Runtime.Core.Scripts.DeprecationMessage"))
+                .FirstOrDefault(t => t != null);
+            Assert.That(type, Is.Not.Null, "This original public declaration has no URP dependency.");
+            var field = type.GetField("CompatibilityScriptingAPIObsolete");
+            Assert.That(field, Is.Not.Null);
+            Assert.That(field.IsLiteral, Is.True);
+            Assert.That(field.GetRawConstantValue(), Is.EqualTo(
+                "This rendering path is for compatibility mode only (when Render Graph is disabled). Use Render Graph API instead."));
+        }
+
+        [Test]
         public void OriginalShaderReassignmentPreservesCommonValuesAndAppliesRenderState(
             [Values("Particles/UberUnlit", "Particles/UberLit", "UIParticles/UberUnlit", "UIParticles/UberLit")] string from,
             [Values("Particles/UberUnlit", "Particles/UberLit", "UIParticles/UberUnlit", "UIParticles/UberLit")] string to)
