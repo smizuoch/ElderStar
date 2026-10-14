@@ -46,7 +46,16 @@ namespace Nova.Tests.Editor
                     Assert.That(material.FindPass("Picking"), Is.GreaterThanOrEqualTo(0), name);
                     Assert.That(material.FindPass("ShadowCaster") >= 0, Is.EqualTo((passes & 4) != 0), name);
                     Assert.That(material.FindPass("DepthOnly") >= 0, Is.EqualTo((passes & 1) != 0), name);
+                    Assert.That(material.FindPass("DepthNormals") >= 0, Is.EqualTo((passes & 2) != 0), name);
                     if (kind == "UberLit") Assert.That(material.FindPass("ForwardAdd"), Is.GreaterThanOrEqualTo(0), name);
+                    if (kind == "UberLit" && (passes & 2) != 0)
+                    {
+                        var source = File.ReadAllText(AssetDatabase.GetAssetPath(shader));
+                        var start = source.IndexOf("Name \"DepthNormals\"", StringComparison.Ordinal);
+                        var end = source.IndexOf("ENDCG", start, StringComparison.Ordinal);
+                        Assert.That(source.Substring(start,end-start), Does.Contain("#pragma shader_feature_local _BASE_MAP_MODE_2D"),
+                            "Opaque DepthNormals still needs texture modes for normal maps.");
+                    }
                     material.EnableKeyword("_BASE_MAP_MODE_2D");
                     material.EnableKeyword("_ALPHATEST_ENABLED");
                     material.EnableKeyword("_VERTEX_DEFORMATION_ENABLED");

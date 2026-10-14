@@ -1,0 +1,1350 @@
+{
+  "total": 192,
+  "failed": 0,
+  "frames": [
+    {
+      "name": "Nova-Particles-UberLit_combined_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_combined_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_combined_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_combined_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_combined_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_combined_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_control_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_control_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_control_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_control_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_control_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_control_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp2_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp2_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp2_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp2_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp2_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp2_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp_negative-scale.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-exp_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-linear_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-linear_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-linear_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-linear_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-linear_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_fog-linear_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_normal_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_normal_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_normal_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_normal_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_normal_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_normal_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_parallax_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_parallax_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_parallax_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_parallax_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_parallax_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_parallax_perspective.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_rim_mirror.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_rim_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_rim_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_rim_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_rim_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_rim_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_combined_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_combined_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_combined_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_combined_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_combined_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_combined_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_control_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_control_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_control_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_control_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_control_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_control_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp2_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp2_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp2_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp2_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp2_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp2_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-exp_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-linear_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-linear_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-linear_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-linear_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-linear_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_fog-linear_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_normal_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_normal_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_normal_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_normal_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_normal_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_normal_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_parallax_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_parallax_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_parallax_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_parallax_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_parallax_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_parallax_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_rim_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_rim_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_rim_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_rim_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_rim_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberUnlit_rim_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_combined_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_combined_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_combined_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_combined_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_combined_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_combined_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_control_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_control_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_control_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_control_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_control_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_control_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp2_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp2_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp2_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp2_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp2_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp2_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp_negative-scale.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-exp_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-linear_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-linear_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-linear_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-linear_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-linear_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_fog-linear_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_normal_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_normal_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_normal_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_normal_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_normal_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_normal_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_parallax_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_parallax_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_parallax_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_parallax_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_parallax_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_parallax_perspective.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_rim_mirror.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_rim_near-clip.ppm",
+      "mean_error": 7.97845179738562e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_rim_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_rim_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_rim_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_rim_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_combined_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_combined_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_combined_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_combined_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_combined_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_combined_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_control_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_control_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_control_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_control_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_control_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_control_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp2_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp2_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp2_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp2_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp2_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp2_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-exp_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-linear_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-linear_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-linear_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-linear_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-linear_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_fog-linear_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_normal_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_normal_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_normal_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_normal_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_normal_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_normal_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_parallax_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_parallax_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_parallax_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_parallax_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_parallax_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_parallax_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_rim_mirror.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_rim_near-clip.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_rim_negative-scale.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_rim_oblique.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_rim_orthographic.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberUnlit_rim_perspective.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    }
+  ]
+}

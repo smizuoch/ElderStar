@@ -11,9 +11,8 @@ namespace Nova.Runtime.Core.Scripts
     {
         [SerializeField] private bool _applyToSceneView = true;
         [SerializeField, HideInInspector] private Shader _applyDistortionShader;
-        private Material applyMaterial;
+        private BuiltInDistortionPass distortionPass;
         private Camera targetCamera;
-        private static readonly int UvTexture = Shader.PropertyToID("_ScreenSpaceUvTexture");
         private static readonly int CameraActive = Shader.PropertyToID("_NovaCameraDistortionActive");
         private float previousCameraActive;
         private bool rendering;
@@ -22,11 +21,11 @@ namespace Nova.Runtime.Core.Scripts
         {
             targetCamera = GetComponent<Camera>();
             targetCamera.depthTextureMode |= DepthTextureMode.Depth;
-            if (applyMaterial != null) return;
+            if (distortionPass != null) return;
             if (_applyDistortionShader == null)
                 _applyDistortionShader = Shader.Find("Hidden/Nova/Particles/ApplyDistortion");
             if (_applyDistortionShader != null)
-                applyMaterial = new Material(_applyDistortionShader) { hideFlags = HideFlags.HideAndDontSave };
+                distortionPass = new BuiltInDistortionPass(_applyDistortionShader);
         }
 
         private void OnEnable() { Create(); }
@@ -34,14 +33,12 @@ namespace Nova.Runtime.Core.Scripts
         private void OnDisable()
         {
             OnPostRender();
-            if (applyMaterial == null) return;
-            if (Application.isPlaying) Destroy(applyMaterial);
-            else DestroyImmediate(applyMaterial);
-            applyMaterial = null;
+            distortionPass?.Dispose();
+            distortionPass = null;
             // Leave the shared camera depth flag set: other effects may now depend on it.
         }
 
-        private bool CanComposite => applyMaterial != null && GraphicsSettings.currentRenderPipeline == null
+        private bool CanComposite => distortionPass != null && GraphicsSettings.currentRenderPipeline == null
             && !targetCamera.stereoEnabled && targetCamera.cameraType != CameraType.Preview
             && targetCamera.cameraType != CameraType.Reflection
             && (_applyToSceneView || targetCamera.cameraType != CameraType.SceneView);
@@ -77,43 +74,13 @@ namespace Nova.Runtime.Core.Scripts
             {
                 using (var commands = new CommandBuffer { name = "NOVA Built-in Distortion" })
                 {
-                    commands.SetRenderTarget(offsets);
-                    commands.ClearRenderTarget(false, true, Color.gray);
-                    commands.SetViewProjectionMatrices(targetCamera.worldToCameraMatrix,
-                        GL.GetGPUProjectionMatrix(targetCamera.projectionMatrix, true));
-                    commands.SetInvertCulling(SystemInfo.graphicsUVStartsAtTop ^ GL.invertCulling);
-                    var planes = GeometryUtility.CalculateFrustumPlanes(targetCamera);
-                    foreach (var renderer in FindObjectsOfType<Renderer>())
-                    {
-                        if (!renderer.enabled || renderer.forceRenderingOff || !renderer.gameObject.activeInHierarchy
-                            || renderer.shadowCastingMode == ShadowCastingMode.ShadowsOnly
-                            || (targetCamera.cullingMask & (1 << renderer.gameObject.layer)) == 0
-                            || !GeometryUtility.TestPlanesAABB(planes, renderer.bounds)) continue;
-                        var materials = renderer.sharedMaterials;
-                        for (var submesh = 0; submesh < materials.Length; submesh++)
-                        {
-                            var material = materials[submesh];
-                            if (material == null) continue;
-                            var pass = material.FindPass("DistortedUvBuffer");
-                            if (pass >= 0 && material.GetShaderPassEnabled("DistortedUvBuffer"))
-                                commands.DrawRenderer(renderer, material, submesh, pass);
-                        }
-                    }
-                    commands.SetInvertCulling(GL.invertCulling);
+                    distortionPass.RecordOffsets(commands, targetCamera, offsets, FindObjectsOfType<Renderer>());
+                    distortionPass.RecordComposite(commands, source, destination, offsets);
                     Graphics.ExecuteCommandBuffer(commands);
                 }
-                applyMaterial.SetTexture(UvTexture, offsets);
-                // The original hidden shader has no ShaderLab Properties block.
-                // Bind the source explicitly without adding a public material property.
-                applyMaterial.SetTexture("_MainTex", source);
-                applyMaterial.SetFloat("_NovaDistortionForceAniso",
-                    QualitySettings.anisotropicFiltering == AnisotropicFiltering.ForceEnable ? 1 : 0);
-                Graphics.Blit(source, destination, applyMaterial);
             }
             finally
             {
-                applyMaterial.SetTexture(UvTexture, null);
-                applyMaterial.SetTexture("_MainTex", null);
                 RenderTexture.ReleaseTemporary(offsets);
             }
         }

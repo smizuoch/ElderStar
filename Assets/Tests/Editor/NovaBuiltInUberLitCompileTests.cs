@@ -183,14 +183,14 @@ public sealed class NovaBuiltInUberLitCompileTests
                 .ToArray();
             var matrixText = File.ReadAllText(MatrixPath);
 
-            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "DepthOnly", "SceneSelectionPass", "Picking" }));
+            Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "DepthOnly", "DepthNormals", "SceneSelectionPass", "Picking" }));
             Assert.That(material.FindPass("ForwardBase"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("ForwardAdd"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("ShadowCaster"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("DepthOnly"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("SceneSelectionPass"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("Picking"), Is.GreaterThanOrEqualTo(0));
-            Assert.That(material.FindPass("DepthNormals"), Is.LessThan(0));
+            Assert.That(material.FindPass("DepthNormals"), Is.GreaterThanOrEqualTo(0));
             Assert.That(shaderText, Does.Not.Contain("UniversalForward"));
             Assert.That(shaderText, Does.Not.Contain("RenderPipeline\" = \"UniversalPipeline\""));
             Assert.That(matrixText, Does.Contain("Phase 6.5A"));
@@ -255,7 +255,7 @@ public sealed class NovaBuiltInUberLitCompileTests
         var shaderText = File.ReadAllText(ShaderPath);
         var matrixText = File.ReadAllText(MatrixPath);
 
-        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"DepthNormals\""));
         Assert.That(matrixText, Does.Contain("Built-in has no URP DepthNormals prepass contract"));
         Assert.That(matrixText, Does.Contain("Lit DepthNormals"));
         Assert.That(matrixText, Does.Contain("Phase 6.5A"));

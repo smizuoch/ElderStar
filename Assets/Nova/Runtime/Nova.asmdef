@@ -9,6 +9,8 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        { "name": "com.unity.modules.vr", "expression": "1.0.0", "define": "NOVA_VR_MODULE" }
+    ],
     "noEngineReferences": false
 }

@@ -174,11 +174,11 @@ half3 NovaUILitTangentToWorldNormal(half3 normalTS, float3 normalWS, float3 tang
     float3 normalizedNormalWS = NovaSafeNormalize(normalWS);
 
     #if defined(_NORMAL_MAP_ENABLED)
-    float3 normalizedTangentWS = NovaSafeNormalize(tangentWS);
-    float3 normalizedBitangentWS = NovaSafeNormalize(bitangentWS);
+    // Original fragUnlit normalizes normalWS in-place before the Lit basis transform.
+    // Tangent and binormal remain interpolated, without independent normalization.
     return NovaSafeNormalize(
-        normalTS.x * normalizedTangentWS +
-        normalTS.y * normalizedBitangentWS +
+        normalTS.x * tangentWS +
+        normalTS.y * bitangentWS +
         normalTS.z * normalizedNormalWS);
     #else
     return normalizedNormalWS;
@@ -233,16 +233,22 @@ half NovaUILitReceiveShadowsEnabled()
     #endif
 }
 
-half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation)
+half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation, float3 positionWS)
 {
     half receiveShadow = NovaUILitReceiveShadowsEnabled();
     half directShadow = NovaApplyReceiveShadow(shadowAttenuation, receiveShadow);
     half diffuse = NovaComputeLambertDiffuse(surfaceData.normalWS, NovaGetMainLightDirection());
     half3 direct = NovaGetMainLightColor() * diffuse * directShadow;
-    half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS);
+    #if defined(NOVA_CANVAS_LIGHTING)
+    direct = 0; // The explicit Canvas list owns direct lighting, avoiding duplicate main lights.
+    #endif
+    half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS, positionWS);
     half3 diffuseColor = NovaComputeDiffuseAlbedo(surfaceData.albedo, surfaceData.metallic,
         surfaceData.specularColor) * (direct + ambient);
     half3 specularColor = NovaComputeUILitSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS) * directShadow;
+    #if defined(NOVA_CANVAS_LIGHTING)
+    specularColor = 0;
+    #endif
     half3 environmentReflection = half3(0.0h, 0.0h, 0.0h);
     #if defined(_ENVIRONMENT_REFLECTIONS_ENABLED)
     environmentReflection = NovaSampleEnvironmentReflection(
@@ -252,7 +258,17 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
             dot(NovaSafeNormalize(surfaceData.normalWS), NovaSafeNormalize(viewDirectionWS)))
         * step(0.5h, _EnvironmentReflections);
     #endif
+    #if defined(NOVA_DEBUG_DISPLAY)
+    half3 diffuseAlbedo = NovaComputeDiffuseAlbedo(surfaceData.albedo, surfaceData.metallic, surfaceData.specularColor);
+    novaDebugDirect = diffuseAlbedo * direct + specularColor;
+    novaDebugIndirect = diffuseAlbedo * ambient + environmentReflection;
+    #endif
     return half4(diffuseColor + specularColor + environmentReflection, surfaceData.alpha);
+}
+
+half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation)
+{
+    return NovaComputeUILitForwardBaseColor(surfaceData, viewDirectionWS, shadowAttenuation, float3(0, 0, 0));
 }
 
 half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS)

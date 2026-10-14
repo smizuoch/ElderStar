@@ -246,6 +246,7 @@ Shader "Nova/Particles/UberUnlit"
     {
         Tags
         {
+            "NovaDepthNormals" = "True"
             "RenderType" = "Opaque"
             "IgnoreProjector" = "True"
             "PreviewType" = "Plane"
@@ -269,6 +270,8 @@ Shader "Nova/Particles/UberUnlit"
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma target 3.5
+            #pragma multi_compile _ NOVA_DEBUG_DISPLAY
+            #pragma target 4.0 NOVA_DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
             #pragma shader_feature_local_fragment _ALPHAMODULATE_ENABLED
@@ -311,6 +314,7 @@ Shader "Nova/Particles/UberUnlit"
             #pragma shader_feature_local _CASTING_PUNCTUAL_LIGHT_SHADOW
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInFog.cginc"
+            #include "BuiltIn/NovaBuiltInDebug.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInDepth.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
@@ -497,7 +501,10 @@ Shader "Nova/Particles/UberUnlit"
                 float3 emissionUvAndProgress : TEXCOORD13;
                 float4 customCoord1 : TEXCOORD8;
                 float4 customCoord2 : TEXCOORD9;
-                float3 normalWS : TEXCOORD10;
+                float4 normalAndFog : TEXCOORD10;
+                #if defined(NOVA_DEBUG_DISPLAY)
+                float3 debugTangentWS : TEXCOORD15;
+                #endif
                 float3 viewDirWS : TEXCOORD11;
                 float3 viewDirTS : TEXCOORD12;
                 float4 screenPosition : TEXCOORD14;
@@ -520,16 +527,20 @@ Shader "Nova/Particles/UberUnlit"
                 #endif
 
                 o.vertex = NovaObjectToClipPos(v.vertex);
+                o.normalAndFog.w = NovaVertexFog(o.vertex.z);
                 o.screenPosition = NovaComputeScreenPos(o.vertex);
                 o.screenPosition.z = -UnityObjectToViewPos(v.vertex).z;
                 o.customCoord1 = v.customCoord1;
                 o.customCoord2 = v.customCoord2;
                 float3 positionWS = NovaObjectToWorld(v.vertex.xyz);
-                o.normalWS = NovaObjectToWorldNormal(v.normal);
+                o.normalAndFog.xyz = NovaObjectToWorldNormal(v.normal);
                 o.viewDirWS = NovaWorldSpaceViewDir(positionWS);
                 float3 tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
-                float3 bitangentWS = NovaCreateBitangent(o.normalWS, tangentWS, v.tangent.w);
-                o.viewDirTS = float3(dot(o.viewDirWS, tangentWS), dot(o.viewDirWS, bitangentWS), dot(o.viewDirWS, o.normalWS));
+                #if defined(NOVA_DEBUG_DISPLAY)
+                o.debugTangentWS = tangentWS;
+                #endif
+                float3 bitangentWS = NovaCreateBitangent(o.normalAndFog.xyz, tangentWS, v.tangent.w);
+                o.viewDirTS = float3(dot(o.viewDirWS, tangentWS), dot(o.viewDirWS, bitangentWS), dot(o.viewDirWS, o.normalAndFog.xyz));
                 half progress = _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2);
                 half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
                 o.baseMapProgress = NovaBaseMapProgress(progress, _BaseMapSliceCount, _BaseMapRowCount, randomValue);
@@ -839,7 +850,7 @@ Shader "Nova/Particles/UberUnlit"
                 #if defined(_TINT_AREA_ALL) || defined(_TINT_AREA_RIM)
                 half tintBlendRate = _TintBlendRate + NovaGetCustomCoord(_TintBlendRateCoord, i.customCoord1, i.customCoord2);
                     #if defined(_TINT_AREA_RIM)
-                    half3 normalWS = NovaSafeNormalize(i.normalWS);
+                    half3 normalWS = NovaSafeNormalize(i.normalAndFog.xyz);
                     half3 viewDirWS = NovaSafeNormalize(i.viewDirWS);
                     half rim = 1.0h - abs(dot(normalWS, viewDirWS));
                     half tintRim = NovaRimValue(
@@ -896,7 +907,7 @@ Shader "Nova/Particles/UberUnlit"
                 #endif
 
                 #if defined(_TRANSPARENCY_BY_RIM)
-                half3 transparencyNormalWS = NovaSafeNormalize(i.normalWS);
+                half3 transparencyNormalWS = NovaSafeNormalize(i.normalAndFog.xyz);
                 half3 transparencyViewDirWS = NovaSafeNormalize(i.viewDirWS);
                 half rimDot = abs(dot(transparencyNormalWS, transparencyViewDirWS));
                 NovaApplyRimTransparency(
@@ -931,7 +942,10 @@ Shader "Nova/Particles/UberUnlit"
                 color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
                 #endif
 
-                NovaApplyEyeFog(color, i.screenPosition.z);
+                #if defined(NOVA_DEBUG_DISPLAY)
+                return NovaDebugColor(color, i.normalAndFog.xyz, i.debugTangentWS, i.screenPosition.z, i.normalAndFog.w, 0, 0, 0);
+                #endif
+                NovaApplyVertexFog(color, i.normalAndFog.w);
                 return color;
             }
             ENDCG
@@ -1081,6 +1095,56 @@ Shader "Nova/Particles/UberUnlit"
             {
                 return _SelectionID;
             }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "DepthNormals"
+            Tags { "LightMode" = "DepthNormals" }
+            ZWrite On
+            ZTest LEqual
+            Cull [_Cull]
+            ColorMask RGBA
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma target 3.5
+            #pragma multi_compile_instancing
+            #pragma instancing_options procedural:vertInstancingSetup
+            #pragma require 2darray
+            #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
+            #pragma shader_feature_local _ALPHATEST_ENABLED
+            #pragma shader_feature_local _BASE_MAP_MODE_2D _BASE_MAP_MODE_2D_ARRAY _BASE_MAP_MODE_3D
+            #pragma shader_feature_local_vertex _BASE_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_fragment _BASE_MAP_CHANNEL_ENABLED
+            #pragma shader_feature_local_fragment _ _BASE_SAMPLER_STATE_POINT_MIRROR _BASE_SAMPLER_STATE_LINEAR_MIRROR _BASE_SAMPLER_STATE_TRILINEAR_MIRROR
+            #pragma shader_feature_local_fragment _ _BASE_MAP_TONE_MODE_TRITONE _BASE_MAP_TONE_MODE_PENTONE
+            #pragma shader_feature_local _ _TINT_AREA_ALL _TINT_AREA_RIM
+            #pragma shader_feature_local _ _TINT_COLOR_ENABLED _TINT_MAP_ENABLED _TINT_MAP_3D_ENABLED _TINT_MAP_MODE_2D_ARRAY
+            #pragma shader_feature_local_vertex _TINT_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local _FLOW_MAP_ENABLED // Obsolete, but retained for compatibility.
+            #pragma shader_feature_local _FLOW_MAP_TARGET_BASE
+            #pragma shader_feature_local _FLOW_MAP_TARGET_TINT
+            #pragma shader_feature_local _FLOW_MAP_TARGET_EMISSION
+            #pragma shader_feature_local _FLOW_MAP_TARGET_ALPHA_TRANSITION
+            #pragma shader_feature_local _ _FADE_TRANSITION_ENABLED _DISSOLVE_TRANSITION_ENABLED
+            #pragma shader_feature_local _ALPHA_TRANSITION_MAP_MODE_2D _ALPHA_TRANSITION_MAP_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_MODE_3D
+            #pragma shader_feature_local _ _ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE _ALPHA_TRANSITION_BLEND_SECOND_TEX_MULTIPLY
+            #pragma shader_feature_local _ _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_3D
+            #pragma shader_feature_local_vertex _ALPHA_TRANSITION_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local_vertex _ALPHA_TRANSITION_MAP_SECOND_TEXTURE_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local _ _EMISSION_AREA_ALL _EMISSION_AREA_MAP _EMISSION_AREA_ALPHA
+            #pragma shader_feature_local _EMISSION_MAP_MODE_2D _EMISSION_MAP_MODE_2D_ARRAY _EMISSION_MAP_MODE_3D
+            #pragma shader_feature_local_fragment _ _EMISSION_COLOR_COLOR _EMISSION_COLOR_BASECOLOR _EMISSION_COLOR_MAP
+            #pragma shader_feature_local_vertex _EMISSION_MAP_RANDOM_ROW_SELECTION_ENABLED
+            #pragma shader_feature_local _TRANSPARENCY_BY_LUMINANCE
+            #pragma shader_feature_local _TRANSPARENCY_BY_RIM
+            #pragma shader_feature_local _SOFT_PARTICLES_ENABLED
+            #pragma shader_feature_local _DEPTH_FADE_ENABLED
+            #pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED
+            #define NOVA_DEPTH_NORMALS
+            #include "BuiltIn/NovaBuiltInParticleFeatures.cginc"
             ENDCG
         }
 

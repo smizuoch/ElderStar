@@ -3961,7 +3961,7 @@
       "feature": "Tint rim",
       "status": "Approximate",
       "evidence": "Shared rim/tint rendering tests",
-      "reason_or_fallback": "Uses Built-in world normal/view interpolation. Orthographic view direction matches the original; tune rim sharpness for platform/interpolation differences."
+      "reason_or_fallback": "World normal/view normalization and interpolation match the original in the 2022 D3D coarse-mesh capture. No independent rim mismatch was reproduced; other backends remain unverified."
     },
     {
       "feature": "Flow targets",
@@ -3973,7 +3973,7 @@
       "feature": "Parallax targets",
       "status": "Approximate",
       "evidence": "36 mode/target cases, signed back-facing GPU probes and randomized reference captures",
-      "reason_or_fallback": "Base/Tint/Emission support 2D/array/3D height maps with the original one-step offset. The signed offset denominator matches original NOVA except for a +/-1e-4 singularity guard. Built-in tangent/view interpolation can differ; supply correct tangents, avoid the near-zero denominator and tune strength."
+      "reason_or_fallback": "Base/Tint/Emission support 2D/array/3D height maps with the original one-step offset. The signed offset denominator matches original NOVA except for a +/-1e-4 singularity guard. The tangent-space view is now formed per vertex and interpolated, including original odd-scale handling. Avoid only the guarded near-zero denominator; see LowCostLightingParity.md."
     },
     {
       "feature": "Greyscale and gradient",
@@ -4003,7 +4003,7 @@
       "feature": "Rim and luminance transparency",
       "status": "Approximate",
       "evidence": "Shared transparency and interaction tests",
-      "reason_or_fallback": "Luminance math is preserved; rim uses Built-in normal/view interpolation. Use the retained progress/sharpness/inverse controls to match the target scene."
+      "reason_or_fallback": "Luminance math is preserved; the rim normal/view conditions also match the original in the coarse-mesh captures. The retained progress/sharpness/inverse controls remain unchanged."
     },
     {
       "feature": "Soft particles",
@@ -4038,14 +4038,14 @@
     {
       "feature": "Instanced stereo",
       "status": "Approximate",
-      "evidence": "Four stereo shadowed ForwardAdd compiler regressions and thirteen GPU texture-array tests: four Uber color passes, per-eye soft-particle depth, particle DepthOnly/ShadowCaster, and distortion eye textures",
+      "evidence": "Four stereo shadowed ForwardAdd compiler regressions and fifteen GPU texture-array tests: four Uber color passes, per-eye soft-particle depth, particle DepthOnly/DepthNormals/ShadowCaster, and distortion eye textures",
       "reason_or_fallback": "Built-in stereo macros carry the vertex eye index to fragments and depth slices. Tested with explicit XR constant buffers on D3D11/12 without a headset; actual VRChat PCVR/headset verification remains separate."
     },
     {
       "feature": "Fog",
       "status": "Approximate",
       "evidence": "24 perspective/orthographic Linear/Exp/Exp2 cases and ForwardAdd diagnostics",
-      "reason_or_fallback": "Evaluates near-plane-relative view depth per fragment instead of URP's interpolated clip fog. ForwardAdd fades toward black; match scene fog distances when migrating."
+      "reason_or_fallback": "Uses the original vertex clip-Z fog coefficient and interpolation, including EXP scaling. ForwardAdd fades toward black. The original orthographic/oblique clip-depth behavior is retained, even when it produces no fog; pipeline camera/fog inputs and other backends still require matching."
     },
     {
       "feature": "Metallic and specular workflows",
@@ -4057,7 +4057,7 @@
       "feature": "Normal maps",
       "status": "Approximate",
       "evidence": "Imported DXT5 packing, normal scale and 2D/array/3D tests",
-      "reason_or_fallback": "Unity normal packing is decoded before XY scale, as in the original. Built-in tangent/normal interpolation differs; use correct imported normals and particle tangents."
+      "reason_or_fallback": "Unity normal packing is decoded before XY scale, as in the original. The normal is normalized after interpolation before the tangent-space transform; interpolated tangent/binormal are not independently normalized, matching original fragUnlit/fragLit ordering. Original normal-map and parallax handedness differ and are preserved separately. Supply valid tangents; see LowCostLightingParity.md."
     },
     {
       "feature": "Surface maps",
@@ -4086,8 +4086,8 @@
     {
       "feature": "Ambient and light probes",
       "status": "Approximate",
-      "evidence": "Ambient, normal and reflection interaction tests",
-      "reason_or_fallback": "Built-in SH with a flat-ambient floor replaces URP SH/APV sampling. Use Built-in light probes or ambient lighting; APV data is not consumed."
+      "evidence": "Ordinary SH tests plus eight spatial LPPV GPU cases",
+      "reason_or_fallback": "Built-in SH/proxy inputs replace URP SH/APV. With environment reflections disabled, original URP still adds its global ambient-probe glossy constant; that constant is not provided by the Built-in avatar path. The retained ordinary ambient floor and this fallback can differ (22/192 nonblack-ambient coarse-mesh captures). Matching direct/interpolation captures use black ambient; use matching world probes/reflections and inspect the result."
     },
     {
       "feature": "Environment reflections",
@@ -4121,33 +4121,33 @@
     },
     {
       "feature": "DepthNormals",
-      "status": "Unsupported",
-      "evidence": "Pass-topology and optimizer tests",
-      "reason_or_fallback": "No URP DepthNormals prepass contract is implemented. Use Built-in depth/ShadowCaster or a separate replacement shader if an effect requires encoded depth normals."
+      "status": "Approximate",
+      "evidence": "128 original/port image pairs, seven camera/pass tests, two stereo array cases and optimizer outputs",
+      "reason_or_fallback": "Particle shaders provide encoded world normals plus coverage through an explicit pass and optional NovaDepthNormals camera buffer. It does not replace world depth normals or implement the URP prepass invocation/format. Use the dedicated Texture API; see DepthNormals.md."
     },
     {
       "feature": "Forward+",
-      "status": "Unsupported",
-      "evidence": "No URP/cluster dependency checks",
-      "reason_or_fallback": "Built-in has no URP Forward+ loop. Use ForwardBase/ForwardAdd and manage per-pixel lights."
+      "status": "Approximate",
+      "evidence": "Existing multi-light/shadow ForwardAdd suites and Canvas selection/rendering tests",
+      "reason_or_fallback": "Mesh/particle renderers retain ForwardBase/ForwardAdd; optional Canvas lighting evaluates up to eight selected lights in one pass. There is no tiled/clustered renderer. Control pixel lights and the Canvas limit; Canvas list shadows/cookies are not sampled."
     },
     {
       "feature": "Probe volumes",
-      "status": "Unsupported",
-      "evidence": "Original APV audit and no-URP compile checks",
-      "reason_or_fallback": "URP adaptive probe-volume APIs/data are unavailable. Use Built-in light probes or ambient lighting."
+      "status": "Approximate",
+      "evidence": "Eight spatial LPPV GPU tests on both Lit shaders, local/world coordinates and fallback",
+      "reason_or_fallback": "Native Built-in LPPV replaces ordinary SH L0/L1 while retaining renderer L2, without double addition. APV file formats, streaming, adaptive placement and scenario changes are not supported. Use world-supplied Built-in probes/LPPV; avatars cannot require a world to provide them."
     },
     {
       "feature": "Foveated rendering",
-      "status": "Unsupported",
-      "evidence": "Original SRP include audit and dependency checks",
-      "reason_or_fallback": "URP foveated-coordinate transforms are not implemented. Use ordinary mono rendering; validate any platform XR/foveation integration separately."
+      "status": "Approximate",
+      "evidence": "URP 17.3 official include audit and D3D mono/stereo depth/screen-UV regressions",
+      "reason_or_fallback": "URP non-uniform-raster coordinate remapping is disabled on the verified Windows D3D path, so its transforms are identity there. Existing per-eye UV/depth paths remain. This does not implement non-uniform remapping for Metal/PS5 or control XR runtime VRS; physical runtime/headset verification remains separate."
     },
     {
       "feature": "Debug display",
-      "status": "Unsupported",
-      "evidence": "Original DEBUG_DISPLAY audit and dependency checks",
-      "reason_or_fallback": "There is no URP debug-display integration. Inspect shaders through the Built-in Frame Debugger and material controls."
+      "status": "Approximate",
+      "evidence": "32 GPU view assertions and two actual diagnostic-variant AssetBundle stripping tests",
+      "reason_or_fallback": "Editor views cover albedo, world normals/tangents, eye depth, fog, direct/indirect light and additional count. Scoped global state restores after rendering; Player/bundle builds strip dedicated variants. This is not the URP debug API. Use Tools/NOVA/Rendering Diagnostics."
     },
     {
       "feature": "UI stencil and ColorMask",
@@ -4164,8 +4164,8 @@
     {
       "feature": "UI lighting",
       "status": "Approximate",
-      "evidence": "UI Lit common, shadow, reflection and additional-light suites",
-      "reason_or_fallback": "Native CanvasRenderer uses the base ambient/main-light approximation and does not schedule the mesh ForwardAdd loop. Use MeshRenderer-based particles when per-pixel additional lights are required."
+      "evidence": "49 optional Canvas lighting/mask tests, plus ordinary mesh/particle UI Lit suites",
+      "reason_or_fallback": "NovaCanvasLighting retains native Canvas and evaluates its selected direct lights in one base pass. Owned drawing materials disable ForwardAdd to prevent duplicate light contribution. Requires optional uGUI helper; no scene search each frame, source material mutation, list shadows or cookies. VRChat uses allowed mesh/particle renderers with no helper. Overlay material/lifecycle is tested; offscreen Overlay pixels are not."
     },
     {
       "feature": "Camera distortion",
@@ -4224,8 +4224,8 @@
     {
       "feature": "Optimizer pass stripping",
       "status": "Approximate",
-      "evidence": "All 48 outputs compiled; rendering equivalence and opaque keyword-reduction tests",
-      "reason_or_fallback": "Original opaque depth/shadow variant reduction is preserved. DepthOnly/ShadowCaster are stripped as requested; the DepthNormals flag preserves naming but adds no URP pass. Keep ShadowCaster for Built-in camera depth."
+      "evidence": "All 48 outputs compiled, DepthNormals flags and opaque normal-array rendering regression",
+      "reason_or_fallback": "DepthOnly, ShadowCaster and the real DepthNormals pass are retained/removed as requested. DepthNormals preserves UV/normal texture variants needed even for opaque surfaces. Built-in invocation/encoded output differ from URP; keep ShadowCaster for ordinary camera depth."
     },
     {
       "feature": "Optimizer includes",

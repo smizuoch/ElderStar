@@ -3,6 +3,7 @@
 
 #include "NovaBuiltInCore.cginc"
 #include "Lighting.cginc"
+#include "NovaBuiltInDebug.cginc"
 
 struct NovaBuiltInMainLight
 {
@@ -102,6 +103,30 @@ half3 NovaComputeAmbientApproximation(float3 normalWS)
 {
     half3 sh = NovaSampleAmbient(normalWS);
     return max(sh, UNITY_LIGHTMODEL_AMBIENT.rgb);
+}
+
+half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
+{
+    half3 result = 0;
+    #if UNITY_LIGHT_PROBE_PROXY_VOLUME
+    UNITY_BRANCH
+    if (unity_ProbeVolumeParams.x == 1.0)
+    {
+        half4 normal = half4(NovaSafeNormalize(normalWS), 1);
+        // Unity's proxy stores L0/L1 spatially; L2 remains the renderer's probe.
+        // Replace L0/L1 instead of adding the ordinary SH result a second time.
+        half3 ambient = max(0, SHEvalLinearL0L1_SampleProbeVolume(normal, positionWS) + SHEvalLinearL2(normal));
+        #ifdef UNITY_COLORSPACE_GAMMA
+        ambient = LinearToGammaSpace(ambient);
+        #endif
+        result = ambient;
+    }
+    else
+    #endif
+    {
+        result = NovaComputeAmbientApproximation(normalWS);
+    }
+    return result;
 }
 
 half3 NovaComputeMinimumLitColor(half3 albedo, float3 normalWS)

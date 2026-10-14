@@ -136,8 +136,17 @@ public sealed class NovaBuiltInUberUnlitRenderingSmokeTests
             yield return null;
             var fogged = Render();
             Assert.That(clear.r, Is.GreaterThan(0.5f), clear.ToString());
-            Assert.That(fogged.r, Is.LessThan(0.08f), fogged.ToString());
-            Assert.That(fogged.b, Is.GreaterThan(0.7f), fogged.ToString());
+            if (orthographic)
+            {
+                // Original NOVA interpolates clip-Z fog. On this D3D orthographic camera
+                // its remapped vertex depth clamps to zero (verified against original captures).
+                Assert.That(Vector4.Distance(clear, fogged), Is.LessThan(.02f));
+            }
+            else
+            {
+                Assert.That(fogged.r, Is.LessThan(0.08f), fogged.ToString());
+                Assert.That(fogged.b, Is.GreaterThan(0.7f), fogged.ToString());
+            }
         }
         finally
         {

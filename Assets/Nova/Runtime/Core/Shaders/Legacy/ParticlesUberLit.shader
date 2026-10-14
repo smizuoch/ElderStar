@@ -275,12 +275,14 @@ Shader "Hidden/Nova/LegacyBuiltIn/ParticlesUberLit"
             "IgnoreProjector" = "True"
             "PreviewType" = "Plane"
             "PerformanceChecks" = "False"
+            "NovaDepthNormals" = "True"
         }
 
         UsePass "Nova/Particles/UberLit/FORWARDBASE"
         UsePass "Nova/Particles/UberLit/FORWARDADD"
         UsePass "Nova/Particles/UberLit/SCENESELECTIONPASS"
         UsePass "Nova/Particles/UberLit/PICKING"
+        UsePass "Nova/Particles/UberLit/DEPTHNORMALS"
         UsePass "Nova/Particles/UberLit/DEPTHONLY"
         UsePass "Nova/Particles/UberLit/SHADOWCASTER"
     }

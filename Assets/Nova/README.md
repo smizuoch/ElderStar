@@ -36,10 +36,14 @@ temperature defaults for all project lights. Later manual edits survive reloads.
 Use **Tools > NOVA > Built-in > Automatic Initial Lighting Setup** to opt out,
 or **Match Original Lighting Settings** to reapply with Undo support.
 
-Forward+, probe volumes, URP DepthNormals/debug and URP foveated rendering are not
-reproduced. The first Built-in reflection probe, forward lights and camera depth
-provide the documented fallbacks. Original NOVA also omits reflection-probe
-blending/box-projection variants.
+Optional normal-Unity helpers add [Canvas lighting](Documentation~/CanvasLighting.md),
+[a dedicated depth-normal buffer](Documentation~/DepthNormals.md) and
+[explicit distortion commands](Documentation~/BuiltInRenderingAPI.md).
+Lit can consume Built-in LPPV, and Editor-only diagnostics expose eight views;
+see [probe volumes and diagnostics](Documentation~/ProbeVolumesAndDiagnostics.md).
+The shader-only VRChat path needs none of these components. Tiled Forward+,
+APV formats/streaming and URP C# types are not implemented. Original NOVA also
+omits reflection-probe blending/box-projection variants.
 
 Windows Direct3D11/12 is the verified platform scope, on Unity 2022.3.22f1 and
 6000.3.23f1. Other graphics APIs require their own platform validation.

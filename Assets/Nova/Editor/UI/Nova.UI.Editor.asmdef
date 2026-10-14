@@ -1,0 +1,8 @@
+{
+    "name": "Nova.UI.Editor",
+    "references": ["Nova.UI"],
+    "includePlatforms": ["Editor"],
+    "autoReferenced": true,
+    "defineConstraints": ["NOVA_UGUI"],
+    "versionDefines": [{"name": "com.unity.ugui", "expression": "1.0.0", "define": "NOVA_UGUI"}]
+}
