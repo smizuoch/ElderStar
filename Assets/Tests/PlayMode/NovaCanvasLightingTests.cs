@@ -164,10 +164,10 @@ namespace Nova.Tests.PlayMode
                 Assert.That(lit.r, Is.GreaterThan(.2f), lit.ToString());
                 Assert.That(lit.r, Is.GreaterThan(lit.g + .15f), "The registered point light must contribute its color.");
                 type.GetMethod("UnregisterLight").Invoke(bridge,new object[] { light });
-                light.enabled = false;
+                // Keep the scene light enabled: it must not leak through a scheduled ForwardAdd pass.
                 yield return null; Canvas.ForceUpdateCanvases(); camera.Render();
                 RenderTexture.active = target; cpu.ReadPixels(new Rect(0,0,64,64),0,0); cpu.Apply();
-                Assert.That(cpu.GetPixel(32,32).r, Is.LessThan(lit.r * .5f), "Unregistered light must stop contributing.");
+                Assert.That(cpu.GetPixel(32,32).r, Is.LessThan(.01f), "An unregistered scene light must not contribute through ForwardAdd.");
                 CollectionAssert.AreEqual(originalKeywords, material.shaderKeywords.OrderBy(k=>k));
                 Assert.That(imageType.GetProperty("material").GetValue(ui), Is.SameAs(material));
             }

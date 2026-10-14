@@ -140,6 +140,9 @@ namespace Nova.Runtime.UI
                 attenuation[i] = new Vector4(inverseRange, scale, bias, 0);
             }
             material.EnableKeyword("NOVA_CANVAS_LIGHTING");
+            // World-space Canvas can schedule ForwardAdd. This material's base
+            // pass already owns the complete selected direct-light list.
+            material.SetShaderPassEnabled("ForwardAdd", false);
             material.SetInt("_NovaCanvasLightCount", count);
             material.SetVectorArray("_NovaCanvasLightPositions", positions);
             material.SetVectorArray("_NovaCanvasLightColors", colors);

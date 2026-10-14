@@ -6,6 +6,8 @@ The selected list supplies all direct lighting for those Graphics, including the
 
 The provider uses uGUI's Graphic registry and `IMaterialModifier`. It creates an owned drawing material after the existing modifiers, preserving stencil, Mask, RectMask2D, CanvasGroup and ordering. It never edits the source material. Disabling the provider releases its drawing materials and temporary modifiers. Shared source materials can be used by independent Canvases. Normal/tangent Canvas shader channels are enabled when the component is enabled.
 
+World Space Canvas can schedule ForwardAdd. The owned drawing material explicitly disables that pass, so selected lights are evaluated once and unregistered scene lights cannot leak into the result. An unregister regression failed in eight rendering conditions before this fix; all 49 Canvas/mask tests pass afterward on Unity 2022.
+
 `Nova.UI` and `Nova.UI.Editor` compile only when `com.unity.ugui` is installed; it is not added as a package dependency. The provider supports the original UI Lit shader. Mesh/particle renderers continue to use ForwardBase/ForwardAdd. Custom or generated UI shader names require their own integration.
 
 This component is for normal Unity scenes. VRChat avatars use the allowed MeshRenderer/SkinnedMeshRenderer/ParticleSystemRenderer path with UI NOVA shaders, and require no NOVA runtime component. Native avatar Canvas and custom scripts are not covered by the VRChat component allowlist.
