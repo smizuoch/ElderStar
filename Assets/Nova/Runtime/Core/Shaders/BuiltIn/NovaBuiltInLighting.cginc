@@ -107,6 +107,7 @@ half3 NovaComputeAmbientApproximation(float3 normalWS)
 
 half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
 {
+    half3 result = 0;
     #if UNITY_LIGHT_PROBE_PROXY_VOLUME
     UNITY_BRANCH
     if (unity_ProbeVolumeParams.x == 1.0)
@@ -118,10 +119,14 @@ half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
         #ifdef UNITY_COLORSPACE_GAMMA
         ambient = LinearToGammaSpace(ambient);
         #endif
-        return ambient;
+        result = ambient;
     }
+    else
     #endif
-    return NovaComputeAmbientApproximation(normalWS);
+    {
+        result = NovaComputeAmbientApproximation(normalWS);
+    }
+    return result;
 }
 
 half3 NovaComputeMinimumLitColor(half3 albedo, float3 normalWS)
