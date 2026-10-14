@@ -4086,14 +4086,14 @@
     {
       "feature": "Ambient and light probes",
       "status": "Approximate",
-      "evidence": "Ordinary SH tests plus eight spatial LPPV GPU cases",
-      "reason_or_fallback": "Built-in SH/proxy inputs replace URP SH/APV. With environment reflections disabled, original URP still adds its global ambient-probe glossy constant; that constant is not provided by the Built-in avatar path. The retained ordinary ambient floor and this fallback can differ (22/192 nonblack-ambient coarse-mesh captures). Matching direct/interpolation captures use black ambient; use matching world probes/reflections and inspect the result."
+      "evidence": "1,008 nonblack-ambient/original image comparisons plus 12 focused GPU tests and eight spatial LPPV cases",
+      "reason_or_fallback": "SH/proxy irradiance no longer has a scene-color floor. Reflection-map-off glossy DC, scene reflection intensity, sRGB low-light and HDR conversion match the tested original inputs; the previous 22/192 failures are resolved. The scriptless fallback recovers renderer SH DC, while URP supplies global ambient-probe DC separately. Local/custom probes can therefore differ from the global fallback; match probe inputs or enable reflection maps. See AmbientLighting.md and the repository AmbientLightingParity.md report."
     },
     {
       "feature": "Environment reflections",
       "status": "Approximate",
       "evidence": "Both Lit shaders: analytic roughness response and original captures with mip-colored cubemaps/view angles",
-      "reason_or_fallback": "Original perceptual-roughness mip selection, surface reduction and grazing Fresnel are preserved. Probe assignment/capture uses Built-in. Original NOVA also omits probe-blending/box-projection shader variants; use one suitable probe or a custom/default cubemap."
+      "reason_or_fallback": "Original perceptual-roughness mip selection, surface reduction and grazing Fresnel are preserved. Disabling reflection maps retains glossy ambient as in original NOVA (0.1.6). Probe assignment/capture uses Built-in. Original NOVA also omits probe-blending/box-projection shader variants; use one suitable probe or a custom/default cubemap."
     },
     {
       "feature": "Lightmaps and vertex lighting",

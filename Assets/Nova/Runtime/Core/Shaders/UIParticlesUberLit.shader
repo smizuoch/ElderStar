@@ -324,7 +324,7 @@ Shader "Nova/UIParticles/UberLit"
             #pragma shader_feature_local _SPECULAR_SETUP
             #pragma shader_feature_local _NORMAL_MAP_ENABLED
             #pragma shader_feature_local_fragment _METALLIC_MAP_ENABLED
-            #pragma shader_feature_local_fragment _SMOOTHNESS_MAP_ENABLED
+            #pragma shader_feature_local _SMOOTHNESS_MAP_ENABLED
             #pragma shader_feature_local_fragment _SPECULAR_MAP_ENABLED
             #pragma shader_feature_local _BASE_MAP_MODE_2D _BASE_MAP_MODE_2D_ARRAY _BASE_MAP_MODE_3D
             #pragma shader_feature_local_vertex _BASE_MAP_RANDOM_ROW_SELECTION_ENABLED

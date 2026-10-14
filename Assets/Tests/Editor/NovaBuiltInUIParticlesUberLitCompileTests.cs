@@ -189,7 +189,8 @@ public sealed class NovaBuiltInUIParticlesUberLitCompileTests
         Assert.That(shaderText, Does.Contain("NovaComputeShadowAttenuation"));
         Assert.That(combinedText, Does.Contain("NovaUILitReceiveShadowsEnabled"));
         Assert.That(combinedText, Does.Contain("NovaApplyReceiveShadow"));
-        Assert.That(combinedText, Does.Contain("ShadeSH9"));
+        Assert.That(combinedText, Does.Contain("SHEvalLinearL0L1"));
+        Assert.That(combinedText, Does.Contain("SHEvalLinearL2"));
         Assert.That(shaderText, Does.Contain("_ALPHATEST_ENABLED"));
         Assert.That(shaderText, Does.Contain("clip("));
         Assert.That(shaderText, Does.Contain("CustomEditor \"Nova.Editor.Core.Scripts.UIParticlesUberLitGUI\""));

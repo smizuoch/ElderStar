@@ -73,10 +73,15 @@ materials preserves their properties, keywords and queue and supports Undo.
 
 ## Compatibility and verification
 
+The [0.1.6 ambient report](Documentation/AmbientLightingParity.md) resolves the
+previous 22 nonblack-ambient comparison failures. It restores glossy ambient,
+removes the diffuse ambient floor and corrects Gamma low-light/HDR conversion.
+The 0.1.6 suites pass 500 EditMode and 945 graphics PlayMode tests per editor.
+
 The [0.1.5 lighting report](Documentation/LowCostLightingParity.md) covers the
 vertex interpolation fixes, optional native Canvas lighting, dedicated DepthNormals,
 Built-in LPPV, eight Editor diagnostic views and explicit distortion commands.
-The final suites pass 492 EditMode and 933 graphics PlayMode tests per editor.
+That release passed 492 EditMode and 933 graphics PlayMode tests per editor.
 The ordinary avatar path needs no runtime NOVA C# component.
 
 The [randomized API/feature audit](Documentation/RandomizedParityVerification.md)

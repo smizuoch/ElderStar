@@ -60,13 +60,15 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
     [TestCase(1)]
     public void FullyReflectiveSurfaceDoesNotRetainDiffuseWhenReflectionsAreDisabled(int workflow)
     {
+        // Isolate diffuse energy. Original URP keeps glossy DC when only the map
+        // keyword is disabled; zero scene reflection intensity removes that term.
         var sample = RenderEnvironment(material =>
         {
             ConfigureReflections(material, enabled: false, metallic: 1f);
             material.SetFloat("_LitWorkflowMode", workflow);
             material.SetColor("_SpecularColor", Color.white);
             material.SetFloat("_SpecularHighlights", 0f);
-        }, ambient: Color.white, lightIntensity: 1f);
+        }, ambient: Color.white, lightIntensity: 1f, reflectionIntensity: 0f);
         Assert.That(Luminance(sample.Center), Is.LessThan(0.005f), sample.Center.ToString());
     }
 
@@ -451,7 +453,8 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
         Color? ambient = null,
         Color? background = null,
         float lightIntensity = 0f,
-        Mesh mesh = null)
+        Mesh mesh = null,
+        float reflectionIntensity = 1f)
     {
         var shader = Shader.Find(LitShaderName);
         Assert.That(shader, Is.Not.Null, LitShaderName);
@@ -482,7 +485,7 @@ public sealed class NovaBuiltInUberLitEnvironmentReflectionSmokeTests
             RenderSettings.ambientIntensity = 1f;
             RenderSettings.defaultReflectionMode = DefaultReflectionMode.Custom;
             RenderSettings.customReflection = cubemap;
-            RenderSettings.reflectionIntensity = 1f;
+            RenderSettings.reflectionIntensity = reflectionIntensity;
             DynamicGI.UpdateEnvironment();
 
             material.SetFloat("_Cull", (float)CullMode.Off);

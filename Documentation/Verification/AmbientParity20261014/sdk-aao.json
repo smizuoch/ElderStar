@@ -1,0 +1,317 @@
+{
+  "package": "0.1.6",
+  "sdk": "3.10.5",
+  "reports": [
+    {
+      "unity": "2022.3.22f1",
+      "operation": "aao-off",
+      "aaoEnabled": false,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 23,
+      "novaMaterials": 17,
+      "activeParticleRenderers": 5,
+      "particleSystems": 6,
+      "magentaPixels": 0,
+      "bundleBytes": 26893650,
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "materialStatesEqual": true,
+      "shaderWarnings": 0,
+      "csharpErrors": 0,
+      "bundleSha256": "d348365d4f609a309369e80cd80078e9a4af8ce90f02d71b2aee194a9a627a9d"
+    },
+    {
+      "unity": "2022.3.22f1",
+      "operation": "aao-on",
+      "aaoEnabled": true,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 19,
+      "novaMaterials": 17,
+      "activeParticleRenderers": 5,
+      "particleSystems": 6,
+      "magentaPixels": 0,
+      "bundleBytes": 22738586,
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "materialStatesEqual": true,
+      "shaderWarnings": 0,
+      "csharpErrors": 0,
+      "bundleSha256": "0a9071900c98585942e8b386874d7a4fe8d79938bcbe9721ad68c511a4b5f61b"
+    }
+  ],
+  "pairs": [
+    {
+      "pair": "bundle-04.png",
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "1eacd8b446c3a92af4fb64925dd092fb949ac5f2b7381407fd5fb58cf1012b82",
+      "onSha256": "11583a0665b0648b5e1c13f091ab41b15a0bd258db40d3cbf9549b73bd7af819"
+    },
+    {
+      "pair": "bundle-21.png",
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "6ea1bbccdcc60f17f00e5090e19072a0bfbbcf0dcee9fda6afdb2dd1c0e07104",
+      "onSha256": "ce8993baf8ab81d87570444ad8b357a270f80b121bc63ad3491c0e763c5b1fb2"
+    },
+    {
+      "pair": "bundle-mirror.png",
+      "mean_error": 3.1027312545388524e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "c943a8bab5331d10762caa4e8151166fff32fe8675863fad342fef1acf179e61",
+      "onSha256": "0f90bfb29358d203b48886153181c610ead61bd98e8df69ed6f3a92b5780312a"
+    },
+    {
+      "pair": "bundle-overlap-False-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "bundle-overlap-False-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "bundle-overlap-False-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "6503cf4b9056a46a3139313357f15ca818c4e1065f701eece408b2cc5508147b",
+      "onSha256": "6503cf4b9056a46a3139313357f15ca818c4e1065f701eece408b2cc5508147b"
+    },
+    {
+      "pair": "bundle-overlap-False-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "bundle-overlap-False-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "bundle-overlap-False-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "bundle-overlap-True-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "bundle-overlap-True-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "bundle-overlap-True-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "fb9aa46b6ce7afeab46d67d09012e658cda593adabe8931db2752635863a7706",
+      "onSha256": "fb9aa46b6ce7afeab46d67d09012e658cda593adabe8931db2752635863a7706"
+    },
+    {
+      "pair": "bundle-overlap-True-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "bundle-overlap-True-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "bundle-overlap-True-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "bundle.png",
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "e5d9d593950cc49df093e69c83e588bd0ef18d337f0e094c0085c604316a84a1",
+      "onSha256": "958068e86299e1f5697c0110d4cdde1dc5438ee3e1f4f67c8130c92fee135956"
+    },
+    {
+      "pair": "source-mirror.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "f38116872889406a01a0ab7fffac9752be9c5bae9b01737ba011eb1a96b2bc1b",
+      "onSha256": "f38116872889406a01a0ab7fffac9752be9c5bae9b01737ba011eb1a96b2bc1b"
+    },
+    {
+      "pair": "source-overlap-False-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "source-overlap-False-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "source-overlap-False-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "6503cf4b9056a46a3139313357f15ca818c4e1065f701eece408b2cc5508147b",
+      "onSha256": "6503cf4b9056a46a3139313357f15ca818c4e1065f701eece408b2cc5508147b"
+    },
+    {
+      "pair": "source-overlap-False-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "source-overlap-False-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "source-overlap-False-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356",
+      "onSha256": "bd8ae97b90b2722b45955326cc8c3a4e395bf90c227cf852ed0cc5c50af4f356"
+    },
+    {
+      "pair": "source-overlap-True-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "source-overlap-True-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "source-overlap-True-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "fb9aa46b6ce7afeab46d67d09012e658cda593adabe8931db2752635863a7706",
+      "onSha256": "fb9aa46b6ce7afeab46d67d09012e658cda593adabe8931db2752635863a7706"
+    },
+    {
+      "pair": "source-overlap-True-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "source-overlap-True-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "source-overlap-True-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0",
+      "onSha256": "241b93f136f8c81c060018eb7a3b4499ff94f7945f2c217214cb1080a36349c0"
+    },
+    {
+      "pair": "source.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true,
+      "offSha256": "3d77198de0febb9a6a6999871bcd90ff33a416db5888d61d020e3134899a17dd",
+      "onSha256": "3d77198de0febb9a6a6999871bcd90ff33a416db5888d61d020e3134899a17dd"
+    }
+  ],
+  "aao": "1.9.20"
+}

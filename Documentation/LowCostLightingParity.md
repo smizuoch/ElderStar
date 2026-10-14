@@ -1,5 +1,8 @@
 # Low-cost lighting parity — implementation record
 
+Follow-up: [0.1.6 ambient parity](AmbientLightingParity.md) resolves the 22 retained
+nonblack-ambient failures and records fresh tests and performance measurements.
+
 The approved 2026-10-14 worklist is in BuiltInPortingSpec.md. This report records
 scoped Built-in alternatives and their measured limits, not complete URP/API compatibility.
 

@@ -33,6 +33,7 @@ namespace Nova.Tests.PlayMode
             var read=new Texture2D(64,32,TextureFormat.RGBAFloat,false,true);
             var previous=RenderTexture.active;
             var previousLight=Shader.GetGlobalVector("_LightColor0");
+            var previousGlossy=Shader.GetGlobalVector("unity_IndirectSpecColor");
             var propertyBlock=new MaterialPropertyBlock();
             var sh=new SphericalHarmonicsL2(); sh.AddAmbientLight(new Color(0,0,2));
             propertyBlock.CopySHCoefficientArraysFrom(new[]{sh});
@@ -53,6 +54,9 @@ namespace Nova.Tests.PlayMode
                     command.SetRenderTarget(target); command.ClearRenderTarget(true,true,Color.clear);
                     command.SetViewProjectionMatrices(Matrix4x4.identity,Matrix4x4.identity);
                     command.SetGlobalVector("_LightColor0",Vector4.zero);
+                    // This assertion isolates diffuse proxy replacement. Original
+                    // NOVA keeps glossy DC with environment reflection maps disabled.
+                    command.SetGlobalVector("unity_IndirectSpecColor",Vector4.zero);
                     command.SetGlobalConstantBuffer(constants,Shader.PropertyToID("UnityProbeVolume"),0,7*16);
                     command.DrawMesh(quad.GetComponent<MeshFilter>().sharedMesh,Matrix4x4.identity,material,0,material.FindPass("ForwardBase"),propertyBlock);
                     Graphics.ExecuteCommandBuffer(command);
@@ -78,6 +82,7 @@ namespace Nova.Tests.PlayMode
                 RenderTexture.active=previous;
                 Shader.SetGlobalConstantBuffer("UnityProbeVolume",(ComputeBuffer)null,0,0);
                 Shader.SetGlobalVector("_LightColor0",previousLight);
+                Shader.SetGlobalVector("unity_IndirectSpecColor",previousGlossy);
                 constants.Dispose();
                 foreach(var owned in new UnityEngine.Object[]{quad,material,texture,target,read}) UnityEngine.Object.DestroyImmediate(owned);
             }
