@@ -300,6 +300,8 @@ Shader "Nova/UIParticles/UberLit"
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma target 3.5
+            #pragma multi_compile _ NOVA_DEBUG_DISPLAY
+            #pragma target 4.0 NOVA_DEBUG_DISPLAY
             #pragma require 2darray
             #pragma multi_compile_fwdbase
             #pragma multi_compile_local_fragment _ NOVA_CANVAS_LIGHTING
@@ -383,6 +385,8 @@ Shader "Nova/UIParticles/UberLit"
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma target 3.5
+            #pragma multi_compile _ NOVA_DEBUG_DISPLAY
+            #pragma target 4.0 NOVA_DEBUG_DISPLAY
             #pragma require 2darray
             #pragma multi_compile_fwdadd_fullshadows
             #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS

@@ -294,6 +294,8 @@ Shader "Nova/Particles/UberLit"
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma target 3.5
+            #pragma multi_compile _ NOVA_DEBUG_DISPLAY
+            #pragma target 4.0 NOVA_DEBUG_DISPLAY
             #pragma multi_compile_fwdbase
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment EVALUATE_SH_MIXED
@@ -373,6 +375,8 @@ Shader "Nova/Particles/UberLit"
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma target 3.5
+            #pragma multi_compile _ NOVA_DEBUG_DISPLAY
+            #pragma target 4.0 NOVA_DEBUG_DISPLAY
             #pragma multi_compile_fwdadd_fullshadows
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment EVALUATE_SH_MIXED

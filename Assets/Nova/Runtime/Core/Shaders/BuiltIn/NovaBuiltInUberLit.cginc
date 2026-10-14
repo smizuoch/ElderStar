@@ -246,6 +246,11 @@ half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 view
         surfaceData.specularColor) * (direct + ambient);
     half3 specularColor = NovaComputeSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS) * directShadow;
     half3 environmentReflection = NovaComputeBuiltInEnvironmentReflection(surfaceData, viewDirectionWS);
+    #if defined(NOVA_DEBUG_DISPLAY)
+    half3 diffuseAlbedo = NovaComputeDiffuseAlbedo(surfaceData.albedo, surfaceData.metallic, surfaceData.specularColor);
+    novaDebugDirect = diffuseAlbedo * direct + specularColor;
+    novaDebugIndirect = diffuseAlbedo * ambient + environmentReflection;
+    #endif
     return half4(NovaApplyEnvironmentReflection(diffuseColor + specularColor, environmentReflection), surfaceData.alpha);
 }
 

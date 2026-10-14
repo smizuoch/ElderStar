@@ -769,6 +769,9 @@ half4 frag(v2f input) : SV_Target
     return half4(depthNormalWS * 0.5 + 0.5, 1);
     #endif
 
+    #if defined(NOVA_DEBUG_DISPLAY)
+    half4 debugAlbedo = color;
+    #endif
 
     #if defined(NOVA_UI_LIT)
     NovaUILitSurfaceData surfaceData = NovaResolveUILitSurfaceData(color,
@@ -780,7 +783,11 @@ half4 frag(v2f input) : SV_Target
     color = NovaComputeUILitForwardBaseColor(surfaceData, particleViewDirWS,
         NovaComputeShadowAttenuation(input, i.positionWS), i.positionWS);
     #if defined(NOVA_CANVAS_LIGHTING)
-    color.rgb += NovaCanvasDirectLighting(surfaceData, i.positionWS, particleViewDirWS);
+    half3 canvasDirect = NovaCanvasDirectLighting(surfaceData, i.positionWS, particleViewDirWS);
+    color.rgb += canvasDirect;
+    #if defined(NOVA_DEBUG_DISPLAY)
+    novaDebugDirect += canvasDirect;
+    #endif
     #endif
     #endif
     #else
@@ -795,6 +802,21 @@ half4 frag(v2f input) : SV_Target
     #endif
     #endif
 
+    #if defined(NOVA_DEBUG_DISPLAY)
+        #if defined(UNITY_PASS_FORWARDADD)
+        if (_NovaDebugMode == 6) return color;
+        if (_NovaDebugMode == 8)
+            return half4((step(0.000001, NovaComputeBuiltInAddLightAttenuation(input, i.positionWS)) / 8.0h).xxx, 0);
+        return 0;
+        #else
+        half count = 0;
+        #if defined(NOVA_CANVAS_LIGHTING)
+        count = _NovaCanvasLightCount;
+        #endif
+        return NovaDebugColor(debugAlbedo, surfaceData.normalWS, i.tangentWS,
+            -mul(UNITY_MATRIX_V, float4(i.positionWS, 1)).z, i.fog, novaDebugDirect, novaDebugIndirect, count);
+        #endif
+    #endif
     NovaApplyVertexFog(color, i.fog);
     return color;
 }

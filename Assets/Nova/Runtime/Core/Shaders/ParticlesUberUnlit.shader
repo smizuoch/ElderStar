@@ -270,6 +270,8 @@ Shader "Nova/Particles/UberUnlit"
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma target 3.5
+            #pragma multi_compile _ NOVA_DEBUG_DISPLAY
+            #pragma target 4.0 NOVA_DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _ DEBUG_DISPLAY
             #pragma shader_feature_local_fragment _VERTEX_ALPHA_AS_TRANSITION_PROGRESS
             #pragma shader_feature_local_fragment _ALPHAMODULATE_ENABLED
@@ -312,6 +314,7 @@ Shader "Nova/Particles/UberUnlit"
             #pragma shader_feature_local _CASTING_PUNCTUAL_LIGHT_SHADOW
             #include "BuiltIn/NovaBuiltInCore.cginc"
             #include "BuiltIn/NovaBuiltInFog.cginc"
+            #include "BuiltIn/NovaBuiltInDebug.cginc"
             #include "BuiltIn/NovaBuiltInTexture.cginc"
             #include "BuiltIn/NovaBuiltInDepth.cginc"
             #include "BuiltIn/NovaBuiltInUberUnlit.cginc"
@@ -499,6 +502,9 @@ Shader "Nova/Particles/UberUnlit"
                 float4 customCoord1 : TEXCOORD8;
                 float4 customCoord2 : TEXCOORD9;
                 float4 normalAndFog : TEXCOORD10;
+                #if defined(NOVA_DEBUG_DISPLAY)
+                float3 debugTangentWS : TEXCOORD15;
+                #endif
                 float3 viewDirWS : TEXCOORD11;
                 float3 viewDirTS : TEXCOORD12;
                 float4 screenPosition : TEXCOORD14;
@@ -530,6 +536,9 @@ Shader "Nova/Particles/UberUnlit"
                 o.normalAndFog.xyz = NovaObjectToWorldNormal(v.normal);
                 o.viewDirWS = NovaWorldSpaceViewDir(positionWS);
                 float3 tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
+                #if defined(NOVA_DEBUG_DISPLAY)
+                o.debugTangentWS = tangentWS;
+                #endif
                 float3 bitangentWS = NovaCreateBitangent(o.normalAndFog.xyz, tangentWS, v.tangent.w);
                 o.viewDirTS = float3(dot(o.viewDirWS, tangentWS), dot(o.viewDirWS, bitangentWS), dot(o.viewDirWS, o.normalAndFog.xyz));
                 half progress = _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2);
@@ -933,6 +942,9 @@ Shader "Nova/Particles/UberUnlit"
                 color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
                 #endif
 
+                #if defined(NOVA_DEBUG_DISPLAY)
+                return NovaDebugColor(color, i.normalAndFog.xyz, i.debugTangentWS, i.screenPosition.z, i.normalAndFog.w, 0, 0, 0);
+                #endif
                 NovaApplyVertexFog(color, i.normalAndFog.w);
                 return color;
             }

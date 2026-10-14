@@ -3,6 +3,7 @@
 
 #include "NovaBuiltInCore.cginc"
 #include "Lighting.cginc"
+#include "NovaBuiltInDebug.cginc"
 
 struct NovaBuiltInMainLight
 {
