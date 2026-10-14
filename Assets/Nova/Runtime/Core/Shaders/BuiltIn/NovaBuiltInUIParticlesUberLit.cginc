@@ -249,15 +249,16 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
     #if defined(NOVA_CANVAS_LIGHTING)
     specularColor = 0;
     #endif
-    half3 environmentReflection = half3(0.0h, 0.0h, 0.0h);
     #if defined(_ENVIRONMENT_REFLECTIONS_ENABLED)
-    environmentReflection = NovaSampleEnvironmentReflection(
+    half3 environment = NovaSampleEnvironmentReflection(
         NovaReflectViewDirection(viewDirectionWS, surfaceData.normalWS), surfaceData.smoothness)
-        * NovaComputeEnvironmentReflectionStrength(surfaceData.albedo, surfaceData.metallic,
-            surfaceData.specularColor, surfaceData.smoothness,
-            dot(NovaSafeNormalize(surfaceData.normalWS), NovaSafeNormalize(viewDirectionWS)))
         * step(0.5h, _EnvironmentReflections);
+    #else
+    half3 environment = NovaSampleGlossyAmbient();
     #endif
+    half3 environmentReflection = environment * NovaComputeEnvironmentReflectionStrength(
+        surfaceData.albedo, surfaceData.metallic, surfaceData.specularColor, surfaceData.smoothness,
+        dot(NovaSafeNormalize(surfaceData.normalWS), NovaSafeNormalize(viewDirectionWS)));
     #if defined(NOVA_DEBUG_DISPLAY)
     half3 diffuseAlbedo = NovaComputeDiffuseAlbedo(surfaceData.albedo, surfaceData.metallic, surfaceData.specularColor);
     novaDebugDirect = diffuseAlbedo * direct + specularColor;

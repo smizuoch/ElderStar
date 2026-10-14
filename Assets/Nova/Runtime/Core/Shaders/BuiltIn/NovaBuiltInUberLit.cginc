@@ -223,16 +223,20 @@ half NovaLitAdditionalLightsEnabled()
 
 half3 NovaComputeBuiltInEnvironmentReflection(NovaLitSurfaceData surfaceData, float3 viewDirectionWS)
 {
-    half enabled = NovaLitEnvironmentReflectionsEnabled();
+    #if defined(_ENVIRONMENT_REFLECTIONS_ENABLED)
     float3 reflectionDirectionWS = NovaReflectViewDirection(viewDirectionWS, surfaceData.normalWS);
     half3 environment = NovaSampleEnvironmentReflection(reflectionDirectionWS, surfaceData.smoothness);
+    environment *= NovaLitEnvironmentReflectionsEnabled();
+    #else
+    half3 environment = NovaSampleGlossyAmbient();
+    #endif
     half3 reflectionStrength = NovaComputeEnvironmentReflectionStrength(
         surfaceData.albedo,
         surfaceData.metallic,
         surfaceData.specularColor,
         surfaceData.smoothness,
         dot(NovaSafeNormalize(surfaceData.normalWS), NovaSafeNormalize(viewDirectionWS)));
-    return environment * reflectionStrength * enabled;
+    return environment * reflectionStrength;
 }
 
 half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation, float3 positionWS)

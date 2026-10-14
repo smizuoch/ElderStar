@@ -15,6 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+Ambient follow-up (2026-10-14):
+
+- [x] Reproduce the 22 nonblack-ambient differences and isolate diffuse SH, glossy fallback and color-space inputs against original NOVA.
+- [x] Add failing GPU regressions, implement the smallest shader-only correction and compare flat/gradient/probe lighting without changing golden images or thresholds.
+- [ ] Run both Unity suites, SDK/AAO and hidden GPU measurements; document remaining limits, review, commit and merge/push main as authorized.
+
 Low-cost lighting parity (approved plan, 2026-10-14):
 
 - [x] Reproduce curved/coarse-mesh rim, tangent-space parallax, normal-basis and vertex-fog differences against original NOVA, then fix within SM3.5/stereo limits.

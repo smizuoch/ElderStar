@@ -94,15 +94,44 @@ NovaBuiltInMainLight NovaGetMainLight(float3 normalWS)
     return lightData;
 }
 
+half3 NovaAmbientToActiveColorSpace(half3 irradiance)
+{
+    irradiance = max(0, irradiance);
+    #ifdef UNITY_COLORSPACE_GAMMA
+    // URP SampleSH uses piecewise sRGB, including its low-intensity linear segment.
+    half3 high = 1.055h * pow(irradiance, 0.416666667h) - 0.055h;
+    irradiance = lerp(high, irradiance * 12.92h, step(irradiance, 0.0031308h));
+    #endif
+    return irradiance;
+}
+
 half3 NovaSampleAmbient(float3 normalWS)
 {
-    return ShadeSH9(half4(NovaSafeNormalize(normalWS), 1.0h));
+    half4 normal = half4(NovaSafeNormalize(normalWS), 1);
+    return NovaAmbientToActiveColorSpace(SHEvalLinearL0L1(normal) + SHEvalLinearL2(normal));
 }
 
 half3 NovaComputeAmbientApproximation(float3 normalWS)
 {
-    half3 sh = NovaSampleAmbient(normalWS);
-    return max(sh, UNITY_LIGHTMODEL_AMBIENT.rgb);
+    // Original SampleSHPixel clamps negative irradiance, without a scene-color floor.
+    return max(0, NovaSampleAmbient(normalWS));
+}
+
+half3 NovaSampleGlossyAmbient()
+{
+    // Original keeps DC glossy illumination even with reflection maps disabled.
+    // Built-in's indirect-specular RGB can retain a previous skybox when switching
+    // to Flat/Trilight. Recover DC from the current renderer SH instead. Packing
+    // puts part of L2 into A.w, so remove it. The native alpha is reflection intensity.
+    half3 dc = half3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w)
+        + half3(unity_SHBr.z, unity_SHBg.z, unity_SHBb.z) / 3.0h;
+    half3 ambient = max(0, dc) * unity_IndirectSpecColor.a;
+    #ifdef UNITY_COLORSPACE_GAMMA
+    // Original URP sets glossy DC through C# Color.gamma, whose HDR segment
+    // differs from the shader's diffuse sRGB conversion above.
+    ambient = half3(LinearToGammaSpaceExact(ambient.r), LinearToGammaSpaceExact(ambient.g), LinearToGammaSpaceExact(ambient.b));
+    #endif
+    return ambient;
 }
 
 half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
@@ -115,11 +144,7 @@ half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
         half4 normal = half4(NovaSafeNormalize(normalWS), 1);
         // Unity's proxy stores L0/L1 spatially; L2 remains the renderer's probe.
         // Replace L0/L1 instead of adding the ordinary SH result a second time.
-        half3 ambient = max(0, SHEvalLinearL0L1_SampleProbeVolume(normal, positionWS) + SHEvalLinearL2(normal));
-        #ifdef UNITY_COLORSPACE_GAMMA
-        ambient = LinearToGammaSpace(ambient);
-        #endif
-        result = ambient;
+        result = NovaAmbientToActiveColorSpace(SHEvalLinearL0L1_SampleProbeVolume(normal, positionWS) + SHEvalLinearL2(normal));
     }
     else
     #endif
