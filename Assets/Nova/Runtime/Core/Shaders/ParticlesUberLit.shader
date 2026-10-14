@@ -339,14 +339,14 @@ Shader "Nova/Particles/UberLit"
             #pragma shader_feature_local_vertex _ _VERTEX_DEFORMATION_ENABLED
             #pragma shader_feature_local _SHADOW_CASTER_ALPHA_TEST_ENABLED
             #pragma shader_feature_local _CASTING_PUNCTUAL_LIGHT_SHADOW
-            #pragma shader_feature_local_fragment _SPECULAR_SETUP
+            #pragma shader_feature_local _SPECULAR_SETUP
             #pragma shader_feature_local_fragment _NORMAL_MAP_ENABLED
             #pragma shader_feature_local_fragment _SPECULAR_MAP_ENABLED
             #pragma shader_feature_local_fragment _METALLIC_MAP_ENABLED
-            #pragma shader_feature_local_fragment _SMOOTHNESS_MAP_ENABLED
+            #pragma shader_feature_local _SMOOTHNESS_MAP_ENABLED
             #pragma shader_feature_local_fragment _RECEIVE_SHADOWS_ENABLED
             #pragma shader_feature_local_fragment _SPECULAR_HIGHLIGHTS_ENABLED
-            #pragma shader_feature_local_fragment _ENVIRONMENT_REFLECTIONS_ENABLED
+            #pragma shader_feature_local _ENVIRONMENT_REFLECTIONS_ENABLED
             #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS
             #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma shader_feature_local_fragment _SHADOWS_SOFT

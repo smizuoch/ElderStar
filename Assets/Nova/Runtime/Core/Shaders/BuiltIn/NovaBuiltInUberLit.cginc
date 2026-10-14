@@ -235,7 +235,7 @@ half3 NovaComputeBuiltInEnvironmentReflection(NovaLitSurfaceData surfaceData, fl
         surfaceData.metallic,
         surfaceData.specularColor,
         surfaceData.smoothness,
-        dot(NovaSafeNormalize(surfaceData.normalWS), NovaSafeNormalize(viewDirectionWS)));
+        NovaEnvironmentNormalDotView(surfaceData.normalWS, viewDirectionWS));
     return environment * reflectionStrength;
 }
 
@@ -243,7 +243,7 @@ half4 NovaComputeLitForwardBaseColor(NovaLitSurfaceData surfaceData, float3 view
 {
     half receiveShadow = NovaLitReceiveShadowsEnabled();
     half directShadow = NovaApplyReceiveShadow(shadowAttenuation, receiveShadow);
-    half diffuse = NovaComputeLambertDiffuse(surfaceData.normalWS, NovaGetMainLightDirection());
+    half diffuse = saturate(dot(surfaceData.normalWS, NovaGetMainLightDirection()));
     half3 direct = NovaGetMainLightColor() * diffuse * directShadow;
     half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS, positionWS);
     half3 diffuseColor = NovaComputeDiffuseAlbedo(surfaceData.albedo, surfaceData.metallic,

@@ -237,7 +237,7 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
 {
     half receiveShadow = NovaUILitReceiveShadowsEnabled();
     half directShadow = NovaApplyReceiveShadow(shadowAttenuation, receiveShadow);
-    half diffuse = NovaComputeLambertDiffuse(surfaceData.normalWS, NovaGetMainLightDirection());
+    half diffuse = saturate(dot(surfaceData.normalWS, NovaGetMainLightDirection()));
     half3 direct = NovaGetMainLightColor() * diffuse * directShadow;
     #if defined(NOVA_CANVAS_LIGHTING)
     direct = 0; // The explicit Canvas list owns direct lighting, avoiding duplicate main lights.
@@ -258,7 +258,7 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
     #endif
     half3 environmentReflection = environment * NovaComputeEnvironmentReflectionStrength(
         surfaceData.albedo, surfaceData.metallic, surfaceData.specularColor, surfaceData.smoothness,
-        dot(NovaSafeNormalize(surfaceData.normalWS), NovaSafeNormalize(viewDirectionWS)));
+        NovaEnvironmentNormalDotView(surfaceData.normalWS, viewDirectionWS));
     #if defined(NOVA_DEBUG_DISPLAY)
     half3 diffuseAlbedo = NovaComputeDiffuseAlbedo(surfaceData.albedo, surfaceData.metallic, surfaceData.specularColor);
     novaDebugDirect = diffuseAlbedo * direct + specularColor;

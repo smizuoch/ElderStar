@@ -23,7 +23,9 @@ struct NovaBuiltInSurfaceData
 
 half3 NovaGetMainLightDirection()
 {
-    return NovaSafeNormalize(_WorldSpaceLightPos0.xyz);
+    // ForwardBase supplies the normalized main direction, as consumed directly
+    // by UnityStandardCore.MainLight. Punctual ForwardAdd still normalizes below.
+    return _WorldSpaceLightPos0.xyz;
 }
 
 half3 NovaGetMainLightColor()
@@ -43,7 +45,8 @@ half3 NovaGetBuiltInAddLightColor()
 
 half NovaComputeLambertDiffuse(float3 normalWS, float3 lightDirectionWS)
 {
-    return saturate(dot(NovaSafeNormalize(normalWS), NovaSafeNormalize(lightDirectionWS)));
+    // Surface resolvers provide a normalized world normal.
+    return saturate(dot(normalWS, NovaSafeNormalize(lightDirectionWS)));
 }
 
 half3 NovaComputeDiffuseAlbedo(half3 albedo, half metallic, half3 specularColor)
@@ -77,7 +80,7 @@ half NovaGgxSpecular(float3 normalWS, float3 lightDirectionWS, float3 viewDirect
     // original NOVA's UniversalFragmentPBR, expressed without an SRP dependency.
     float3 lightDirection = NovaSafeNormalize(lightDirectionWS);
     float3 halfDirection = NovaSafeNormalize(lightDirection + NovaSafeNormalize(viewDirectionWS));
-    float noH = saturate(dot(NovaSafeNormalize(normalWS), halfDirection));
+    float noH = saturate(dot(normalWS, halfDirection));
     float loH = saturate(dot(lightDirection, halfDirection));
     float roughness = NovaRoughness(smoothness);
     float roughnessSquared = max(roughness * roughness, 0.00006103515625);
@@ -100,15 +103,24 @@ half3 NovaAmbientToActiveColorSpace(half3 irradiance)
     #ifdef UNITY_COLORSPACE_GAMMA
     // URP SampleSH uses piecewise sRGB, including its low-intensity linear segment.
     half3 high = 1.055h * pow(irradiance, 0.416666667h) - 0.055h;
-    irradiance = lerp(high, irradiance * 12.92h, step(irradiance, 0.0031308h));
+    irradiance = irradiance <= 0.0031308h ? irradiance * 12.9232102h : high;
     #endif
     return irradiance;
 }
 
+#if defined(NOVA_VERTEX_GLOSSY_AMBIENT)
+static half4 novaInterpolatedGlossyAmbient = 0;
+#endif
+
+half3 NovaSampleAmbientUnitNormal(float3 normalWS)
+{
+    half4 normal = half4(normalWS, 1);
+    return NovaAmbientToActiveColorSpace(SHEvalLinearL0L1(normal) + SHEvalLinearL2(normal));
+}
+
 half3 NovaSampleAmbient(float3 normalWS)
 {
-    half4 normal = half4(NovaSafeNormalize(normalWS), 1);
-    return NovaAmbientToActiveColorSpace(SHEvalLinearL0L1(normal) + SHEvalLinearL2(normal));
+    return NovaSampleAmbientUnitNormal(NovaSafeNormalize(normalWS));
 }
 
 half3 NovaComputeAmbientApproximation(float3 normalWS)
@@ -117,7 +129,7 @@ half3 NovaComputeAmbientApproximation(float3 normalWS)
     return max(0, NovaSampleAmbient(normalWS));
 }
 
-half3 NovaSampleGlossyAmbient()
+half3 NovaComputeGlossyAmbient()
 {
     // Original keeps DC glossy illumination even with reflection maps disabled.
     // Built-in's indirect-specular RGB can retain a previous skybox when switching
@@ -134,6 +146,15 @@ half3 NovaSampleGlossyAmbient()
     return ambient;
 }
 
+half3 NovaSampleGlossyAmbient()
+{
+    #if defined(NOVA_VERTEX_GLOSSY_AMBIENT)
+    return novaInterpolatedGlossyAmbient.rgb;
+    #else
+    return NovaComputeGlossyAmbient();
+    #endif
+}
+
 half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
 {
     half3 result = 0;
@@ -141,7 +162,7 @@ half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
     UNITY_BRANCH
     if (unity_ProbeVolumeParams.x == 1.0)
     {
-        half4 normal = half4(NovaSafeNormalize(normalWS), 1);
+        half4 normal = half4(normalWS, 1);
         // Unity's proxy stores L0/L1 spatially; L2 remains the renderer's probe.
         // Replace L0/L1 instead of adding the ordinary SH result a second time.
         result = NovaAmbientToActiveColorSpace(SHEvalLinearL0L1_SampleProbeVolume(normal, positionWS) + SHEvalLinearL2(normal));
@@ -149,13 +170,14 @@ half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
     else
     #endif
     {
-        result = NovaComputeAmbientApproximation(normalWS);
+        result = NovaSampleAmbientUnitNormal(normalWS);
     }
     return result;
 }
 
 half3 NovaComputeMinimumLitColor(half3 albedo, float3 normalWS)
 {
+    normalWS = NovaSafeNormalize(normalWS);
     half diffuse = NovaComputeLambertDiffuse(normalWS, NovaGetMainLightDirection());
     half3 direct = NovaGetMainLightColor() * diffuse;
     half3 ambient = NovaComputeAmbientApproximation(normalWS);
@@ -175,6 +197,16 @@ half3 NovaSampleEnvironmentReflection(float3 reflectionDirectionWS, half smoothn
     return DecodeHDR(encodedEnvironment, unity_SpecCube0_HDR);
 }
 
+half NovaEnvironmentNormalDotView(float3 unitNormalWS, float3 viewDirectionWS)
+{
+    #if !defined(_ENVIRONMENT_REFLECTIONS_ENABLED) && !defined(_SPECULAR_HIGHLIGHTS_ENABLED) && !defined(_TINT_AREA_RIM) && !defined(_TRANSPARENCY_BY_RIM)
+    // Only NoV is needed: move the reciprocal length outside the dot product.
+    return dot(unitNormalWS, viewDirectionWS) * rsqrt(max(dot(viewDirectionWS, viewDirectionWS), 1.0e-8));
+    #else
+    return dot(unitNormalWS, NovaSafeNormalize(viewDirectionWS));
+    #endif
+}
+
 half3 NovaComputeEnvironmentReflectionStrength(
     half3 albedo,
     half metallic,
@@ -189,11 +221,20 @@ half3 NovaComputeEnvironmentReflectionStrength(
     half reflectivity = 0.04h + 0.96h * metallic;
     #endif
     float roughness = NovaRoughness(smoothness);
+    #if defined(NOVA_VERTEX_GLOSSY_AMBIENT) && !defined(_SMOOTHNESS_MAP_ENABLED) && ((!defined(_SPECULAR_SETUP) && !defined(_METALLIC_MAP_ENABLED)) || (defined(_SPECULAR_SETUP) && !defined(_SPECULAR_MAP_ENABLED)))
+    half grazing = novaInterpolatedGlossyAmbient.w;
+    #else
     half grazing = saturate(smoothness + reflectivity);
+    #endif
     half fresnel = 1.0h - saturate(normalDotView);
     fresnel *= fresnel;
     fresnel *= fresnel;
+    #if defined(NOVA_VERTEX_GLOSSY_AMBIENT) && !defined(_SMOOTHNESS_MAP_ENABLED)
+    // Uniform surface reduction is already multiplied into the vertex DC.
+    return lerp(reflectionColor, grazing, fresnel);
+    #else
     return lerp(reflectionColor, grazing, fresnel) / (roughness * roughness + 1.0);
+    #endif
 }
 
 half3 NovaApplyEnvironmentReflection(half3 litColor, half3 environmentReflection)

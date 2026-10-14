@@ -27,6 +27,12 @@
 #include "NovaBuiltInUI.cginc"
 #include "NovaBuiltInBaseUV.cginc"
 
+// The unnormalized world view is affine in world position, so interpolation is
+// equivalent to rebuilding it per pixel. Reuse the parallax field when unused.
+#if !defined(_PARALLAX_MAP_TARGET_BASE) && !defined(_PARALLAX_MAP_TARGET_TINT) && !defined(_PARALLAX_MAP_TARGET_EMISSION)
+#define NOVA_INTERPOLATED_VIEW_WS
+#endif
+
 #if defined(NOVA_DEPTH_NORMALS)
 float _NovaDepthNormalsUseSceneDepth;
 #endif
@@ -184,6 +190,11 @@ float _VertexDeformationIntensity;
 half _VertexDeformationIntensityCoord;
 float _VertexDeformationBaseValue;
 
+// Uniform glossy DC/color conversion can run per vertex. A fully featured clipped
+// UI base pass already consumes all SM3.5 stereo outputs; keep its pixel fallback.
+#if !defined(_ENVIRONMENT_REFLECTIONS_ENABLED) && !defined(UNITY_PASS_FORWARDADD) && !defined(NOVA_DEPTH_NORMALS) && !(defined(NOVA_UI_LIT) && defined(UNITY_UI_CLIP_RECT))
+#define NOVA_VERTEX_GLOSSY_AMBIENT
+#endif
 #include "NovaBuiltInLighting.cginc"
 #include "NovaBuiltInShadow.cginc"
 #if defined(NOVA_UI_LIT)
@@ -248,6 +259,9 @@ struct v2f
     float4 tangentAndNormalY : TEXCOORD8;
     float4 bitangentAndNormalZ : TEXCOORD9;
     float4 viewAndFog : TEXCOORD10;
+    #if defined(NOVA_VERTEX_GLOSSY_AMBIENT)
+    nointerpolation half4 glossyAmbient : TEXCOORD12;
+    #endif
     #if defined(UNITY_PASS_FORWARDADD) && !defined(NOVA_FRAGMENT_LIGHT_COORDS)
     NOVA_LIGHTING_COORDS(11, 12)
     #else
@@ -308,7 +322,11 @@ v2f vert(appdata v)
     // original parallax uses odd scale. Preserve the two distinct contracts.
     o.bitangentWS = cross(vertexNormalWS, tangentWS) * v.tangent.w;
     float3 viewDirWS = NovaWorldSpaceViewDir(positionWS);
+    #if defined(NOVA_INTERPOLATED_VIEW_WS)
+    o.viewDirTS = viewDirWS;
+    #else
     o.viewDirTS = float3(dot(viewDirWS, tangentWS), dot(viewDirWS, bitangentWS), dot(viewDirWS, vertexNormalWS));
+    #endif
     o.fog = NovaVertexFog(o.pos.z);
     half progress = _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2);
     half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
@@ -466,6 +484,19 @@ v2f vert(appdata v)
     packed.tangentAndNormalY = float4(o.tangentWS, vertexNormalWS.y);
     packed.bitangentAndNormalZ = float4(o.bitangentWS, vertexNormalWS.z);
     packed.viewAndFog = float4(o.viewDirTS, o.fog);
+    #if defined(NOVA_VERTEX_GLOSSY_AMBIENT)
+    half3 glossyAmbient = NovaComputeGlossyAmbient();
+    #if !defined(_SMOOTHNESS_MAP_ENABLED)
+    float ambientRoughness = NovaRoughness(_Smoothness);
+    glossyAmbient *= rcp(ambientRoughness * ambientRoughness + 1.0);
+    #endif
+    #if defined(_SPECULAR_SETUP)
+    half ambientReflectivity = saturate(max(_SpecularColor.r, max(_SpecularColor.g, _SpecularColor.b)));
+    #else
+    half ambientReflectivity = 0.04h + 0.96h * saturate(_Metallic);
+    #endif
+    packed.glossyAmbient = half4(glossyAmbient, saturate(saturate(_Smoothness) + ambientReflectivity));
+    #endif
     packed.color = o.color;
     #if defined(NOVA_UI_LIT) && defined(UNITY_UI_CLIP_RECT)
     packed.positionOS = o.flowUvAndPositionOS.zw;
@@ -592,6 +623,9 @@ void ApplyEmissionColor(inout half4 color, half4 emissionMap, half emissionInten
 half4 frag(v2f input) : SV_Target
 {
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+    #if defined(NOVA_VERTEX_GLOSSY_AMBIENT)
+    novaInterpolatedGlossyAmbient = input.glossyAmbient;
+    #endif
     NovaFeatureData i = (NovaFeatureData)0;
     i.baseUvAndProgress = float4(input.baseTintUv.xy, input.progress.x, input.positionAndNormalX.w);
     i.tintUvAndProgress = float4(input.baseTintUv.zw, input.progress.y, input.tangentAndNormalY.w);
@@ -617,7 +651,11 @@ half4 frag(v2f input) : SV_Target
     float4 screenPosition = NovaComputeScreenPos(NovaWorldToClipPos(i.positionWS));
     screenPosition.z = -mul(UNITY_MATRIX_V, float4(i.positionWS, 1)).z;
     #endif
+    #if defined(NOVA_INTERPOLATED_VIEW_WS)
+    float3 particleViewDirWS = input.viewAndFog.xyz;
+    #else
     float3 particleViewDirWS = NovaWorldSpaceViewDir(i.positionWS);
+    #endif
     float3 particleBitangentWS = i.bitangentWS;
     float3 particleViewDirTS = i.viewDirTS;
     float2 baseUv = i.baseUvAndProgress.xy;

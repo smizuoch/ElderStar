@@ -34,6 +34,20 @@ namespace Nova.Tests.Editor
         [TestCase("Nova/UIParticles/UberLit", "SPOT", "SHADOWS_DEPTH")]
         public void AllInterpolatedFeaturesFitStereoShadowedForwardAdd(string name, string light, string shadow)
         {
+            CompileAllFeatures(name,light,shadow,"ForwardAdd",true,false);
+        }
+
+        [Test]
+        public void AllInterpolatedFeaturesFitStereoShadowedForwardBase(
+            [Values("Nova/Particles/UberLit","Nova/UIParticles/UberLit")] string name,
+            [Values(false,true)] bool clip,
+            [Values(false,true)] bool reflections)
+        {
+            CompileAllFeatures(name,"DIRECTIONAL","SHADOWS_SCREEN","ForwardBase",clip,reflections);
+        }
+
+        private static void CompileAllFeatures(string name,string light,string shadow,string pass,bool clip,bool reflections)
+        {
             var shader = Shader.Find(name);
             var material = new Material(shader);
             try
@@ -46,7 +60,9 @@ namespace Nova.Tests.Editor
                     "_ALPHA_TRANSITION_MAP_MODE_2D_ARRAY", "_ALPHA_TRANSITION_MAP_SECOND_TEXTURE_MODE_2D_ARRAY",
                     "_FADE_TRANSITION_ENABLED", "_ALPHA_TRANSITION_BLEND_SECOND_TEX_AVERAGE", "_SOFT_PARTICLES_ENABLED",
                     "_TRANSPARENCY_BY_RIM", "_DEPTH_FADE_ENABLED" }) material.EnableKeyword(keyword);
-                ShaderUtil.CompilePass(material, material.FindPass("ForwardAdd"), true);
+                if(!clip)material.DisableKeyword("UNITY_UI_CLIP_RECT");
+                if(reflections)material.EnableKeyword("_ENVIRONMENT_REFLECTIONS_ENABLED");
+                ShaderUtil.CompilePass(material, material.FindPass(pass), true);
                 Assert.That(ShaderUtil.GetShaderMessages(shader).Where(m => m.severity.ToString() == "Error")
                     .Select(m => m.message), Is.Empty, name);
             }
