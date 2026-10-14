@@ -104,6 +104,25 @@ half3 NovaComputeAmbientApproximation(float3 normalWS)
     return max(sh, UNITY_LIGHTMODEL_AMBIENT.rgb);
 }
 
+half3 NovaComputeAmbientApproximation(float3 normalWS, float3 positionWS)
+{
+    #if UNITY_LIGHT_PROBE_PROXY_VOLUME
+    UNITY_BRANCH
+    if (unity_ProbeVolumeParams.x == 1.0)
+    {
+        half4 normal = half4(NovaSafeNormalize(normalWS), 1);
+        // Unity's proxy stores L0/L1 spatially; L2 remains the renderer's probe.
+        // Replace L0/L1 instead of adding the ordinary SH result a second time.
+        half3 ambient = max(0, SHEvalLinearL0L1_SampleProbeVolume(normal, positionWS) + SHEvalLinearL2(normal));
+        #ifdef UNITY_COLORSPACE_GAMMA
+        ambient = LinearToGammaSpace(ambient);
+        #endif
+        return ambient;
+    }
+    #endif
+    return NovaComputeAmbientApproximation(normalWS);
+}
+
 half3 NovaComputeMinimumLitColor(half3 albedo, float3 normalWS)
 {
     half diffuse = NovaComputeLambertDiffuse(normalWS, NovaGetMainLightDirection());

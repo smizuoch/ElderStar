@@ -233,7 +233,7 @@ half NovaUILitReceiveShadowsEnabled()
     #endif
 }
 
-half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation)
+half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation, float3 positionWS)
 {
     half receiveShadow = NovaUILitReceiveShadowsEnabled();
     half directShadow = NovaApplyReceiveShadow(shadowAttenuation, receiveShadow);
@@ -242,7 +242,7 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
     #if defined(NOVA_CANVAS_LIGHTING)
     direct = 0; // The explicit Canvas list owns direct lighting, avoiding duplicate main lights.
     #endif
-    half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS);
+    half3 ambient = NovaComputeAmbientApproximation(surfaceData.normalWS, positionWS);
     half3 diffuseColor = NovaComputeDiffuseAlbedo(surfaceData.albedo, surfaceData.metallic,
         surfaceData.specularColor) * (direct + ambient);
     half3 specularColor = NovaComputeUILitSpecularApproximation(surfaceData, NovaGetMainLightDirection(), viewDirectionWS) * directShadow;
@@ -259,6 +259,11 @@ half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 
         * step(0.5h, _EnvironmentReflections);
     #endif
     return half4(diffuseColor + specularColor + environmentReflection, surfaceData.alpha);
+}
+
+half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS, half shadowAttenuation)
+{
+    return NovaComputeUILitForwardBaseColor(surfaceData, viewDirectionWS, shadowAttenuation, float3(0, 0, 0));
 }
 
 half4 NovaComputeUILitForwardBaseColor(NovaUILitSurfaceData surfaceData, float3 viewDirectionWS)

@@ -778,7 +778,7 @@ half4 frag(v2f input) : SV_Target
         NovaComputeBuiltInAddLightAttenuation(input, i.positionWS));
     #else
     color = NovaComputeUILitForwardBaseColor(surfaceData, particleViewDirWS,
-        NovaComputeShadowAttenuation(input, i.positionWS));
+        NovaComputeShadowAttenuation(input, i.positionWS), i.positionWS);
     #if defined(NOVA_CANVAS_LIGHTING)
     color.rgb += NovaCanvasDirectLighting(surfaceData, i.positionWS, particleViewDirWS);
     #endif
@@ -791,7 +791,7 @@ half4 frag(v2f input) : SV_Target
         NovaComputeBuiltInAddLightAttenuation(input, i.positionWS));
     #else
     color = NovaComputeLitForwardBaseColor(surfaceData, particleViewDirWS,
-        NovaComputeShadowAttenuation(input, i.positionWS));
+        NovaComputeShadowAttenuation(input, i.positionWS), i.positionWS);
     #endif
     #endif
 
