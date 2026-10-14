@@ -1,12 +1,35 @@
 #ifndef NOVA_PARTICLE_FEATURES_INCLUDED
 #define NOVA_PARTICLE_FEATURES_INCLUDED
 
+#if defined(NOVA_DEPTH_NORMALS)
+// Match original ParticlesUberDepthNormalsCore, whose alpha path deliberately
+// omits channel/tone/color correction and whose opaque flow uses the legacy flag.
+#undef _BASE_MAP_CHANNEL_ENABLED
+#undef _BASE_MAP_TONE_MODE_TRITONE
+#undef _BASE_MAP_TONE_MODE_PENTONE
+#undef _GREYSCALE_ENABLED
+#undef _GRADIENT_MAP_ENABLED
+#if !defined(_ALPHATEST_ENABLED)
+#undef _FLOW_MAP_TARGET_BASE
+#undef _FLOW_MAP_TARGET_TINT
+#undef _FLOW_MAP_TARGET_EMISSION
+#undef _FLOW_MAP_TARGET_ALPHA_TRANSITION
+#endif
+#if defined(_FLOW_MAP_ENABLED)
+#define _FLOW_MAP_TARGET_BASE
+#endif
+#endif
+
 #include "NovaBuiltInCore.cginc"
 #include "NovaBuiltInFog.cginc"
 #include "NovaBuiltInTexture.cginc"
 #include "NovaBuiltInDepth.cginc"
 #include "NovaBuiltInUI.cginc"
 #include "NovaBuiltInBaseUV.cginc"
+
+#if defined(NOVA_DEPTH_NORMALS)
+float _NovaDepthNormalsUseSceneDepth;
+#endif
 
 NOVA_DECLARE_TEX2D(_BaseMap);
 NOVA_DECLARE_TEX2D_ARRAY(_BaseMap2DArray);
@@ -561,7 +584,7 @@ half4 frag(v2f input) : SV_Target
     i.customCoord1 = input.customCoord1; i.customCoord2 = input.customCoord2;
     i.color = input.color;
     float3 interpolatedNormalWS = float3(i.baseUvAndProgress.w, i.tintUvAndProgress.w, i.parallaxUvAndProgress.w);
-    #if defined(_SOFT_PARTICLES_ENABLED) || defined(_DEPTH_FADE_ENABLED)
+    #if defined(_SOFT_PARTICLES_ENABLED) || defined(_DEPTH_FADE_ENABLED) || defined(NOVA_DEPTH_NORMALS)
     // Reconstruct from the world position already carried for lighting. Keeping a
     // separate screen-position interpolator exceeds SM3.5's limit with cookie shadows.
     float4 screenPosition = NovaComputeScreenPos(NovaWorldToClipPos(i.positionWS));
@@ -725,6 +748,27 @@ half4 frag(v2f input) : SV_Target
     #if defined(_ALPHAMODULATE_ENABLED)
     color.rgb = lerp(half3(1.0, 1.0, 1.0), color.rgb, color.a);
     #endif
+
+    #if defined(NOVA_DEPTH_NORMALS)
+    UNITY_BRANCH
+    if (_NovaDepthNormalsUseSceneDepth > 0.5)
+    {
+        float sceneDepth = NovaSampleSceneDepthEye(NovaScreenUV(screenPosition));
+        clip(sceneDepth - screenPosition.z + max(0.0001, screenPosition.z * 0.00001));
+    }
+    // This explicit pass writes encoded world normals plus a validity mask. It is
+    // opt-in and never replaces Unity's camera depth-normal texture.
+    // Original depth vertices only compute flipbook progress for alpha-tested objects.
+    #if defined(_ALPHATEST_ENABLED)
+    float normalProgress = i.baseUvAndProgress.z;
+    #else
+    float normalProgress = 0;
+    #endif
+    float3 depthNormalWS = NovaTangentToWorldNormal(NovaResolveNormalMap(float3(baseUv, normalProgress)),
+        interpolatedNormalWS, i.tangentWS, particleBitangentWS);
+    return half4(depthNormalWS * 0.5 + 0.5, 1);
+    #endif
+
 
     #if defined(NOVA_UI_LIT)
     NovaUILitSurfaceData surfaceData = NovaResolveUILitSurfaceData(color,

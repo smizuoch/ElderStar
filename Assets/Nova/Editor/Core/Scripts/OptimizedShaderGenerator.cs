@@ -135,7 +135,9 @@ namespace Nova.Editor.Core.Scripts.Optimizer
                 var optional = Enum.TryParse(lightMode, out OptionalShaderPass flag) && flag != OptionalShaderPass.None;
                 if (optional && (required & flag) == 0)
                     result.Remove(match.Index, end - match.Index);
-                else if (optional && renderType == RenderType.Opaque)
+                // Opaque DepthNormals still samples normal maps, their selected texture
+                // dimension, UVs and filtering. Color-depth pruning would break them.
+                else if (optional && renderType == RenderType.Opaque && flag != OptionalShaderPass.DepthNormals)
                 {
                     var optimized = Regex.Replace(pass, @"(?m)^[ \t]*#pragma[ \t]+shader_feature[^\r\n]*(?:\r?\n|$)",
                         line => OpaqueUnusedKeywordRegex.IsMatch(line.Value) ? "" : line.Value);

@@ -158,8 +158,8 @@ public sealed class NovaBuiltInUberLitInteractionCompileTests
             .Select(match => match.Groups[1].Value)
             .ToArray();
 
-        Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "DepthOnly", "SceneSelectionPass", "Picking" }));
-        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(lightModes, Is.EquivalentTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "DepthOnly", "DepthNormals", "SceneSelectionPass", "Picking" }));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"DepthNormals\""));
         Assert.That(shaderText, Does.Not.Contain("UniversalForward"));
         Assert.That(shaderText, Does.Not.Contain("RenderPipeline\" = \"UniversalPipeline\""));
         Assert.That(shaderText, Does.Not.Contain("Packages/com.unity.render-pipelines.universal"));

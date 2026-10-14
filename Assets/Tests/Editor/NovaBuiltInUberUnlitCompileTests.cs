@@ -67,7 +67,7 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         Assert.That(shaderText, Does.Contain("\"LightMode\" = \"SceneSelectionPass\""));
         Assert.That(shaderText, Does.Contain("Name \"Picking\""));
         Assert.That(shaderText, Does.Contain("\"LightMode\" = \"Picking\""));
-        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"DepthNormals\""));
     }
 
     [Test]
@@ -94,7 +94,7 @@ public sealed class NovaBuiltInUberUnlitCompileTests
         var shaderText = File.ReadAllText(ShaderPath);
         var matrixText = File.ReadAllText("Documentation/BuiltInVerificationHistory.md");
 
-        Assert.That(shaderText, Does.Not.Contain("\"LightMode\" = \"DepthNormals\""));
+        Assert.That(shaderText, Does.Contain("\"LightMode\" = \"DepthNormals\""));
         Assert.That(matrixText, Does.Contain("Phase 4.5B"));
         Assert.That(matrixText, Does.Contain("DepthNormals"));
         Assert.That(matrixText, Does.Contain("Built-in has no URP DepthNormals prepass contract"));

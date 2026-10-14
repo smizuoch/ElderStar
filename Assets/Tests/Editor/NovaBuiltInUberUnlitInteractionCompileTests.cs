@@ -35,13 +35,14 @@ public sealed class NovaBuiltInUberUnlitInteractionCompileTests
                 "SceneSelectionPass",
                 "Picking",
                 "DepthOnly",
+                "DepthNormals",
                 "ShadowCaster",
             }));
             Assert.That(material.FindPass("SceneSelectionPass"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("Picking"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("DepthOnly"), Is.GreaterThanOrEqualTo(0));
             Assert.That(material.FindPass("ShadowCaster"), Is.GreaterThanOrEqualTo(0));
-            Assert.That(shaderText, Does.Not.Contain(@"""LightMode"" = ""DepthNormals"""));
+            Assert.That(shaderText, Does.Contain(@"""LightMode"" = ""DepthNormals"""));
         }
         finally
         {

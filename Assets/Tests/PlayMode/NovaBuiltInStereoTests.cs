@@ -16,6 +16,8 @@ namespace Nova.Tests.PlayMode
         [TestCase("Nova/UIParticles/UberUnlit", true)]
         [TestCase("Nova/Particles/UberLit", true)]
         [TestCase("Nova/UIParticles/UberLit", true)]
+        [TestCase("Nova/Particles/UberUnlit", false, "DepthNormals")]
+        [TestCase("Nova/Particles/UberLit", false, "DepthNormals")]
         [TestCase("Nova/Particles/UberUnlit", false, "DepthOnly")]
         [TestCase("Nova/Particles/UberLit", false, "DepthOnly")]
         [TestCase("Nova/Particles/UberUnlit", false, "ShadowCaster")]
@@ -106,7 +108,15 @@ namespace Nova.Tests.PlayMode
                     if (distortion)
                         Assert.That(Vector4.Distance(read.GetPixel(16, 16), eye == 0 ? Color.red : Color.green), Is.LessThan(.01f),
                             "Eye " + eye + " sampled " + read.GetPixel(16, 16) + "; camera compositor flag=" + Shader.GetGlobalFloat("_NovaCameraDistortionActive"));
-                    if (depthPass != null)
+                    if (depthPass == "DepthNormals")
+                    {
+                        var normal = read.GetPixel(16,16);
+                        Assert.That(normal.a, Is.GreaterThan(.95f), "Normal coverage in eye " + eye);
+                        Assert.That(normal.r, Is.EqualTo(.5f).Within(.01f));
+                        Assert.That(normal.g, Is.EqualTo(.5f).Within(.01f));
+                        Assert.That(normal.b, Is.LessThan(.01f), "The encoded normal, not the occluded white color pass, must remain.");
+                    }
+                    else if (depthPass != null)
                         Assert.That(read.GetPixel(16, 16).a, Is.LessThan(.05f), depthPass + " must occlude the later geometry in eye " + eye);
                     else if (softParticles && eye == 0)
                         Assert.That(read.GetPixels().Max(c => c.a), Is.LessThan(.05f), "Near geometry fades only the left eye.");
