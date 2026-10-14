@@ -165,6 +165,7 @@ float _VertexDeformationBaseValue;
 #include "NovaBuiltInShadow.cginc"
 #if defined(NOVA_UI_LIT)
 #include "NovaBuiltInUIParticlesUberLit.cginc"
+#include "NovaBuiltInCanvasLighting.cginc"
 #else
 #include "NovaBuiltInUberLit.cginc"
 #endif
@@ -734,6 +735,9 @@ half4 frag(v2f input) : SV_Target
     #else
     color = NovaComputeUILitForwardBaseColor(surfaceData, particleViewDirWS,
         NovaComputeShadowAttenuation(input, i.positionWS));
+    #if defined(NOVA_CANVAS_LIGHTING)
+    color.rgb += NovaCanvasDirectLighting(surfaceData, i.positionWS, particleViewDirWS);
+    #endif
     #endif
     #else
     NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(color,

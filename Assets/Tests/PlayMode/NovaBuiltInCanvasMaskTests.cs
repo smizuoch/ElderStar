@@ -10,10 +10,13 @@ namespace Nova.Tests.PlayMode
 {
     [TestFixture("Nova/UIParticles/UberUnlit")]
     [TestFixture("Nova/UIParticles/UberLit")]
+    [TestFixture("Nova/UIParticles/UberLit", true)]
     public sealed class NovaBuiltInCanvasMaskTests
     {
         private readonly string shaderName;
-        public NovaBuiltInCanvasMaskTests(string shaderName) { this.shaderName = shaderName; }
+        private readonly bool canvasLighting;
+        public NovaBuiltInCanvasMaskTests(string shaderName) : this(shaderName, false) { }
+        public NovaBuiltInCanvasMaskTests(string shaderName, bool canvasLighting) { this.shaderName = shaderName; this.canvasLighting = canvasLighting; }
 
         [UnityTest]
         public IEnumerator CanvasMaskClipsActualGraphic() { return RenderMask(true); }
@@ -45,10 +48,11 @@ namespace Nova.Tests.PlayMode
             var pixels = new Texture2D(96, 96, TextureFormat.RGBA32, false);
             var cameraObject = new GameObject("Canvas mask test camera", typeof(Camera));
             var canvasObject = new GameObject("Canvas mask test", typeof(RectTransform), typeof(Canvas));
+            GameObject lightObject = null;
             try
             {
                 RenderSettings.ambientMode = AmbientMode.Flat;
-                RenderSettings.ambientLight = Color.white;
+                RenderSettings.ambientLight = canvasLighting ? Color.black : Color.white;
                 var camera = cameraObject.GetComponent<Camera>();
                 camera.transform.position = new Vector3(0, 0, -3);
                 camera.orthographic = true;
@@ -70,6 +74,15 @@ namespace Nova.Tests.PlayMode
                 child.GetComponent<RectTransform>().sizeDelta = Vector2.one * 2;
                 var graphic = child.AddComponent(imageType);
                 imageType.GetProperty("material").SetValue(graphic, material);
+                if (canvasLighting)
+                {
+                    var lightingType = AppDomain.CurrentDomain.GetAssemblies().Select(a=>a.GetType("Nova.Runtime.UI.NovaCanvasLighting")).First(t=>t!=null);
+                    var bridge = canvasObject.AddComponent(lightingType);
+                    lightObject = new GameObject("UI mask light",typeof(Light));
+                    var light = lightObject.GetComponent<Light>(); light.type = LightType.Directional;
+                    lightingType.GetMethod("RegisterLight").Invoke(bridge,new object[]{light});
+                    maskObject.AddComponent<CanvasGroup>().alpha = .5f;
+                }
                 yield return null;
                 Canvas.ForceUpdateCanvases();
                 Read(camera, target, pixels);
@@ -89,6 +102,7 @@ namespace Nova.Tests.PlayMode
                 RenderSettings.ambientMode = previousAmbientMode;
                 RenderTexture.active = previousActive;
                 UnityEngine.Object.DestroyImmediate(canvasObject);
+                if (lightObject != null) UnityEngine.Object.DestroyImmediate(lightObject);
                 UnityEngine.Object.DestroyImmediate(cameraObject);
                 UnityEngine.Object.DestroyImmediate(material);
                 UnityEngine.Object.DestroyImmediate(texture);

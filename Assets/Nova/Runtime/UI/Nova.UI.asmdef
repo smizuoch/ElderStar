@@ -1,0 +1,7 @@
+{
+    "name": "Nova.UI",
+    "references": ["Nova", "Unity.ugui"],
+    "autoReferenced": true,
+    "defineConstraints": ["NOVA_UGUI"],
+    "versionDefines": [{"name": "com.unity.ugui", "expression": "1.0.0", "define": "NOVA_UGUI"}]
+}

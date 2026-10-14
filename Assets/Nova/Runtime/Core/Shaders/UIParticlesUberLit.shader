@@ -302,6 +302,7 @@ Shader "Nova/UIParticles/UberLit"
             #pragma target 3.5
             #pragma require 2darray
             #pragma multi_compile_fwdbase
+            #pragma multi_compile_local_fragment _ NOVA_CANVAS_LIGHTING
             #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS
             #pragma shader_feature_local_fragment _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma shader_feature_local_fragment _SHADOWS_SOFT
