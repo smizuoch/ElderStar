@@ -31,6 +31,8 @@ Previous Built-in GUIDs remain usable through hidden shader aliases. See
 [import instructions](Documentation~/Migration.md) and [compatibility](Documentation~/Compatibility.md).
 
 Lit preserves the original GGX and environment Fresnel/roughness response.
+Version 0.1.6 restores glossy ambient with reflection maps disabled and corrects
+dark-probe and Gamma/HDR handling; see [ambient lighting](Documentation~/AmbientLighting.md).
 First import and color-space changes automatically match original intensity/color-
 temperature defaults for all project lights. Later manual edits survive reloads.
 Use **Tools > NOVA > Built-in > Automatic Initial Lighting Setup** to opt out,

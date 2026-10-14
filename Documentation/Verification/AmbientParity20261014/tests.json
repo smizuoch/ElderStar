@@ -1,0 +1,52 @@
+[
+  {
+    "run": "release-play2022",
+    "total": "945",
+    "passed": "945",
+    "failed": "0",
+    "result": "Passed",
+    "shaderErrors": 0
+  },
+  {
+    "run": "release-play6",
+    "total": "945",
+    "passed": "945",
+    "failed": "0",
+    "result": "Passed",
+    "shaderErrors": 0
+  },
+  {
+    "run": "release-edit2022",
+    "total": "500",
+    "passed": "500",
+    "failed": "0",
+    "result": "Passed",
+    "shaderErrors": 0
+  },
+  {
+    "run": "release-edit6",
+    "total": "500",
+    "passed": "500",
+    "failed": "0",
+    "result": "Passed",
+    "shaderErrors": 0
+  },
+  {
+    "run": "package2022-clean",
+    "total": "3",
+    "passed": "3",
+    "failed": "0",
+    "result": "Passed",
+    "shaderErrors": 0,
+    "csharpErrors": 0
+  },
+  {
+    "run": "package6",
+    "total": "3",
+    "passed": "3",
+    "failed": "0",
+    "result": "Passed",
+    "shaderErrors": 0,
+    "csharpErrors": 0
+  }
+]

@@ -1,0 +1,426 @@
+{
+  "total": 60,
+  "failed": 0,
+  "frames": [
+    {
+      "name": "Nova-Particles-UberLit_black_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_gradient_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_gradient_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_gradient_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_gradient_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_gradient_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_gradient_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_sky-probe_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_sky-probe_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_sky-probe_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_sky-probe_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_sky-probe_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_sky-probe_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_gradient_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_gradient_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_gradient_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_gradient_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_gradient_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_gradient_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_sky-probe_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_sky-probe_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_sky-probe_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_sky-probe_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_sky-probe_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_sky-probe_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    }
+  ]
+}

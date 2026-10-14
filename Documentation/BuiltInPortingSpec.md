@@ -19,7 +19,7 @@ Ambient follow-up (2026-10-14):
 
 - [x] Reproduce the 22 nonblack-ambient differences and isolate diffuse SH, glossy fallback and color-space inputs against original NOVA.
 - [x] Add failing GPU regressions, implement the smallest shader-only correction and compare flat/gradient/probe lighting without changing golden images or thresholds.
-- [ ] Run both Unity suites, SDK/AAO and hidden GPU measurements; document remaining limits, review, commit and merge/push main as authorized.
+- [x] Run both Unity suites, SDK/AAO and hidden GPU measurements; document remaining limits, review, commit and merge/push main as authorized.
 
 Low-cost lighting parity (approved plan, 2026-10-14):
 

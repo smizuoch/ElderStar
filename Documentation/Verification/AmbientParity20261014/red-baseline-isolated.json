@@ -1,0 +1,258 @@
+{
+  "total": 36,
+  "failed": 12,
+  "frames": [
+    {
+      "name": "Nova-Particles-UberLit_black_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_black_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_1_dielectric.ppm",
+      "mean_error": 0.0026313731872957516,
+      "max_error": 0.10588235294117647,
+      "bad_pixel_fraction": 0.0325927734375,
+      "passed": false
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_1_diffuse.ppm",
+      "mean_error": 0.0015096028645833334,
+      "max_error": 0.09803921568627451,
+      "bad_pixel_fraction": 0.0240478515625,
+      "passed": false
+    },
+    {
+      "name": "Nova-Particles-UberLit_colored_1_metal.ppm",
+      "mean_error": 0.06961550245098039,
+      "max_error": 0.44313725490196076,
+      "bad_pixel_fraction": 0.291015625,
+      "passed": false
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_1_dielectric.ppm",
+      "mean_error": 0.0023217294730392157,
+      "max_error": 0.047058823529411764,
+      "bad_pixel_fraction": 0.01690673828125,
+      "passed": false
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_1_diffuse.ppm",
+      "mean_error": 0.001204666436887255,
+      "max_error": 0.043137254901960784,
+      "bad_pixel_fraction": 0.01239013671875,
+      "passed": false
+    },
+    {
+      "name": "Nova-Particles-UberLit_flat_1_metal.ppm",
+      "mean_error": 0.04336703431372549,
+      "max_error": 0.14901960784313725,
+      "bad_pixel_fraction": 0.291015625,
+      "passed": false
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_1_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_1_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_black_1_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_1_dielectric.ppm",
+      "mean_error": 0.0037790734783496732,
+      "max_error": 0.11372549019607843,
+      "bad_pixel_fraction": 0.042236328125,
+      "passed": false
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_1_diffuse.ppm",
+      "mean_error": 0.002654430912990196,
+      "max_error": 0.10588235294117647,
+      "bad_pixel_fraction": 0.03875732421875,
+      "passed": false
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_colored_1_metal.ppm",
+      "mean_error": 0.06961550245098039,
+      "max_error": 0.44313725490196076,
+      "bad_pixel_fraction": 0.291015625,
+      "passed": false
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_0_dielectric.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_0_diffuse.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_0_metal.ppm",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_1_dielectric.ppm",
+      "mean_error": 0.003068033854166667,
+      "max_error": 0.047058823529411764,
+      "bad_pixel_fraction": 0.0355224609375,
+      "passed": false
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_1_diffuse.ppm",
+      "mean_error": 0.001948098575367647,
+      "max_error": 0.043137254901960784,
+      "bad_pixel_fraction": 0.0335693359375,
+      "passed": false
+    },
+    {
+      "name": "Nova-UIParticles-UberLit_flat_1_metal.ppm",
+      "mean_error": 0.04336703431372549,
+      "max_error": 0.14901960784313725,
+      "bad_pixel_fraction": 0.291015625,
+      "passed": false
+    }
+  ]
+}
