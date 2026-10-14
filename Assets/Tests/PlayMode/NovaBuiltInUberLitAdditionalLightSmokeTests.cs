@@ -19,6 +19,20 @@ public sealed class NovaBuiltInUberLitAdditionalLightSmokeTests
     private const int RenderSize = 144;
     private const int TextureSize = 8;
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public void ClippedAdditionalLightPreservesInsideAndRejectsOutside(bool spot)
+    {
+        var light = spot ? AdditionalLightCase.Spot(Color.white, Quaternion.LookRotation(Vector3.forward)) : AdditionalLightCase.Point(Color.white);
+        var ordinary = RenderAdditional(m => { ConfigureMetallic(m, 0f, .35f); m.SetFloat("_RenderType", 1); }, light);
+        var clipped = RenderAdditional(m => { ConfigureMetallic(m, 0f, .35f); m.SetFloat("_RenderType", 1); }, light,
+            configureAfterSetup: m => { m.EnableKeyword("UNITY_UI_CLIP_RECT"); m.SetVector("_ClipRect", new Vector4(0,-2,2,2)); });
+        Assert.That(Luminance(clipped.Right), Is.GreaterThan(.02f), "The retained region must actually be lit.");
+        Assert.That(ColorDistance(clipped.Right, ordinary.Right), Is.LessThan(.002f), "Clipping must not change light attenuation inside the rectangle.");
+        if (LitShaderName.Contains("UIParticles"))
+            Assert.That(Luminance(clipped.Left), Is.LessThan(.015f), "ForwardAdd must respect the same UI clip as ForwardBase.");
+    }
+
     [Test]
     public void UberLitAdditionalLightsAffectOutput()
     {

@@ -227,6 +227,12 @@ struct NovaFeatureData
     fixed4 color;
 };
 
+// A clipped UI, stereo and shadowed punctual light otherwise require 17 outputs.
+// Reuse interpolated world position for the affine light transform in this variant.
+#if defined(NOVA_UI_LIT) && defined(UNITY_UI_CLIP_RECT) && defined(UNITY_PASS_FORWARDADD) && (defined(POINT) || defined(POINT_COOKIE) || defined(SPOT) || defined(DIRECTIONAL_COOKIE))
+#define NOVA_FRAGMENT_LIGHT_COORDS
+#endif
+
 struct v2f
 {
     UNITY_VERTEX_OUTPUT_STEREO
@@ -242,7 +248,7 @@ struct v2f
     float4 tangentAndNormalY : TEXCOORD8;
     float4 bitangentAndNormalZ : TEXCOORD9;
     float4 viewAndFog : TEXCOORD10;
-    #if defined(UNITY_PASS_FORWARDADD)
+    #if defined(UNITY_PASS_FORWARDADD) && !defined(NOVA_FRAGMENT_LIGHT_COORDS)
     NOVA_LIGHTING_COORDS(11, 12)
     #else
     NOVA_SHADOW_COORDS(11)
@@ -252,6 +258,27 @@ struct v2f
     float2 positionOS : TEXCOORD13;
     #endif
 };
+
+#if defined(NOVA_FRAGMENT_LIGHT_COORDS)
+struct NovaFragmentLightData { NOVA_LIGHTING_COORDS(0, 1) };
+half NovaFragmentLightAttenuation(v2f input, float3 positionWS)
+{
+    NovaFragmentLightData data = (NovaFragmentLightData)0;
+    #if defined(POINT) || defined(POINT_COOKIE)
+    data._LightCoord = mul(unity_WorldToLight, float4(positionWS, 1)).xyz;
+    #elif defined(SPOT)
+    data._LightCoord = mul(unity_WorldToLight, float4(positionWS, 1));
+    #else
+    data._LightCoord = mul(unity_WorldToLight, float4(positionWS, 1)).xy;
+    #endif
+    #if defined(SHADOWS_SCREEN) || defined(SHADOWS_CUBE) || (defined(SHADOWS_DEPTH) && defined(SPOT))
+    data._ShadowCoord = input._ShadowCoord;
+    #endif
+    return LIGHT_ATTENUATION(data);
+}
+#undef NovaComputeBuiltInAddLightAttenuation
+#define NovaComputeBuiltInAddLightAttenuation(input, positionWS) NovaFragmentLightAttenuation(input, positionWS)
+#endif
 
 v2f vert(appdata v)
 {
@@ -443,7 +470,7 @@ v2f vert(appdata v)
     #if defined(NOVA_UI_LIT) && defined(UNITY_UI_CLIP_RECT)
     packed.positionOS = o.flowUvAndPositionOS.zw;
     #endif
-    #if defined(UNITY_PASS_FORWARDADD)
+    #if defined(UNITY_PASS_FORWARDADD) && !defined(NOVA_FRAGMENT_LIGHT_COORDS)
     NovaTransferBuiltInAddLightCoord(packed);
     #else
     NovaTransferShadowCoord(packed, positionWS);
