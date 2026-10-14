@@ -500,7 +500,7 @@ Shader "Nova/UIParticles/UberUnlit"
                 float2 positionOS : TEXCOORD6;
                 float4 customCoord1 : TEXCOORD7;
                 float4 customCoord2 : TEXCOORD8;
-                float3 normalWS : TEXCOORD9;
+                float4 normalAndFog : TEXCOORD9;
                 float3 viewDirWS : TEXCOORD10;
                 float3 viewDirTS : TEXCOORD11;
                 float3 alphaTransitionUvAndProgress : TEXCOORD12;
@@ -526,14 +526,15 @@ Shader "Nova/UIParticles/UberUnlit"
                 #endif
 
                 o.vertex = NovaObjectToClipPos(v.vertex);
+                o.normalAndFog.w = NovaVertexFog(o.vertex.z);
                 o.screenPosition = NovaComputeScreenPos(o.vertex);
                 o.screenPosition.z = -UnityObjectToViewPos(v.vertex).z;
                 float3 positionWS = NovaObjectToWorld(v.vertex.xyz);
-                o.normalWS = NovaObjectToWorldNormal(v.normal);
+                o.normalAndFog.xyz = NovaObjectToWorldNormal(v.normal);
                 o.viewDirWS = NovaWorldSpaceViewDir(positionWS);
                 float3 tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
-                float3 bitangentWS = NovaCreateBitangent(o.normalWS, tangentWS, v.tangent.w);
-                o.viewDirTS = float3(dot(o.viewDirWS, tangentWS), dot(o.viewDirWS, bitangentWS), dot(o.viewDirWS, o.normalWS));
+                float3 bitangentWS = NovaCreateBitangent(o.normalAndFog.xyz, tangentWS, v.tangent.w);
+                o.viewDirTS = float3(dot(o.viewDirWS, tangentWS), dot(o.viewDirWS, bitangentWS), dot(o.viewDirWS, o.normalAndFog.xyz));
                 half progress = _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2);
                 half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
                 o.baseMapProgress = NovaBaseMapProgress(progress, _BaseMapSliceCount, _BaseMapRowCount, randomValue);
@@ -851,7 +852,7 @@ Shader "Nova/UIParticles/UberUnlit"
                 #if defined(_TINT_AREA_ALL) || defined(_TINT_AREA_RIM)
                 half tintBlendRate = _TintBlendRate + NovaGetCustomCoord(_TintBlendRateCoord, i.customCoord1, i.customCoord2);
                     #if defined(_TINT_AREA_RIM)
-                    half3 normalWS = NovaSafeNormalize(i.normalWS);
+                    half3 normalWS = NovaSafeNormalize(i.normalAndFog.xyz);
                     half3 viewDirWS = NovaSafeNormalize(i.viewDirWS);
                     half rim = 1.0h - abs(dot(normalWS, viewDirWS));
                     half tintRim = NovaRimValue(
@@ -908,7 +909,7 @@ Shader "Nova/UIParticles/UberUnlit"
                 #endif
 
                 #if defined(_TRANSPARENCY_BY_RIM)
-                half3 transparencyNormalWS = NovaSafeNormalize(i.normalWS);
+                half3 transparencyNormalWS = NovaSafeNormalize(i.normalAndFog.xyz);
                 half3 transparencyViewDirWS = NovaSafeNormalize(i.viewDirWS);
                 half rimDot = abs(dot(transparencyNormalWS, transparencyViewDirWS));
                 NovaApplyRimTransparency(
@@ -945,7 +946,7 @@ Shader "Nova/UIParticles/UberUnlit"
                 color.rgb = lerp(fixed3(1.0, 1.0, 1.0), color.rgb, color.a);
                 #endif
 
-                NovaApplyEyeFog(color, i.screenPosition.z);
+                NovaApplyVertexFog(color, i.normalAndFog.w);
                 return color;
             }
             ENDCG

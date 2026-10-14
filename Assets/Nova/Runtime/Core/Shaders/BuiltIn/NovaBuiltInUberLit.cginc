@@ -145,11 +145,11 @@ half3 NovaTangentToWorldNormal(half3 normalTS, float3 normalWS, float3 tangentWS
     float3 normalizedNormalWS = NovaSafeNormalize(normalWS);
 
     #if defined(_NORMAL_MAP_ENABLED)
-    float3 normalizedTangentWS = NovaSafeNormalize(tangentWS);
-    float3 normalizedBitangentWS = NovaSafeNormalize(bitangentWS);
+    // Original fragUnlit normalizes normalWS in-place before the Lit basis transform.
+    // Tangent and binormal remain interpolated, without independent normalization.
     return NovaSafeNormalize(
-        normalTS.x * normalizedTangentWS +
-        normalTS.y * normalizedBitangentWS +
+        normalTS.x * tangentWS +
+        normalTS.y * bitangentWS +
         normalTS.z * normalizedNormalWS);
     #else
     return normalizedNormalWS;

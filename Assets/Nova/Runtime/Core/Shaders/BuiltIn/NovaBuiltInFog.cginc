@@ -7,6 +7,36 @@
 #define NOVA_TRANSFER_FOG(output, positionCS) UNITY_TRANSFER_FOG(output, positionCS)
 #define NOVA_APPLY_FOG(fogCoord, color) UNITY_APPLY_FOG(fogCoord, color)
 
+// Original NOVA explicitly uses the vertex fog factor (not URP's optional
+// fragment-fog helper). Preserve its clip-space mapping and EXP coefficient.
+float NovaVertexFog(float clipZ)
+{
+    float depth = UNITY_Z_0_FAR_FROM_CLIPSPACE(clipZ);
+    #if defined(FOG_LINEAR)
+    return saturate(depth * unity_FogParams.z + unity_FogParams.w);
+    #elif defined(FOG_EXP) || defined(FOG_EXP2)
+    return unity_FogParams.x * depth;
+    #else
+    return 0;
+    #endif
+}
+
+void NovaApplyVertexFog(inout half4 color, float factor)
+{
+    #if defined(FOG_LINEAR) || defined(FOG_EXP) || defined(FOG_EXP2)
+    #if defined(FOG_EXP)
+    factor = exp2(-factor);
+    #elif defined(FOG_EXP2)
+    factor = exp2(-factor * factor);
+    #endif
+    #if defined(UNITY_PASS_FORWARDADD)
+    color.rgb *= saturate(factor);
+    #else
+    color.rgb = lerp(unity_FogColor.rgb, color.rgb, saturate(factor));
+    #endif
+    #endif
+}
+
 void NovaApplyEyeFog(inout half4 color, float eyeDepth)
 {
     #if defined(FOG_LINEAR) || defined(FOG_EXP) || defined(FOG_EXP2)

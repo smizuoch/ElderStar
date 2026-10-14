@@ -181,36 +181,58 @@ struct appdata
     fixed4 color : COLOR;
 };
 
-// Pack the world normal into unused UV .w components. Stereo plus shadowed
-// ForwardAdd must still fit the SM3.5 vertex output budget (including SV_POSITION).
+// Logical feature data. Pack before interpolation so the original vertex-space
+// tangent basis and parallax direction fit stereo + shadowed SM3.5 ForwardAdd.
+struct NovaFeatureData
+{
+    float4 pos;
+    float4 baseUvAndProgress;
+    float4 tintUvAndProgress;
+    float4 flowUvAndPositionOS;
+    float4 parallaxUvAndProgress;
+    float4 customCoord1;
+    float4 customCoord2;
+    float3 positionWS;
+    float3 tangentWS;
+    float3 bitangentWS;
+    float3 viewDirTS;
+    float fog;
+    float3 alphaTransitionUvAndProgress;
+    float3 alphaTransitionSecondUvAndProgress;
+    float3 emissionUvAndProgress;
+    fixed4 color;
+};
+
 struct v2f
 {
     UNITY_VERTEX_OUTPUT_STEREO
     float4 pos : SV_POSITION;
-    float4 baseUvAndProgress : TEXCOORD0;
-    float4 tintUvAndProgress : TEXCOORD1;
-    float4 flowUvAndPositionOS : TEXCOORD2;
-    float4 parallaxUvAndProgress : TEXCOORD3;
-    float4 customCoord1 : TEXCOORD4;
-    float4 customCoord2 : TEXCOORD5;
-    float3 positionWS : TEXCOORD6;
-    float4 tangentWS : TEXCOORD7;
-    float3 alphaTransitionUvAndProgress : TEXCOORD8;
-    float3 alphaTransitionSecondUvAndProgress : TEXCOORD9;
-    float3 emissionUvAndProgress : TEXCOORD10;
+    float4 baseTintUv : TEXCOORD0;
+    float4 alphaUv : TEXCOORD1;
+    float4 parallaxEmissionUv : TEXCOORD2;
+    float4 progress : TEXCOORD3;
+    float4 flowUvAndProgress : TEXCOORD4;
+    float4 customCoord1 : TEXCOORD5;
+    float4 customCoord2 : TEXCOORD6;
+    float4 positionAndNormalX : TEXCOORD7;
+    float4 tangentAndNormalY : TEXCOORD8;
+    float4 bitangentAndNormalZ : TEXCOORD9;
+    float4 viewAndFog : TEXCOORD10;
     #if defined(UNITY_PASS_FORWARDADD)
     NOVA_LIGHTING_COORDS(11, 12)
     #else
     NOVA_SHADOW_COORDS(11)
     #endif
     fixed4 color : COLOR;
+    #if defined(NOVA_UI_LIT) && defined(UNITY_UI_CLIP_RECT)
+    float2 positionOS : TEXCOORD13;
+    #endif
 };
 
 v2f vert(appdata v)
 {
     NOVA_SETUP_PARTICLE(v)
-    v2f o = (v2f)0;
-    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+    NovaFeatureData o = (NovaFeatureData)0;
     #if defined(_VERTEX_DEFORMATION_ENABLED)
     float2 vertexDeformationUv = NovaTransformUV(v.uv, _VertexDeformationMap_ST);
     vertexDeformationUv.x += NovaGetCustomCoord(_VertexDeformationMapOffsetXCoord, v.customCoord1, v.customCoord2);
@@ -230,7 +252,13 @@ v2f vert(appdata v)
     o.positionWS = positionWS;
     float3 tangentWS = NovaObjectToWorldTangent(v.tangent.xyz);
     float3 bitangentWS = NovaCreateBitangent(vertexNormalWS, tangentWS, v.tangent.w);
-    o.tangentWS = float4(tangentWS, v.tangent.w * unity_WorldTransformParams.w);
+    o.tangentWS = tangentWS;
+    // Original normal-map basis deliberately uses tangent.w without odd scale;
+    // original parallax uses odd scale. Preserve the two distinct contracts.
+    o.bitangentWS = cross(vertexNormalWS, tangentWS) * v.tangent.w;
+    float3 viewDirWS = NovaWorldSpaceViewDir(positionWS);
+    o.viewDirTS = float3(dot(viewDirWS, tangentWS), dot(viewDirWS, bitangentWS), dot(viewDirWS, vertexNormalWS));
+    o.fog = NovaVertexFog(o.pos.z);
     half progress = _BaseMapProgress + NovaGetCustomCoord(_BaseMapProgressCoord, v.customCoord1, v.customCoord2);
     half randomValue = NovaGetCustomCoord(_BaseMapRandomRowCoord, v.customCoord1, v.customCoord2);
     o.baseUvAndProgress.z = NovaBaseMapProgress(progress, _BaseMapSliceCount, _BaseMapRowCount, randomValue);
@@ -373,12 +401,30 @@ v2f vert(appdata v)
     o.customCoord1 = v.customCoord1;
     o.customCoord2 = v.customCoord2;
     o.color = v.color;
-    #if defined(UNITY_PASS_FORWARDADD)
-    NovaTransferBuiltInAddLightCoord(o);
-    #else
-    NovaTransferShadowCoord(o, positionWS);
+    v2f packed = (v2f)0;
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(packed);
+    packed.pos = o.pos;
+    packed.baseTintUv = float4(o.baseUvAndProgress.xy, o.tintUvAndProgress.xy);
+    packed.alphaUv = float4(o.alphaTransitionUvAndProgress.xy, o.alphaTransitionSecondUvAndProgress.xy);
+    packed.parallaxEmissionUv = float4(o.parallaxUvAndProgress.xy, o.emissionUvAndProgress.xy);
+    packed.progress = float4(o.baseUvAndProgress.z, o.tintUvAndProgress.z, o.alphaTransitionUvAndProgress.z, o.alphaTransitionSecondUvAndProgress.z);
+    packed.flowUvAndProgress = float4(o.flowUvAndPositionOS.xy, o.parallaxUvAndProgress.z, o.emissionUvAndProgress.z);
+    packed.customCoord1 = o.customCoord1;
+    packed.customCoord2 = o.customCoord2;
+    packed.positionAndNormalX = float4(o.positionWS, vertexNormalWS.x);
+    packed.tangentAndNormalY = float4(o.tangentWS, vertexNormalWS.y);
+    packed.bitangentAndNormalZ = float4(o.bitangentWS, vertexNormalWS.z);
+    packed.viewAndFog = float4(o.viewDirTS, o.fog);
+    packed.color = o.color;
+    #if defined(NOVA_UI_LIT) && defined(UNITY_UI_CLIP_RECT)
+    packed.positionOS = o.flowUvAndPositionOS.zw;
     #endif
-    return o;
+    #if defined(UNITY_PASS_FORWARDADD)
+    NovaTransferBuiltInAddLightCoord(packed);
+    #else
+    NovaTransferShadowCoord(packed, positionWS);
+    #endif
+    return packed;
 }
 
 half4 SampleBaseMap(float2 uv, half progress)
@@ -492,9 +538,27 @@ void ApplyEmissionColor(inout half4 color, half4 emissionMap, half emissionInten
     color.rgb += emissionColor * emissionIntensity * emissionIntensityParameter;
 }
 
-half4 frag(v2f i) : SV_Target
+half4 frag(v2f input) : SV_Target
 {
-    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+    NovaFeatureData i = (NovaFeatureData)0;
+    i.baseUvAndProgress = float4(input.baseTintUv.xy, input.progress.x, input.positionAndNormalX.w);
+    i.tintUvAndProgress = float4(input.baseTintUv.zw, input.progress.y, input.tangentAndNormalY.w);
+    i.parallaxUvAndProgress = float4(input.parallaxEmissionUv.xy, input.flowUvAndProgress.z, input.bitangentAndNormalZ.w);
+    i.alphaTransitionUvAndProgress = float3(input.alphaUv.xy, input.progress.z);
+    i.alphaTransitionSecondUvAndProgress = float3(input.alphaUv.zw, input.progress.w);
+    i.emissionUvAndProgress = float3(input.parallaxEmissionUv.zw, input.flowUvAndProgress.w);
+    i.positionWS = input.positionAndNormalX.xyz;
+    i.tangentWS = input.tangentAndNormalY.xyz;
+    i.bitangentWS = input.bitangentAndNormalZ.xyz;
+    i.viewDirTS = input.viewAndFog.xyz;
+    i.fog = input.viewAndFog.w;
+    i.flowUvAndPositionOS.xy = input.flowUvAndProgress.xy;
+    #if defined(NOVA_UI_LIT) && defined(UNITY_UI_CLIP_RECT)
+    i.flowUvAndPositionOS.zw = input.positionOS;
+    #endif
+    i.customCoord1 = input.customCoord1; i.customCoord2 = input.customCoord2;
+    i.color = input.color;
     float3 interpolatedNormalWS = float3(i.baseUvAndProgress.w, i.tintUvAndProgress.w, i.parallaxUvAndProgress.w);
     #if defined(_SOFT_PARTICLES_ENABLED) || defined(_DEPTH_FADE_ENABLED)
     // Reconstruct from the world position already carried for lighting. Keeping a
@@ -503,9 +567,8 @@ half4 frag(v2f i) : SV_Target
     screenPosition.z = -mul(UNITY_MATRIX_V, float4(i.positionWS, 1)).z;
     #endif
     float3 particleViewDirWS = NovaWorldSpaceViewDir(i.positionWS);
-    float3 particleBitangentWS = cross(interpolatedNormalWS, i.tangentWS.xyz) * i.tangentWS.w;
-    float3 particleViewDirTS = float3(dot(particleViewDirWS, i.tangentWS.xyz),
-        dot(particleViewDirWS, particleBitangentWS), dot(particleViewDirWS, interpolatedNormalWS));
+    float3 particleBitangentWS = i.bitangentWS;
+    float3 particleViewDirTS = i.viewDirTS;
     float2 baseUv = i.baseUvAndProgress.xy;
     float2 tintUv = i.tintUvAndProgress.xy;
     float2 alphaTransitionUv = i.alphaTransitionUvAndProgress.xy;
@@ -667,24 +730,24 @@ half4 frag(v2f i) : SV_Target
         i.baseUvAndProgress.xyz, interpolatedNormalWS, i.tangentWS.xyz, particleBitangentWS);
     #if defined(UNITY_PASS_FORWARDADD)
     color = NovaComputeUILitForwardAddColor(surfaceData, i.positionWS, particleViewDirWS,
-        NovaComputeBuiltInAddLightAttenuation(i, i.positionWS));
+        NovaComputeBuiltInAddLightAttenuation(input, i.positionWS));
     #else
     color = NovaComputeUILitForwardBaseColor(surfaceData, particleViewDirWS,
-        NovaComputeShadowAttenuation(i, i.positionWS));
+        NovaComputeShadowAttenuation(input, i.positionWS));
     #endif
     #else
     NovaLitSurfaceData surfaceData = NovaResolveLitSurfaceData(color,
         i.baseUvAndProgress.xyz, interpolatedNormalWS, i.tangentWS.xyz, particleBitangentWS);
     #if defined(UNITY_PASS_FORWARDADD)
     color = NovaComputeLitForwardAddColor(surfaceData, i.positionWS, particleViewDirWS,
-        NovaComputeBuiltInAddLightAttenuation(i, i.positionWS));
+        NovaComputeBuiltInAddLightAttenuation(input, i.positionWS));
     #else
     color = NovaComputeLitForwardBaseColor(surfaceData, particleViewDirWS,
-        NovaComputeShadowAttenuation(i, i.positionWS));
+        NovaComputeShadowAttenuation(input, i.positionWS));
     #endif
     #endif
 
-    NovaApplyWorldFog(color, i.positionWS);
+    NovaApplyVertexFog(color, i.fog);
     return color;
 }
 

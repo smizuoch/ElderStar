@@ -15,6 +15,18 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+Low-cost lighting parity (approved plan, 2026-10-14):
+
+- [ ] Reproduce curved/coarse-mesh rim, tangent-space parallax, normal-basis and vertex-fog differences against original NOVA, then fix within SM3.5/stereo limits.
+- [ ] Add optional Canvas single-pass additional lighting with bounded light selection and material ownership tests.
+- [ ] Implement actual particle DepthNormals passes, optimizer stripping and an opt-in NOVA-only camera buffer.
+- [ ] Add spatial Built-in LPPV sampling and verify SH/proxy selection without double lighting.
+- [ ] Add opt-in Editor diagnostic views and executable Built-in distortion pass APIs.
+- [ ] Verify D3D foveation scope, all Unity 2022/6 regressions, original images, SDK/AAO bundles and offscreen GPU/CPU costs.
+- [ ] Document remaining limits, review each green change, commit and merge/push to main.
+
+No new clustered renderer or APV file/streaming backend is included. Ordinary avatar paths must remain scriptless; optional Unity camera/Canvas helpers must not be attached to avatars.
+
 Avatar parity and performance (2026-10-14): zero-offset overlap and uniform-zero rasterization are fixed. Verification and measured tradeoffs are recorded in AvatarParityPerformance.md. Next acceptance TODO: the updated avatar in an actual VRChat client mirror, physical PCVR and additional GPUs; advanced AAO configurations remain outside the default-settings acceptance.
 
 - [x] Add failing overlap and mirror regressions before implementation; capture the existing behavior.
