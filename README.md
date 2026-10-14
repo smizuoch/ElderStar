@@ -73,12 +73,18 @@ materials preserves their properties, keywords and queue and supports Undo.
 
 ## Compatibility and verification
 
+The [0.1.5 lighting report](Documentation/LowCostLightingParity.md) covers the
+vertex interpolation fixes, optional native Canvas lighting, dedicated DepthNormals,
+Built-in LPPV, eight Editor diagnostic views and explicit distortion commands.
+The final suites pass 492 EditMode and 933 graphics PlayMode tests per editor.
+The ordinary avatar path needs no runtime NOVA C# component.
+
 The [randomized API/feature audit](Documentation/RandomizedParityVerification.md)
 adds six reproduced fixes and 3,328 original/port comparisons, all within the
 unchanged thresholds (2,874 pixel-identical). Forced distortion filtering retains
 a documented 8x/9x approximation.
-Both editors pass 448 EditMode and 852 graphics PlayMode tests. The report
-separates preserved declarations, exercised API behavior and remaining limits.
+That historical checkpoint passed 448 EditMode and 852 graphics PlayMode tests
+per editor. The report separates preserved declarations, exercised API behavior and remaining limits.
 
 The [0.1.2 settings and asset report](Documentation/AssetCorpusVerification.md)
 records initial-state parity, 442 EditMode and 807 PlayMode tests per editor, plus
@@ -91,8 +97,10 @@ The [previous 0.1.0 report](Documentation/VerificationReport.md) retains the bro
 
 Lit shading preserves the original GGX and environment Fresnel/roughness response
 with normal, metallic/specular and smoothness maps. Light scheduling, shadows and
-probe assignment use Built-in; URP Forward+ and probe volumes have no equivalent.
-CanvasRenderer additional lighting and camera distortion have documented limits.
+probe assignment use Built-in. ForwardBase/ForwardAdd, bounded Canvas lights and
+native LPPV provide practical alternatives to URP Forward+ and APV; their data
+formats and scheduling are not reproduced. See the current lighting report for
+Canvas, depth-normal, ambient and camera-distortion limits.
 Texture arrays/3D textures require suitable hardware; untested graphics APIs are
 not certified by the Windows verification results.
 

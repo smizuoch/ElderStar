@@ -1,0 +1,255 @@
+{
+  "package": "0.1.5",
+  "sdk": "3.10.5",
+  "aao": "1.9.20",
+  "reports": [
+    {
+      "unity": "2022.3.22f1",
+      "operation": "aao-off",
+      "aaoEnabled": false,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 23,
+      "novaMaterials": 17,
+      "activeParticleRenderers": 5,
+      "particleSystems": 6,
+      "magentaPixels": 0,
+      "bundleBytes": 26801148,
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "materialStatesEqual": true,
+      "shaderWarnings": 0,
+      "bundleSha256": "c3e73c7b72d2282dc4dc8e530ea1d009fb5f409fa8783c8a89f40525067b260f"
+    },
+    {
+      "unity": "2022.3.22f1",
+      "operation": "aao-on",
+      "aaoEnabled": true,
+      "sourceSkinnedMeshes": 23,
+      "builtSkinnedMeshes": 19,
+      "novaMaterials": 17,
+      "activeParticleRenderers": 5,
+      "particleSystems": 6,
+      "magentaPixels": 0,
+      "bundleBytes": 22644440,
+      "success": true,
+      "errors": 0,
+      "shaderErrors": 0,
+      "materialStatesEqual": true,
+      "shaderWarnings": 0,
+      "bundleSha256": "d7eaabedd1bc5e66a24f59e0c01f5b37b0e9b99aea80a1c18b2155d6bfc92900"
+    }
+  ],
+  "pairs": [
+    {
+      "pair": "bundle-04.png",
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-21.png",
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-mirror.png",
+      "mean_error": 3.1027312545388524e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-False-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-False-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-False-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-False-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-False-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-False-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-True-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-True-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-True-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-True-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-True-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle-overlap-True-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "bundle.png",
+      "mean_error": 2.6594839324618736e-08,
+      "max_error": 0.00392156862745098,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-mirror.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-False-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-False-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-False-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-False-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-False-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-False-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-True-depth-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-True-dissolve.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-True-empty.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-True-fade.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-True-underlay.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source-overlap-True-zero.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    },
+    {
+      "pair": "source.png",
+      "mean_error": 0.0,
+      "max_error": 0.0,
+      "bad_pixel_fraction": 0.0,
+      "passed": true
+    }
+  ]
+}

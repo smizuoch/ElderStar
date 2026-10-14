@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.5
+
+- Match original vertex parallax, interpolated normal-map basis and clip-depth fog without new ordinary color passes or texture reads.
+- Add optional bounded Canvas lighting with owned materials, native masks and no per-frame scene light search; suppress duplicate ForwardAdd.
+- Add real particle DepthNormals passes, optimizer selection and an optional dedicated normal/coverage camera buffer.
+- Sample native Built-in LPPV without double SH contribution. APV data/streaming remain outside scope.
+- Add eight Editor diagnostic views, build-time diagnostic stripping and executable BuiltInDistortionPass commands while retaining ScreenSpaceDistortion.Create().
+- Preserve original names/properties/defaults and scriptless PC avatar rendering. See the updated compatibility matrix for remaining pipeline differences.
+
 ## 0.1.4
 
 - Preserve existing distortion under zero-offset avatar surfaces, including completed fade/dissolve/depth fade. Adds no screen copy, pass, material property or runtime component.

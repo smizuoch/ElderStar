@@ -1,5 +1,23 @@
 # VRChat PC and Avatar Optimizer verification
 
+## 0.1.5 lighting follow-up
+
+The [lighting parity report](LowCostLightingParity.md) records the new vertex
+interpolation, optional Unity-only lighting/normal-buffer helpers and current
+SDK/AAO acceptance. PC avatars still use allowed mesh/particle renderers without
+custom runtime NOVA components. Both final bundles preserve 17 NOVA materials,
+five active Fire001 particle renderers and their vertex streams; AAO defaults
+reduce 23 skinned meshes to 19. Thirty normal/overlap/reflected-camera image pairs
+pass with maximum channel difference 1/255. SDK and shader error counts are zero.
+
+The first SDK attempt found a stereo/clipped UI ForwardAdd output-limit defect;
+the added Point/Point-cookie/Spot compile tests reproduce it and the corrected
+variant uses one fewer varying. Two additional tests catch and remove an LPPV
+compiler warning. This current evidence is local SDK bundle rendering in Unity,
+not a new upload or a physical headset test. The existing Private upload/client
+receipts below retain their earlier release scope.
+
+
 For the 0.1.4 SDK/AAO bundle, overlap, reflected-camera and GPU-cost follow-up,
 see [Avatar parity and performance (2026-10-14)](AvatarParityPerformance.md).
 The client upload/mirror evidence below remains specific to 0.1.3.

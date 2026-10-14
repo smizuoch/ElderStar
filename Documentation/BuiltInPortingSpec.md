@@ -17,13 +17,13 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 Low-cost lighting parity (approved plan, 2026-10-14):
 
-- [ ] Reproduce curved/coarse-mesh rim, tangent-space parallax, normal-basis and vertex-fog differences against original NOVA, then fix within SM3.5/stereo limits.
-- [ ] Add optional Canvas single-pass additional lighting with bounded light selection and material ownership tests.
-- [ ] Implement actual particle DepthNormals passes, optimizer stripping and an opt-in NOVA-only camera buffer.
-- [ ] Add spatial Built-in LPPV sampling and verify SH/proxy selection without double lighting.
-- [ ] Add opt-in Editor diagnostic views and executable Built-in distortion pass APIs.
-- [ ] Verify D3D foveation scope, all Unity 2022/6 regressions, original images, SDK/AAO bundles and offscreen GPU/CPU costs.
-- [ ] Document remaining limits, review each green change, commit and merge/push to main.
+- [x] Reproduce curved/coarse-mesh rim, tangent-space parallax, normal-basis and vertex-fog differences against original NOVA, then fix within SM3.5/stereo limits.
+- [x] Add optional Canvas single-pass additional lighting with bounded light selection and material ownership tests.
+- [x] Implement actual particle DepthNormals passes, optimizer stripping and an opt-in NOVA-only camera buffer.
+- [x] Add spatial Built-in LPPV sampling and verify SH/proxy selection without double lighting.
+- [x] Add opt-in Editor diagnostic views and executable Built-in distortion pass APIs.
+- [x] Verify D3D foveation scope, all Unity 2022/6 regressions, original images, SDK/AAO bundles and offscreen GPU/CPU costs.
+- [x] Document remaining limits, review each green change and prepare tested commits for the authorized main merge/push.
 
 No new clustered renderer or APV file/streaming backend is included. Ordinary avatar paths must remain scriptless; optional Unity camera/Canvas helpers must not be attached to avatars.
 
