@@ -56,3 +56,33 @@ Report active-surface overhead separately, including raw paired block variation.
 References: [Unity native rendering callbacks](https://docs.unity3d.com/2022.3/Documentation/Manual/NativePluginInterface.html),
 [D3D11 timestamp/disjoint queries](https://learn.microsoft.com/en-us/windows/win32/api/d3d11/ne-d3d11-d3d11_query),
 [FrameTimingManager limitations](https://docs.unity3d.com/2022.3/Documentation/Manual/frame-timing-manager.html).
+
+## Lighting and optional helpers (0.1.5)
+
+Export the complete `Assets/Nova/Runtime/Core/Shaders` tree from `c38b1f1`.
+Use `prepare_lighting.py --project <closed-disposable-project> --baseline-tree
+<export-root>`, then the same native timer build. Unlike the earlier distortion
+fixture, baseline includes are completely independent from candidate includes.
+Build `NovaLightingGpuBenchmarkBuilder.Build` with `-novaBenchmarkPlayer <exe>`.
+Run the Player with `-batchmode -force-d3d11 -novaPerformanceOutput <json>` and
+`-WindowStyle Hidden`; do not use `-nographics`. Analyze with
+`python Tests/Performance/analyze_lighting.py <json> <summary.json>`.
+
+Eighteen ordinary scenarios compare four shader families, textured diffuse
+controls / normal-rim-parallax-fog combinations, one / eight overlapping surfaces
+with a reflected camera, and clipped UI Lit with eight scene lights. The controls
+are configured diffuse materials, not untouched fresh material defaults. Five
+optional scenarios compare Canvas 0/4/8 selected lights, an eight-renderer normal
+buffer and spatial LPPV. Candidate helper off/on uses the same candidate shader.
+Each scenario has three ABBA repetitions, 64 warmup frames and 128 samples per
+block at 1920x1080. Source hashes, actual draw counters, CPU command-submission
+intervals and active native material/RT/probe sizes accompany GPU timestamps.
+The Development Player is used for counters; this is not total VRChat frame time,
+managed-heap profiling or total device VRAM consumption.
+
+The ordinary gate is unchanged draw count and GPU increase <= max(5%, 0.02 ms).
+Optional costs are reported separately and never interpreted as passing that gate.
+Canvas off uses Built-in light attenuation/ForwardAdd, while on uses the selected
+URP-style single-pass list: timing differences do not prove identical pictures.
+Keep ordinary scene layers/shadows and other running GPU applications in the report.
+See `Documentation/LowCostLightingParity.md` for measured results and limitations.
