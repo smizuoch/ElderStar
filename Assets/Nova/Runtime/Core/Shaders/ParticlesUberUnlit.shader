@@ -927,7 +927,7 @@ Shader "Nova/Particles/UberUnlit"
                 #endif
 
                 #if defined(_SOFT_PARTICLES_ENABLED)
-                color.a *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity);
+                color.a *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity, i.vertex.z);
                 #endif
 
                 #if defined(_DEPTH_FADE_ENABLED)

@@ -1,8 +1,8 @@
 # 再現率の厳密な集計と全入力評価の限界
 
 集計日: 2026-10-15。対象は NOVA 3.6.0
-(`1c6b88729f91c852c164ef71a32cc2bce83a1892`) と Built-in 0.1.6を基にした描画互換修正
-(`3b764095b35121828b1d295ac106b2796455f7fe`)。
+(`1c6b88729f91c852c164ef71a32cc2bce83a1892`) と Built-in 0.1.7の描画互換修正
+(`b001fcdc67389cabcb24f3d494ac0d6ed1f55401`)。
 数値の原本は [再計算結果 JSON](Verification/ReproductionAudit20261015.json)。
 この集計は記録の監査であり、下記画像群を新たに撮り直したものではない。
 同日の[API互換修正](RuntimeAPICompatibility.md)に伴い、宣言分類と対象ソースを更新した。さらに[Exact分類の再評価](ExactParityProgress.md)で6項目を更新した。

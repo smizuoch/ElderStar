@@ -1,0 +1,300 @@
+{
+  "date": "2026-10-15",
+  "all_29_resolved": false,
+  "classification_changed": false,
+  "rows": [
+    {
+      "feature": "Material setup",
+      "status": "Approximate",
+      "result": "既存の初期値・設定遷移テストを再実行。歪みの3100キューは背景取得に必要なまま。",
+      "remaining_requirement": "URP separately schedules distortion; a shader-only GrabPass is invoked at its material queue.",
+      "next_acceptance": "Preserve transparent-background capture at the original queue without changing other transparent ordering.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Material migration",
+      "status": "Approximate",
+      "result": "標準GUID・Fire001直接利用をSDKで再検証。任意の独自URPシェーダーを無変換では実行できない。",
+      "remaining_requirement": "A shader GUID cannot safely identify both original URP code and a different Built-in implementation in one import.",
+      "next_acceptance": "Exercise optimized/custom GUID bundles and original-source collision imports; preserve executable shader references automatically.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Render state",
+      "status": "Approximate",
+      "result": "全描画回帰とSDK/AAOの重なりを再検証。heal02の同順位ソートは過去の反例として保持。",
+      "remaining_requirement": "Stable ordering of equal queue/distance/sorting keys belongs to each engine renderer, beyond an individual fragment shader.",
+      "next_acceptance": "Reproduce heal02 tied-key ordering against original and find a deterministic, no-conversion ordering rule.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Parallax targets",
+      "status": "Approximate",
+      "result": "曲面・負スケール・符号を含む既存回帰を再実行。依頼済みの有限値ガードを維持。",
+      "remaining_requirement": "The requested finite 1e-4 guard is intentionally different from original singular arithmetic.",
+      "next_acceptance": "Analyze the guarded denominator with signed near-singularity GPU inputs and preserve finite outputs.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Soft particles",
+      "status": "Approximate",
+      "result": "本家数式との35描画比較で20失敗を再現し修正。正投影・斜交・負強度・微小強度が一致。",
+      "remaining_requirement": "A shader cannot recover opaque/transparent geometry absent from the world camera depth texture.",
+      "next_acceptance": "Compare perspective/orthographic/oblique depth linearization, signed intensity and world-provided depth coverage.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md",
+        "Assets/Tests/PlayMode/NovaOriginalSoftParticleTests.cs"
+      ]
+    },
+    {
+      "feature": "Instanced stereo",
+      "status": "Approximate",
+      "result": "15件の左右眼配列描画と最悪条件のコンパイルを再検証。実HMDは未実施。",
+      "remaining_requirement": "Texture-array simulation and compilation do not prove the real XR runtime path.",
+      "next_acceptance": "Run actual PCVR eyes/mirror/depth with the SDK/AAO-built avatar on a physical headset.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Metallic and specular workflows",
+      "status": "Approximate",
+      "result": "両Litの既存BRDF回帰を再実行。世界のライト割当の差は数式の変更では解消できない。",
+      "remaining_requirement": "Final workflow output still consumes different engine light/probe assignments.",
+      "next_acceptance": "Extend original direct BRDF captures across punctual light attenuation and mixed probe inputs.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Surface maps",
+      "status": "Approximate",
+      "result": "既存の2D/Array/3D表面マップ描画とSDKの素材保持を再検証。最終照明入力の差は残る。",
+      "remaining_requirement": "Map sampling is preserved; complete surface output depends on independently approximate scene lighting.",
+      "next_acceptance": "Extend real imported texture-format/filter/mip and mixed-light surface captures.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Main light",
+      "status": "Approximate",
+      "result": "既存ライト回帰を再実行。アバターへ届かないライト一覧から本家の主光源を再選択できない。",
+      "remaining_requirement": "Built-in and URP select and bind main lights differently; avatars do not own the scene light list.",
+      "next_acceptance": "Reproduce no-directional, several-directional and importance changes with original light selection.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Additional lights",
+      "status": "Approximate",
+      "result": "ForwardAdd・UI補助・影の回帰を再実行。エンジンによるライト制限・Cookie入力の差は残る。",
+      "remaining_requirement": "ForwardAdd scheduling/attenuation differs from URP and a finite single-pass Canvas list omits shadows/cookies.",
+      "next_acceptance": "Compare pixel-light limits, importance, shadows/cookies and blended order for dense local lights.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Receive shadows",
+      "status": "Approximate",
+      "result": "既存の受影・無効化・組合せを再検証。世界のシャドウアトラスとPCFの完全置換は未実装。",
+      "remaining_requirement": "The Built-in shadow atlas, bias and cascade selection cannot be replaced by an avatar shader alone.",
+      "next_acceptance": "Compare bias, cascade boundaries, PCF footprints and mixed lights using actual world shadow inputs.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Ambient and light probes",
+      "status": "Approximate",
+      "result": "局所の赤いSHが全体の反射光に混入する差を再現。任意カメラ補助で分離しFlat/Trilight/Skyboxと状態復元を検証。VRCの無スクリプト経路では差が残る。",
+      "remaining_requirement": "Global ambient-probe DC is not separately supplied to the scriptless avatar shader.",
+      "next_acceptance": "Reproduce separate renderer and global SH DC with local/custom probes; assess an optional world/camera binder.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md",
+        "Assets/Tests/PlayMode/NovaAmbientLightingTests.cs",
+        "Assets/Tests/PlayMode/NovaAmbientLightingScopeTests.cs"
+      ]
+    },
+    {
+      "feature": "Environment reflections",
+      "status": "Approximate",
+      "result": "既存の反射・粗さ回帰を再実行。今回の全体環境光補助はエンジンの反射プローブ選択は変更しない。",
+      "remaining_requirement": "Engine probe selection/capture differs; NOVA itself does not provide blending/box-projection variants.",
+      "next_acceptance": "Compare probe assignment, capture updates and fallback under the same moving renderer.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Scene selection and picking",
+      "status": "Approximate",
+      "result": "明示パスの描画とEditor API回帰を再実行。ネイティブ画面の選択イベントは新規検証していない。",
+      "remaining_requirement": "Explicit pass drawing already works; native Editor invocation is a separate integration contract.",
+      "next_acceptance": "Automate actual Editor picking/selection callbacks in both editors and compare IDs.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Shadow caster",
+      "status": "Approximate",
+      "result": "既存Caster描画・コンパイルを再実行。世界側バイアス・アトラス差は残る。",
+      "remaining_requirement": "World-owned shadow scheduling/atlas conventions differ.",
+      "next_acceptance": "Capture equivalent caster bias and cube/directional variants in original and Built-in.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "DepthOnly",
+      "status": "Approximate",
+      "result": "既存明示パスとクリップ回帰を再実行。自動深度生成がShadowCasterを用いる仕様は変えない。",
+      "remaining_requirement": "Built-in auto-depth uses ShadowCaster; an explicit DepthOnly pass is not an automatically scheduled URP prepass.",
+      "next_acceptance": "Exercise actual camera depth inclusion and original caster-disabled depth-only materials.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "DepthNormals",
+      "status": "Approximate",
+      "result": "カメラ補助・左右眼・生成シェーダーの回帰を再実行。物理深度の計算は今回のSoftParticles修正から分離した。",
+      "remaining_requirement": "NOVA dedicated texture is implemented, but does not own or replace world depth normals.",
+      "next_acceptance": "Compare native consumer integration including encoding, scheduling and world occlusion.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Forward+",
+      "status": "Approximate",
+      "result": "既存ForwardAdd/Canvas代替の回帰を再実行。クラスタ型描画基盤は今回の承認計画の対象外。",
+      "remaining_requirement": "No tiled/clustered renderer is shipped; ForwardAdd is not algorithm/API-compatible Forward+.",
+      "next_acceptance": "Evaluate bounded multi-light alternatives with matched visible light sets and GPU cost.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Probe volumes",
+      "status": "Approximate",
+      "result": "既存LPPV空間読み取りの回帰を再実行。APVのファイル形式・ストリーミングは承認計画の対象外。",
+      "remaining_requirement": "LPPV does not implement APV placement, data formats, streaming or scenarios; world data is required.",
+      "next_acceptance": "Study an optional data adapter with actual APV probe/scenario fixtures and cost limits.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Foveated rendering",
+      "status": "Approximate",
+      "result": "D3Dの座標変換が恒等の範囲を維持。実XRランタイムの密度制御は未検証。",
+      "remaining_requirement": "D3D remapping is identity, but shader tests cannot establish runtime density-control compatibility.",
+      "next_acceptance": "Verify physical Windows XR runtime VRS plus per-eye UV/depth behavior.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Debug display",
+      "status": "Approximate",
+      "result": "8表示とビルド時除去の回帰を再実行。URPデバッグサービスの型や呼出し互換は提供しない。",
+      "remaining_requirement": "The implemented eight views use a Built-in Editor helper; URP debug service/API is absent.",
+      "next_acceptance": "Inventory remaining original debug views and actual activation/stripping semantics.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "UI lighting",
+      "status": "Approximate",
+      "result": "既存Canvas・Mask・光源選択の回帰を再実行。Overlay実画面・追加光の影/Cookieは未解消。",
+      "remaining_requirement": "The optional eight-light list has no shadow atlas/cookie manager; real Canvas/custom runtime components are outside VRC avatar scope.",
+      "next_acceptance": "Capture Overlay pixels and compare shadow/cookie cases, light selection and all Canvas modes.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Camera distortion",
+      "status": "Approximate",
+      "result": "既存実行可能APIとカメラ回帰を再実行。URP型を引数にするAPIは無依存パッケージの制約と両立しない。",
+      "remaining_requirement": "Executable Built-in APIs preserve selected call forms but cannot implement URP base classes/parameters without URP.",
+      "next_acceptance": "Compare engine callback/lifecycle usage in real consuming projects, including camera stacking.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Distortion buffer",
+      "status": "Approximate",
+      "result": "SDK/AAO後のゼロ強度重なり・鏡を再検証。非ゼロ歪みの全物体加算と8x/9x差は残る。",
+      "remaining_requirement": "A shared GrabPass lacks a per-camera additive offset texture; extra copies or rendering have real cost. Inline8 vs forced9 remains.",
+      "next_acceptance": "Use nonzero overlapping distortion and sampler-sharing experiments to evaluate a low-cost exact accumulator.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Distortion depth and visibility",
+      "status": "Approximate",
+      "result": "ソフト粒子の計算を修正し既存可視性回帰を再実行。世界の深度にない遮蔽物は復元できない。",
+      "remaining_requirement": "Missing world camera depth cannot be reconstructed from only the avatar surface.",
+      "next_acceptance": "Compare world transparent-depth coverage and camera-resolved depth tests across MSAA modes.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Distortion camera types",
+      "status": "Approximate",
+      "result": "既存ネスト/反射/Preview回帰を再実行。実XR・Editorの統合イベント網羅ではない。",
+      "remaining_requirement": "Nested mono Game/Reflection/Preview now pass; unsupported compositor camera types still select the shader fallback.",
+      "next_acceptance": "Extend the fixed nested-camera path to actual XR/SceneView and callback-order integrations.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Optimizer pass stripping",
+      "status": "Approximate",
+      "result": "48生成名・パス保持除去・コンパイルの回帰を再実行。パスの自動呼出しは各エンジンのまま。",
+      "remaining_requirement": "Pass presence/strip flags work; pipeline invocation differences remain.",
+      "next_acceptance": "Test retained generated passes through native depth/selection consumer entry points.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Optimizer includes",
+      "status": "Approximate",
+      "result": "既存のパッケージ参照・出力移動テストを再実行。元パッケージ移動時の参照修復は未実装。",
+      "remaining_requirement": "Previously generated shaders contain include paths; preserving legacy helper signatures does not repair moved package paths.",
+      "next_acceptance": "Evaluate stable include identifiers for generated assets moved between package installations.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    },
+    {
+      "feature": "Platform scope",
+      "status": "Approximate",
+      "result": "Unity 2022/6・D3D11/12・SDK/AAOを再検証。別GPU・PCVR実機は未検証。",
+      "remaining_requirement": "Windows D3D coverage cannot establish every Unity GPU/platform behavior.",
+      "next_acceptance": "Repeat rendering, sampler, shader-budget and physical XR checks on additional GPUs/backends.",
+      "evidence": [
+        "Documentation/BuiltInCompatibilityMatrix.md"
+      ]
+    }
+  ]
+}

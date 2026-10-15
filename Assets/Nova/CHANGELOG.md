@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.7
+
+- Match original projected soft-particle and depth-fade math, including oblique/orthographic cameras and signed/small parameters. Keep legacy generated helper signatures.
+- Add optional camera binding for independent global glossy ambient; keep local SH/LPPV diffuse and scriptless avatar fallback.
+- Restore executable pipeline-independent distortion constructor/setup contracts and nested-camera suppression state.
+- Preserve original material/editor contracts; no URP or RenderGraph dependency. Camera helpers remain ordinary-Unity features, not avatar components.
+
+## 0.1.6
+
+- Restore reflection-map-off glossy ambient, reflection intensity, dark custom SH and low-light/HDR conversion.
+- Keep the global-versus-local probe limitation explicit for scriptless avatars.
+
 ## 0.1.5
 
 - Match original vertex parallax, interpolated normal-map basis and clip-depth fog without new ordinary color passes or texture reads.

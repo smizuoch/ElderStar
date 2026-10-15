@@ -97,3 +97,13 @@ and clipped UI with eight lights enable it (near 1, far 10, width 3). The same
 18 ordinary ABBA workloads run; unrelated optional helper workloads are omitted.
 The original cost gate and sampling counts are unchanged. This measures the
 four Uber shader families, not distortion GrabPass or camera callback CPU cost.
+
+## Soft-particle / ambient follow-up (0.1.7)
+
+Use main `faad69ee` as the independent baseline and build with
+`-novaSoftAmbientBenchmark`. Combined ordinary materials enable soft particles
+(intensity 0.5); default controls leave them off. Eighteen ordinary conditions
+retain the same gate and sample schedule. Two optional ambient-camera conditions
+measure helper off/on using the same candidate shader. All forty before/after
+witness images must be visible. See `SoftParticleAmbientAcceptance.md` for the
+measurement scope, CPU intervals and unchanged native material/target sizes.

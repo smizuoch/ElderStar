@@ -151,6 +151,14 @@ public static class NovaVrcAcceptance
                 EditorUtility.SetDirty(material); AssetDatabase.SaveAssetIfDirty(material);
             }
             AddSkinnedProbes(avatar);
+            if (args.Contains("-novaSoftAmbient"))
+            {
+                // Scene-only input: no custom runtime component on the avatar.
+                RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+                RenderSettings.ambientLight = new Color(.15f,.22f,.45f);
+                RenderSettings.reflectionIntensity = .7f;
+                Object.FindObjectOfType<Camera>().depthTextureMode |= DepthTextureMode.Depth;
+            }
             NovaVrcDistortionProbe.Prepare(avatar);
             report.sourceSkinnedMeshes = avatar.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length;
             var tagType = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType("Anatawa12.AvatarOptimizer.AvatarTagComponent")).First(t => t != null);
@@ -244,6 +252,17 @@ public static class NovaVrcAcceptance
                 material.SetTexture("_VertexDeformationMap", patternedMap);
                 material.SetFloat("_VertexDeformationIntensity", .03f); material.SetFloat("_VertexDeformationIntensityCoord", 8);
                 material.EnableKeyword("_VERTEX_DEFORMATION_ENABLED");
+                if (Environment.GetCommandLineArgs().Contains("-novaSoftAmbient"))
+                {
+                    material.SetFloat("_SoftParticlesEnabled",1);
+                    material.SetFloat("_SoftParticlesIntensity",.5f);
+                    material.EnableKeyword("_SOFT_PARTICLES_ENABLED");
+                    if (material.HasProperty("_EnvironmentReflections"))
+                    {
+                        material.SetFloat("_EnvironmentReflections",0);
+                        material.DisableKeyword("_ENVIRONMENT_REFLECTIONS_ENABLED");
+                    }
+                }
                 materials[shader] = material;
             }
             renderer.sharedMaterial = materials[shader];

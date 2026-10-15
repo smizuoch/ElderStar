@@ -1,0 +1,106 @@
+{
+  "source_commit": "b001fcdc67389cabcb24f3d494ac0d6ed1f55401",
+  "reference_commit": "1c6b88729f91c852c164ef71a32cc2bce83a1892",
+  "runs": [
+    {
+      "kind": "PlayMode",
+      "log": "Logs/Unity/SoftAmbient/release-full-6000.3.23f1.xml",
+      "passed": 1051,
+      "failed": 0,
+      "xml_sha256": "57279d96df99bcb1291fa2099e3570ce6c0e330255c37adccb32d5fc5455cf34",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "PlayMode",
+      "log": "Logs/Unity/SoftAmbient/release-full-2022.3.22f1.xml",
+      "passed": 1051,
+      "failed": 0,
+      "xml_sha256": "9d372688ae7ebcb5f0ab09f9c7271869822351707a12fab785d02c6c26f412c7",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "EditMode",
+      "log": "Logs/Unity/SoftAmbient/edit-clean-6000.3.23f1.xml",
+      "passed": 500,
+      "failed": 0,
+      "xml_sha256": "f164998c1c1593942d153f5d8f3680599c479e47bc95f86488b6bf033e62e4e3",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "EditMode",
+      "log": "Logs/Unity/SoftAmbient/edit-clean-2022.3.22f1.xml",
+      "passed": 500,
+      "failed": 0,
+      "xml_sha256": "798e12175e8e684e74d8ff2a127edb10d65f1eac8c69834ee5b1fc74cea29fc8",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "D3D12 focused",
+      "log": "Logs/Unity/SoftAmbient/d3d12-final-2022.3.22f1.xml",
+      "passed": 74,
+      "failed": 0,
+      "xml_sha256": "e342d9b0cc55a02b397699af3995d57ba484eedb1ae0fe96137c7b4a5fd6f867",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "D3D12 focused",
+      "log": "Logs/Unity/SoftAmbient/d3d12-final-6000.3.23f1.xml",
+      "passed": 74,
+      "failed": 0,
+      "xml_sha256": "4883f7431b2d1dcd0f93e4e4cd3b44bc49068fbfe6687ed61a3a9c7acb631635",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "Linear ambient",
+      "log": "Logs/Unity/SoftAmbient/ambient-linear-2022.3.22f1.xml",
+      "passed": 25,
+      "failed": 0,
+      "xml_sha256": "067d0866fd62d8eda9a72f356f776931fab250b200a95c4e619cde8a60bcb2ae",
+      "startup_compiler_diagnostics": [
+        "error CS0246: The type or namespace name 'DistortedUvBufferPass' could not be found (are you missing a using directive or an assembly reference?)",
+        "error CS0246: The type or namespace name 'ApplyDistortionPass' could not be found (are you missing a using directive or an assembly reference?)"
+      ],
+      "startup_note": "Old Bee source list rebuilt automatically before successful tests; clean subsequent Gamma run."
+    },
+    {
+      "kind": "Linear ambient",
+      "log": "Logs/Unity/SoftAmbient/ambient-linear-6000.3.23f1.xml",
+      "passed": 25,
+      "failed": 0,
+      "xml_sha256": "6f8c011080f83c86095fa845b92a923b9b84fe570a863e703fb4b1e170d18ed8",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "Gamma ambient",
+      "log": "Logs/Unity/SoftAmbient/ambient-gamma-2022.3.22f1.xml",
+      "passed": 25,
+      "failed": 0,
+      "xml_sha256": "d1a546f4988fcd1fd49296b5c039d159fab6208d53302b6880a75e29920c9416",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    },
+    {
+      "kind": "Gamma ambient",
+      "log": "Logs/Unity/SoftAmbient/ambient-gamma-6000.3.23f1.xml",
+      "passed": 25,
+      "failed": 0,
+      "xml_sha256": "597a83d0cf0159fd640612b17053a5c84671ed484616aeb427cfac2878c21c01",
+      "startup_compiler_diagnostics": [],
+      "startup_note": ""
+    }
+  ],
+  "red_cases": {
+    "soft_original_math": 20,
+    "global_local_ambient_pixel_mismatch": 2,
+    "missing_camera_helper": 2,
+    "uninitialized_warning_per_editor": 2
+  },
+  "test_fixture_corrections": "Physical-eye-distance assertions now use matched-framing perspective cameras. Synthetic stereo particles now lie between near/far slices. Numerical tolerances and original images unchanged."
+}

@@ -41,6 +41,7 @@ public sealed class NovaLightingGpuBenchmark : MonoBehaviour
     ProfilerRecorder drawCounter;
     Camera cameraMain,cameraMirror;
     NovaDepthNormals depthNormals;
+    NovaAmbientLighting ambientMain,ambientMirror;
     GameObject canvasObject;RawImage graphic;NovaCanvasLighting canvasLighting;
     RenderTexture mainTarget,mirrorTarget;
     ComputeBuffer probeConstants;Texture3D probeTexture;MaterialPropertyBlock probeProperties;
@@ -66,6 +67,8 @@ public sealed class NovaLightingGpuBenchmark : MonoBehaviour
             cameraMain=CreateCamera("Main measurement",mainTarget);
             cameraMirror=CreateCamera("Reflected measurement",mirrorTarget);
             cameraMirror.worldToCameraMatrix=Matrix4x4.Scale(new Vector3(-1,1,1))*cameraMirror.worldToCameraMatrix;
+            ambientMain=cameraMain.gameObject.AddComponent<NovaAmbientLighting>();ambientMain.enabled=false;
+            ambientMirror=cameraMirror.gameObject.AddComponent<NovaAmbientLighting>();ambientMirror.enabled=false;
             depthNormals=cameraMain.gameObject.AddComponent<NovaDepthNormals>();depthNormals.enabled=false;
             var primitive=GameObject.CreatePrimitive(PrimitiveType.Quad);
             mesh=Instantiate(primitive.GetComponent<MeshFilter>().sharedMesh);Destroy(primitive);
@@ -116,7 +119,7 @@ public sealed class NovaLightingGpuBenchmark : MonoBehaviour
     void BeginBlock()
     {
         var current=Current;frames=0;gpu.Clear();cpu.Clear();draws.Clear();started=Time.realtimeSinceStartup;
-        for(int i=0;i<meshes.Count;i++){meshes[i].enabled=string.IsNullOrEmpty(current.helper) && i<current.layers || current.helper=="depth" && i<current.layers;meshes[i].sharedMaterial=ActiveMaterial;}
+        for(int i=0;i<meshes.Count;i++){meshes[i].enabled=(string.IsNullOrEmpty(current.helper) || current.helper=="ambient") && i<current.layers || current.helper=="depth" && i<current.layers;meshes[i].sharedMaterial=ActiveMaterial;}
         for(int i=0;i<lights.Count;i++)lights[i].enabled=i<Math.Max(1,current.lights);
         if(current.clip)ActiveMaterial.EnableKeyword("UNITY_UI_CLIP_RECT");else ActiveMaterial.DisableKeyword("UNITY_UI_CLIP_RECT");
         ActiveMaterial.SetVector("_ClipRect",new Vector4(-10,-10,10,10));
@@ -124,6 +127,7 @@ public sealed class NovaLightingGpuBenchmark : MonoBehaviour
         canvasObject.SetActive(current.helper=="canvas");graphic.material=ActiveMaterial;
         canvasLighting.MaximumLights=current.lights;canvasLighting.enabled=current.helper=="canvas" && Candidate;
         depthNormals.enabled=current.helper=="depth" && Candidate;
+        ambientMain.enabled=ambientMirror.enabled=current.helper=="ambient" && Candidate;
         if(current.helper=="probe")
         {
             var data=new Vector4[7];data[0]=new Vector4(Candidate ? 1 : 0,0,1f/32,0);

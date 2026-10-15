@@ -1,5 +1,9 @@
 # VRChat PC and Avatar Optimizer verification
 
+## 0.1.7 soft-particle / ambient follow-up
+
+See [current-source acceptance](SoftParticleAmbientAcceptance.md): both SDK/AAO builds, 30 image pairs, source/archive hashes, zero final shader/C# errors and the temporary third-party Editor toolbar workaround are recorded separately from previous client uploads.
+
 ## 0.1.5 lighting follow-up
 
 The [lighting parity report](LowCostLightingParity.md) records the new vertex

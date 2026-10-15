@@ -129,20 +129,28 @@ half3 NovaComputeAmbientApproximation(float3 normalWS)
     return max(0, NovaSampleAmbient(normalWS));
 }
 
+// Optional ordinary-Unity camera input; w=0 keeps the scriptless avatar path.
+float4 _NovaGlobalGlossyAmbient;
+
 half3 NovaComputeGlossyAmbient()
 {
-    // Original keeps DC glossy illumination even with reflection maps disabled.
-    // Built-in's indirect-specular RGB can retain a previous skybox when switching
-    // to Flat/Trilight. Recover DC from the current renderer SH instead. Packing
-    // puts part of L2 into A.w, so remove it. The native alpha is reflection intensity.
-    half3 dc = half3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w)
-        + half3(unity_SHBr.z, unity_SHBg.z, unity_SHBb.z) / 3.0h;
-    half3 ambient = max(0, dc) * unity_IndirectSpecColor.a;
-    #ifdef UNITY_COLORSPACE_GAMMA
-    // Original URP sets glossy DC through C# Color.gamma, whose HDR segment
-    // differs from the shader's diffuse sRGB conversion above.
-    ambient = half3(LinearToGammaSpaceExact(ambient.r), LinearToGammaSpaceExact(ambient.g), LinearToGammaSpaceExact(ambient.b));
-    #endif
+    half3 ambient = _NovaGlobalGlossyAmbient.rgb;
+    UNITY_BRANCH
+    if (_NovaGlobalGlossyAmbient.w <= 0.5)
+    {
+        // Original keeps DC glossy illumination even with reflection maps disabled.
+        // Built-in's indirect-specular RGB can retain a previous skybox when switching
+        // to Flat/Trilight. Recover DC from the current renderer SH instead. Packing
+        // puts part of L2 into A.w, so remove it. The native alpha is reflection intensity.
+        half3 dc = half3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w)
+            + half3(unity_SHBr.z, unity_SHBg.z, unity_SHBb.z) / 3.0h;
+        ambient = max(0, dc) * unity_IndirectSpecColor.a;
+        #ifdef UNITY_COLORSPACE_GAMMA
+        // Original URP sets glossy DC through C# Color.gamma, whose HDR segment
+        // differs from the shader's diffuse sRGB conversion above.
+        ambient = half3(LinearToGammaSpaceExact(ambient.r), LinearToGammaSpaceExact(ambient.g), LinearToGammaSpaceExact(ambient.b));
+        #endif
+    }
     return ambient;
 }
 
