@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -14,8 +15,15 @@ namespace Nova.Runtime.Core.Scripts
         private BuiltInDistortionPass distortionPass;
         private Camera targetCamera;
         private static readonly int CameraActive = Shader.PropertyToID("_NovaCameraDistortionActive");
-        private float previousCameraActive;
-        private bool rendering;
+        private static readonly Dictionary<Camera, ScreenSpaceDistortion> Owners = new Dictionary<Camera, ScreenSpaceDistortion>();
+        private static readonly List<CameraScope> Scopes = new List<CameraScope>(4);
+        private static bool subscribed;
+
+        private struct CameraScope
+        {
+            public Camera Camera;
+            public float PreviousActive;
+        }
 
         public void Create()
         {
@@ -28,11 +36,21 @@ namespace Nova.Runtime.Core.Scripts
                 distortionPass = new BuiltInDistortionPass(_applyDistortionShader);
         }
 
-        private void OnEnable() { Create(); }
+        private void OnEnable()
+        {
+            Create();
+            Owners[targetCamera] = this;
+            if (subscribed) return;
+            Camera.onPreCull += BeginCamera;
+            Camera.onPostRender += EndCamera;
+            subscribed = true;
+        }
 
         private void OnDisable()
         {
-            OnPostRender();
+            if (targetCamera != null) Owners.Remove(targetCamera);
+            if (Scopes.Count > 0) SetCameraActive(Scopes[Scopes.Count - 1].Camera);
+            UnsubscribeIfIdle();
             distortionPass?.Dispose();
             distortionPass = null;
             // Leave the shared camera depth flag set: other effects may now depend on it.
@@ -43,18 +61,38 @@ namespace Nova.Runtime.Core.Scripts
             && targetCamera.cameraType != CameraType.Reflection
             && (_applyToSceneView || targetCamera.cameraType != CameraType.SceneView);
 
-        private void OnPreCull()
+        private static void BeginCamera(Camera camera)
         {
-            previousCameraActive = Shader.GetGlobalFloat(CameraActive);
-            Shader.SetGlobalFloat(CameraActive, CanComposite ? 1 : 0);
-            rendering = true;
+            // Reflection/preview cameras often have no NOVA component. Scope every
+            // camera while any compositor exists so they cannot inherit its flag.
+            Scopes.Add(new CameraScope { Camera = camera, PreviousActive = Shader.GetGlobalFloat(CameraActive) });
+            SetCameraActive(camera);
         }
 
-        private void OnPostRender()
+        private static void EndCamera(Camera camera)
         {
-            if (!rendering) return;
-            Shader.SetGlobalFloat(CameraActive, previousCameraActive);
-            rendering = false;
+            if (Scopes.Count == 0 || Scopes[Scopes.Count - 1].Camera != camera) return;
+            var scope = Scopes[Scopes.Count - 1];
+            Scopes.RemoveAt(Scopes.Count - 1);
+            if (Scopes.Count == 0) Shader.SetGlobalFloat(CameraActive, scope.PreviousActive);
+            else SetCameraActive(Scopes[Scopes.Count - 1].Camera);
+            UnsubscribeIfIdle();
+        }
+
+        private static void SetCameraActive(Camera camera)
+        {
+            Shader.SetGlobalFloat(CameraActive, Owners.TryGetValue(camera, out var owner)
+                && owner != null && owner.isActiveAndEnabled && owner.CanComposite ? 1 : 0);
+        }
+
+        private static void UnsubscribeIfIdle()
+        {
+            // Disabling the last owner inside a nested render must still unwind
+            // both camera scopes and restore the caller's external shader state.
+            if (!subscribed || Owners.Count != 0 || Scopes.Count != 0) return;
+            Camera.onPreCull -= BeginCamera;
+            Camera.onPostRender -= EndCamera;
+            subscribed = false;
         }
 
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
