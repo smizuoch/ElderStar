@@ -14,6 +14,7 @@ public static class NovaLightingGpuBenchmarkBuilder
     {
         var args=Environment.GetCommandLineArgs();int index=Array.IndexOf(args,"-novaBenchmarkPlayer");
         if(index<0)throw new ArgumentException("Missing -novaBenchmarkPlayer");
+        bool depthFade = Array.IndexOf(args,"-novaDepthFadeBenchmark") >= 0;
         var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
         var runner=new GameObject("NOVA lighting measurements").AddComponent<NovaLightingGpuBenchmark>();
         Directory.CreateDirectory("Assets/NovaBenchmark/Materials");
@@ -35,6 +36,11 @@ public static class NovaLightingGpuBenchmarkBuilder
                 var material=new Material(shader);material.SetTexture("_BaseMap",texture);material.SetFloat("_Cull",0);
                 material.SetFloat("_RenderType",2);material.SetFloat("_ZWriteOverride",0);material.SetFloat("_LitWorkflowMode",1);
                 if(kind>=2){material.SetFloat("_Metallic",0);material.SetTexture("_NormalMap",combined==1 ? normal : null);material.SetFloat("_EnvironmentReflections",0);material.SetFloat("_SpecularHighlights",combined);}
+                if(depthFade && combined==1)
+                {
+                    material.SetFloat("_DepthFadeEnabled",1);material.SetFloat("_DepthFadeNear",1);
+                    material.SetFloat("_DepthFadeFar",10);material.SetFloat("_DepthFadeWidth",3);
+                }
                 if(combined==1)
                 {
                     material.SetTexture("_ParallaxMap",texture);material.SetFloat("_ParallaxMapMode",0);material.SetFloat("_ParallaxMapTarget",1);material.SetFloat("_ParallaxStrength",.03f);
@@ -54,10 +60,13 @@ public static class NovaLightingGpuBenchmarkBuilder
                 (variant==0 ? runner.baselineMaterials : runner.candidateMaterials)[materialIndex]=material;
             }
             foreach(bool mirror in new[]{false,true})scenarios.Add(new NovaLightingGpuBenchmark.Scenario{
-                name=kinds[kind]+(combined==0 ? "-default" : "-combined")+(mirror ? "-overlap-mirror" : "-single"),material=materialIndex,layers=mirror ? 8 : 1,mirror=mirror,fog=combined==1});
+                name=kinds[kind]+(combined==0 ? "-default" : depthFade ? "-combined-depth-fade" : "-combined")+(mirror ? "-overlap-mirror" : "-single"),material=materialIndex,layers=mirror ? 8 : 1,mirror=mirror,fog=combined==1});
         }
         foreach(bool mirror in new[]{false,true})scenarios.Add(new NovaLightingGpuBenchmark.Scenario{
             name="UI-Lit-clipped-eight-lights"+(mirror ? "-overlap-mirror" : "-single"),material=7,layers=mirror ? 8 : 1,mirror=mirror,clip=true,lights=8,fog=true});
+        // A focused depth-fade run measures ordinary keyword-off/on paths only.
+        if (!depthFade)
+        {
         // Optional workloads compare one candidate shader with its helper disabled/enabled.
         foreach(int count in new[]{0,4,8})scenarios.Add(new NovaLightingGpuBenchmark.Scenario{name="canvas-"+count,helper="canvas",material=6,lights=count});
         scenarios.Add(new NovaLightingGpuBenchmark.Scenario{name="depth-normals-eight",helper="depth",material=5,layers=8,fog=true});
@@ -69,6 +78,7 @@ public static class NovaLightingGpuBenchmarkBuilder
             int old=scenarios[i].material,newIndex=runner.candidateMaterials.Length;
             Array.Resize(ref runner.candidateMaterials,newIndex+1);Array.Resize(ref runner.baselineMaterials,newIndex+1);
             runner.candidateMaterials[newIndex]=runner.baselineMaterials[newIndex]=runner.candidateMaterials[old];scenarios[i].material=newIndex;
+        }
         }
         runner.scenarios=scenarios.ToArray();
         const string path="Assets/NovaLightingBenchmark.unity";EditorSceneManager.SaveScene(scene,path);

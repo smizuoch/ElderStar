@@ -1,11 +1,11 @@
 # 再現率の厳密な集計と全入力評価の限界
 
 集計日: 2026-10-15。対象は NOVA 3.6.0
-(`1c6b88729f91c852c164ef71a32cc2bce83a1892`) と Built-in 0.1.6を基にしたAPI互換修正
-(`c4c75a971329a70eef3ea06b6f21228cd739a86c`)。
+(`1c6b88729f91c852c164ef71a32cc2bce83a1892`) と Built-in 0.1.6を基にした描画互換修正
+(`3b764095b35121828b1d295ac106b2796455f7fe`)。
 数値の原本は [再計算結果 JSON](Verification/ReproductionAudit20261015.json)。
 この集計は記録の監査であり、下記画像群を新たに撮り直したものではない。
-同日の[API互換修正](RuntimeAPICompatibility.md)に伴い、宣言分類と対象ソースを更新した。
+同日の[API互換修正](RuntimeAPICompatibility.md)に伴い、宣言分類と対象ソースを更新した。さらに[Exact分類の再評価](ExactParityProgress.md)で6項目を更新した。
 
 ## 結論
 
@@ -32,13 +32,13 @@
 
 | 分類 | 項目数 | 判定の意味 |
 | --- | ---: | --- |
-| Exact | 28 | 検証したWindows経路の契約・計算が一致。全入力の同値証明ではない |
-| Approximate | 35 | 代替実装と制約がある。再現度を一律の部分点には換算できない |
+| Exact | 34 | 検証したWindows経路の契約・計算が一致。全入力の同値証明ではない |
+| Approximate | 29 | 代替実装と制約がある。再現度を一律の部分点には換算できない |
 | Unsupported | 0 | 表の機能単位で代替なしと分類された行はない |
 | Not Applicable | 3 | Lightmaps and vertex lighting、RenderGraph、URP compatibility mode |
 
-対象外を除く**Exact分類比率は28/63 = 44.44%**。
-対象外も含めた全行に対する比率は28/66 = 42.42%。どちらも**見た目の再現率でも、
+対象外を除く**Exact分類比率は34/63 = 53.97%**。
+対象外も含めた全行に対する比率は34/66 = 51.52%。どちらも**見た目の再現率でも、
 全入力の一致率の下限でもない**。機能行を細分化するだけでも比率は変わる。
 Unsupportedが0でも、URP専用API・APVデータ読み取りなどが使えるという意味にはならない。
 それらの欠落はApproximateの制約欄やランタイムAPIの非互換分類に含まれる。

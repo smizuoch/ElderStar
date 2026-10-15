@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "reference_commit": "1c6b88729f91c852c164ef71a32cc2bce83a1892",
+  "matrix_scope_unchanged": "Unity 2022.3.22f1 and 6000.3.23f1, Windows D3D11/12",
+  "universal_equivalence_claimed": false,
+  "promoted": [
+    {
+      "feature": "Mirror samplers",
+      "contract": "Point, bilinear and trilinear mirror sampling use native independent D3D sampler states.",
+      "scope_limits": "D3D11/12 as in the existing matrix scope. Coupled-sampler backends retain the documented UV fallback; no cross-platform claim.",
+      "evidence_files": [
+        "Assets/Tests/PlayMode/NovaBuiltInUberLitSurfaceSmokeTests.cs",
+        "Documentation/RandomizedParityVerification.md"
+      ]
+    },
+    {
+      "feature": "Tint rim",
+      "contract": "Original normalized world view/normal interpolation, abs(dot), GetRimValue and tint controls.",
+      "scope_limits": "Nondegenerate normals/view vectors; singular normalization is not a portable cross-GPU contract.",
+      "evidence_files": [
+        "Assets/Tests/PlayMode/NovaBuiltInRandomizedMathTests.cs",
+        "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json"
+      ],
+      "retained_image_evidence": [
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json",
+          "pattern": "_rim_",
+          "frames": 24,
+          "passed": 24,
+          "pixel_identical": 18
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json",
+          "pattern": "_rim_",
+          "frames": 24,
+          "passed": 24,
+          "pixel_identical": 22
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json",
+          "pattern": "_rim_",
+          "frames": 24,
+          "passed": 24,
+          "pixel_identical": 18
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json",
+          "pattern": "_rim_",
+          "frames": 24,
+          "passed": 24,
+          "pixel_identical": 20
+        }
+      ]
+    },
+    {
+      "feature": "Rim and luminance transparency",
+      "contract": "Original GetRimValue/inverse/progress/sharpness and luminance weights multiply surface alpha.",
+      "scope_limits": "The equation and shared feature tests are verified. Frame order and the scene lighting supplying color remain separately assessed.",
+      "evidence_files": [
+        "Assets/Tests/PlayMode/NovaBuiltInRandomizedMathTests.cs",
+        "Assets/Tests/PlayMode/NovaBuiltInUberUnlitRenderingSmokeTests.cs",
+        "Assets/Tests/PlayMode/NovaBuiltInUIParticlesUberUnlitSmokeTests.cs"
+      ]
+    },
+    {
+      "feature": "Depth fade",
+      "contract": "Original LinearEyeDepth(clip.z / clip.w), signed and sub-1e-4 width, near/far and saturation; raster depth reuses SV_POSITION.",
+      "scope_limits": "Standard and newly generated shaders. Legacy vector helper is retained for old generated source, which requires regeneration for the new projection behavior. Zero-width singularities inherit GPU arithmetic.",
+      "evidence_files": [
+        "Assets/Tests/PlayMode/NovaOriginalDepthFadeTests.cs",
+        "Assets/Tests/PlayMode/Shaders/NovaOriginalDepthFadeOracle.shader",
+        "Assets/Tests/PlayMode/NovaBuiltInRandomizedMathTests.cs"
+      ]
+    },
+    {
+      "feature": "Normal maps",
+      "contract": "Original packing/XY scale, vertex tangent/binormal and interpolation/normalization order, including distinct parallax handedness.",
+      "scope_limits": "Valid supplied normals/tangents. Lighting inputs and shadow behavior are separate matrix rows.",
+      "evidence_files": [
+        "Assets/Tests/PlayMode/NovaBuiltInUberLitSurfaceSmokeTests.cs",
+        "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json"
+      ],
+      "retained_image_evidence": [
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json",
+          "pattern": "-UberLit_normal_",
+          "frames": 12,
+          "passed": 12,
+          "pixel_identical": 10
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json",
+          "pattern": "-UberLit_normal_",
+          "frames": 12,
+          "passed": 12,
+          "pixel_identical": 12
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json",
+          "pattern": "-UberLit_normal_",
+          "frames": 12,
+          "passed": 12,
+          "pixel_identical": 12
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json",
+          "pattern": "-UberLit_normal_",
+          "frames": 12,
+          "passed": 12,
+          "pixel_identical": 12
+        }
+      ]
+    },
+    {
+      "feature": "Fog",
+      "contract": "Original clip-Z vertex factor/interpolation and Linear/Exp/Exp2 fragment mix; black fog for ForwardAdd.",
+      "scope_limits": "Matching scene fog/camera inputs on D3D. Original nonphysical orthographic/oblique behavior is intentionally preserved.",
+      "evidence_files": [
+        "Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInFog.cginc",
+        "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json",
+        "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json"
+      ],
+      "retained_image_evidence": [
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json",
+          "pattern": "_fog-",
+          "frames": 72,
+          "passed": 72,
+          "pixel_identical": 72
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json",
+          "pattern": "_fog-",
+          "frames": 72,
+          "passed": 72,
+          "pixel_identical": 72
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json",
+          "pattern": "_fog-",
+          "frames": 72,
+          "passed": 72,
+          "pixel_identical": 72
+        },
+        {
+          "path": "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json",
+          "pattern": "_fog-",
+          "frames": 72,
+          "passed": 72,
+          "pixel_identical": 72
+        }
+      ]
+    }
+  ],
+  "remaining": [
+    {
+      "feature": "Material setup",
+      "next_acceptance": "Preserve transparent-background capture at the original queue without changing other transparent ordering.",
+      "constraint": "URP separately schedules distortion; a shader-only GrabPass is invoked at its material queue."
+    },
+    {
+      "feature": "Material migration",
+      "next_acceptance": "Exercise optimized/custom GUID bundles and original-source collision imports; preserve executable shader references automatically.",
+      "constraint": "A shader GUID cannot safely identify both original URP code and a different Built-in implementation in one import."
+    },
+    {
+      "feature": "Render state",
+      "next_acceptance": "Reproduce heal02 tied-key ordering against original and find a deterministic, no-conversion ordering rule.",
+      "constraint": "Stable ordering of equal queue/distance/sorting keys belongs to each engine renderer, beyond an individual fragment shader."
+    },
+    {
+      "feature": "Parallax targets",
+      "next_acceptance": "Analyze the guarded denominator with signed near-singularity GPU inputs and preserve finite outputs.",
+      "constraint": "The requested finite 1e-4 guard is intentionally different from original singular arithmetic."
+    },
+    {
+      "feature": "Soft particles",
+      "next_acceptance": "Compare perspective/orthographic/oblique depth linearization, signed intensity and world-provided depth coverage.",
+      "constraint": "A shader cannot recover opaque/transparent geometry absent from the world camera depth texture."
+    },
+    {
+      "feature": "Instanced stereo",
+      "next_acceptance": "Run actual PCVR eyes/mirror/depth with the SDK/AAO-built avatar on a physical headset.",
+      "constraint": "Texture-array simulation and compilation do not prove the real XR runtime path."
+    },
+    {
+      "feature": "Metallic and specular workflows",
+      "next_acceptance": "Extend original direct BRDF captures across punctual light attenuation and mixed probe inputs.",
+      "constraint": "Final workflow output still consumes different engine light/probe assignments."
+    },
+    {
+      "feature": "Surface maps",
+      "next_acceptance": "Extend real imported texture-format/filter/mip and mixed-light surface captures.",
+      "constraint": "Map sampling is preserved; complete surface output depends on independently approximate scene lighting."
+    },
+    {
+      "feature": "Main light",
+      "next_acceptance": "Reproduce no-directional, several-directional and importance changes with original light selection.",
+      "constraint": "Built-in and URP select and bind main lights differently; avatars do not own the scene light list."
+    },
+    {
+      "feature": "Additional lights",
+      "next_acceptance": "Compare pixel-light limits, importance, shadows/cookies and blended order for dense local lights.",
+      "constraint": "ForwardAdd scheduling/attenuation differs from URP and a finite single-pass Canvas list omits shadows/cookies."
+    },
+    {
+      "feature": "Receive shadows",
+      "next_acceptance": "Compare bias, cascade boundaries, PCF footprints and mixed lights using actual world shadow inputs.",
+      "constraint": "The Built-in shadow atlas, bias and cascade selection cannot be replaced by an avatar shader alone."
+    },
+    {
+      "feature": "Ambient and light probes",
+      "next_acceptance": "Reproduce separate renderer and global SH DC with local/custom probes; assess an optional world/camera binder.",
+      "constraint": "Global ambient-probe DC is not separately supplied to the scriptless avatar shader."
+    },
+    {
+      "feature": "Environment reflections",
+      "next_acceptance": "Compare probe assignment, capture updates and fallback under the same moving renderer.",
+      "constraint": "Engine probe selection/capture differs; NOVA itself does not provide blending/box-projection variants."
+    },
+    {
+      "feature": "Scene selection and picking",
+      "next_acceptance": "Automate actual Editor picking/selection callbacks in both editors and compare IDs.",
+      "constraint": "Explicit pass drawing already works; native Editor invocation is a separate integration contract."
+    },
+    {
+      "feature": "Shadow caster",
+      "next_acceptance": "Capture equivalent caster bias and cube/directional variants in original and Built-in.",
+      "constraint": "World-owned shadow scheduling/atlas conventions differ."
+    },
+    {
+      "feature": "DepthOnly",
+      "next_acceptance": "Exercise actual camera depth inclusion and original caster-disabled depth-only materials.",
+      "constraint": "Built-in auto-depth uses ShadowCaster; an explicit DepthOnly pass is not an automatically scheduled URP prepass."
+    },
+    {
+      "feature": "DepthNormals",
+      "next_acceptance": "Compare native consumer integration including encoding, scheduling and world occlusion.",
+      "constraint": "NOVA dedicated texture is implemented, but does not own or replace world depth normals."
+    },
+    {
+      "feature": "Forward+",
+      "next_acceptance": "Evaluate bounded multi-light alternatives with matched visible light sets and GPU cost.",
+      "constraint": "No tiled/clustered renderer is shipped; ForwardAdd is not algorithm/API-compatible Forward+."
+    },
+    {
+      "feature": "Probe volumes",
+      "next_acceptance": "Study an optional data adapter with actual APV probe/scenario fixtures and cost limits.",
+      "constraint": "LPPV does not implement APV placement, data formats, streaming or scenarios; world data is required."
+    },
+    {
+      "feature": "Foveated rendering",
+      "next_acceptance": "Verify physical Windows XR runtime VRS plus per-eye UV/depth behavior.",
+      "constraint": "D3D remapping is identity, but shader tests cannot establish runtime density-control compatibility."
+    },
+    {
+      "feature": "Debug display",
+      "next_acceptance": "Inventory remaining original debug views and actual activation/stripping semantics.",
+      "constraint": "The implemented eight views use a Built-in Editor helper; URP debug service/API is absent."
+    },
+    {
+      "feature": "UI lighting",
+      "next_acceptance": "Capture Overlay pixels and compare shadow/cookie cases, light selection and all Canvas modes.",
+      "constraint": "The optional eight-light list has no shadow atlas/cookie manager; real Canvas/custom runtime components are outside VRC avatar scope."
+    },
+    {
+      "feature": "Camera distortion",
+      "next_acceptance": "Compare engine callback/lifecycle usage in real consuming projects, including camera stacking.",
+      "constraint": "Executable Built-in APIs preserve selected call forms but cannot implement URP base classes/parameters without URP."
+    },
+    {
+      "feature": "Distortion buffer",
+      "next_acceptance": "Use nonzero overlapping distortion and sampler-sharing experiments to evaluate a low-cost exact accumulator.",
+      "constraint": "A shared GrabPass lacks a per-camera additive offset texture; extra copies or rendering have real cost. Inline8 vs forced9 remains."
+    },
+    {
+      "feature": "Distortion depth and visibility",
+      "next_acceptance": "Compare world transparent-depth coverage and camera-resolved depth tests across MSAA modes.",
+      "constraint": "Missing world camera depth cannot be reconstructed from only the avatar surface."
+    },
+    {
+      "feature": "Distortion camera types",
+      "next_acceptance": "Extend the fixed nested-camera path to actual XR/SceneView and callback-order integrations.",
+      "constraint": "Nested mono Game/Reflection/Preview now pass; unsupported compositor camera types still select the shader fallback."
+    },
+    {
+      "feature": "Optimizer pass stripping",
+      "next_acceptance": "Test retained generated passes through native depth/selection consumer entry points.",
+      "constraint": "Pass presence/strip flags work; pipeline invocation differences remain."
+    },
+    {
+      "feature": "Optimizer includes",
+      "next_acceptance": "Evaluate stable include identifiers for generated assets moved between package installations.",
+      "constraint": "Previously generated shaders contain include paths; preserving legacy helper signatures does not repair moved package paths."
+    },
+    {
+      "feature": "Platform scope",
+      "next_acceptance": "Repeat rendering, sampler, shader-budget and physical XR checks on additional GPUs/backends.",
+      "constraint": "Windows D3D coverage cannot establish every Unity GPU/platform behavior."
+    }
+  ]
+}

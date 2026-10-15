@@ -77,7 +77,7 @@ class ReproductionAuditTests(unittest.TestCase):
         self.assertIsNone(result["all_inputs_reproduction_percent"])
         self.assertNotIn("pooled_visual_percent", result)
         self.assertEqual(result["features"]["counts"],
-                         {"Exact": 28, "Approximate": 35, "Unsupported": 0, "Not Applicable": 3})
+                         {"Exact": 34, "Approximate": 29, "Unsupported": 0, "Not Applicable": 3})
         expected = {"asset_corpus_0.1.2": (2018, 1994, 1972),
                     "randomized_20261013": (3328, 3328, 2874),
                     "ambient_0.1.6": (1008, 1008, None)}

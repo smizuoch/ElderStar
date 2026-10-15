@@ -86,3 +86,14 @@ Canvas off uses Built-in light attenuation/ForwardAdd, while on uses the selecte
 URP-style single-pass list: timing differences do not prove identical pictures.
 Keep ordinary scene layers/shadows and other running GPU applications in the report.
 See `Documentation/LowCostLightingParity.md` for measured results and limitations.
+
+## Projected depth-fade follow-up (2026-10-15)
+
+Export the complete shader tree from `d9636c0` as the independent baseline and
+prepare the existing disposable lighting project with `prepare_lighting.py`.
+Pass `-novaDepthFadeBenchmark` to `NovaLightingGpuBenchmarkBuilder.Build`.
+The eight configured default controls keep depth fade off; combined scenarios
+and clipped UI with eight lights enable it (near 1, far 10, width 3). The same
+18 ordinary ABBA workloads run; unrelated optional helper workloads are omitted.
+The original cost gate and sampling counts are unchanged. This measures the
+four Uber shader families, not distortion GrabPass or camera callback CPU cost.

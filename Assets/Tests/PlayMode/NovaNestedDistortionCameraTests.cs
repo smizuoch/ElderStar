@@ -93,6 +93,24 @@ namespace Nova.Tests.PlayMode
             }
         }
 
+        [Test]
+        public void DestroyingLastOwnerBetweenRendersUnsubscribesCameraCallbacks()
+        {
+            using (var scene = new Scene())
+            {
+                scene.AddEffect(scene.Parent);
+                scene.Parent.Render();
+                UnityEngine.Object.DestroyImmediate(scene.Parent.gameObject);
+                Shader.SetGlobalFloat(Active, .375f);
+                float observed = -1;
+                Camera.CameraCallback observe = camera => { if (camera == scene.Child) observed = Shader.GetGlobalFloat(Active); };
+                Camera.onPreRender += observe;
+                try { scene.Child.Render(); }
+                finally { Camera.onPreRender -= observe; }
+                Assert.That(observed, Is.EqualTo(.375f), "No compositor remains; camera callbacks must be detached.");
+            }
+        }
+
         private static int DifferentPixels(Color32[] a, Color32[] b) => a.Zip(b,
             (x, y) => Math.Max(Math.Abs(x.r - y.r), Math.Max(Math.Abs(x.g - y.g), Math.Abs(x.b - y.b)))).Count(x => x > 1);
 
