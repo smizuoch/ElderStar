@@ -129,8 +129,13 @@ half3 NovaComputeAmbientApproximation(float3 normalWS)
     return max(0, NovaSampleAmbient(normalWS));
 }
 
+// Optional ordinary-Unity camera input; w=0 keeps the scriptless avatar path.
+float4 _NovaGlobalGlossyAmbient;
+
 half3 NovaComputeGlossyAmbient()
 {
+    UNITY_BRANCH
+    if (_NovaGlobalGlossyAmbient.w > 0.5) return _NovaGlobalGlossyAmbient.rgb;
     // Original keeps DC glossy illumination even with reflection maps disabled.
     // Built-in's indirect-specular RGB can retain a previous skybox when switching
     // to Flat/Trilight. Recover DC from the current renderer SH instead. Packing

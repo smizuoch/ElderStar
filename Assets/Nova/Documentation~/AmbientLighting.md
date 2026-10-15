@@ -25,3 +25,24 @@ The corrected nonblack-ambient comparison passes all 192 original cases. Additio
 flat, colored, gradient and supplied-sky-probe comparisons cover both Lit shaders,
 reflection intensity zero/one and three surface workflows on Unity 2022/6 in Gamma
 and Linear. They do not guarantee every world, probe setup or graphics backend.
+
+## Separate global glossy probe (0.1.7)
+
+Add **NOVA / Global Ambient Lighting** (`NovaAmbientLighting`) to each ordinary
+Built-in camera that needs original NOVA's independent global glossy environment
+color. It reads `RenderSettings.ambientProbe` DC and reflection intensity before
+rendering and applies the original active-color-space conversion. Renderer SH and
+LPPV remain responsible for diffuse light. There is no material edit, texture,
+scene search, additional pass or screen copy. Nested cameras without this component
+use the scriptless fallback; camera exit/disable/destroy restores external state.
+
+This optional component is not allowed on a VRChat avatar. The avatar fallback
+still reconstructs glossy DC from renderer SH, so a local/custom probe differing
+from the global ambient probe remains a documented difference. A world providing
+reflection maps can avoid the disabled-reflection fallback, but an avatar cannot
+require that world input. Do not add this component to an avatar to claim parity.
+
+The global `_NovaGlobalGlossyAmbient` value is RGB in active color space, with W=1
+only while a bound camera renders (W=0 selects the fallback). External tools may
+supply it explicitly, but must own/restore their scope. Shader properties and
+material defaults are unchanged.
