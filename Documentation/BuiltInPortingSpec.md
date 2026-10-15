@@ -17,10 +17,10 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 Soft particles / ambient / SDK acceptance (2026-10-15):
 
-- [ ] Reproduce original soft-particle projected-depth and signed/small-intensity differences; fix and retain generated-helper compatibility.
-- [ ] Reproduce separate local/global probe inputs; implement and verify a practical correction with explicit avatar constraints.
-- [ ] Re-evaluate all 29 remaining rows against implementation and required external data; retain unresolved counterexamples.
-- [ ] Run both editors, graphics diagnostics, current-source SDK/AAO bundles and hidden cost measurements; review, commit and merge/push tested changes.
+- [x] Reproduce original soft-particle projected-depth and signed/small-intensity differences; fix and retain generated-helper compatibility.
+- [x] Reproduce separate local/global probe inputs; implement and verify a practical correction with explicit avatar constraints.
+- [x] Re-evaluate all 29 remaining rows against implementation and required external data; retain unresolved counterexamples.
+- [x] Run both editors, graphics diagnostics, current-source SDK/AAO bundles and hidden cost measurements; review, commit and merge/push tested changes.
 
 Exact classification follow-up (2026-10-15):
 
@@ -57,7 +57,7 @@ Low-cost lighting parity (approved plan, 2026-10-14):
 - [x] Verify D3D foveation scope, all Unity 2022/6 regressions, original images, SDK/AAO bundles and offscreen GPU/CPU costs.
 - [x] Document remaining limits, review each green change and prepare tested commits for the authorized main merge/push.
 
-Next implementation TODO: reproduce the remaining soft-particle projection/intensity differences and separate local/global probe inputs against original NOVA. Exact 100% remains open; the 29 differences are not resolved by relabeling alternatives.
+Next acceptance TODO: actual VRChat client mirror / PCVR with 0.1.7; world-supplied depth/global-probe and URP-specific API constraints remain individually listed in RemainingCompatibilityReview.md. Soft-particle projection/intensity is corrected, and ordinary Unity has an independent global-ambient camera binder. Exact 100% remains open; all 29 Approximate rows retain explicit limits. See SoftParticleAmbientAcceptance.md.
 
 No new clustered renderer or APV file/streaming backend is included. Ordinary avatar paths must remain scriptless; optional Unity camera/Canvas helpers must not be attached to avatars.
 

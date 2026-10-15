@@ -175,7 +175,7 @@ def build_report(root):
                                  source=path, all_inputs_coverage_percent=None))
 
     return dict(schema_version=1, audit_date="2026-10-15",
-                assessed_source_commit="3b764095b35121828b1d295ac106b2796455f7fe",
+                assessed_source_commit="b001fcdc67389cabcb24f3d494ac0d6ed1f55401",
                 package_version=load("Assets/Nova/package.json")["version"], reference=inventory["reference"],
                 all_inputs_reproduction_percent=None,
                 undefined_reason="No closed input domain, weighting measure or exhaustive equivalence proof. Finite sample rates do not determine universal reproduction.",

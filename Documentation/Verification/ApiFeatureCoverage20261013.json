@@ -4008,8 +4008,8 @@
     {
       "feature": "Soft particles",
       "status": "Approximate",
-      "evidence": "Camera-depth, stereo and URP-version sampler GPU tests; randomized visible-depth witness",
-      "reason_or_fallback": "Unity 6 matches URP 17 PointClamp; Unity 2022 retains URP 14 texture sampling. Requires a Built-in camera depth texture containing opaque casters. Enable DepthTextureMode.Depth; transparent depth writes do not provide the same URP input."
+      "evidence": "35 original-formula GPU comparisons for all five visible shaders on both editors/D3D11/12, plus camera-depth and stereo tests",
+      "reason_or_fallback": "Projected scene/particle depth and signed/sub-1e-4 intensity now match original NOVA, including orthographic/oblique projections. Legacy generated helper source remains usable; regenerate for corrected math. Unity 6 uses URP 17 PointClamp; Unity 2022 retains URP 14 sampling. Still requires matching world camera depth coverage; an avatar cannot recover missing world geometry. See SoftParticleAmbientAcceptance.md."
     },
     {
       "feature": "Depth fade",
@@ -4086,8 +4086,8 @@
     {
       "feature": "Ambient and light probes",
       "status": "Approximate",
-      "evidence": "1,008 nonblack-ambient/original image comparisons plus 12 focused GPU tests and eight spatial LPPV cases",
-      "reason_or_fallback": "SH/proxy irradiance no longer has a scene-color floor. Reflection-map-off glossy DC, scene reflection intensity, sRGB low-light and HDR conversion match the tested original inputs; the previous 22/192 failures are resolved. The scriptless fallback recovers renderer SH DC, while URP supplies global ambient-probe DC separately. Local/custom probes can therefore differ from the global fallback; match probe inputs or enable reflection maps. See AmbientLighting.md and the repository AmbientLightingParity.md report."
+      "evidence": "Retained 1,008 original image comparisons; 20 focused ambient GPU cases, four nested-camera lifetime cases and eight LPPV cases",
+      "reason_or_fallback": "Optional NovaAmbientLighting supplies the original global glossy probe independently of local diffuse SH, with Flat/Trilight/Skybox and state restoration tests. The scriptless VRC fallback still uses renderer DC because the separate global value is not supplied. No new draw, copy or texture. See AmbientLighting.md and SoftParticleAmbientAcceptance.md."
     },
     {
       "feature": "Environment reflections",

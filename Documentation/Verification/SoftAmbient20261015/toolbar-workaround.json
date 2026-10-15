@@ -1,0 +1,7 @@
+{
+  "cause": "EditorToolbox ToolbarWrap reads absent toolbar in batch mode; before NOVA install method",
+  "backup": "C:\\Users\\massu\\ALCOM\\Projects\\test-VRCLens\\Exports\\NovaVRCValidation\\SoftAmbient20261015\\ToolbarExtension.original.cs.txt",
+  "original_sha256": "5e0fd30c65ab3f49a07c65c130b4e55f2d7b626a8ee3c1a60e0aabc8f9dddf39",
+  "temporary_sha256": "b114d3889baf5aca3bb1af5e1f8611d9a1f069ef044eaab625023937146953b1",
+  "restored": true
+}

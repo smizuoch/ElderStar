@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_date": "2026-10-15",
-  "assessed_source_commit": "3b764095b35121828b1d295ac106b2796455f7fe",
-  "package_version": "0.1.6",
+  "assessed_source_commit": "b001fcdc67389cabcb24f3d494ac0d6ed1f55401",
+  "package_version": "0.1.7",
   "reference": "NOVA 3.6.0 / 1c6b88729f91c852c164ef71a32cc2bce83a1892",
   "all_inputs_reproduction_percent": null,
   "undefined_reason": "No closed input domain, weighting measure or exhaustive equivalence proof. Finite sample rates do not determine universal reproduction.",
@@ -180,8 +180,8 @@
     {
       "feature": "Soft particles",
       "status": "Approximate",
-      "evidence": "Camera-depth, stereo and URP-version sampler GPU tests; randomized visible-depth witness",
-      "reason_or_fallback": "Unity 6 matches URP 17 PointClamp; Unity 2022 retains URP 14 texture sampling. Requires a Built-in camera depth texture containing opaque casters. Enable DepthTextureMode.Depth; transparent depth writes do not provide the same URP input."
+      "evidence": "35 original-formula GPU comparisons for all five visible shaders on both editors/D3D11/12, plus camera-depth and stereo tests",
+      "reason_or_fallback": "Projected scene/particle depth and signed/sub-1e-4 intensity now match original NOVA, including orthographic/oblique projections. Legacy generated helper source remains usable; regenerate for corrected math. Unity 6 uses URP 17 PointClamp; Unity 2022 retains URP 14 sampling. Still requires matching world camera depth coverage; an avatar cannot recover missing world geometry. See SoftParticleAmbientAcceptance.md."
     },
     {
       "feature": "Depth fade",
@@ -258,8 +258,8 @@
     {
       "feature": "Ambient and light probes",
       "status": "Approximate",
-      "evidence": "1,008 nonblack-ambient/original image comparisons plus 12 focused GPU tests and eight spatial LPPV cases",
-      "reason_or_fallback": "SH/proxy irradiance no longer has a scene-color floor. Reflection-map-off glossy DC, scene reflection intensity, sRGB low-light and HDR conversion match the tested original inputs; the previous 22/192 failures are resolved. The scriptless fallback recovers renderer SH DC, while URP supplies global ambient-probe DC separately. Local/custom probes can therefore differ from the global fallback; match probe inputs or enable reflection maps. See AmbientLighting.md and the repository AmbientLightingParity.md report."
+      "evidence": "Retained 1,008 original image comparisons; 20 focused ambient GPU cases, four nested-camera lifetime cases and eight LPPV cases",
+      "reason_or_fallback": "Optional NovaAmbientLighting supplies the original global glossy probe independently of local diffuse SH, with Flat/Trilight/Skybox and state restoration tests. The scriptless VRC fallback still uses renderer DC because the separate global value is not supplied. No new draw, copy or texture. See AmbientLighting.md and SoftParticleAmbientAcceptance.md."
     },
     {
       "feature": "Environment reflections",
@@ -1066,12 +1066,12 @@
     "Assets/Nova/Runtime/Core/Shaders/ParticlesApplyDistortion.shader": "5ae85d64ef38ce3ab1e7a5bc253bfbf40174bdb650656ed4a1298d396c9a7f63",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesDistortion.shader": "08330070e32f81ec44ed94aaa117d0a2a1499b0fff529b60c53bc22ab775805f",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader": "bdad30eac8e4c040839152f8739641d3a4ce3bddb35ee725851b2a125077b281",
-    "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader": "3b3c73f10d6b374ed5508a0f46240b28e264332c26609d7bd0df68a06b87c207",
+    "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader": "b0050df5fc1ec5366a80ad78b8dd69650d88221d50bc8a522817e81aa358d173",
     "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader": "8e6e11d719255bac73d8430083975b15d63e2049d9d60208915edcf631c9b8f3",
-    "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "7a99449be72fbbcc3fde42d304f63512957ba065a6c08d82f3336ca3ca10c69a",
-    "Assets/Nova/package.json": "e80ce609f856018a36c91681638e0b63f19d05dc61fabc886990f8afcde9436d",
+    "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "5324ee2f9ab19cc26949780a8254b2c642f519c09746355be07f036c5d479abc",
+    "Assets/Nova/package.json": "8826c71c6be19013009ca16fc082663eb6c4ffa2b2b581ff6cc116f635dda58d",
     "Assets/Tests/Editor/Reference/EditorContract.json": "7b1857d640116db327f73324e4b20e8697249840458243697e3bc0b339fbea03",
-    "Documentation/BuiltInCompatibilityMatrix.md": "0cc74fe776f80367817925db4cb2f68da11d8210b2aff20ddbd4666a67e5655e",
+    "Documentation/BuiltInCompatibilityMatrix.md": "4aa63b5218c28cb1e3a01a99152cc1b22fbc9fe1d6fe4fb74ba25e92729863c5",
     "Documentation/Validation/AssetCorpus/unity2022-gamma.json": "7abef19ac771bbc34fe335ee4d11e886c1d6c33c174f202440e0ff5e0225ed10",
     "Documentation/Validation/AssetCorpus/unity2022-linear.json": "4ad69b38b7463499003747425845d3bd75353069ed2ccb2d01a082de4a2779c2",
     "Documentation/Validation/AssetCorpus/unity6-gamma.json": "d271ba4a901d6e9a83409c9e9fbd48b7506cf6331b4642ab7ab35b1141836b0d",
@@ -1084,7 +1084,7 @@
     "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json": "63ac4d55e23428dc307f1a79aee70eb6716711ba0f1ee6d9e3773b07e936eb4c",
     "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json": "67cb365d546c984924b864aa2101b8a2a271e7020615aab69af40227130d1b8d",
     "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json": "19fc49c032b1ccc1ed34902af952047adecec4357d10a6ad8a740f485fa3e3b1",
-    "Documentation/Verification/ApiFeatureCoverage20261013.json": "212646cb8cefdcfa1b330c9ed0c69db7fd1fb7c1db964a854547e13bfc8e55b5",
+    "Documentation/Verification/ApiFeatureCoverage20261013.json": "5c404ae444a6cfe65341a2f55b2450e2701d33770a32442a5dfe1671f725e130",
     "Documentation/Verification/Randomized20261013/2022-api-observations.json": "4e99391ca56fb5eb4fd71900147ffe7494ebbc9ebadc6eb1ebd1c2a8c6a0e6dc",
     "Documentation/Verification/Randomized20261013/2022-gamma-disabled-metrics.json": "f60cf29269350eec914287a612546d755392c4f18a5ff3fdb8ef6c3a9c9c4d9e",
     "Documentation/Verification/Randomized20261013/2022-gamma-green-metrics.json": "bf7e86a1f038775e9d77c4ab7fd689d5d71c086bbd3c85949baccad53843cd35",
