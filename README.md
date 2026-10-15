@@ -91,6 +91,13 @@ a documented 8x/9x approximation.
 That historical checkpoint passed 448 EditMode and 852 graphics PlayMode tests
 per editor. The report separates preserved declarations, exercised API behavior and remaining limits.
 
+The [runtime API follow-up](Documentation/RuntimeAPICompatibility.md) restores five
+original constructor/setup/reset call forms with real Built-in distortion stages.
+Original pass names and LightMode selection work without URP dependencies; engine
+base types and pipeline-specific parameters still require caller adaptation.
+The [reproduction audit](Documentation/ReproductionAudit.md) keeps those API
+classifications separate from sampled image pass rates and all-input claims.
+
 The [0.1.2 settings and asset report](Documentation/AssetCorpusVerification.md)
 records initial-state parity, 442 EditMode and 807 PlayMode tests per editor, plus
 MIT/CC0 asset comparisons. The expanded corpus exposes a remaining transparent-sort

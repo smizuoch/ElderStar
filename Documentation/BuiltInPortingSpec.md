@@ -15,6 +15,18 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+Runtime API compatibility follow-up (2026-10-15):
+
+- [x] Restore the original pipeline-independent distortion constructors and Setup contract with real Built-in drawing, without adding fake engine types or a pipeline dependency.
+- [x] Add red/green API and graphics regressions for deferred targets, LightMode selection, scene-view controls, validation and cleanup; preserve the existing BuiltInDistortionPass API and avatar shaders.
+- [x] Verify Unity 2022/6, rendering command cost and shader diagnostics; update the API inventory, compatibility scope and migration examples, then review and commit green changes. See RuntimeAPICompatibility.md for five restored call forms and the 13 remaining engine-specific declaration differences.
+
+Reproduction measurement audit (2026-10-15):
+
+- [x] Define denominators and keep feature classification, declaration preservation, sampled behavior and all-input equivalence separate.
+- [x] Add failing audit tests; recompute accepted-frame and pixel-identical counts from explicit evidence manifests without changing thresholds or baselines.
+- [x] Record source versions, missing input domains and known counterexamples; review the reproducible report. Do not invent a universal reproduction percentage. See ReproductionAudit.md.
+
 Ambient follow-up (2026-10-14):
 
 - [x] Reproduce the 22 nonblack-ambient differences and isolate diffuse SH, glossy fallback and color-space inputs against original NOVA.

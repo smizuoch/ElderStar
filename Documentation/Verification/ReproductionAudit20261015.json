@@ -1,0 +1,1103 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-15",
+  "assessed_source_commit": "c4c75a971329a70eef3ea06b6f21228cd739a86c",
+  "package_version": "0.1.6",
+  "reference": "NOVA 3.6.0 / 1c6b88729f91c852c164ef71a32cc2bce83a1892",
+  "all_inputs_reproduction_percent": null,
+  "undefined_reason": "No closed input domain, weighting measure or exhaustive equivalence proof. Finite sample rates do not determine universal reproduction.",
+  "features": {
+    "counts": {
+      "Exact": 28,
+      "Approximate": 35,
+      "Unsupported": 0,
+      "Not Applicable": 3
+    },
+    "exact_classification_share": {
+      "numerator": 28,
+      "denominator": 63,
+      "percent": 44.44444444444444
+    },
+    "all_inputs_reproduction_percent": null
+  },
+  "feature_inventory": [
+    {
+      "feature": "Package import",
+      "status": "Exact",
+      "evidence": "Phase1 and isolated external/tarball package fixtures",
+      "reason_or_fallback": "Runtime and editor assemblies use Built-in Unity APIs; no URP, SRP Core or RenderGraph dependency."
+    },
+    {
+      "feature": "Shader names",
+      "status": "Exact",
+      "evidence": "Phase1 discovery and standalone shader-retention checks",
+      "reason_or_fallback": "All six original names are preserved, including Hidden/Nova/Particles/ApplyDistortion."
+    },
+    {
+      "feature": "Material properties",
+      "status": "Exact",
+      "evidence": "All 889 original ShaderLab declarations compared, including attributes, ranges, order and defaults",
+      "reason_or_fallback": "Original public names and defaults remain, including obsolete compatibility properties."
+    },
+    {
+      "feature": "Custom editors",
+      "status": "Exact",
+      "evidence": "525 public/protected declarations, 14 original Inspector/helper source contracts, real OnGUI, multi-edit and Undo/Redo tests",
+      "reason_or_fallback": "Original class names, labels, CustomEditor declarations, foldout icons and saved preferences remain. Batch GUI tests cover Layout/Repaint and property edits; native mouse input has not been automated."
+    },
+    {
+      "feature": "Material setup",
+      "status": "Approximate",
+      "evidence": "735 differential state transitions against original processors, raw/validated snapshots and shader reassignment",
+      "reason_or_fallback": "Render state, keyword setup and particle streams remain. Uber raw materials retain queue 2000. Distortion defaults to queue 3100 so shader-only background capture occurs after transparents; an explicit material queue still wins. Original URP could keep queue 2000 because its renderer feature drew the effect separately."
+    },
+    {
+      "feature": "Material migration",
+      "status": "Approximate",
+      "evidence": "Six direct original-GUID imports, six legacy aliases, optional normalizer, unchanged Fire001 assets",
+      "reason_or_fallback": "Original standard shader references need no conversion, including embedded/binary references. Effect Import omits bundled NOVA source; ordinary all-selected Unity import can conflict. Old Built-in aliases remain usable; custom/optimized shader GUIDs require a port or regeneration. See Migration.md."
+    },
+    {
+      "feature": "Samples",
+      "status": "Exact",
+      "evidence": "Showcase tests plus generated scene image",
+      "reason_or_fallback": "Package Manager imports a playable scene with four particle variants and moving distortion; the generator preserves the active saved scene and refuses overwrites."
+    },
+    {
+      "feature": "Render state",
+      "status": "Approximate",
+      "evidence": "MaterialSetup, minimum rendering, Lit multiply-albedo-before-lighting regression, interaction and imported MIT sample comparisons",
+      "reason_or_fallback": "Material blend/cull/queue/depth controls match. Equal-depth transparent renderers with tied sort keys can composite differently across pipelines (heal02 sample). Set distinct renderer sortingOrder values when deterministic overlap is required; this is an explicit authoring fallback, not automatic asset conversion."
+    },
+    {
+      "feature": "Vertex color",
+      "status": "Exact",
+      "evidence": "Shared color and actual ParticleSystem tests",
+      "reason_or_fallback": "RGB and alpha streams affect all four Uber shaders."
+    },
+    {
+      "feature": "Vertex alpha progress",
+      "status": "Exact",
+      "evidence": "Shared color, particle Custom1/Custom2 and interaction tests",
+      "reason_or_fallback": "Vertex alpha can drive transition progress while retaining the original alpha interpretation."
+    },
+    {
+      "feature": "Alpha clipping",
+      "status": "Exact",
+      "evidence": "Color, DepthOnly, ShadowCaster and selection rendering tests",
+      "reason_or_fallback": "Cutoff and alpha-modulate behavior are preserved in applicable passes."
+    },
+    {
+      "feature": "Base texture modes",
+      "status": "Exact",
+      "evidence": "2D/array/3D color and original-image comparisons",
+      "reason_or_fallback": "Slice/progress selection is implemented for all four shaders on capable hardware; see Platform scope."
+    },
+    {
+      "feature": "UV transforms and custom coordinates",
+      "status": "Exact",
+      "evidence": "Coordinate, deformation and ParticleSystem tests; 24 original-order Base UV graphics cases and four Lit alpha-pass texture-transform cases",
+      "reason_or_fallback": "Base rotations/pivots precede tiling/offset, followed by custom offsets. Array/volume transforms reach Lit depth/shadow passes. Original property mappings and UI-specific stream layout are retained."
+    },
+    {
+      "feature": "Random row selection",
+      "status": "Exact",
+      "evidence": "Base/tint/transition/emission row tests, interaction suite, eight Lit alpha-pass cases and out-of-range Custom Data GPU probes",
+      "reason_or_fallback": "Original row count and custom/random coordinate selection remain, including parallax and second transition. Base progress is computed in the vertex stage as in original NOVA. Combined progress is normalized by the selected row before clamping, including values outside 0..1."
+    },
+    {
+      "feature": "Mirror samplers",
+      "status": "Approximate",
+      "evidence": "Original-image comparison and 36 Lit surface-sampler cases",
+      "reason_or_fallback": "D3D11/12 uses matching point/linear/trilinear mirror samplers. Coupled-sampler backends use mirrored UVs and texture-import filtering; configure matching filters on those platforms."
+    },
+    {
+      "feature": "Channel extraction",
+      "status": "Exact",
+      "evidence": "Shared base/channel tests and visual capture",
+      "reason_or_fallback": "Original color channel selection and texture-channel controls remain."
+    },
+    {
+      "feature": "Tritone and pentone",
+      "status": "Exact",
+      "evidence": "Shared tone tests and original-image comparison",
+      "reason_or_fallback": "Tone thresholds, colors and custom coordinates retain the original math."
+    },
+    {
+      "feature": "Tint color and maps",
+      "status": "Exact",
+      "evidence": "Shared 2D/array/3D tint, row and interaction tests",
+      "reason_or_fallback": "Constant/map tint, blend controls and obsolete 3D aliases are retained."
+    },
+    {
+      "feature": "Tint rim",
+      "status": "Approximate",
+      "evidence": "Shared rim/tint rendering tests",
+      "reason_or_fallback": "World normal/view normalization and interpolation match the original in the 2022 D3D coarse-mesh capture. No independent rim mismatch was reproduced; other backends remain unverified."
+    },
+    {
+      "feature": "Flow targets",
+      "status": "Exact",
+      "evidence": "Shared Base/Tint/Emission/AlphaTransition tests",
+      "reason_or_fallback": "Signed XY offsets, channel selection, rotation and target flags are implemented. Lit surface maps keep their original pre-flow UVs."
+    },
+    {
+      "feature": "Parallax targets",
+      "status": "Approximate",
+      "evidence": "36 mode/target cases, signed back-facing GPU probes and randomized reference captures",
+      "reason_or_fallback": "Base/Tint/Emission support 2D/array/3D height maps with the original one-step offset. The signed offset denominator matches original NOVA except for a +/-1e-4 singularity guard. The tangent-space view is now formed per vertex and interpolated, including original odd-scale handling. Avoid only the guarded near-zero denominator; see LowCostLightingParity.md."
+    },
+    {
+      "feature": "Greyscale and gradient",
+      "status": "Exact",
+      "evidence": "Shared color-correction tests and visual capture",
+      "reason_or_fallback": "Original luminance and gradient lookup operations remain."
+    },
+    {
+      "feature": "Alpha transition",
+      "status": "Exact",
+      "evidence": "Shared fade/dissolve, texture-mode and flow tests",
+      "reason_or_fallback": "Fade/dissolve thresholds, sharpness, texture modes and progress controls are implemented."
+    },
+    {
+      "feature": "Second alpha transition",
+      "status": "Exact",
+      "evidence": "Interaction tests for array/3D, random rows, average/multiply",
+      "reason_or_fallback": "Both transition maps combine using the original blend controls and alpha semantics."
+    },
+    {
+      "feature": "Emission",
+      "status": "Exact",
+      "evidence": "Shared area/map/color/intensity/edge tests and visual capture",
+      "reason_or_fallback": "All/alpha/map areas, explicit/base/ramp colors, 2D/array/3D maps and edge transparency remain. As in original Lit, the common stack supplies lit albedo."
+    },
+    {
+      "feature": "Rim and luminance transparency",
+      "status": "Approximate",
+      "evidence": "Shared transparency and interaction tests",
+      "reason_or_fallback": "Luminance math is preserved; the rim normal/view conditions also match the original in the coarse-mesh captures. The retained progress/sharpness/inverse controls remain unchanged."
+    },
+    {
+      "feature": "Soft particles",
+      "status": "Approximate",
+      "evidence": "Camera-depth, stereo and URP-version sampler GPU tests; randomized visible-depth witness",
+      "reason_or_fallback": "Unity 6 matches URP 17 PointClamp; Unity 2022 retains URP 14 texture sampling. Requires a Built-in camera depth texture containing opaque casters. Enable DepthTextureMode.Depth; transparent depth writes do not provide the same URP input."
+    },
+    {
+      "feature": "Depth fade",
+      "status": "Approximate",
+      "evidence": "Camera distance/range and combined-feature tests",
+      "reason_or_fallback": "Uses explicit eye depth and the original near/far/width controls. Camera projection differs by pipeline; tune the same eye-space distances after migration."
+    },
+    {
+      "feature": "Vertex deformation",
+      "status": "Exact",
+      "evidence": "Forward/depth/shadow/selection and custom-coordinate tests",
+      "reason_or_fallback": "Texture-driven position deformation and stream-driven offsets are carried into applicable passes."
+    },
+    {
+      "feature": "Billboard particles",
+      "status": "Exact",
+      "evidence": "Actual ParticleSystem vertex-color/custom-stream rendering",
+      "reason_or_fallback": "Configure the original NOVA vertex streams using the Inspector."
+    },
+    {
+      "feature": "Mesh particle instancing",
+      "status": "Exact",
+      "evidence": "Actual instanced mesh ParticleSystem rendering for all five visible shaders",
+      "reason_or_fallback": "Unity's Built-in particle instancing buffer provides transforms, colors and custom data; procedural instancing variants are compiled in applicable passes."
+    },
+    {
+      "feature": "Instanced stereo",
+      "status": "Approximate",
+      "evidence": "Four stereo shadowed ForwardAdd compiler regressions and fifteen GPU texture-array tests: four Uber color passes, per-eye soft-particle depth, particle DepthOnly/DepthNormals/ShadowCaster, and distortion eye textures",
+      "reason_or_fallback": "Built-in stereo macros carry the vertex eye index to fragments and depth slices. Tested with explicit XR constant buffers on D3D11/12 without a headset; actual VRChat PCVR/headset verification remains separate."
+    },
+    {
+      "feature": "Fog",
+      "status": "Approximate",
+      "evidence": "24 perspective/orthographic Linear/Exp/Exp2 cases and ForwardAdd diagnostics",
+      "reason_or_fallback": "Uses the original vertex clip-Z fog coefficient and interpolation, including EXP scaling. ForwardAdd fades toward black. The original orthographic/oblique clip-depth behavior is retained, even when it produces no fog; pipeline camera/fog inputs and other backends still require matching."
+    },
+    {
+      "feature": "Metallic and specular workflows",
+      "status": "Approximate",
+      "evidence": "Analytic GPU tests and 72 original/port PBR frame comparisons",
+      "reason_or_fallback": "Original GGX direct BRDF, diffuse energy, F0 and roughness math are preserved without URP includes. Light selection/attenuation and ambient data still come from Built-in; match scene light/probe settings after migration."
+    },
+    {
+      "feature": "Normal maps",
+      "status": "Approximate",
+      "evidence": "Imported DXT5 packing, normal scale and 2D/array/3D tests",
+      "reason_or_fallback": "Unity normal packing is decoded before XY scale, as in the original. The normal is normalized after interpolation before the tangent-space transform; interpolated tangent/binormal are not independently normalized, matching original fragUnlit/fragLit ordering. Original normal-map and parallax handedness differ and are preserved separately. Supply valid tangents; see LowCostLightingParity.md."
+    },
+    {
+      "feature": "Surface maps",
+      "status": "Approximate",
+      "evidence": "Metallic/specular/smoothness channel and texture-mode tests, original PBR captures",
+      "reason_or_fallback": "Sampling, channel selection, shared base filtering and original BRDF response are retained. Final lighting uses Built-in light/probe inputs; match those scene inputs when migrating."
+    },
+    {
+      "feature": "Main light",
+      "status": "Approximate",
+      "evidence": "Direction/color/intensity, normal-map rendering and automatic initial lighting and Undo tests",
+      "reason_or_fallback": "Built-in ForwardBase supplies the main directional light. URP light selection differs. Configure a directional key light and initial setup now preserves original intensity values automatically; Match Original Lighting Settings can reapply them; see Migration.md."
+    },
+    {
+      "feature": "Additional lights",
+      "status": "Approximate",
+      "evidence": "Shared point/spot/range/direction tests for both Lit shaders",
+      "reason_or_fallback": "ForwardAdd uses Built-in attenuation and shadows, with alpha and UI clipping preserved. Set per-pixel lights/Quality pixel-light count appropriately; it is not a Forward+ light loop."
+    },
+    {
+      "feature": "Receive shadows",
+      "status": "Approximate",
+      "evidence": "Lit/UI directional receiver, toggles and combined-feature tests",
+      "reason_or_fallback": "Built-in attenuation affects direct light, leaving ambient/reflections separate. Bias, cascades and filtering follow Built-in Light/Quality settings; retune them after migration."
+    },
+    {
+      "feature": "Ambient and light probes",
+      "status": "Approximate",
+      "evidence": "1,008 nonblack-ambient/original image comparisons plus 12 focused GPU tests and eight spatial LPPV cases",
+      "reason_or_fallback": "SH/proxy irradiance no longer has a scene-color floor. Reflection-map-off glossy DC, scene reflection intensity, sRGB low-light and HDR conversion match the tested original inputs; the previous 22/192 failures are resolved. The scriptless fallback recovers renderer SH DC, while URP supplies global ambient-probe DC separately. Local/custom probes can therefore differ from the global fallback; match probe inputs or enable reflection maps. See AmbientLighting.md and the repository AmbientLightingParity.md report."
+    },
+    {
+      "feature": "Environment reflections",
+      "status": "Approximate",
+      "evidence": "Both Lit shaders: analytic roughness response and original captures with mip-colored cubemaps/view angles",
+      "reason_or_fallback": "Original perceptual-roughness mip selection, surface reduction and grazing Fresnel are preserved. Disabling reflection maps retains glossy ambient as in original NOVA (0.1.6). Probe assignment/capture uses Built-in. Original NOVA also omits probe-blending/box-projection shader variants; use one suitable probe or a custom/default cubemap."
+    },
+    {
+      "feature": "Lightmaps and vertex lighting",
+      "status": "Not Applicable",
+      "evidence": "Original ParticlesUberLitForward.hlsl input/GI initialization",
+      "reason_or_fallback": "Original NOVA uses SH (or Unity 6 APV), has no lightmap UV path and sets vertexLighting to zero. The port does not add those absent paths."
+    },
+    {
+      "feature": "Scene selection and picking",
+      "status": "Approximate",
+      "evidence": "Particle Uber and Distortion editor-pass rendering",
+      "reason_or_fallback": "Original pass names and selection IDs remain. Alpha/deformation are rendered, but Unity's editor invocation differs by pipeline; use normal Built-in selection tooling."
+    },
+    {
+      "feature": "Shadow caster",
+      "status": "Approximate",
+      "evidence": "Caster alpha/deformation, receive-shadow and compile tests",
+      "reason_or_fallback": "Uses Built-in ShadowCaster bias/variants. Enable the original caster controls and renderer shadow casting; retune light bias. UI shaders originally had no caster pass."
+    },
+    {
+      "feature": "DepthOnly",
+      "status": "Approximate",
+      "evidence": "Explicit depth-pass rendering and optimizer tests",
+      "reason_or_fallback": "The pass can be drawn explicitly, but Built-in camera depth normally comes from ShadowCaster. Retain that pass and enable camera depth for depth effects."
+    },
+    {
+      "feature": "DepthNormals",
+      "status": "Approximate",
+      "evidence": "128 original/port image pairs, seven camera/pass tests, two stereo array cases and optimizer outputs",
+      "reason_or_fallback": "Particle shaders provide encoded world normals plus coverage through an explicit pass and optional NovaDepthNormals camera buffer. It does not replace world depth normals or implement the URP prepass invocation/format. Use the dedicated Texture API; see DepthNormals.md."
+    },
+    {
+      "feature": "Forward+",
+      "status": "Approximate",
+      "evidence": "Existing multi-light/shadow ForwardAdd suites and Canvas selection/rendering tests",
+      "reason_or_fallback": "Mesh/particle renderers retain ForwardBase/ForwardAdd; optional Canvas lighting evaluates up to eight selected lights in one pass. There is no tiled/clustered renderer. Control pixel lights and the Canvas limit; Canvas list shadows/cookies are not sampled."
+    },
+    {
+      "feature": "Probe volumes",
+      "status": "Approximate",
+      "evidence": "Eight spatial LPPV GPU tests on both Lit shaders, local/world coordinates and fallback",
+      "reason_or_fallback": "Native Built-in LPPV replaces ordinary SH L0/L1 while retaining renderer L2, without double addition. APV file formats, streaming, adaptive placement and scenario changes are not supported. Use world-supplied Built-in probes/LPPV; avatars cannot require a world to provide them."
+    },
+    {
+      "feature": "Foveated rendering",
+      "status": "Approximate",
+      "evidence": "URP 17.3 official include audit and D3D mono/stereo depth/screen-UV regressions",
+      "reason_or_fallback": "URP non-uniform-raster coordinate remapping is disabled on the verified Windows D3D path, so its transforms are identity there. Existing per-eye UV/depth paths remain. This does not implement non-uniform remapping for Metal/PS5 or control XR runtime VRS; physical runtime/headset verification remains separate."
+    },
+    {
+      "feature": "Debug display",
+      "status": "Approximate",
+      "evidence": "32 GPU view assertions and two actual diagnostic-variant AssetBundle stripping tests",
+      "reason_or_fallback": "Editor views cover albedo, world normals/tangents, eye depth, fog, direct/indirect light and additional count. Scoped global state restores after rendering; Player/bundle builds strip dedicated variants. This is not the URP debug API. Use Tools/NOVA/Rendering Diagnostics."
+    },
+    {
+      "feature": "UI stencil and ColorMask",
+      "status": "Exact",
+      "evidence": "Real Canvas Mask plus mesh stencil/ColorMask tests",
+      "reason_or_fallback": "Original stencil names and material contract are retained. UGUI is a test-project dependency, not a package dependency."
+    },
+    {
+      "feature": "UI rect clipping",
+      "status": "Exact",
+      "evidence": "Real Canvas RectMask2D plus mesh clipping tests",
+      "reason_or_fallback": "UNITY_UI_CLIP_RECT and the original clip rectangle work on both UI shaders."
+    },
+    {
+      "feature": "UI lighting",
+      "status": "Approximate",
+      "evidence": "49 optional Canvas lighting/mask tests, plus ordinary mesh/particle UI Lit suites",
+      "reason_or_fallback": "NovaCanvasLighting retains native Canvas and evaluates its selected direct lights in one base pass. Owned drawing materials disable ForwardAdd to prevent duplicate light contribution. Requires optional uGUI helper; no scene search each frame, source material mutation, list shadows or cookies. VRChat uses allowed mesh/particle renderers with no helper. Overlay material/lifecycle is tested; offscreen Overlay pixels are not."
+    },
+    {
+      "feature": "Camera distortion",
+      "status": "Approximate",
+      "evidence": "19 camera-compositor and 19 shader-only visibility/control cases, per-eye texture sampling, and 14 original-name API graphics/lifetime cases",
+      "reason_or_fallback": "The shader automatically uses a named GrabPass when no supported camera compositor is active. VRChat avatars need no custom component. The mono camera compositor and restored ApplyDistortionPass/DistortedUvBufferPass execute real Built-in commands. Five original constructor/setup/reset signatures are callable; URP inheritance and engine-specific parameters still require adaptation. See RuntimeAPICompatibility.md and BuiltInRenderingAPI.md."
+    },
+    {
+      "feature": "Distortion buffer",
+      "status": "Approximate",
+      "evidence": "Positive/negative/vertical/off-center tests; 256 randomized original/port cases across two editors, two color spaces and two anisotropy settings (all pass)",
+      "reason_or_fallback": "The camera compositor accumulates signed offsets in RGHalf (ARGBHalf fallback). Forced anisotropy uses an explicit 8x sampler, the nearest supported inline value to original forced 9x. Other quality settings retain ordinary sampling. Raster/depth rounding and 8x/9x filtering can still differ; Disable is a tested explicit quality option when forced filtering is unwanted. No project quality setting or material is rewritten. The shader-only path captures background once per camera using a named GrabPass and distorts per surface; overlapping nonzero offsets are not accumulated across objects, and the extra scene copy has a GPU cost. Zero-offset surfaces discard, preserving distortion underneath without another screen copy (ordinary and reflected-camera regressions). Uniform-zero strength with unused Custom Data coordinates rejects geometry before rasterization; active-surface overhead and invisible-layer savings were measured on D3D11."
+    },
+    {
+      "feature": "Distortion material controls",
+      "status": "Exact",
+      "evidence": "Material setup, shader diagnostics and camera tests",
+      "reason_or_fallback": "Original Base/Flow/AlphaTransition, normal unpack, mirror/channel/rotation/custom coordinates and scalar/XY intensity controls remain."
+    },
+    {
+      "feature": "Distortion depth and visibility",
+      "status": "Approximate",
+      "evidence": "Layer/culling/frustum, localized occlusion and depth-effect tests on both paths",
+      "reason_or_fallback": "The compositor compares opaque camera depth. Shader-only distortion uses hardware ZTest; soft particles additionally need the world's camera depth texture. Avatar shaders cannot require arbitrary VRChat worlds to provide depth."
+    },
+    {
+      "feature": "Distortion cleanup",
+      "status": "Exact",
+      "evidence": "Disable/destroy behavior and runtime implementation review",
+      "reason_or_fallback": "Temporary targets, command buffers and materials are released. The camera depth flag intentionally remains for other effects."
+    },
+    {
+      "feature": "Distortion camera types",
+      "status": "Approximate",
+      "evidence": "Runtime bypass guards, shader-only rendering, per-eye texture tests",
+      "reason_or_fallback": "XR, reflection and preview cameras use the shader-only approximation rather than the MonoBehaviour compositor. Scene-view compositor application is configurable. Actual headset/mirror combinations need client verification; a nested camera during another camera's compositor can inherit its suppression flag."
+    },
+    {
+      "feature": "RenderGraph",
+      "status": "Not Applicable",
+      "evidence": "Runtime/editor assembly and source dependency checks",
+      "reason_or_fallback": "Built-in does not schedule URP RenderGraph passes; the camera effect replaces their visible function."
+    },
+    {
+      "feature": "URP compatibility mode",
+      "status": "Not Applicable",
+      "evidence": "Original version-specific renderer API audit",
+      "reason_or_fallback": "Built-in has no URP render-graph compatibility toggle."
+    },
+    {
+      "feature": "Optimizer enum and names",
+      "status": "Exact",
+      "evidence": "Optimizer tests for all 48 generated names",
+      "reason_or_fallback": "Original OptionalShaderPass API and 2 shaders x 3 render types x 8 optional-pass naming combinations remain."
+    },
+    {
+      "feature": "Optimizer pass stripping",
+      "status": "Approximate",
+      "evidence": "All 48 outputs compiled, DepthNormals flags and opaque normal-array rendering regression",
+      "reason_or_fallback": "DepthOnly, ShadowCaster and the real DepthNormals pass are retained/removed as requested. DepthNormals preserves UV/normal texture variants needed even for opaque surfaces. Built-in invocation/encoded output differ from URP; keep ShadowCaster for ordinary camera depth."
+    },
+    {
+      "feature": "Optimizer includes",
+      "status": "Approximate",
+      "evidence": "Package-cache compilation and moved-output-folder test",
+      "reason_or_fallback": "Includes resolve through the current Built-in package asset path rather than original URP includes. Regenerate after moving/replacing the source package; output must be under Assets."
+    },
+    {
+      "feature": "Material replacement",
+      "status": "Exact",
+      "evidence": "Scoped replacement, persistence and Undo tests",
+      "reason_or_fallback": "Original names are resolved after generation; material values, keywords, queue and Undo are preserved."
+    },
+    {
+      "feature": "Platform scope",
+      "status": "Approximate",
+      "evidence": "Windows graphics-enabled editor/player, image comparisons, stereo GPU tests and VRChat SDK 3.10.5 PC Build/Build & Test",
+      "reason_or_fallback": "Verified on Direct3D11/12 with SM3.5, arrays/3D textures and half-float targets. VRChat PC build validation is separate from actual server upload and client/headset rendering. Other APIs/mobile/Web require separate validation; Android avatar custom shaders are outside scope."
+    }
+  ],
+  "property_declarations": {
+    "preserved": {
+      "numerator": 889,
+      "denominator": 889,
+      "percent": 100.0
+    },
+    "types": {
+      "Float": 573,
+      "2D": 51,
+      "Range": 144,
+      "Vector": 27,
+      "2DArray": 32,
+      "3D": 32,
+      "Color": 30
+    },
+    "shaders": [
+      {
+        "file": "ParticlesApplyDistortion.shader",
+        "property_declarations": 0
+      },
+      {
+        "file": "ParticlesDistortion.shader",
+        "property_declarations": 47
+      },
+      {
+        "file": "ParticlesUberLit.shader",
+        "property_declarations": 219
+      },
+      {
+        "file": "ParticlesUberUnlit.shader",
+        "property_declarations": 196
+      },
+      {
+        "file": "UIParticlesUberLit.shader",
+        "property_declarations": 225
+      },
+      {
+        "file": "UIParticlesUberUnlit.shader",
+        "property_declarations": 202
+      }
+    ]
+  },
+  "editor_declaration_inventory_count": 525,
+  "editor_preservation_evidence": "Existing 0.1.6 Unity authoring tests; this audit checks inventory and source contracts, not a fresh reflection run.",
+  "runtime_declaration_classifications": {
+    "Approximate": 6,
+    "Not source-compatible": 13,
+    "Exact": 2
+  },
+  "runtime_declarations": [
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void .ctor(Boolean, UnityEngine.Shader)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Approximate",
+      "reason_or_fallback": "The original constructor/Setup call signature is restored by the real Built-in ApplyDistortionPass. Execute records Camera/CommandBuffer work; inheritance and URP lifecycle are not source-compatible. Supplied targets remain caller-owned. See RuntimeAPICompatibility.md."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void RecordRenderGraph(UnityEngine.Rendering.RenderGraphModule.RenderGraph, UnityEngine.Rendering.ContextContainer)",
+      "editors": [
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void Setup(UnityEngine.Rendering.RenderTargetIdentifier)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Approximate",
+      "reason_or_fallback": "The original constructor/Setup call signature is restored by the real Built-in ApplyDistortionPass. Execute records Camera/CommandBuffer work; inheritance and URP lifecycle are not source-compatible. Supplied targets remain caller-owned. See RuntimeAPICompatibility.md."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass type : UnityEngine.Rendering.Universal.ScriptableRenderPass",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DeprecationMessage field System.String CompatibilityScriptingAPIObsolete",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Exact",
+      "reason_or_fallback": "Original public type and const string are restored without a URP dependency. OriginalPipelineIndependentRuntimeConstantRemainsAvailable verifies the constant value."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DeprecationMessage type : System.Object",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Exact",
+      "reason_or_fallback": "Original public type and const string are restored without a URP dependency. OriginalPipelineIndependentRuntimeConstantRemainsAvailable verifies the constant value."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void .ctor(System.String)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Approximate",
+      "reason_or_fallback": "The original constructor is restored and selects the actual LightMode tag. Built-in Setup accepts a RenderTexture and Execute accepts Camera/CommandBuffer plus an explicit renderer list; URP inheritance and callbacks differ. See RuntimeAPICompatibility.md."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void OnCameraSetup(UnityEngine.Rendering.CommandBuffer, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void RecordRenderGraph(UnityEngine.Rendering.RenderGraphModule.RenderGraph, UnityEngine.Rendering.ContextContainer)",
+      "editors": [
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void Setup(UnityEngine.Rendering.RTHandle)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass type : UnityEngine.Rendering.Universal.ScriptableRenderPass",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem Void .ctor()",
+      "editors": [
+        "6000"
+      ],
+      "status": "Approximate",
+      "reason_or_fallback": "Constructor and Reset() are restored. Reset clears a caller-owned RenderTexture binding without releasing it. The class does not inherit ContextItem and its texture field has a different engine type. See RuntimeAPICompatibility.md."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem Void Reset()",
+      "editors": [
+        "6000"
+      ],
+      "status": "Approximate",
+      "reason_or_fallback": "Constructor and Reset() are restored. Reset clears a caller-owned RenderTexture binding without releasing it. The class does not inherit ContextItem and its texture field has a different engine type. See RuntimeAPICompatibility.md."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem field UnityEngine.Rendering.RenderGraphModule.TextureHandle DistortedUvTexture",
+      "editors": [
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "The DistortedUvTexture field name is restored with real Built-in RenderTexture storage. Its original graph TextureHandle type is not source-compatible; bind the RenderTexture to the explicit distortion stages. See RuntimeAPICompatibility.md."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem type : UnityEngine.Rendering.ContextItem",
+      "editors": [
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void .ctor()",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void AddRenderPasses(UnityEngine.Rendering.Universal.ScriptableRenderer, UnityEngine.Rendering.Universal.RenderingData ByRef)",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion Void Create()",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Approximate",
+      "reason_or_fallback": "The parameterless setup entry point remains on the Built-in camera component. Instantiate through GameObject.AddComponent; the original ScriptableRendererFeature base and lifecycle are different."
+    },
+    {
+      "declaration": "Nova.Runtime.Core.Scripts.ScreenSpaceDistortion type : UnityEngine.Rendering.Universal.ScriptableRendererFeature",
+      "editors": [
+        "2022",
+        "6000"
+      ],
+      "status": "Not source-compatible",
+      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+    }
+  ],
+  "api_observations": [
+    {
+      "editor": "2022",
+      "recorded_matching_observations": 188,
+      "source": "Documentation/Verification/Randomized20261013/2022-api-observations.json",
+      "all_inputs_coverage_percent": null
+    },
+    {
+      "editor": "6000",
+      "recorded_matching_observations": 188,
+      "source": "Documentation/Verification/Randomized20261013/6000-api-observations.json",
+      "all_inputs_coverage_percent": null
+    }
+  ],
+  "visual_cohorts": [
+    {
+      "id": "asset_corpus_0.1.2",
+      "scope": "0.1.2 historical corpus; not rerun on 0.1.6",
+      "within_threshold": {
+        "numerator": 1994,
+        "denominator": 2018,
+        "percent": 98.81070366699703
+      },
+      "pixel_identical": {
+        "numerator": 1972,
+        "denominator": 2018,
+        "percent": 97.7205153617443
+      },
+      "failed": 24,
+      "runs": [
+        {
+          "source": "Documentation/Validation/AssetCorpus/unity2022-gamma.json",
+          "within_threshold": {
+            "numerator": 503,
+            "denominator": 509,
+            "percent": 98.82121807465619
+          },
+          "pixel_identical": {
+            "numerator": 502,
+            "denominator": 509,
+            "percent": 98.62475442043223
+          },
+          "failed": 6,
+          "failing_frames": [
+            "pfb_eff_heal02-015-00.ppm",
+            "pfb_eff_heal02-015-35.ppm",
+            "pfb_eff_heal02-015-80.ppm",
+            "pfb_eff_heal02-050-00.ppm",
+            "pfb_eff_heal02-050-35.ppm",
+            "pfb_eff_heal02-050-80.ppm"
+          ]
+        },
+        {
+          "source": "Documentation/Validation/AssetCorpus/unity2022-linear.json",
+          "within_threshold": {
+            "numerator": 503,
+            "denominator": 509,
+            "percent": 98.82121807465619
+          },
+          "pixel_identical": {
+            "numerator": 493,
+            "denominator": 509,
+            "percent": 96.8565815324165
+          },
+          "failed": 6,
+          "failing_frames": [
+            "pfb_eff_heal02-015-00.ppm",
+            "pfb_eff_heal02-015-35.ppm",
+            "pfb_eff_heal02-015-80.ppm",
+            "pfb_eff_heal02-050-00.ppm",
+            "pfb_eff_heal02-050-35.ppm",
+            "pfb_eff_heal02-050-80.ppm"
+          ]
+        },
+        {
+          "source": "Documentation/Validation/AssetCorpus/unity6-gamma.json",
+          "within_threshold": {
+            "numerator": 494,
+            "denominator": 500,
+            "percent": 98.8
+          },
+          "pixel_identical": {
+            "numerator": 492,
+            "denominator": 500,
+            "percent": 98.4
+          },
+          "failed": 6,
+          "failing_frames": [
+            "pfb_eff_heal02-015-00.ppm",
+            "pfb_eff_heal02-015-35.ppm",
+            "pfb_eff_heal02-015-80.ppm",
+            "pfb_eff_heal02-050-00.ppm",
+            "pfb_eff_heal02-050-35.ppm",
+            "pfb_eff_heal02-050-80.ppm"
+          ]
+        },
+        {
+          "source": "Documentation/Validation/AssetCorpus/unity6-linear.json",
+          "within_threshold": {
+            "numerator": 494,
+            "denominator": 500,
+            "percent": 98.8
+          },
+          "pixel_identical": {
+            "numerator": 485,
+            "denominator": 500,
+            "percent": 97.0
+          },
+          "failed": 6,
+          "failing_frames": [
+            "pfb_eff_heal02-015-00.ppm",
+            "pfb_eff_heal02-015-35.ppm",
+            "pfb_eff_heal02-015-80.ppm",
+            "pfb_eff_heal02-050-00.ppm",
+            "pfb_eff_heal02-050-35.ppm",
+            "pfb_eff_heal02-050-80.ppm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "randomized_20261013",
+      "scope": "2026-10-13 historical randomized run; source hashes retained",
+      "within_threshold": {
+        "numerator": 3328,
+        "denominator": 3328,
+        "percent": 100.0
+      },
+      "pixel_identical": {
+        "numerator": 2874,
+        "denominator": 3328,
+        "percent": 86.35817307692308
+      },
+      "failed": 0,
+      "runs": [
+        {
+          "source": "Documentation/Verification/Randomized20261013/2022-gamma-green-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 352,
+            "denominator": 416,
+            "percent": 84.61538461538461
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/Randomized20261013/2022-gamma-disabled-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 356,
+            "denominator": 416,
+            "percent": 85.57692307692308
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/Randomized20261013/2022-linear-green-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 361,
+            "denominator": 416,
+            "percent": 86.77884615384616
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/Randomized20261013/2022-linear-disabled-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 368,
+            "denominator": 416,
+            "percent": 88.46153846153847
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/Randomized20261013/6000-gamma-green-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 352,
+            "denominator": 416,
+            "percent": 84.61538461538461
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/Randomized20261013/6000-gamma-disabled-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 356,
+            "denominator": 416,
+            "percent": 85.57692307692308
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/Randomized20261013/6000-linear-green-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 361,
+            "denominator": 416,
+            "percent": 86.77884615384616
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/Randomized20261013/6000-linear-disabled-metrics.json",
+          "within_threshold": {
+            "numerator": 416,
+            "denominator": 416,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 368,
+            "denominator": 416,
+            "percent": 88.46153846153847
+          },
+          "failed": 0,
+          "failing_frames": []
+        }
+      ]
+    },
+    {
+      "id": "ambient_0.1.6",
+      "scope": "0.1.6 ambient and interpolation release captures",
+      "within_threshold": {
+        "numerator": 1008,
+        "denominator": 1008,
+        "percent": 100.0
+      },
+      "pixel_identical": {
+        "numerator": 974,
+        "denominator": 1008,
+        "percent": 96.62698412698413
+      },
+      "failed": 0,
+      "runs": [
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/ambient2022-gamma.json",
+          "within_threshold": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/ambient2022-linear.json",
+          "within_threshold": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/ambient6-gamma.json",
+          "within_threshold": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/ambient6-linear.json",
+          "within_threshold": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 60,
+            "denominator": 60,
+            "percent": 100.0
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json",
+          "within_threshold": {
+            "numerator": 192,
+            "denominator": 192,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 178,
+            "denominator": 192,
+            "percent": 92.70833333333333
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json",
+          "within_threshold": {
+            "numerator": 192,
+            "denominator": 192,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 190,
+            "denominator": 192,
+            "percent": 98.95833333333333
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json",
+          "within_threshold": {
+            "numerator": 192,
+            "denominator": 192,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 180,
+            "denominator": 192,
+            "percent": 93.75
+          },
+          "failed": 0,
+          "failing_frames": []
+        },
+        {
+          "source": "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json",
+          "within_threshold": {
+            "numerator": 192,
+            "denominator": 192,
+            "percent": 100.0
+          },
+          "pixel_identical": {
+            "numerator": 186,
+            "denominator": 192,
+            "percent": 96.875
+          },
+          "failed": 0,
+          "failing_frames": []
+        }
+      ]
+    }
+  ],
+  "omitted_evidence": "Red runs, superseded lighting captures, retained-original22 duplicate, SDK/AAO port-to-port comparisons and other separately documented suites are not pooled.",
+  "limitations": [
+    "Exact is the matrix's scoped classification, not a proof for every input or hardware configuration.",
+    "Feature rows and declaration rows are different units and must not be averaged.",
+    "Image pass rates are case counts under fixed tolerances, not a percentage of visual similarity.",
+    "Pixel-identical refers to stored RGB capture metrics, not internal HDR buffers, alpha or unobserved pixels/times.",
+    "Historical cohorts are not reruns of every case on 0.1.6 and are not independent samples of all use.",
+    "No sampling distribution was defined; no universal confidence interval is justified.",
+    "All input values, textures, scene topologies, call sequences, GPU/world/XR conditions remain unenumerated."
+  ],
+  "evidence_sha256": {
+    "Assets/Nova/Runtime/Core/Scripts/ApplyDistortionPass.cs": "6885afe7f3b009eddd2970ad70cc23d77b8166549c652df73823f1294ac8e2da",
+    "Assets/Nova/Runtime/Core/Scripts/BuiltInDistortionPass.cs": "131c2b2c537654740c00acac4c8ef183e11f379182bdd1e4565a793d4e818f4d",
+    "Assets/Nova/Runtime/Core/Scripts/DistortedUvBufferPass.cs": "cf9f87cfbb91ad0ca3bf17c5c3756bd1c9a8901060aad0ac7833cce80c68bebe",
+    "Assets/Nova/Runtime/Core/Scripts/DistortionContextItem.cs": "0d4642dd144dfabd839e05c932755cd314bff3247f91061e75e6a39c1ce24ad5",
+    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "999e8ad2f60ebef99bf8226c4a95be27efbe37a7f4cecc8cb966f378332699de",
+    "Assets/Nova/Runtime/Core/Shaders/ParticlesApplyDistortion.shader": "5ae85d64ef38ce3ab1e7a5bc253bfbf40174bdb650656ed4a1298d396c9a7f63",
+    "Assets/Nova/Runtime/Core/Shaders/ParticlesDistortion.shader": "08330070e32f81ec44ed94aaa117d0a2a1499b0fff529b60c53bc22ab775805f",
+    "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader": "bdad30eac8e4c040839152f8739641d3a4ce3bddb35ee725851b2a125077b281",
+    "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader": "d6a04f3f0550f929a1926717f6fad4f39b275bfafca4baffd186402456e3d966",
+    "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader": "8e6e11d719255bac73d8430083975b15d63e2049d9d60208915edcf631c9b8f3",
+    "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "7020a1a11add57c9defe31414cbfe1fb6fbe23200529ca444ec4a8e007deaaec",
+    "Assets/Nova/package.json": "e80ce609f856018a36c91681638e0b63f19d05dc61fabc886990f8afcde9436d",
+    "Assets/Tests/Editor/Reference/EditorContract.json": "7b1857d640116db327f73324e4b20e8697249840458243697e3bc0b339fbea03",
+    "Documentation/BuiltInCompatibilityMatrix.md": "3f81c7871e8eb6dcadd6082aa3e4d99185d1b2306eba3389741c16c0739ddd06",
+    "Documentation/Validation/AssetCorpus/unity2022-gamma.json": "7abef19ac771bbc34fe335ee4d11e886c1d6c33c174f202440e0ff5e0225ed10",
+    "Documentation/Validation/AssetCorpus/unity2022-linear.json": "4ad69b38b7463499003747425845d3bd75353069ed2ccb2d01a082de4a2779c2",
+    "Documentation/Validation/AssetCorpus/unity6-gamma.json": "d271ba4a901d6e9a83409c9e9fbd48b7506cf6331b4642ab7ab35b1141836b0d",
+    "Documentation/Validation/AssetCorpus/unity6-linear.json": "59bf830521aa25d9b7cb418b25c310ed9fd521c28b767b7da8266aa32175324c",
+    "Documentation/Verification/AmbientParity20261014/ambient2022-gamma.json": "0a104964d2cce660876456965cf4211237ebb79619c11bcbfa0da215c869a1e8",
+    "Documentation/Verification/AmbientParity20261014/ambient2022-linear.json": "0a104964d2cce660876456965cf4211237ebb79619c11bcbfa0da215c869a1e8",
+    "Documentation/Verification/AmbientParity20261014/ambient6-gamma.json": "0a104964d2cce660876456965cf4211237ebb79619c11bcbfa0da215c869a1e8",
+    "Documentation/Verification/AmbientParity20261014/ambient6-linear.json": "0a104964d2cce660876456965cf4211237ebb79619c11bcbfa0da215c869a1e8",
+    "Documentation/Verification/AmbientParity20261014/interpolation2022-gamma.json": "d28985db75893b58531b93c87ab313552ab74a8a995c7d4165b76e45d26ea93f",
+    "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json": "63ac4d55e23428dc307f1a79aee70eb6716711ba0f1ee6d9e3773b07e936eb4c",
+    "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json": "67cb365d546c984924b864aa2101b8a2a271e7020615aab69af40227130d1b8d",
+    "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json": "19fc49c032b1ccc1ed34902af952047adecec4357d10a6ad8a740f485fa3e3b1",
+    "Documentation/Verification/ApiFeatureCoverage20261013.json": "1826f477913a5d59f4ef66058fe007216b9b49b95c6ebcb75666fe947e7653fa",
+    "Documentation/Verification/Randomized20261013/2022-api-observations.json": "4e99391ca56fb5eb4fd71900147ffe7494ebbc9ebadc6eb1ebd1c2a8c6a0e6dc",
+    "Documentation/Verification/Randomized20261013/2022-gamma-disabled-metrics.json": "f60cf29269350eec914287a612546d755392c4f18a5ff3fdb8ef6c3a9c9c4d9e",
+    "Documentation/Verification/Randomized20261013/2022-gamma-green-metrics.json": "bf7e86a1f038775e9d77c4ab7fd689d5d71c086bbd3c85949baccad53843cd35",
+    "Documentation/Verification/Randomized20261013/2022-linear-disabled-metrics.json": "b671422a7709aeb6fee9ace6ab3c7f074ce1e14b3e923276cb027bba81ed0bc6",
+    "Documentation/Verification/Randomized20261013/2022-linear-green-metrics.json": "00ca07649dd734fa9f9a8435919b867d315847184a17e1efe8fa0fe2f4edda6d",
+    "Documentation/Verification/Randomized20261013/2022-reference-runtime-declarations.json": "cb9335e339c4b4a94dbf474d875a69c4d778806e42a1be8092e52b23320925f8",
+    "Documentation/Verification/Randomized20261013/6000-api-observations.json": "4e99391ca56fb5eb4fd71900147ffe7494ebbc9ebadc6eb1ebd1c2a8c6a0e6dc",
+    "Documentation/Verification/Randomized20261013/6000-gamma-disabled-metrics.json": "f60cf29269350eec914287a612546d755392c4f18a5ff3fdb8ef6c3a9c9c4d9e",
+    "Documentation/Verification/Randomized20261013/6000-gamma-green-metrics.json": "bf7e86a1f038775e9d77c4ab7fd689d5d71c086bbd3c85949baccad53843cd35",
+    "Documentation/Verification/Randomized20261013/6000-linear-disabled-metrics.json": "b671422a7709aeb6fee9ace6ab3c7f074ce1e14b3e923276cb027bba81ed0bc6",
+    "Documentation/Verification/Randomized20261013/6000-linear-green-metrics.json": "00ca07649dd734fa9f9a8435919b867d315847184a17e1efe8fa0fe2f4edda6d",
+    "Documentation/Verification/Randomized20261013/6000-reference-runtime-declarations.json": "33f5c23219563521f2e6771e447481812c2f5b63658d0740a747e67c86e34c92",
+    "Documentation/Verification/Randomized20261013/summary.json": "c2e1d9c7a4b77dd1ff48144f112233a9c3f978426245e5adf11e41d8e51640ee",
+    "Tests/Parity/original-3.6-contract.json": "9d1dc10028d0c4a33dca4eda5b3b2a7a3652d052803828e794f063806f48877c"
+  }
+}

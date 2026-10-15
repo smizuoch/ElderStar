@@ -1,0 +1,393 @@
+{
+  "date": "2026-10-15",
+  "sourceCommit": "c4c75a971329a70eef3ea06b6f21228cd739a86c",
+  "reference": "NOVA 3.6.0 / 1c6b88729f91c852c164ef71a32cc2bce83a1892",
+  "runs": [
+    {
+      "run": "red2022",
+      "result": "Failed(Child)",
+      "total": 13,
+      "passed": 1,
+      "failed": 12,
+      "xml_sha256": "37380deb43762039db0d8a7e68e02636de8ee3f92cd7c922359dad0eded41d14",
+      "log_sha256": "73cb5f2c4b5da8d50fd6f32183964db930cc39292108c526878644d822ef959f",
+      "csharpErrors": 0,
+      "shaderErrors": 0,
+      "focusedCases": [
+        {
+          "name": "ApplyPassReleasesItsOwnedMaterial",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "DisposedPassesRejectUseWithoutDestroyingCallerTextures",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "ExistingFacadeCommandBudgetIsRecorded",
+          "result": "Passed",
+          "message": null,
+          "output": "ExistingFacadeCommandBytes=400"
+        },
+        {
+          "name": "LightModeSelectionUsesTheTagRatherThanThePassName(True)",
+          "result": "Failed",
+          "message": "  DistortedUvBufferPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "LightModeSelectionUsesTheTagRatherThanThePassName(False)",
+          "result": "Failed",
+          "message": "  DistortedUvBufferPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "MissingSetupAndAliasedTargetsFailBeforeRecording",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "OriginalConstructorsAndSetupSignaturesRemainCallable",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "OriginalSetupSupportsCommandBufferTemporaryTargetIdentifiers",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "SceneViewConstructorOptionControlsActualCompositing(False,0.5f)",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "SceneViewConstructorOptionControlsActualCompositing(True,0.7f)",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "SetupCapturesItsTargetWhenCommandsAreRecorded",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "UnsupportedCameraKindsFailExplicitly(Reflection)",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        },
+        {
+          "name": "UnsupportedCameraKindsFailExplicitly(Preview)",
+          "result": "Failed",
+          "message": "  ApplyDistortionPass must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        }
+      ]
+    },
+    {
+      "run": "context-red2022",
+      "result": "Failed(Child)",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "xml_sha256": "f9747b90452302a079af440ec22cf63be5a70bf7101f3d2794be9ce379932e4f",
+      "log_sha256": "29d009b30a75da06f17c2026887362ad26a4f9ba3c967dfa6f922d03e5b7db9d",
+      "csharpErrors": 0,
+      "shaderErrors": 0,
+      "focusedCases": [
+        {
+          "name": "ContextResetClearsTheBindingWithoutReleasingCallerTexture",
+          "result": "Failed",
+          "message": "  DistortionContextItem must provide executable Built-in compatibility.\n  Expected: not null\n  But was:  null\n",
+          "output": null
+        }
+      ]
+    },
+    {
+      "run": "context-virtual-red6",
+      "result": "Failed(Child)",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "xml_sha256": "bb39afd62dd9d07a07f716d6c62ac96ac51df425fd08a671c7c49b32fb00934f",
+      "log_sha256": "b8191694e19687f07b02c94e151994387f3d474151d1f4fe90a94540b9181991",
+      "csharpErrors": 0,
+      "shaderErrors": 0,
+      "focusedCases": [
+        {
+          "name": "ContextResetClearsTheBindingWithoutReleasingCallerTexture",
+          "result": "Failed",
+          "message": "  Original Reset can be overridden by a caller's derived context.\n  Expected: True\n  But was:  False\n",
+          "output": null
+        }
+      ]
+    },
+    {
+      "run": "final-edit2022",
+      "result": "Passed",
+      "total": 500,
+      "passed": 500,
+      "failed": 0,
+      "xml_sha256": "fa88a21fc5a1590a0b7a53c36eb489b3612e5c4d1730f3d8ea4f000718d328bb",
+      "log_sha256": "de9259fe8a93c0cd1f178739a0213c89438ca8bf1f8c01f68f58fba2e955e85a",
+      "csharpErrors": 0,
+      "shaderErrors": 0,
+      "focusedCases": []
+    },
+    {
+      "run": "final-edit6",
+      "result": "Passed",
+      "total": 500,
+      "passed": 500,
+      "failed": 0,
+      "xml_sha256": "f968eadb89b065c4c6f9c884d5489c2ee9541791ed28e7198348b5d952c3c8fd",
+      "log_sha256": "41c63c59e6405ee79f34edbe3257265e96fdf6dbf707543f7283eda5fa088009",
+      "csharpErrors": 0,
+      "shaderErrors": 0,
+      "focusedCases": []
+    },
+    {
+      "run": "final-play2022",
+      "result": "Passed",
+      "total": 959,
+      "passed": 959,
+      "failed": 0,
+      "xml_sha256": "6a3801e3084f4bf9873acf2775874b63c5030d918d85f494ecb8d2e0caf39a0a",
+      "log_sha256": "ce17aef9496ee3882dc76551017f4796b08ddf059f30444bce455e240f8bdd98",
+      "csharpErrors": 0,
+      "shaderErrors": 0,
+      "focusedCases": [
+        {
+          "name": "ApplyPassReleasesItsOwnedMaterial",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "ContextResetClearsTheBindingWithoutReleasingCallerTexture",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "DisposedPassesRejectUseWithoutDestroyingCallerTextures",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "ExistingFacadeCommandBudgetIsRecorded",
+          "result": "Passed",
+          "message": null,
+          "output": "ExistingFacadeCommandBytes=400"
+        },
+        {
+          "name": "LightModeSelectionUsesTheTagRatherThanThePassName(True)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "LightModeSelectionUsesTheTagRatherThanThePassName(False)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "MissingSetupAndAliasedTargetsFailBeforeRecording",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "OriginalConstructorsAndSetupSignaturesRemainCallable",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "OriginalSetupSupportsCommandBufferTemporaryTargetIdentifiers",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "SceneViewConstructorOptionControlsActualCompositing(False,0.5f)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "SceneViewConstructorOptionControlsActualCompositing(True,0.9f)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "SetupCapturesItsTargetWhenCommandsAreRecorded",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "UnsupportedCameraKindsFailExplicitly(Reflection)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "UnsupportedCameraKindsFailExplicitly(Preview)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        }
+      ]
+    },
+    {
+      "run": "final-play6",
+      "result": "Passed",
+      "total": 959,
+      "passed": 959,
+      "failed": 0,
+      "xml_sha256": "4bc8582c9c740702ad3da5611ee054bf18adda8a86a34da7ea8f6f3f8844be5f",
+      "log_sha256": "380523526d27718bedc4e93a4956ab2eba81d221f18157106563abf5be453088",
+      "csharpErrors": 0,
+      "shaderErrors": 0,
+      "focusedCases": [
+        {
+          "name": "ApplyPassReleasesItsOwnedMaterial",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "ContextResetClearsTheBindingWithoutReleasingCallerTexture",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "DisposedPassesRejectUseWithoutDestroyingCallerTextures",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "ExistingFacadeCommandBudgetIsRecorded",
+          "result": "Passed",
+          "message": null,
+          "output": "ExistingFacadeCommandBytes=520"
+        },
+        {
+          "name": "LightModeSelectionUsesTheTagRatherThanThePassName(True)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "LightModeSelectionUsesTheTagRatherThanThePassName(False)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "MissingSetupAndAliasedTargetsFailBeforeRecording",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "OriginalConstructorsAndSetupSignaturesRemainCallable",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "OriginalSetupSupportsCommandBufferTemporaryTargetIdentifiers",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "SceneViewConstructorOptionControlsActualCompositing(False,0.5f)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "SceneViewConstructorOptionControlsActualCompositing(True,0.9f)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "SetupCapturesItsTargetWhenCommandsAreRecorded",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "UnsupportedCameraKindsFailExplicitly(Reflection)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        },
+        {
+          "name": "UnsupportedCameraKindsFailExplicitly(Preview)",
+          "result": "Passed",
+          "message": null,
+          "output": null
+        }
+      ]
+    }
+  ],
+  "source_sha256": {
+    "Assets/Nova/Runtime/Core/Scripts/ApplyDistortionPass.cs": "6885afe7f3b009eddd2970ad70cc23d77b8166549c652df73823f1294ac8e2da",
+    "Assets/Nova/Runtime/Core/Scripts/BuiltInDistortionPass.cs": "131c2b2c537654740c00acac4c8ef183e11f379182bdd1e4565a793d4e818f4d",
+    "Assets/Nova/Runtime/Core/Scripts/DeprecationMessage.cs": "cfabe388ae9593fb854eae63cd900325b433d1cf7d22369a0103bd316002a5c1",
+    "Assets/Nova/Runtime/Core/Scripts/DistortedUvBufferPass.cs": "cf9f87cfbb91ad0ca3bf17c5c3756bd1c9a8901060aad0ac7833cce80c68bebe",
+    "Assets/Nova/Runtime/Core/Scripts/DistortionContextItem.cs": "0d4642dd144dfabd839e05c932755cd314bff3247f91061e75e6a39c1ce24ad5",
+    "Assets/Nova/Runtime/Core/Scripts/NovaDepthNormals.cs": "5e10b1818f8d85ef4d36b492a9f468cc634cc34a2f9f27205eab6b48080fc73a",
+    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "999e8ad2f60ebef99bf8226c4a95be27efbe37a7f4cecc8cb966f378332699de",
+    "Assets/Tests/PlayMode/NovaOriginalDistortionApiTests.cs": "c045d35f041ba783c49841413333e68a7438ae51edcd8e9b762b6b0a67512bd7",
+    "Assets/Tests/PlayMode/Shaders/NovaOriginalApiLightMode.shader": "8d9c4c00949dea7fa9a6530f2b3e3ba09d49ee32d2acdd686e8bd33e321fe78d"
+  },
+  "bothTestMirrorsMatchSource": true,
+  "restoredOriginalCallForms": 5,
+  "originalRuntimeDeclarationClassifications": {
+    "Exact": 2,
+    "Approximate": 6,
+    "Not source-compatible": 13
+  },
+  "neutralFacadeCommandBytes": {
+    "after2022": 400,
+    "afterUnity6": 520,
+    "before2022": 400,
+    "beforeUnity6": 520
+  },
+  "avatarShaderChangesSinceAmbientRelease": [],
+  "newGpuTimingMeasurement": false,
+  "newSdkAaoBuild": false,
+  "newAvatarUpload": false,
+  "remaining": "URP engine inheritance, RenderingData/RTHandle/graph callbacks and TextureHandle field type still require explicit Built-in caller adaptation.",
+  "unity6BaselineCheck": {
+    "sourceCommit": "3324316918092f73a0f86649b29f2f7260c3d6c8",
+    "facade_sha256": "16dbe1e6ad9e60856699641b5c24a1c08f282835d7619f44436368350d018388",
+    "passed": 1,
+    "commandBytes": 520,
+    "xml_sha256": "0f255eea42da928bd25e6900c17067e14656c91428ec81daac6e8480d19e5eb4",
+    "log_sha256": "8188e1826b7b7811f434eea59d079c0671dc680da43863087983d0509e3c5094",
+    "csharpErrors": 0,
+    "shaderErrors": 0
+  }
+}

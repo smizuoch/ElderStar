@@ -4170,8 +4170,8 @@
     {
       "feature": "Camera distortion",
       "status": "Approximate",
-      "evidence": "19 camera-compositor and 19 shader-only visibility/control cases, plus per-eye texture sampling",
-      "reason_or_fallback": "The shader automatically uses a named GrabPass when no supported camera compositor is active. VRChat avatars need no custom component. An enabled ScreenSpaceDistortion component retains the ordinary mono camera-wide compositor."
+      "evidence": "19 camera-compositor and 19 shader-only visibility/control cases, per-eye texture sampling, and 14 original-name API graphics/lifetime cases",
+      "reason_or_fallback": "The shader automatically uses a named GrabPass when no supported camera compositor is active. VRChat avatars need no custom component. The mono camera compositor and restored ApplyDistortionPass/DistortedUvBufferPass execute real Built-in commands. Five original constructor/setup/reset signatures are callable; URP inheritance and engine-specific parameters still require adaptation. See RuntimeAPICompatibility.md and BuiltInRenderingAPI.md."
     },
     {
       "feature": "Distortion buffer",
@@ -4248,7 +4248,7 @@
   ],
   "runtime_pipeline_apis": {
     "status": "Mixed: preserved pipeline-independent declarations; replaced URP integration",
-    "reason": "Original ScreenSpaceDistortion, DistortedUvBufferPass, ApplyDistortionPass and RenderGraph types depend on URP. The Built-in component/shader compositor supplies the rendering function; callers of ScriptableRendererFeature/Pass APIs must change pipeline integration. See matrix.",
+    "reason": "Five original constructor/setup/reset call signatures are restored with real Built-in rendering and resource binding. URP base types, RenderingData callbacks, RTHandle and graph integration still require caller adaptation. Use the explicit Camera/CommandBuffer stages or the shader-only avatar path; no fake Unity types or no-op callbacks are provided.",
     "declarations": [
       {
         "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void .ctor(Boolean, UnityEngine.Shader)",
@@ -4256,8 +4256,8 @@
           "2022",
           "6000"
         ],
-        "status": "Not source-compatible",
-        "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+        "status": "Approximate",
+        "reason_or_fallback": "The original constructor/Setup call signature is restored by the real Built-in ApplyDistortionPass. Execute records Camera/CommandBuffer work; inheritance and URP lifecycle are not source-compatible. Supplied targets remain caller-owned. See RuntimeAPICompatibility.md."
       },
       {
         "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
@@ -4282,8 +4282,8 @@
           "2022",
           "6000"
         ],
-        "status": "Not source-compatible",
-        "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+        "status": "Approximate",
+        "reason_or_fallback": "The original constructor/Setup call signature is restored by the real Built-in ApplyDistortionPass. Execute records Camera/CommandBuffer work; inheritance and URP lifecycle are not source-compatible. Supplied targets remain caller-owned. See RuntimeAPICompatibility.md."
       },
       {
         "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass type : UnityEngine.Rendering.Universal.ScriptableRenderPass",
@@ -4318,8 +4318,8 @@
           "2022",
           "6000"
         ],
-        "status": "Not source-compatible",
-        "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+        "status": "Approximate",
+        "reason_or_fallback": "The original constructor is restored and selects the actual LightMode tag. Built-in Setup accepts a RenderTexture and Execute accepts Camera/CommandBuffer plus an explicit renderer list; URP inheritance and callbacks differ. See RuntimeAPICompatibility.md."
       },
       {
         "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
@@ -4370,16 +4370,16 @@
         "editors": [
           "6000"
         ],
-        "status": "Not source-compatible",
-        "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+        "status": "Approximate",
+        "reason_or_fallback": "Constructor and Reset() are restored. Reset clears a caller-owned RenderTexture binding without releasing it. The class does not inherit ContextItem and its texture field has a different engine type. See RuntimeAPICompatibility.md."
       },
       {
         "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem Void Reset()",
         "editors": [
           "6000"
         ],
-        "status": "Not source-compatible",
-        "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+        "status": "Approximate",
+        "reason_or_fallback": "Constructor and Reset() are restored. Reset clears a caller-owned RenderTexture binding without releasing it. The class does not inherit ContextItem and its texture field has a different engine type. See RuntimeAPICompatibility.md."
       },
       {
         "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem field UnityEngine.Rendering.RenderGraphModule.TextureHandle DistortedUvTexture",
@@ -4387,7 +4387,7 @@
           "6000"
         ],
         "status": "Not source-compatible",
-        "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+        "reason_or_fallback": "The DistortedUvTexture field name is restored with real Built-in RenderTexture storage. Its original graph TextureHandle type is not source-compatible; bind the RenderTexture to the explicit distortion stages. See RuntimeAPICompatibility.md."
       },
       {
         "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem type : UnityEngine.Rendering.ContextItem",

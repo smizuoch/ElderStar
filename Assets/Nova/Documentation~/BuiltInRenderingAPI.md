@@ -1,6 +1,10 @@
 # Built-in rendering APIs
 
-These APIs use Unity Built-in types; they do not emulate URP renderer feature or render-pass types. They are optional normal-Unity camera helpers, not VRChat avatar components. Avatar distortion uses the shader-only path.
+These APIs use Unity Built-in types. They are optional normal-Unity camera helpers,
+not VRChat avatar components. Avatar distortion uses the shader-only path.
+Original NOVA class names and pipeline-independent call signatures are restored
+where they can perform real work without a pipeline dependency. Their base types
+and pipeline callbacks remain different from URP.
 
 ## Distortion
 
@@ -28,6 +32,68 @@ distortion.Dispose();
 
 The default camera component retains its automatic renderer discovery for compatibility. Custom integrations can retain a renderer list and use the explicit API to avoid that search.
 
+## Original pass names
+
+The following original call forms are available in `Nova.Runtime.Core.Scripts`:
+
+```csharp
+var offsets = new DistortedUvBufferPass("DistortedUvBuffer");
+var apply = new ApplyDistortionPass(true, Shader.Find("Hidden/Nova/Particles/ApplyDistortion"));
+apply.Setup(new RenderTargetIdentifier(offsetTexture));
+```
+
+`DistortedUvBufferPass` selects the actual **LightMode tag**, including when its
+pass Name differs. Its Built-in target setup uses a `RenderTexture`:
+
+```csharp
+offsets.Setup(offsetTexture);
+offsets.Execute(commands, camera, registeredRenderers);
+apply.Execute(commands, camera, sourceTexture, destinationTexture);
+Graphics.ExecuteCommandBuffer(commands);
+// Dispose only after any recorded commands using these objects have completed.
+offsets.Dispose();
+apply.Dispose();
+```
+
+`ApplyDistortionPass.Setup(RenderTargetIdentifier)` also accepts a target obtained
+with `CommandBuffer.GetTemporaryRT`. Allocate it before the recorded composite and
+release it afterwards. Reconfiguring the pass does not change commands already
+recorded. With `applyToSceneView: false`, Execute copies the source unchanged for
+a SceneView camera; a separate destination is thus initialized correctly.
+
+Both passes reject missing setup and use after disposal. Offset rendering owns no
+GPU resources; the apply pass owns one hidden material and releases it on disposal.
+The combined `BuiltInDistortionPass` uses these same stages. No extra screen copy,
+target, draw or texture fetch is introduced by restoring the original names.
+
+`DistortionContextItem` retains its constructor, `DistortedUvTexture` field name
+and `Reset()` method. In Built-in the field is a real `RenderTexture`, replacing
+the pipeline-specific handle. This is an explicit type change, not handle/source
+compatibility. Reset clears the reference without releasing the caller's texture:
+
+```csharp
+var context = new DistortionContextItem { DistortedUvTexture = offsetTexture };
+offsets.Setup(context.DistortedUvTexture);
+apply.Setup(new RenderTargetIdentifier(context.DistortedUvTexture));
+// Record and execute the passes as above; release the texture when GPU use ends.
+context.Reset();
+```
+
+These classes are **not assignable to URP's ScriptableRenderPass**. Calls accepting
+`RenderingData`, `RTHandle`, renderer features and graph contexts still require a
+pipeline integration change. Use the explicit Camera/CommandBuffer execution above;
+there are no successful no-op callbacks or duplicate Unity engine type definitions.
+
 ## Verification
 
-Unity 2022.3.22f1, D3D11: 45 tests passed (`NovaBuiltInDistortionTests` and `NovaDistortionApiTests`). Coverage includes the existing camera and shader-only paths, occlusion, localized/negative/vertical offsets, particles, Custom Data and two command buffers recorded together then executed in reverse order. This is not URP C# API signature compatibility. Unity 6 and final release acceptance are tracked in `LowCostLightingParity.md`.
+The 2026-10-15 follow-up adds 14 GPU/API cases on Unity 2022.3.22f1 and
+6000.3.23f1: original constructor/setup/reset calls, deferred targets, temporary
+target identifiers, LightMode selection, scene-view options, disposal and context
+ownership. The combined facade's neutral-offset/composite fixture records 400
+command bytes before/after on Unity 2022 and 520 before/after on Unity 6.
+
+Existing camera and shader-only tests cover occlusion, localized/negative/vertical
+offsets, particles, Custom Data and independently recorded cameras. The repository's
+RuntimeAPICompatibility.md records final full-suite results and remaining source
+compatibility limits. These tests do not certify arbitrary URP callbacks or every
+possible caller/input combination.

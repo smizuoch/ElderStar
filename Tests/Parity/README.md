@@ -1,5 +1,10 @@
 # Original authoring contract
 
+For denominator-aware reproduction metrics, run
+`python3 Tests/Parity/analyze_reproduction.py`. It recomputes explicit historical
+cohorts separately and leaves the undefined all-input reproduction rate null.
+See `Documentation/ReproductionAudit.md` for the interpretation and limitations.
+
 Reference: NOVA 3.6.0 commit `1c6b88729f91c852c164ef71a32cc2bce83a1892`.
 
 `original-3.6-contract.json` records all 889 ShaderLab property declarations,

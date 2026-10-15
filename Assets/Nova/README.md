@@ -41,6 +41,8 @@ or **Match Original Lighting Settings** to reapply with Undo support.
 Optional normal-Unity helpers add [Canvas lighting](Documentation~/CanvasLighting.md),
 [a dedicated depth-normal buffer](Documentation~/DepthNormals.md) and
 [explicit distortion commands](Documentation~/BuiltInRenderingAPI.md).
+The distortion API also restores original pass constructors, target setup and
+context reset using real Built-in resources; engine inheritance remains different.
 Lit can consume Built-in LPPV, and Editor-only diagnostics expose eight views;
 see [probe volumes and diagnostics](Documentation~/ProbeVolumesAndDiagnostics.md).
 The shader-only VRChat path needs none of these components. Tiled Forward+,
