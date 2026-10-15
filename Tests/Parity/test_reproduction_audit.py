@@ -90,7 +90,7 @@ class ReproductionAuditTests(unittest.TestCase):
         self.assertEqual(sum(result["property_declarations"]["types"].values()), 889)
         self.assertEqual(result["editor_declaration_inventory_count"], 525)
         self.assertEqual(result["runtime_declaration_classifications"],
-                         {"Not source-compatible": 18, "Exact": 2, "Approximate": 1})
+                         {"Not source-compatible": 13, "Exact": 2, "Approximate": 6})
 
     def test_report_is_reproducible_and_never_fills_unknown_global_rate(self):
         path = ROOT / "Documentation/Verification/ReproductionAudit20261015.json"

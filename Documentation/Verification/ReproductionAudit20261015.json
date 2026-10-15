@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "audit_date": "2026-10-15",
-  "assessed_source_commit": "3324316918092f73a0f86649b29f2f7260c3d6c8",
+  "assessed_source_commit": "c4c75a971329a70eef3ea06b6f21228cd739a86c",
   "package_version": "0.1.6",
   "reference": "NOVA 3.6.0 / 1c6b88729f91c852c164ef71a32cc2bce83a1892",
   "all_inputs_reproduction_percent": null,
@@ -342,8 +342,8 @@
     {
       "feature": "Camera distortion",
       "status": "Approximate",
-      "evidence": "19 camera-compositor and 19 shader-only visibility/control cases, plus per-eye texture sampling",
-      "reason_or_fallback": "The shader automatically uses a named GrabPass when no supported camera compositor is active. VRChat avatars need no custom component. An enabled ScreenSpaceDistortion component retains the ordinary mono camera-wide compositor."
+      "evidence": "19 camera-compositor and 19 shader-only visibility/control cases, per-eye texture sampling, and 14 original-name API graphics/lifetime cases",
+      "reason_or_fallback": "The shader automatically uses a named GrabPass when no supported camera compositor is active. VRChat avatars need no custom component. The mono camera compositor and restored ApplyDistortionPass/DistortedUvBufferPass execute real Built-in commands. Five original constructor/setup/reset signatures are callable; URP inheritance and engine-specific parameters still require adaptation. See RuntimeAPICompatibility.md and BuiltInRenderingAPI.md."
     },
     {
       "feature": "Distortion buffer",
@@ -463,9 +463,9 @@
   "editor_declaration_inventory_count": 525,
   "editor_preservation_evidence": "Existing 0.1.6 Unity authoring tests; this audit checks inventory and source contracts, not a fresh reflection run.",
   "runtime_declaration_classifications": {
-    "Not source-compatible": 18,
-    "Exact": 2,
-    "Approximate": 1
+    "Approximate": 6,
+    "Not source-compatible": 13,
+    "Exact": 2
   },
   "runtime_declarations": [
     {
@@ -474,8 +474,8 @@
         "2022",
         "6000"
       ],
-      "status": "Not source-compatible",
-      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+      "status": "Approximate",
+      "reason_or_fallback": "The original constructor/Setup call signature is restored by the real Built-in ApplyDistortionPass. Execute records Camera/CommandBuffer work; inheritance and URP lifecycle are not source-compatible. Supplied targets remain caller-owned. See RuntimeAPICompatibility.md."
     },
     {
       "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
@@ -500,8 +500,8 @@
         "2022",
         "6000"
       ],
-      "status": "Not source-compatible",
-      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+      "status": "Approximate",
+      "reason_or_fallback": "The original constructor/Setup call signature is restored by the real Built-in ApplyDistortionPass. Execute records Camera/CommandBuffer work; inheritance and URP lifecycle are not source-compatible. Supplied targets remain caller-owned. See RuntimeAPICompatibility.md."
     },
     {
       "declaration": "Nova.Runtime.Core.Scripts.ApplyDistortionPass type : UnityEngine.Rendering.Universal.ScriptableRenderPass",
@@ -536,8 +536,8 @@
         "2022",
         "6000"
       ],
-      "status": "Not source-compatible",
-      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+      "status": "Approximate",
+      "reason_or_fallback": "The original constructor is restored and selects the actual LightMode tag. Built-in Setup accepts a RenderTexture and Execute accepts Camera/CommandBuffer plus an explicit renderer list; URP inheritance and callbacks differ. See RuntimeAPICompatibility.md."
     },
     {
       "declaration": "Nova.Runtime.Core.Scripts.DistortedUvBufferPass Void Execute(UnityEngine.Rendering.ScriptableRenderContext, UnityEngine.Rendering.Universal.RenderingData ByRef)",
@@ -588,16 +588,16 @@
       "editors": [
         "6000"
       ],
-      "status": "Not source-compatible",
-      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+      "status": "Approximate",
+      "reason_or_fallback": "Constructor and Reset() are restored. Reset clears a caller-owned RenderTexture binding without releasing it. The class does not inherit ContextItem and its texture field has a different engine type. See RuntimeAPICompatibility.md."
     },
     {
       "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem Void Reset()",
       "editors": [
         "6000"
       ],
-      "status": "Not source-compatible",
-      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+      "status": "Approximate",
+      "reason_or_fallback": "Constructor and Reset() are restored. Reset clears a caller-owned RenderTexture binding without releasing it. The class does not inherit ContextItem and its texture field has a different engine type. See RuntimeAPICompatibility.md."
     },
     {
       "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem field UnityEngine.Rendering.RenderGraphModule.TextureHandle DistortedUvTexture",
@@ -605,7 +605,7 @@
         "6000"
       ],
       "status": "Not source-compatible",
-      "reason_or_fallback": "URP renderer/pass/context inheritance or lifecycle is not available in the dependency-free Built-in runtime. Use the ScreenSpaceDistortion camera component or shader-only avatar path; adapt pipeline-specific callers instead of referencing URP/RenderGraph."
+      "reason_or_fallback": "The DistortedUvTexture field name is restored with real Built-in RenderTexture storage. Its original graph TextureHandle type is not source-compatible; bind the RenderTexture to the explicit distortion stages. See RuntimeAPICompatibility.md."
     },
     {
       "declaration": "Nova.Runtime.Core.Scripts.DistortionContextItem type : UnityEngine.Rendering.ContextItem",
@@ -1058,6 +1058,11 @@
     "All input values, textures, scene topologies, call sequences, GPU/world/XR conditions remain unenumerated."
   ],
   "evidence_sha256": {
+    "Assets/Nova/Runtime/Core/Scripts/ApplyDistortionPass.cs": "6885afe7f3b009eddd2970ad70cc23d77b8166549c652df73823f1294ac8e2da",
+    "Assets/Nova/Runtime/Core/Scripts/BuiltInDistortionPass.cs": "131c2b2c537654740c00acac4c8ef183e11f379182bdd1e4565a793d4e818f4d",
+    "Assets/Nova/Runtime/Core/Scripts/DistortedUvBufferPass.cs": "cf9f87cfbb91ad0ca3bf17c5c3756bd1c9a8901060aad0ac7833cce80c68bebe",
+    "Assets/Nova/Runtime/Core/Scripts/DistortionContextItem.cs": "0d4642dd144dfabd839e05c932755cd314bff3247f91061e75e6a39c1ce24ad5",
+    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "999e8ad2f60ebef99bf8226c4a95be27efbe37a7f4cecc8cb966f378332699de",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesApplyDistortion.shader": "5ae85d64ef38ce3ab1e7a5bc253bfbf40174bdb650656ed4a1298d396c9a7f63",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesDistortion.shader": "08330070e32f81ec44ed94aaa117d0a2a1499b0fff529b60c53bc22ab775805f",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader": "bdad30eac8e4c040839152f8739641d3a4ce3bddb35ee725851b2a125077b281",
@@ -1066,7 +1071,7 @@
     "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "7020a1a11add57c9defe31414cbfe1fb6fbe23200529ca444ec4a8e007deaaec",
     "Assets/Nova/package.json": "e80ce609f856018a36c91681638e0b63f19d05dc61fabc886990f8afcde9436d",
     "Assets/Tests/Editor/Reference/EditorContract.json": "7b1857d640116db327f73324e4b20e8697249840458243697e3bc0b339fbea03",
-    "Documentation/BuiltInCompatibilityMatrix.md": "6b708d324e1edd415da5bb5838555a022484be950ae69861a6e0fc289579e754",
+    "Documentation/BuiltInCompatibilityMatrix.md": "3f81c7871e8eb6dcadd6082aa3e4d99185d1b2306eba3389741c16c0739ddd06",
     "Documentation/Validation/AssetCorpus/unity2022-gamma.json": "7abef19ac771bbc34fe335ee4d11e886c1d6c33c174f202440e0ff5e0225ed10",
     "Documentation/Validation/AssetCorpus/unity2022-linear.json": "4ad69b38b7463499003747425845d3bd75353069ed2ccb2d01a082de4a2779c2",
     "Documentation/Validation/AssetCorpus/unity6-gamma.json": "d271ba4a901d6e9a83409c9e9fbd48b7506cf6331b4642ab7ab35b1141836b0d",
@@ -1079,7 +1084,7 @@
     "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json": "63ac4d55e23428dc307f1a79aee70eb6716711ba0f1ee6d9e3773b07e936eb4c",
     "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json": "67cb365d546c984924b864aa2101b8a2a271e7020615aab69af40227130d1b8d",
     "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json": "19fc49c032b1ccc1ed34902af952047adecec4357d10a6ad8a740f485fa3e3b1",
-    "Documentation/Verification/ApiFeatureCoverage20261013.json": "577a9985a5003fbbefc0ed6ca2681c95b41b38c45b567d40475badb266c2a021",
+    "Documentation/Verification/ApiFeatureCoverage20261013.json": "1826f477913a5d59f4ef66058fe007216b9b49b95c6ebcb75666fe947e7653fa",
     "Documentation/Verification/Randomized20261013/2022-api-observations.json": "4e99391ca56fb5eb4fd71900147ffe7494ebbc9ebadc6eb1ebd1c2a8c6a0e6dc",
     "Documentation/Verification/Randomized20261013/2022-gamma-disabled-metrics.json": "f60cf29269350eec914287a612546d755392c4f18a5ff3fdb8ef6c3a9c9c4d9e",
     "Documentation/Verification/Randomized20261013/2022-gamma-green-metrics.json": "bf7e86a1f038775e9d77c4ab7fd689d5d71c086bbd3c85949baccad53843cd35",

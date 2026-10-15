@@ -146,6 +146,8 @@ def build_report(root):
     if sorted(editor_reference) != sorted(editor_declarations) or len(set(editor_declarations)) != len(editor_declarations):
         raise ValueError("Original Editor API inventory is incomplete")
     runtime = inventory["runtime_pipeline_apis"]["declarations"]
+    for name in ("ApplyDistortionPass", "DistortedUvBufferPass", "DistortionContextItem", "BuiltInDistortionPass", "ScreenSpaceDistortion"):
+        read("Assets/Nova/Runtime/Core/Scripts/" + name + ".cs")
     runtime_reference = set()
     for editor in ("2022", "6000"):
         runtime_reference.update(load(RANDOM + editor + "-reference-runtime-declarations.json")["rows"])
@@ -173,7 +175,7 @@ def build_report(root):
                                  source=path, all_inputs_coverage_percent=None))
 
     return dict(schema_version=1, audit_date="2026-10-15",
-                assessed_source_commit="3324316918092f73a0f86649b29f2f7260c3d6c8",
+                assessed_source_commit="c4c75a971329a70eef3ea06b6f21228cd739a86c",
                 package_version=load("Assets/Nova/package.json")["version"], reference=inventory["reference"],
                 all_inputs_reproduction_percent=None,
                 undefined_reason="No closed input domain, weighting measure or exhaustive equivalence proof. Finite sample rates do not determine universal reproduction.",
