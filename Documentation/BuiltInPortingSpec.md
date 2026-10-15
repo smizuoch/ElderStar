@@ -15,6 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+Reproduction measurement audit (2026-10-15):
+
+- [x] Define denominators and keep feature classification, declaration preservation, sampled behavior and all-input equivalence separate.
+- [x] Add failing audit tests; recompute accepted-frame and pixel-identical counts from explicit evidence manifests without changing thresholds or baselines.
+- [x] Record source versions, missing input domains and known counterexamples; review the reproducible report. Do not invent a universal reproduction percentage. See ReproductionAudit.md.
+
 Ambient follow-up (2026-10-14):
 
 - [x] Reproduce the 22 nonblack-ambient differences and isolate diffuse SH, glossy fallback and color-space inputs against original NOVA.
