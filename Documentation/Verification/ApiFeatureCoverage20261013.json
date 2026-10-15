@@ -3935,9 +3935,9 @@
     },
     {
       "feature": "Mirror samplers",
-      "status": "Approximate",
-      "evidence": "Original-image comparison and 36 Lit surface-sampler cases",
-      "reason_or_fallback": "D3D11/12 uses matching point/linear/trilinear mirror samplers. Coupled-sampler backends use mirrored UVs and texture-import filtering; configure matching filters on those platforms."
+      "status": "Exact",
+      "evidence": "Original-image comparison, 36 Lit surface-sampler cases and the 2026-10-15 source reassessment",
+      "reason_or_fallback": "Native point/linear/trilinear mirror sampler states match on the matrix's Windows D3D11/12 scope. Coupled-sampler backends outside this scope retain mirrored UVs and texture-import filtering; they are not certified exact. See ExactParityProgress.md."
     },
     {
       "feature": "Channel extraction",
@@ -3959,9 +3959,9 @@
     },
     {
       "feature": "Tint rim",
-      "status": "Approximate",
-      "evidence": "Shared rim/tint rendering tests",
-      "reason_or_fallback": "World normal/view normalization and interpolation match the original in the 2022 D3D coarse-mesh capture. No independent rim mismatch was reproduced; other backends remain unverified."
+      "status": "Exact",
+      "evidence": "96 retained original/port rim images across both editors/color spaces, plus 128 seeded GPU curve probes per graphics path",
+      "reason_or_fallback": "Original normalized world normal/view interpolation, abs(dot), progress/sharpness/inverse and tint math match on verified D3D paths. Degenerate normal/view vectors remain outside a portable normalization contract; see ExactParityProgress.md."
     },
     {
       "feature": "Flow targets",
@@ -4001,9 +4001,9 @@
     },
     {
       "feature": "Rim and luminance transparency",
-      "status": "Approximate",
-      "evidence": "Shared transparency and interaction tests",
-      "reason_or_fallback": "Luminance math is preserved; the rim normal/view conditions also match the original in the coarse-mesh captures. The retained progress/sharpness/inverse controls remain unchanged."
+      "status": "Exact",
+      "evidence": "Shared transparency/interaction rendering plus 128 seeded GPU comparisons with original GetRimValue",
+      "reason_or_fallback": "Original luminance weights, rim normal/view interpolation, inverse/progress/sharpness and alpha multiplication are preserved. Source lighting and transparent ordering remain assessed in their own rows. See ExactParityProgress.md."
     },
     {
       "feature": "Soft particles",
@@ -4013,9 +4013,9 @@
     },
     {
       "feature": "Depth fade",
-      "status": "Approximate",
-      "evidence": "Camera distance/range and combined-feature tests",
-      "reason_or_fallback": "Uses explicit eye depth and the original near/far/width controls. Camera projection differs by pipeline; tune the same eye-space distances after migration."
+      "status": "Exact",
+      "evidence": "35 original-formula GPU image cases covering all five visible shaders, both editors and D3D11/12; legacy generated-helper regression",
+      "reason_or_fallback": "Matches original projected-depth linearization and near/far/signed-width math, including orthographic/oblique behavior and widths below 1e-4. No extra varying, pass or sample. Zero-width singularities retain GPU arithmetic. Old generated source retains its vector helper and needs regeneration for the new behavior; see ExactParityProgress.md."
     },
     {
       "feature": "Vertex deformation",
@@ -4043,9 +4043,9 @@
     },
     {
       "feature": "Fog",
-      "status": "Approximate",
-      "evidence": "24 perspective/orthographic Linear/Exp/Exp2 cases and ForwardAdd diagnostics",
-      "reason_or_fallback": "Uses the original vertex clip-Z fog coefficient and interpolation, including EXP scaling. ForwardAdd fades toward black. The original orthographic/oblique clip-depth behavior is retained, even when it produces no fog; pipeline camera/fog inputs and other backends still require matching."
+      "status": "Exact",
+      "evidence": "288 retained original/port fog images across both editors/color spaces, plus ForwardAdd tests",
+      "reason_or_fallback": "Original clip-Z vertex coefficient/interpolation and Linear/Exp/Exp2 mixing match; ForwardAdd fades to black. Matching camera/fog inputs are required. Original orthographic/oblique behavior is intentionally retained. See ExactParityProgress.md."
     },
     {
       "feature": "Metallic and specular workflows",
@@ -4055,9 +4055,9 @@
     },
     {
       "feature": "Normal maps",
-      "status": "Approximate",
-      "evidence": "Imported DXT5 packing, normal scale and 2D/array/3D tests",
-      "reason_or_fallback": "Unity normal packing is decoded before XY scale, as in the original. The normal is normalized after interpolation before the tangent-space transform; interpolated tangent/binormal are not independently normalized, matching original fragUnlit/fragLit ordering. Original normal-map and parallax handedness differ and are preserved separately. Supply valid tangents; see LowCostLightingParity.md."
+      "status": "Exact",
+      "evidence": "48 retained original/port Lit normal images across both editors/color spaces, DXT5 packing/scale and 2D/array/3D tests",
+      "reason_or_fallback": "Original unpacking and XY scale, vertex tangent/binormal generation, interpolation and final normalization order match. Normal-map handedness remains distinct from parallax as in original NOVA. Supply valid tangents/normals; lighting inputs are assessed separately. See ExactParityProgress.md."
     },
     {
       "feature": "Surface maps",
@@ -4200,8 +4200,8 @@
     {
       "feature": "Distortion camera types",
       "status": "Approximate",
-      "evidence": "Runtime bypass guards, shader-only rendering, per-eye texture tests",
-      "reason_or_fallback": "XR, reflection and preview cameras use the shader-only approximation rather than the MonoBehaviour compositor. Scene-view compositor application is configurable. Actual headset/mirror combinations need client verification; a nested camera during another camera's compositor can inherit its suppression flag."
+      "evidence": "Mono image-effect, SceneView option, XR/preview/reflection guards and seven actual nested-camera/disable rendering regressions on both editors and D3D11/12",
+      "reason_or_fallback": "Unsupported compositor cameras use shader-only distortion. Camera-wide scoped state now prevents unconfigured nested Game/Reflection/Preview cameras from inheriting another compositor's suppression flag, and restores the parent/external state after nesting or disable. Actual XR/runtime invocation remains separate; see ExactParityProgress.md."
     },
     {
       "feature": "RenderGraph",

@@ -329,6 +329,7 @@ public sealed class NovaBuiltInUberUnlitDepthSmokeTests
             camera.depthTextureMode |= DepthTextureMode.Depth;
             camera.transform.position = new Vector3(0f, 0f, -2f);
             camera.targetTexture = target;
+            NovaDepthFadeTestCamera.UseEyeDistanceRanges(camera, new[] { material });
             camera.Render();
 
             var previous = RenderTexture.active;

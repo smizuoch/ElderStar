@@ -1,22 +1,22 @@
 {
   "schema_version": 1,
   "audit_date": "2026-10-15",
-  "assessed_source_commit": "c4c75a971329a70eef3ea06b6f21228cd739a86c",
+  "assessed_source_commit": "3b764095b35121828b1d295ac106b2796455f7fe",
   "package_version": "0.1.6",
   "reference": "NOVA 3.6.0 / 1c6b88729f91c852c164ef71a32cc2bce83a1892",
   "all_inputs_reproduction_percent": null,
   "undefined_reason": "No closed input domain, weighting measure or exhaustive equivalence proof. Finite sample rates do not determine universal reproduction.",
   "features": {
     "counts": {
-      "Exact": 28,
-      "Approximate": 35,
+      "Exact": 34,
+      "Approximate": 29,
       "Unsupported": 0,
       "Not Applicable": 3
     },
     "exact_classification_share": {
-      "numerator": 28,
+      "numerator": 34,
       "denominator": 63,
-      "percent": 44.44444444444444
+      "percent": 53.96825396825397
     },
     "all_inputs_reproduction_percent": null
   },
@@ -107,9 +107,9 @@
     },
     {
       "feature": "Mirror samplers",
-      "status": "Approximate",
-      "evidence": "Original-image comparison and 36 Lit surface-sampler cases",
-      "reason_or_fallback": "D3D11/12 uses matching point/linear/trilinear mirror samplers. Coupled-sampler backends use mirrored UVs and texture-import filtering; configure matching filters on those platforms."
+      "status": "Exact",
+      "evidence": "Original-image comparison, 36 Lit surface-sampler cases and the 2026-10-15 source reassessment",
+      "reason_or_fallback": "Native point/linear/trilinear mirror sampler states match on the matrix's Windows D3D11/12 scope. Coupled-sampler backends outside this scope retain mirrored UVs and texture-import filtering; they are not certified exact. See ExactParityProgress.md."
     },
     {
       "feature": "Channel extraction",
@@ -131,9 +131,9 @@
     },
     {
       "feature": "Tint rim",
-      "status": "Approximate",
-      "evidence": "Shared rim/tint rendering tests",
-      "reason_or_fallback": "World normal/view normalization and interpolation match the original in the 2022 D3D coarse-mesh capture. No independent rim mismatch was reproduced; other backends remain unverified."
+      "status": "Exact",
+      "evidence": "96 retained original/port rim images across both editors/color spaces, plus 128 seeded GPU curve probes per graphics path",
+      "reason_or_fallback": "Original normalized world normal/view interpolation, abs(dot), progress/sharpness/inverse and tint math match on verified D3D paths. Degenerate normal/view vectors remain outside a portable normalization contract; see ExactParityProgress.md."
     },
     {
       "feature": "Flow targets",
@@ -173,9 +173,9 @@
     },
     {
       "feature": "Rim and luminance transparency",
-      "status": "Approximate",
-      "evidence": "Shared transparency and interaction tests",
-      "reason_or_fallback": "Luminance math is preserved; the rim normal/view conditions also match the original in the coarse-mesh captures. The retained progress/sharpness/inverse controls remain unchanged."
+      "status": "Exact",
+      "evidence": "Shared transparency/interaction rendering plus 128 seeded GPU comparisons with original GetRimValue",
+      "reason_or_fallback": "Original luminance weights, rim normal/view interpolation, inverse/progress/sharpness and alpha multiplication are preserved. Source lighting and transparent ordering remain assessed in their own rows. See ExactParityProgress.md."
     },
     {
       "feature": "Soft particles",
@@ -185,9 +185,9 @@
     },
     {
       "feature": "Depth fade",
-      "status": "Approximate",
-      "evidence": "Camera distance/range and combined-feature tests",
-      "reason_or_fallback": "Uses explicit eye depth and the original near/far/width controls. Camera projection differs by pipeline; tune the same eye-space distances after migration."
+      "status": "Exact",
+      "evidence": "35 original-formula GPU image cases covering all five visible shaders, both editors and D3D11/12; legacy generated-helper regression",
+      "reason_or_fallback": "Matches original projected-depth linearization and near/far/signed-width math, including orthographic/oblique behavior and widths below 1e-4. No extra varying, pass or sample. Zero-width singularities retain GPU arithmetic. Old generated source retains its vector helper and needs regeneration for the new behavior; see ExactParityProgress.md."
     },
     {
       "feature": "Vertex deformation",
@@ -215,9 +215,9 @@
     },
     {
       "feature": "Fog",
-      "status": "Approximate",
-      "evidence": "24 perspective/orthographic Linear/Exp/Exp2 cases and ForwardAdd diagnostics",
-      "reason_or_fallback": "Uses the original vertex clip-Z fog coefficient and interpolation, including EXP scaling. ForwardAdd fades toward black. The original orthographic/oblique clip-depth behavior is retained, even when it produces no fog; pipeline camera/fog inputs and other backends still require matching."
+      "status": "Exact",
+      "evidence": "288 retained original/port fog images across both editors/color spaces, plus ForwardAdd tests",
+      "reason_or_fallback": "Original clip-Z vertex coefficient/interpolation and Linear/Exp/Exp2 mixing match; ForwardAdd fades to black. Matching camera/fog inputs are required. Original orthographic/oblique behavior is intentionally retained. See ExactParityProgress.md."
     },
     {
       "feature": "Metallic and specular workflows",
@@ -227,9 +227,9 @@
     },
     {
       "feature": "Normal maps",
-      "status": "Approximate",
-      "evidence": "Imported DXT5 packing, normal scale and 2D/array/3D tests",
-      "reason_or_fallback": "Unity normal packing is decoded before XY scale, as in the original. The normal is normalized after interpolation before the tangent-space transform; interpolated tangent/binormal are not independently normalized, matching original fragUnlit/fragLit ordering. Original normal-map and parallax handedness differ and are preserved separately. Supply valid tangents; see LowCostLightingParity.md."
+      "status": "Exact",
+      "evidence": "48 retained original/port Lit normal images across both editors/color spaces, DXT5 packing/scale and 2D/array/3D tests",
+      "reason_or_fallback": "Original unpacking and XY scale, vertex tangent/binormal generation, interpolation and final normalization order match. Normal-map handedness remains distinct from parallax as in original NOVA. Supply valid tangents/normals; lighting inputs are assessed separately. See ExactParityProgress.md."
     },
     {
       "feature": "Surface maps",
@@ -372,8 +372,8 @@
     {
       "feature": "Distortion camera types",
       "status": "Approximate",
-      "evidence": "Runtime bypass guards, shader-only rendering, per-eye texture tests",
-      "reason_or_fallback": "XR, reflection and preview cameras use the shader-only approximation rather than the MonoBehaviour compositor. Scene-view compositor application is configurable. Actual headset/mirror combinations need client verification; a nested camera during another camera's compositor can inherit its suppression flag."
+      "evidence": "Mono image-effect, SceneView option, XR/preview/reflection guards and seven actual nested-camera/disable rendering regressions on both editors and D3D11/12",
+      "reason_or_fallback": "Unsupported compositor cameras use shader-only distortion. Camera-wide scoped state now prevents unconfigured nested Game/Reflection/Preview cameras from inheriting another compositor's suppression flag, and restores the parent/external state after nesting or disable. Actual XR/runtime invocation remains separate; see ExactParityProgress.md."
     },
     {
       "feature": "RenderGraph",
@@ -1062,16 +1062,16 @@
     "Assets/Nova/Runtime/Core/Scripts/BuiltInDistortionPass.cs": "131c2b2c537654740c00acac4c8ef183e11f379182bdd1e4565a793d4e818f4d",
     "Assets/Nova/Runtime/Core/Scripts/DistortedUvBufferPass.cs": "cf9f87cfbb91ad0ca3bf17c5c3756bd1c9a8901060aad0ac7833cce80c68bebe",
     "Assets/Nova/Runtime/Core/Scripts/DistortionContextItem.cs": "0d4642dd144dfabd839e05c932755cd314bff3247f91061e75e6a39c1ce24ad5",
-    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "999e8ad2f60ebef99bf8226c4a95be27efbe37a7f4cecc8cb966f378332699de",
+    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "d447e496d8a132b5c5273f8bc1a9cc85a05246ee3945a2e965580aad729d9f0e",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesApplyDistortion.shader": "5ae85d64ef38ce3ab1e7a5bc253bfbf40174bdb650656ed4a1298d396c9a7f63",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesDistortion.shader": "08330070e32f81ec44ed94aaa117d0a2a1499b0fff529b60c53bc22ab775805f",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader": "bdad30eac8e4c040839152f8739641d3a4ce3bddb35ee725851b2a125077b281",
-    "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader": "d6a04f3f0550f929a1926717f6fad4f39b275bfafca4baffd186402456e3d966",
+    "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader": "3b3c73f10d6b374ed5508a0f46240b28e264332c26609d7bd0df68a06b87c207",
     "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader": "8e6e11d719255bac73d8430083975b15d63e2049d9d60208915edcf631c9b8f3",
-    "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "7020a1a11add57c9defe31414cbfe1fb6fbe23200529ca444ec4a8e007deaaec",
+    "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "7a99449be72fbbcc3fde42d304f63512957ba065a6c08d82f3336ca3ca10c69a",
     "Assets/Nova/package.json": "e80ce609f856018a36c91681638e0b63f19d05dc61fabc886990f8afcde9436d",
     "Assets/Tests/Editor/Reference/EditorContract.json": "7b1857d640116db327f73324e4b20e8697249840458243697e3bc0b339fbea03",
-    "Documentation/BuiltInCompatibilityMatrix.md": "3f81c7871e8eb6dcadd6082aa3e4d99185d1b2306eba3389741c16c0739ddd06",
+    "Documentation/BuiltInCompatibilityMatrix.md": "0cc74fe776f80367817925db4cb2f68da11d8210b2aff20ddbd4666a67e5655e",
     "Documentation/Validation/AssetCorpus/unity2022-gamma.json": "7abef19ac771bbc34fe335ee4d11e886c1d6c33c174f202440e0ff5e0225ed10",
     "Documentation/Validation/AssetCorpus/unity2022-linear.json": "4ad69b38b7463499003747425845d3bd75353069ed2ccb2d01a082de4a2779c2",
     "Documentation/Validation/AssetCorpus/unity6-gamma.json": "d271ba4a901d6e9a83409c9e9fbd48b7506cf6331b4642ab7ab35b1141836b0d",
@@ -1084,7 +1084,7 @@
     "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json": "63ac4d55e23428dc307f1a79aee70eb6716711ba0f1ee6d9e3773b07e936eb4c",
     "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json": "67cb365d546c984924b864aa2101b8a2a271e7020615aab69af40227130d1b8d",
     "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json": "19fc49c032b1ccc1ed34902af952047adecec4357d10a6ad8a740f485fa3e3b1",
-    "Documentation/Verification/ApiFeatureCoverage20261013.json": "1826f477913a5d59f4ef66058fe007216b9b49b95c6ebcb75666fe947e7653fa",
+    "Documentation/Verification/ApiFeatureCoverage20261013.json": "212646cb8cefdcfa1b330c9ed0c69db7fd1fb7c1db964a854547e13bfc8e55b5",
     "Documentation/Verification/Randomized20261013/2022-api-observations.json": "4e99391ca56fb5eb4fd71900147ffe7494ebbc9ebadc6eb1ebd1c2a8c6a0e6dc",
     "Documentation/Verification/Randomized20261013/2022-gamma-disabled-metrics.json": "f60cf29269350eec914287a612546d755392c4f18a5ff3fdb8ef6c3a9c9c4d9e",
     "Documentation/Verification/Randomized20261013/2022-gamma-green-metrics.json": "bf7e86a1f038775e9d77c4ab7fd689d5d71c086bbd3c85949baccad53843cd35",

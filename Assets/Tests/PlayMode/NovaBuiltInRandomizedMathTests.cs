@@ -45,6 +45,26 @@ public sealed class NovaBuiltInRandomizedMathTests
         finally {Object.DestroyImmediate(depth);}
     }
 
+    [Test]
+    public void RimCurveMatchesOriginalForSeededProgressSharpnessAndInverse()
+    {
+        var random = new System.Random(20261015);
+        for (var i = 0; i < 128; i++)
+        {
+            var input = new Vector4((float)random.NextDouble() * 2 - .5f,
+                (float)random.NextDouble() * 2 - .5f,
+                (float)random.NextDouble() * 1.5f - .25f, i % 2);
+            var result = Probe(3, input);
+            Assert.That(result.r, Is.EqualTo(result.g).Within(.000002f), "Original GetRimValue, sample " + i);
+        }
+    }
+
+    [Test]
+    public void PreviouslyGeneratedShaderRetainsVectorDepthHelperContract()
+    {
+        Assert.That(Probe(4, new Vector4(.25f, .5f, 2.5f, 1)).r, Is.EqualTo(.5f).Within(.001f));
+    }
+
     private static Color Probe(float mode,Vector4 input,Texture depth=null)
     {
         var shader=Shader.Find("Hidden/NovaBuiltInTests/MathProbe");Assert.That(shader,Is.Not.Null);

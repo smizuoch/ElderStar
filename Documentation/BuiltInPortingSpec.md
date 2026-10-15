@@ -15,6 +15,13 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+Exact classification follow-up (2026-10-15):
+
+- [x] Reproduce and fix nested-camera distortion suppression, including reflected/preview cameras and component shutdown during rendering.
+- [x] Compare feature math with original source and GPU output; fix projected depth fade and signed/small widths, retaining old generated-helper source compatibility.
+- [x] Record evidence-backed reassessment of six rows and individual acceptance work for all 29 remaining Approximate rows; see ExactParityProgress.md.
+- [x] Run both Unity suites, D3D12 probes and shader diagnostics; all 18 measured GPU scenarios pass the unchanged cost gate. Review and commit green changes for the authorized main merge/push.
+
 Runtime API compatibility follow-up (2026-10-15):
 
 - [x] Restore the original pipeline-independent distortion constructors and Setup contract with real Built-in drawing, without adding fake engine types or a pipeline dependency.
@@ -42,6 +49,8 @@ Low-cost lighting parity (approved plan, 2026-10-14):
 - [x] Add opt-in Editor diagnostic views and executable Built-in distortion pass APIs.
 - [x] Verify D3D foveation scope, all Unity 2022/6 regressions, original images, SDK/AAO bundles and offscreen GPU/CPU costs.
 - [x] Document remaining limits, review each green change and prepare tested commits for the authorized main merge/push.
+
+Next implementation TODO: reproduce the remaining soft-particle projection/intensity differences and separate local/global probe inputs against original NOVA. Exact 100% remains open; the 29 differences are not resolved by relabeling alternatives.
 
 No new clustered renderer or APV file/streaming backend is included. Ordinary avatar paths must remain scriptless; optional Unity camera/Canvas helpers must not be attached to avatars.
 

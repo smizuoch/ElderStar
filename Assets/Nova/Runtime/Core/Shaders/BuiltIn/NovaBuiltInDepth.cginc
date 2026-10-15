@@ -75,12 +75,23 @@ float NovaSoftParticleFactor(float4 screenPosition, float intensity)
 float NovaComputeDepthFadeFactor(float particleDepth, float nearDistance, float farDistance, float width)
 {
     float distanceToRange = min(particleDepth - nearDistance, farDistance - particleDepth);
-    return saturate(distanceToRange / max(width, 1.0e-4));
+    // Original NOVA accepts signed widths, including values below 1e-4.
+    return saturate(distanceToRange / width);
 }
 
+float NovaDepthFadeFactor(float nearDistance, float farDistance, float width, float rawDepth)
+{
+    // Match Particles.hlsl, including its perspective linearization on ortho
+    // and oblique projections. SV_POSITION.z already contains clip z / w on D3D.
+    return NovaComputeDepthFadeFactor(LinearEyeDepth(rawDepth), nearDistance, farDistance, width);
+}
+
+// Legacy generated Built-in shaders carried eye depth in screenPosition.z.
+// Keep that source contract; newly generated shaders use the scalar overload.
 float NovaDepthFadeFactor(float nearDistance, float farDistance, float width, float4 screenPosition)
 {
-    return NovaComputeDepthFadeFactor(NovaFragmentEyeDepth(screenPosition), nearDistance, farDistance, width);
+    float distanceToRange = min(screenPosition.z - nearDistance, farDistance - screenPosition.z);
+    return saturate(distanceToRange / max(width, 1.0e-4));
 }
 
 #endif

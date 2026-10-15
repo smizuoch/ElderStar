@@ -1,0 +1,269 @@
+{
+  "source_commit": "3b764095b35121828b1d295ac106b2796455f7fe",
+  "baseline_commit": "d9636c02f833c4ae35bd59827d68dc5529cc0f85",
+  "package_version": "0.1.6 plus source fixes; no new tarball release",
+  "red_runs": [
+    {
+      "name": "camera-red2022",
+      "total": 8,
+      "passed": 3,
+      "failed": 5,
+      "failures": [
+        {
+          "name": "Nova.Tests.PlayMode.NovaNestedDistortionCameraTests.DisablingLastCompositorInsideChildRestoresExternalState(False)",
+          "message": "  Expected: 0\n  But was:  0.375f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaNestedDistortionCameraTests.DisablingLastCompositorInsideChildRestoresExternalState(True)",
+          "message": "  Expected: 0\n  But was:  1.0f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaNestedDistortionCameraTests.NestedCameraMatchesItsStandaloneFrame(Game,False)",
+          "message": "  Nested camera must retain its own shader/compositor path.\n  Expected: 0\n  But was:  4096\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaNestedDistortionCameraTests.NestedCameraMatchesItsStandaloneFrame(Reflection,False)",
+          "message": "  Nested camera must retain its own shader/compositor path.\n  Expected: 0\n  But was:  4096\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaNestedDistortionCameraTests.NestedCameraMatchesItsStandaloneFrame(Preview,False)",
+          "message": "  Nested camera must retain its own shader/compositor path.\n  Expected: 0\n  But was:  4096\n"
+        }
+      ],
+      "result_sha256": "8327cce4b0c70899bed8b4bcd1861a185908b10e445ae8b521ed8023f0b71820"
+    },
+    {
+      "name": "depth-red6c",
+      "total": 28,
+      "passed": 12,
+      "failed": 16,
+      "failures": [
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberLit\").FadeMatchesOriginalProjectedDepth(\"orthographic\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.918309867f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberLit\").FadeMatchesOriginalProjectedDepth(\"oblique\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.910530031f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberLit\").FadeMatchesOriginalProjectedDepth(\"negative-width\",1.0f,2.0f,-0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  1.0f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberLit\").FadeMatchesOriginalProjectedDepth(\"thin-width\",2.999995f,4.0f,1E-05.0f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.949932098f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"orthographic\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.918309867f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"oblique\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.910530031f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"negative-width\",1.0f,2.0f,-0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  1.0f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/Particles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"thin-width\",2.999995f,4.0f,1E-05.0f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.949932098f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberLit\").FadeMatchesOriginalProjectedDepth(\"orthographic\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.918309867f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberLit\").FadeMatchesOriginalProjectedDepth(\"oblique\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.910530031f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberLit\").FadeMatchesOriginalProjectedDepth(\"negative-width\",1.0f,2.0f,-0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  1.0f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberLit\").FadeMatchesOriginalProjectedDepth(\"thin-width\",2.999995f,4.0f,1E-05.0f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.949932098f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"orthographic\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.918309867f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"oblique\",0.1f,5.0f,0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.910530031f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"negative-width\",1.0f,2.0f,-0.5f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  1.0f\n"
+        },
+        {
+          "name": "Nova.Tests.PlayMode.NovaOriginalDepthFadeTests(\"Nova/UIParticles/UberUnlit\").FadeMatchesOriginalProjectedDepth(\"thin-width\",2.999995f,4.0f,1E-05.0f)",
+          "message": "  Original clip-depth/width formula must control actual surface alpha.\n  Expected: less than 0.00499999989f\n  But was:  0.949932098f\n"
+        }
+      ],
+      "result_sha256": "07361d1fa2fe9fb32e2bb3744ee4349e913a3ff75b30bdf8cfef895066f7a22a"
+    },
+    {
+      "name": "legacy-red2022",
+      "total": 11,
+      "passed": 10,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "NovaBuiltInRandomizedMathTests.PreviouslyGeneratedShaderRetainsVectorDepthHelperContract",
+          "message": "  Expected: 0.5f +/- 0.00100000005f\n  But was:  0.0f\n"
+        }
+      ],
+      "result_sha256": "47636a1fada9c55e2a439e5fdae14f107b426a85f7e6bc34c76d19848f315dfa"
+    }
+  ],
+  "red_notes": [
+    "The initial camera run includes an invalid DestroyImmediate-in-render-callback test, excluded from production defect claims. The valid failure count was four.",
+    "Initial depth fixture attempts had a specular-only black Lit control; corrected to metallic workflow with visible diffuse witness before the retained red run.",
+    "Legacy helper test reproduces a generated-source call-contract regression introduced by the scalar change; the vector overload preserves old output."
+  ],
+  "runs": [
+    {
+      "name": "final-play2022",
+      "kind": "full PlayMode",
+      "total": 1003,
+      "passed": 1003,
+      "failed": 0,
+      "started": "2026-10-15 01:52:13Z",
+      "duration_seconds": 46.2806765,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "266ed93c333ef7e381100ff0488730093c491a675d4b43e05477b67d051cbcad",
+      "log_sha256": "f1eb3cae3339b99368f833cd359a36be2716f3b57a7232adaba1ada6bebcb1f7"
+    },
+    {
+      "name": "final-play6",
+      "kind": "full PlayMode",
+      "total": 1003,
+      "passed": 1003,
+      "failed": 0,
+      "started": "2026-10-15 01:52:13Z",
+      "duration_seconds": 39.9404427,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "4c5ca0cd4e3224947383e4cae831596407cf3581f66e8c20211e1483e03a4567",
+      "log_sha256": "789d8f0c1bda8a43e90a81af821a954c0832164b583a1b200898086171a3db2b"
+    },
+    {
+      "name": "final-edit2022",
+      "kind": "full EditMode",
+      "total": 500,
+      "passed": 500,
+      "failed": 0,
+      "started": "2026-10-15 01:59:13Z",
+      "duration_seconds": 55.0786229,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "9ef1bfa977823534db5a1561f480037973d2acd20286cfdf342a7685b962ee1e",
+      "log_sha256": "7d24287698137467994b275b54da34582c9b3dd671a2037d174928ea4de483e4"
+    },
+    {
+      "name": "final-edit6",
+      "kind": "full EditMode",
+      "total": 500,
+      "passed": 500,
+      "failed": 0,
+      "started": "2026-10-15 01:59:14Z",
+      "duration_seconds": 53.7558301,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "246428a77a1b0125d355dc999ddb9e475648deb21a59a62a613ae04a071ad263",
+      "log_sha256": "fd4c4299fa3fa4d971d4ec22fcf8c01d1b04a09689973c7dfa99bd2b74388831"
+    },
+    {
+      "name": "d3d12-2022",
+      "kind": "focused D3D12",
+      "total": 53,
+      "passed": 53,
+      "failed": 0,
+      "started": "2026-10-15 01:54:16Z",
+      "duration_seconds": 0.6338983,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "cce1117168a424d8ab3a68338e69021feebb5e832ba1aeb3ae7635183ca01370",
+      "log_sha256": "b8024c9de25abbf023f70a6b3e4e70508a9e8fa0e617e6e75821200b8732a896"
+    },
+    {
+      "name": "d3d12-6",
+      "kind": "focused D3D12",
+      "total": 53,
+      "passed": 53,
+      "failed": 0,
+      "started": "2026-10-15 01:54:17Z",
+      "duration_seconds": 0.3908843,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "0bb42c912d23e4891317e0afdd726121cb9fe7bc2bebf11a70045c670efa92fa",
+      "log_sha256": "a675076400fdea57530f75dbaf70d8f4aeef1a65d8ed3dee58bf688284f036a2"
+    },
+    {
+      "name": "camera-lifetime2022",
+      "kind": "focused lifetime follow-up",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "started": "2026-10-15 02:00:44Z",
+      "duration_seconds": 0.1443089,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "fb7e1dc37a71ee1307ff3a5ad63a437c6d3bffdba5d2ec844525070dbf444310",
+      "log_sha256": "d09083cb926dd2b8af195e93bcf322c4c62800b8af3d931aaedc13ae5584b1bc"
+    },
+    {
+      "name": "camera-lifetime6",
+      "kind": "focused lifetime follow-up",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "started": "2026-10-15 02:00:46Z",
+      "duration_seconds": 0.1362861,
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "result_sha256": "003610d08a625e76077f77dae8cfbc6c63f0b1d8e72c7066e00770f33e4705cd",
+      "log_sha256": "865c59bf508bd9ddf5ad78073185497eaaf3f2dcf3caf3eaf2fdc28e1520cb00"
+    }
+  ],
+  "coverage_notes": [
+    "Full graphics suite contained 1003 cases; the follow-up runs add one distinct owner-destruction test, rechecking all 8 camera cases.",
+    "128 seeded GetRimValue inputs are checked within one test. Test count is not input-domain coverage.",
+    "D3D12 runs contain 53 cases, including the original 7 camera cases; owner destruction was added afterward and checked on D3D11.",
+    "Historical original-image evidence is retained, not recaptured or modified.",
+    "No new SDK/AAO build, VRC upload, package deployment or physical XR acceptance in this follow-up."
+  ],
+  "runtime_source_sha256": {
+    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "d447e496d8a132b5c5273f8bc1a9cc85a05246ee3945a2e965580aad729d9f0e",
+    "Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInDepth.cginc": "86e005ecb619400df920f35e4f937b529cd039b3040cbfa52cf02a215fb0b81f",
+    "Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInDistortion.cginc": "ff7b199c3f98e0e3dd78ddf458dc5c7ebe5284ba54b62854f5053ef14b57c47c",
+    "Assets/Nova/Runtime/Core/Shaders/BuiltIn/NovaBuiltInParticleFeatures.cginc": "03814116ec2190dbae35603af3bf9350624937db31d2143519a4f4a871181198",
+    "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader": "3b3c73f10d6b374ed5508a0f46240b28e264332c26609d7bd0df68a06b87c207",
+    "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "7a99449be72fbbcc3fde42d304f63512957ba065a6c08d82f3336ca3ca10c69a"
+  },
+  "mirror_source_matches": true,
+  "python_tests": {
+    "parity": 20,
+    "documentation": 4,
+    "performance": 11
+  },
+  "gpu": {
+    "report": "gpu-raw.json.gz",
+    "summary": "gpu-summary.json",
+    "source_hashes": "gpu-source-hashes.json",
+    "ordinary_scenarios": 18,
+    "accepted": 18,
+    "blocks": 216,
+    "width": 1920,
+    "height": 1080,
+    "concurrent_validation_editors": 0,
+    "vrchat_or_steamvr_processes_detected": false,
+    "user_applications_modified": false,
+    "displayed_window": false,
+    "scope": "Four Uber shaders, depth keyword off/on, overlap/reflected view, clipped UI Lit with eight lights. Does not measure Distortion GrabPass or compositor callback CPU."
+  }
+}
