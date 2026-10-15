@@ -931,7 +931,7 @@ Shader "Nova/Particles/UberUnlit"
                 #endif
 
                 #if defined(_DEPTH_FADE_ENABLED)
-                color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.screenPosition);
+                color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.vertex.z);
                 #endif
 
                 #ifdef _ALPHATEST_ENABLED

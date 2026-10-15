@@ -2043,6 +2043,7 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
             camera.farClipPlane = 10f;
             camera.transform.position = new Vector3(0f, 0f, -2f);
             camera.targetTexture = target;
+            NovaDepthFadeTestCamera.UseEyeDistanceRanges(camera, ownedObjects.OfType<Material>());
             camera.Render();
 
             RenderTexture.active = target;
@@ -2122,6 +2123,7 @@ public sealed class NovaBuiltInUIParticlesUberUnlitSmokeTests
             camera.depthTextureMode |= DepthTextureMode.Depth;
             camera.transform.position = new Vector3(0f, 0f, -2f);
             camera.targetTexture = target;
+            NovaDepthFadeTestCamera.UseEyeDistanceRanges(camera, new[] { material });
             camera.Render();
 
             RenderTexture.active = target;

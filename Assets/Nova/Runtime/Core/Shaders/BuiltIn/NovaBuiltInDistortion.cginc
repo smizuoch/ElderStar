@@ -135,7 +135,7 @@ half2 NovaDistortionOffset(v2f i)
     offset *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity);
     #endif
     #if defined(_DEPTH_FADE_ENABLED)
-    offset *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.screenPosition);
+    offset *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.pos.z);
     #endif
     return offset;
 }

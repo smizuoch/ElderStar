@@ -235,6 +235,7 @@ public sealed class NovaBuiltInUberUnlitInteractionSmokeTests
 
             var camera = cameraObject.AddComponent<Camera>();
             ConfigureCamera(camera, target, background ?? new Color(0.01f, 0.01f, 0.01f, 1f));
+            NovaDepthFadeTestCamera.UseEyeDistanceRanges(camera, new[] { material });
             camera.Render();
             Readback(target, readback);
 
@@ -287,6 +288,7 @@ public sealed class NovaBuiltInUberUnlitInteractionSmokeTests
             var camera = cameraObject.AddComponent<Camera>();
             ConfigureCamera(camera, target, Color.black);
             camera.depthTextureMode |= DepthTextureMode.Depth;
+            NovaDepthFadeTestCamera.UseEyeDistanceRanges(camera, new[] { material });
             camera.Render();
             Readback(target, readback);
 
@@ -348,6 +350,7 @@ public sealed class NovaBuiltInUberUnlitInteractionSmokeTests
 
             var camera = cameraObject.AddComponent<Camera>();
             ConfigureCamera(camera, target, Color.black);
+            NovaDepthFadeTestCamera.UseEyeDistanceRanges(camera, new[] { material });
             camera.Render();
             Readback(target, readback);
             return readback;

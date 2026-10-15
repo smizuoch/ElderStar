@@ -645,7 +645,7 @@ half4 frag(v2f input) : SV_Target
     i.customCoord1 = input.customCoord1; i.customCoord2 = input.customCoord2;
     i.color = input.color;
     float3 interpolatedNormalWS = float3(i.baseUvAndProgress.w, i.tintUvAndProgress.w, i.parallaxUvAndProgress.w);
-    #if defined(_SOFT_PARTICLES_ENABLED) || defined(_DEPTH_FADE_ENABLED) || defined(NOVA_DEPTH_NORMALS)
+    #if defined(_SOFT_PARTICLES_ENABLED) || defined(NOVA_DEPTH_NORMALS)
     // Reconstruct from the world position already carried for lighting. Keeping a
     // separate screen-position interpolator exceeds SM3.5's limit with cookie shadows.
     float4 screenPosition = NovaComputeScreenPos(NovaWorldToClipPos(i.positionWS));
@@ -797,7 +797,7 @@ half4 frag(v2f input) : SV_Target
     #endif
 
     #if defined(_DEPTH_FADE_ENABLED)
-    color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, screenPosition);
+    color.a *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, input.pos.z);
     #endif
 
     #if defined(NOVA_UI_LIT)
