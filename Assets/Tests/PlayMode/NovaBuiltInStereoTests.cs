@@ -86,7 +86,9 @@ namespace Nova.Tests.PlayMode
                     cmd.SetSinglePassStereo(SinglePassStereoMode.Instancing);
                     cmd.SetGlobalVector("_ZBufferParams", new Vector4(999, 1, 9.99f, .01f));
                     cmd.SetGlobalConstantBuffer(stereoGlobals, Shader.PropertyToID("UnityStereoGlobals"), 0, 68 * 16);
-                    var drawMatrix = Matrix4x4.identity;
+                    // With identity projection, z=0 is the far plane in reversed Z.
+                    // Place soft particles between the near/far depth slices.
+                    var drawMatrix = softParticles ? Matrix4x4.Translate(new Vector3(0,0,.5f)) : Matrix4x4.identity;
                     if (depthPass != null)
                     {
                         var near = Matrix4x4.Translate(new Vector3(0, 0, SystemInfo.usesReversedZBuffer ? .75f : .25f));

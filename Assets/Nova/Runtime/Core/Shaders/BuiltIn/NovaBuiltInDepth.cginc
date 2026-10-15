@@ -64,6 +64,17 @@ float NovaComputeSoftParticleFactor(float sceneDepth, float particleDepth, float
     return saturate((sceneDepth - particleDepth) / max(intensity, 1.0e-4));
 }
 
+// Original NOVA linearizes both projected depths with _ZBufferParams, even
+// for orthographic/oblique cameras. Keep physical depth helpers for occlusion.
+float NovaSoftParticleFactor(float4 screenPosition, half intensity, float rawDepth)
+{
+    float sceneDepth = LinearEyeDepth(NovaSampleSceneDepth01(NovaScreenUV(screenPosition)));
+    float particleDepth = LinearEyeDepth(rawDepth);
+    half inverseIntensity = 1.0 / intensity;
+    return saturate((sceneDepth - particleDepth) * inverseIntensity);
+}
+
+// Legacy generated source stores physical eye depth in screenPosition.z.
 float NovaSoftParticleFactor(float4 screenPosition, float intensity)
 {
     float2 uv = NovaScreenUV(screenPosition);

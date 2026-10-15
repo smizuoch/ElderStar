@@ -793,7 +793,7 @@ half4 frag(v2f input) : SV_Target
     #endif
 
     #if defined(_SOFT_PARTICLES_ENABLED)
-    color.a *= NovaSoftParticleFactor(screenPosition, _SoftParticlesIntensity);
+    color.a *= NovaSoftParticleFactor(screenPosition, _SoftParticlesIntensity, input.pos.z);
     #endif
 
     #if defined(_DEPTH_FADE_ENABLED)

@@ -132,7 +132,7 @@ half2 NovaDistortionOffset(v2f i)
         _AlphaTransitionProgress + NovaGetCustomCoord(_AlphaTransitionProgressCoord, i.customCoord1, i.customCoord2), _DissolveSharpness);
     #endif
     #if defined(_SOFT_PARTICLES_ENABLED)
-    offset *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity);
+    offset *= NovaSoftParticleFactor(i.screenPosition, _SoftParticlesIntensity, i.pos.z);
     #endif
     #if defined(_DEPTH_FADE_ENABLED)
     offset *= NovaDepthFadeFactor(_DepthFadeNear, _DepthFadeFar, _DepthFadeWidth, i.pos.z);

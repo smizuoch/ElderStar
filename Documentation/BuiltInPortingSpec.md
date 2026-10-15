@@ -15,6 +15,13 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+Soft particles / ambient / SDK acceptance (2026-10-15):
+
+- [ ] Reproduce original soft-particle projected-depth and signed/small-intensity differences; fix and retain generated-helper compatibility.
+- [ ] Reproduce separate local/global probe inputs; implement and verify a practical correction with explicit avatar constraints.
+- [ ] Re-evaluate all 29 remaining rows against implementation and required external data; retain unresolved counterexamples.
+- [ ] Run both editors, graphics diagnostics, current-source SDK/AAO bundles and hidden cost measurements; review, commit and merge/push tested changes.
+
 Exact classification follow-up (2026-10-15):
 
 - [x] Reproduce and fix nested-camera distortion suppression, including reflected/preview cameras and component shutdown during rendering.
