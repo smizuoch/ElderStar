@@ -1,6 +1,6 @@
 # ElderStar: Multifunctional Particle Shaders for Built-in
 
-[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](Assets/LICENSE.md)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](Assets/LICENSE)
 [![Unity](https://img.shields.io/badge/Unity-2022.3%2B-green.svg)](#requirements)
 [![Built-in](https://img.shields.io/badge/Render%20Pipeline-Built--in-blue.svg)](#requirements)
 
