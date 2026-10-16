@@ -15,6 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+ElderStar README and own captures (2026-10-16):
+
+- [x] Match the upstream introduction/authoring-reference structure, with current ElderStar installation, unchanged-material import and honest Built-in/VRChat limits.
+- [x] Add failing guide/link/media-provenance checks, capture real ElderStar effects and Inspector sections, and inspect the rendered README.
+- [x] Verify documentation and source contracts, review screenshots/captions and commit the documentation-only change. See ElderStarReadme.md for capture provenance, checks and remaining validation scope.
+
 ElderStar package identity (2026-10-16):
 
 - [x] Require `me.smizuoch.elderstar` and author `smizuoch`; keep original asset GUIDs, shader names and API contracts.

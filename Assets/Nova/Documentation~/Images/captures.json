@@ -1,0 +1,203 @@
+{
+  "package_id": "me.smizuoch.elderstar",
+  "package_version": "0.1.8",
+  "unity": "2022.3.22f1",
+  "graphics_api": "Direct3D11",
+  "color_space": "Gamma",
+  "date": "2026-10-16",
+  "shader_errors": 0,
+  "upstream_samples_commit": "1c6b88729f91c852c164ef71a32cc2bce83a1892",
+  "capture_script_sha256": "d3dd41ea8d6f9f6cd6c990551c5db3d8c006ab01aa6be019d05d84c6d2404785",
+  "images": {
+    "AlphaTransition.png": {
+      "source": "ElderStar Inspector drawing code: AlphaTransition",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 324,
+      "sha256": "8e8f743ec51b9439169d485ebcf51131a02a954b68c214cc5884ae8e79e04549"
+    },
+    "BaseMap.png": {
+      "source": "ElderStar Inspector drawing code: BaseMap",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 284,
+      "sha256": "7c2ebcd38293f863e33651058f0ed2e9d876d122456eda51f5a3afcc280965b4"
+    },
+    "CanvasLighting.png": {
+      "source": "ElderStar Inspector drawing code: CanvasLighting",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 199,
+      "sha256": "a1c3df370c19f92b892e4d0df2d8b82bdbf0b23b1f1fdf8faa182d4cc665776b"
+    },
+    "ColorCorrection.png": {
+      "source": "ElderStar Inspector drawing code: ColorCorrection",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 184,
+      "sha256": "b5d50f61654479deb77a6f9ed5086befbc59260333ecc3d55dec7a8e36e75461"
+    },
+    "Distortion.png": {
+      "source": "ElderStar Inspector drawing code: Distortion",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 286,
+      "sha256": "bcca5dbacae1256c4469131a47c211ce7ddcbaac243c9910a9ba2000ad24ead2"
+    },
+    "DistortionAlpha.png": {
+      "source": "ElderStar Inspector drawing code: DistortionAlpha",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 266,
+      "sha256": "849c03bfce77cfdbd3a04d76cdf492affd862a956b7bc7c4543b019338e08fae"
+    },
+    "DistortionFlow.png": {
+      "source": "ElderStar Inspector drawing code: DistortionFlow",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 246,
+      "sha256": "f9e1951765e1083ef5a6213d44765a129e97e41a8575705b6bf0e760e25dd0d1"
+    },
+    "DistortionTransparency.png": {
+      "source": "ElderStar Inspector drawing code: DistortionTransparency",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 178,
+      "sha256": "c5dd8b671526725f8710cb038927afd95eee2aa5c0619568dfbacfd0a7ba15ed"
+    },
+    "Emission.png": {
+      "source": "ElderStar Inspector drawing code: Emission",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 176,
+      "sha256": "d69832922d0a37f26e404459a4e0e37f6df38765bf3cf057a075f7d90bffc698"
+    },
+    "FlowMap.png": {
+      "source": "ElderStar Inspector drawing code: FlowMap",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 264,
+      "sha256": "945617bd89bc340c0f798b5427ddfd24a2ddbd709779801cf963022351090666"
+    },
+    "LitSettings.png": {
+      "source": "ElderStar Inspector drawing code: LitSettings",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 316,
+      "sha256": "bc7dc0aff5cd87ea42b3a190f3271ddf7dde0f7455db45479b10d9fd81931392"
+    },
+    "ParallaxMap.png": {
+      "source": "ElderStar Inspector drawing code: ParallaxMap",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 244,
+      "sha256": "091608aa2db0bec5f75e47f411efbdc2684db09fb3fed8eed8946c7e33d87dea"
+    },
+    "RenderSettings.png": {
+      "source": "ElderStar Inspector drawing code: RenderSettings",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 236,
+      "sha256": "fd51d8d4a72bd393f11bab83faae5b4f39f92d98f247aad43e2544deb3982ecb"
+    },
+    "ShadowCaster.png": {
+      "source": "ElderStar Inspector drawing code: ShadowCaster",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 156,
+      "sha256": "484f4bec226eb04a1443adb44ddfd0a103713cf780e142c4ac656ee0290f7e6c"
+    },
+    "SurfaceMaps.png": {
+      "source": "ElderStar Inspector drawing code: SurfaceMaps",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 192,
+      "sha256": "2a27287e15744b48b56852b26de505e418a0cbba463a79c857f6551635d7d32b"
+    },
+    "TintColor.png": {
+      "source": "ElderStar Inspector drawing code: TintColor",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 236,
+      "sha256": "4a2ab9005d11940e499b3a8ad406f6f99743f02e462c25ea35fcc26cd3b03303"
+    },
+    "Transparency.png": {
+      "source": "ElderStar Inspector drawing code: Transparency",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 236,
+      "sha256": "f4822f6b3f2609e9906337334724ff8ef4de02ed133616358a820f1d98a0a303"
+    },
+    "VertexDeformation.png": {
+      "source": "ElderStar Inspector drawing code: VertexDeformation",
+      "capture_method": "Bounded native Unity EditorWindow screenshot (@oai/sky)",
+      "width": 642,
+      "height": 224,
+      "sha256": "d61ad50e8cd7f7a95d39e7a998e9bfb864e5c5567092cb6c4e3945748b079ce2"
+    },
+    "barrier.gif": {
+      "source": "NOVA MIT Assets/Samples/Prefabs/pfb_eff_barrier01.prefab",
+      "author": "@Ugokashiya / CyberAgent, Inc.",
+      "capture_method": "ElderStar Camera.Render -> RenderTexture -> PNG sequence -> GIF",
+      "width": 960,
+      "height": 600,
+      "input_frames": 48,
+      "duration_ms": 2000,
+      "simulation_seconds": [
+        0.1,
+        2.058333333333333
+      ],
+      "max_visible_pixels": 90989,
+      "input_sha256": "bcefe56287d5c62cb07922caa3b27ad062f6e931775e955a33ede5d638c9dbea",
+      "sha256": "d8ca982e781076a0da843df02f1fb962b4aadabc601916e329fdd85fd95eee21"
+    },
+    "ice.gif": {
+      "source": "NOVA MIT Assets/Samples/Prefabs/pfb_eff_ice02.prefab",
+      "author": "@Ugokashiya / CyberAgent, Inc.",
+      "capture_method": "ElderStar Camera.Render -> RenderTexture -> PNG sequence -> GIF",
+      "width": 960,
+      "height": 600,
+      "input_frames": 48,
+      "duration_ms": 2000,
+      "simulation_seconds": [
+        0.1,
+        2.058333333333333
+      ],
+      "max_visible_pixels": 26005,
+      "input_sha256": "b460e501ff5301a67da4e0d03fb72c9e29f6a798b9509c5575a1535b230275fb",
+      "sha256": "2c1fbe7961156f24b4d2b8eedcd756cfb52a44863ae6c88e42d48e9c586f2af8"
+    },
+    "slash.gif": {
+      "source": "NOVA MIT Assets/Samples/Prefabs/pfb_eff_slash01.prefab",
+      "author": "@Ugokashiya / CyberAgent, Inc.",
+      "capture_method": "ElderStar Camera.Render -> RenderTexture -> PNG sequence -> GIF",
+      "width": 960,
+      "height": 600,
+      "input_frames": 48,
+      "duration_ms": 2000,
+      "simulation_seconds": [
+        0.1,
+        2.058333333333333
+      ],
+      "max_visible_pixels": 3541,
+      "input_sha256": "70b909ef060e2f5a9d347f596515a69992234ea5aee62e0d994a450be417eed1",
+      "sha256": "ef641fece7d0019660fb8e9505963da21cd5ac7d8c66f728ae24bdf0f136a116"
+    },
+    "heal.gif": {
+      "source": "NOVA MIT Assets/Samples/Prefabs/pfb_eff_heal01.prefab",
+      "author": "@Ugokashiya / CyberAgent, Inc.",
+      "capture_method": "ElderStar Camera.Render -> RenderTexture -> PNG sequence -> GIF",
+      "width": 960,
+      "height": 600,
+      "input_frames": 48,
+      "duration_ms": 2000,
+      "simulation_seconds": [
+        0.1,
+        2.058333333333333
+      ],
+      "max_visible_pixels": 6830,
+      "input_sha256": "f8e388b978efd7ae0b2f7ae7dedc680cbb76cee93865a52d836f68dd2e16715b",
+      "sha256": "adcc9787dc8c0bbdb3db715bc55ad86c54357c8b8c97cff496bc31f37c70b6ae"
+    }
+  }
+}
