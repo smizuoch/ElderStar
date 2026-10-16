@@ -2,6 +2,9 @@
 
 2026-10-16。依頼に合わせ、公開される表示名とメニューの最上位だけを変更した。
 
+この記録は表示名変更時点のもの。その後の依頼で、0.1.8からパッケージIDを
+`me.smizuoch.elderstar`へ変更した。配布前の変更であり、旧ID向けの公開移行案内は設けない。
+
 - Package Managerの表示名、リポジトリと同梱READMEの見出し: **ElderStar**。
 - **Tools > NOVA** と **Tools > NOVA Shader**: **Tools > ElderStar** に統合。下位の機能名と処理は維持。
 - Add Componentの **NOVA** カテゴリ: **ElderStar**。

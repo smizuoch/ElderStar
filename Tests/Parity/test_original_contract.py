@@ -17,10 +17,11 @@ def tokens(source):
 
 
 class OriginalContractTests(unittest.TestCase):
-    def test_elderstar_display_name_preserves_package_identity(self):
+    def test_elderstar_package_identity_and_maintainer(self):
         manifest = json.loads((PACKAGE / "package.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["displayName"], "ElderStar")
-        self.assertEqual(manifest["name"], "jp.co.cyberagent.nova.builtin")
+        self.assertEqual(manifest["name"], "me.smizuoch.elderstar")
+        self.assertEqual(manifest["author"]["name"], "smizuoch")
 
     def test_every_property_keeps_attributes_label_type_range_default_and_order(self):
         for name, contract in SNAPSHOT["shaders"].items():

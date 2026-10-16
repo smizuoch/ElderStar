@@ -1,7 +1,7 @@
 {
-  "name": "jp.co.cyberagent.nova.builtin",
+  "name": "me.smizuoch.elderstar",
   "displayName": "ElderStar",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "unity": "2022.3",
   "license": "MIT",
   "description": "Built-in Render Pipeline port of NOVA Shader with particle/UI shaders, camera distortion, original editor APIs, migration and an executable showcase.",
@@ -16,6 +16,7 @@
     "com.unity.modules.particlesystem": "1.0.0"
   },
   "author": {
-    "name": "CyberAgent"
+    "name": "smizuoch",
+    "url": "https://smizuoch.me"
   }
 }

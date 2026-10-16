@@ -57,7 +57,7 @@ public static class NovaPackagePlayerBuilder
                 EditorUtility.SetDirty(material);
             }
             AssetDatabase.SaveAssets();
-            var package = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/jp.co.cyberagent.nova.builtin/package.json");
+            var package = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/me.smizuoch.elderstar/package.json");
             var samples = Sample.FindByPackage(package.name, package.version);
             string showcasePath = null;
             foreach (var sample in samples)
