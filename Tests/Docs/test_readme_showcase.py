@@ -12,7 +12,7 @@ PACKAGE = ROOT / "Assets/Nova"
 
 class ReadmeShowcaseTests(unittest.TestCase):
     def test_guide_covers_authoring_and_the_actual_installation(self):
-        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        text = (ROOT / "README_JA.md").read_text(encoding="utf-8")
         for heading in ["セットアップ", "NOVA用の素材をそのまま使う", "使い方",
                         "Uber Unlit", "Uber Lit", "Distortion", "uGUI",
                         "Custom Vertex Streams", "Mesh GPU Instancing", "最適化", "互換性", "ライセンス"]:
@@ -42,7 +42,8 @@ class ReadmeShowcaseTests(unittest.TestCase):
                 self.assertTrue((path.parent / target).exists(), f"{path}: {target}")
 
     def test_guide_media_are_own_captures_with_matching_provenance(self):
-        text = (PACKAGE / "README.md").read_text(encoding="utf-8")
+        guides = [PACKAGE / "README.md", *(PACKAGE / "Documentation~").rglob("README*.md")]
+        text = "\n".join(path.read_text(encoding="utf-8").replace('src="../Images/', 'src="Documentation~/Images/') for path in guides)
         images = re.findall(r'<img[^>]+src="([^"]+)"', text)
         images += re.findall(r"!\[[^\]]*\]\(([^)]+)\)", text)
         images = [p for p in images if "shields.io" not in p]

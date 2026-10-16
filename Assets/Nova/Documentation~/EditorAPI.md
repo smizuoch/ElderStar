@@ -1,19 +1,21 @@
-# Editor APIリファレンス
+# Editor API Reference
 
-Editor用スクリプトから利用するAPIです。コードは`Editor`フォルダー、またはEditor専用asmdefに置いてください。
-既存のNOVA拡張を利用できるよう、クラス名・名前空間を維持しています。
+[English](EditorAPI.md) | [日本語](EditorAPI_JA.md)
+
+Use these APIs from scripts in an `Editor` folder or an Editor-only assembly definition.
+Class names and namespaces are retained so existing NOVA extensions can use them.
 
 ## RendererErrorHandler
 
-名前空間：`Nova.Editor.Core.Scripts`
+Namespace: `Nova.Editor.Core.Scripts`
 
-| メソッド | 説明 |
+| Method | Description |
 | --- | --- |
-| `bool CheckErrorWithMaterial(Material material)` | 指定したマテリアルを使用するParticleSystemRendererに頂点ストリームなどのエラーがある場合、`true`を返します。 |
-| `void FixErrorWithMaterial(Material material)` | そのマテリアルを使用するRendererの必要な頂点ストリームなどを設定します。InspectorのFix Nowに相当します。 |
+| `bool CheckErrorWithMaterial(Material material)` | Returns `true` if ParticleSystemRenderers using this material have errors such as an incorrect vertex stream layout. |
+| `void FixErrorWithMaterial(Material material)` | Configures required vertex streams and related settings on Renderers using this material, like Fix Now in the Inspector. |
 
-シーン内でそのマテリアルを使用するRendererがなければ、チェックは`false`、修正は何もしません。
-通常のマテリアルとTrail Materialの両方が対象です。
+If no Renderer in the scene uses the material, the check returns `false` and the fix does nothing.
+Both regular materials and Trail Materials are checked.
 
 ```csharp
 using Nova.Editor.Core.Scripts;
@@ -31,40 +33,40 @@ public static class EffectStreams
 
 ## OptimizedShaderGenerator
 
-名前空間：`Nova.Editor.Core.Scripts.Optimizer`
+Namespace: `Nova.Editor.Core.Scripts.Optimizer`
 
-`void Generate(string outputFolderPath)`は、Particle Uber Lit/Unlitから最適化シェーダーを生成します。
-生成先は`Assets`以下を指定します。Render Typeの3種類とOptionalShaderPassの組み合わせにより、計48種類を生成します。
-UI・Distortionシェーダーは生成対象ではありません。
+`void Generate(string outputFolderPath)` generates optimized Particle Uber Lit/Unlit shaders.
+Choose an output folder under `Assets`. The three Render Types and OptionalShaderPass combinations produce 48 shaders in total.
+UI and Distortion shaders are not included.
 
 ```csharp
 OptimizedShaderGenerator.Generate("Assets/ElderStarOptimized");
 ```
 
-生成されるincludeは、導入済みのElderStarのパスを参照します。
-ソースパッケージの配置を変えた場合は再生成してください。生成済みの同名ファイルは更新され、GUIDは維持されます。
+Generated includes refer to the installed ElderStar package location.
+Regenerate if you move the source package. Existing files with the same names are updated while retaining their GUIDs.
 
 ## OptimizedShaderReplacer
 
-同じ名前空間の`void Replace(Settings settings)`で、マテリアルを対応する生成済みシェーダーへ差し替えます。
-先に`Generate`を実行してください。該当するシェーダーがない場合は警告を出し、そのマテリアルをスキップします。
+In the same namespace, `void Replace(Settings settings)` replaces materials with matching generated shaders.
+Run `Generate` first. If a matching shader is missing, the replacer logs a warning and skips that material.
 
-| Settingsプロパティ | 説明 |
+| Settings property | Description |
 | --- | --- |
-| `TargetFolderPath` | 対象マテリアルのフォルダー。`Assets`以下を指定します。省略時は`Assets`全体が対象になるため、対象を明示してください。 |
-| `OpaqueRequiredPasses` | Opaqueで保持する任意パス。 |
-| `CutoutRequiredPasses` | Cutoutで保持する任意パス。 |
-| `TransparentRequiredPasses` | Transparentで保持する任意パス。 |
+| `TargetFolderPath` | The material folder under `Assets`. Set it explicitly: the default searches all of `Assets`. |
+| `OpaqueRequiredPasses` | Optional passes to retain for Opaque materials. |
+| `CutoutRequiredPasses` | Optional passes to retain for Cutout materials. |
+| `TransparentRequiredPasses` | Optional passes to retain for Transparent materials. |
 
-`OptionalShaderPass`は`None`・`DepthOnly`・`DepthNormals`・`ShadowCaster`です。
-複数のパスは`OptionalShaderPass.DepthNormals | OptionalShaderPass.ShadowCaster`のように指定します。
-Built-inのカメラ深度にはShadowCasterが必要になるため、画面上の影の有無だけで削除しないでください。
-DepthNormalsの使い方は[専用バッファの説明](DepthNormals.md)を参照してください。
+`OptionalShaderPass` includes `None`, `DepthOnly`, `DepthNormals` and `ShadowCaster`.
+Combine flags with expressions such as `OptionalShaderPass.DepthNormals | OptionalShaderPass.ShadowCaster`.
+Built-in camera depth can require ShadowCaster, so do not remove it based only on whether visible shadows are needed.
+See the [dedicated buffer guide](DepthNormals.md) for DepthNormals usage.
 
-差し替えではマテリアルの値・キーワード・Render Queueを維持し、Undoに対応します。
-完全な使用例は[README](../README.md#optimization)にあります。
+Replacement preserves material values, keywords and Render Queue, and supports Undo.
+The [main guide](../README.md#optimization) includes a complete example.
 
-## 実行時の描画API
+## Runtime Rendering API
 
-Camera・CommandBuffer・RenderTextureを使う歪み処理は[Built-in Rendering API](BuiltInRenderingAPI.md)を参照してください。
-URPのScriptableRendererFeature・ScriptableRenderPass・RenderGraph型をそのまま使用するAPIではありません。
+See [Built-in Rendering API](BuiltInRenderingAPI.md) for distortion with Camera, CommandBuffer and RenderTexture.
+These APIs do not accept URP ScriptableRendererFeature, ScriptableRenderPass or RenderGraph types directly.

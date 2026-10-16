@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -41,6 +42,24 @@ class ReleasePackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             with self.assertRaises(FileExistsError):
                 self.release.stage(ROOT, Path(folder), "assets")
+
+    def test_bilingual_navigation_survives_both_distribution_layouts(self):
+        for mode in ("assets", "upm"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as folder:
+                out = Path(folder) / mode
+                self.release.stage(ROOT, out, mode)
+                docs = out / ("Documentation" if mode == "assets" else "Documentation~")
+                guides = [out / name for name in ("README.md", "README_JA.md")]
+                guides += [docs / kind / name for kind in ("Samples", "Demo")
+                           for name in ("README.md", "README_JA.md")]
+                self.assertTrue((out / "README_JA.md.meta").is_file())
+                for path in guides:
+                    text = path.read_text(encoding="utf-8")
+                    nav = re.search(r"\*\*Docs\*\*[^\n]+", text).group()
+                    links = re.findall(r"\]\(([^)]+)\)", nav)
+                    self.assertEqual(len(links), 6)
+                    for link in links:
+                        self.assertTrue((path.parent / link).is_file(), f"{path}: {link}")
 
     def test_unexpected_package_files_are_not_silently_published(self):
         with tempfile.TemporaryDirectory() as folder:

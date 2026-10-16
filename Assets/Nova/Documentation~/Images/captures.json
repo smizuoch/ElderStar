@@ -198,6 +198,13 @@
       "max_visible_pixels": 6830,
       "input_sha256": "f8e388b978efd7ae0b2f7ae7dedc680cbb76cee93865a52d836f68dd2e16715b",
       "sha256": "adcc9787dc8c0bbdb3db715bc55ad86c54357c8b8c97cff496bc31f37c70b6ae"
+    },
+    "Showcase.png": {
+      "source": "ElderStar Built-in Showcase after importing ElderStar-0.1.8.unitypackage; Documentation/Verification/Distribution20261016/assets2022.png",
+      "capture_method": "Unity camera RenderTexture during distribution integration test; unmodified copy",
+      "width": 960,
+      "height": 640,
+      "sha256": "7750d6bc9d96ab3a117c01b329ba8606203ac5bb5321c2a15b145ec0896789c3"
     }
   }
 }

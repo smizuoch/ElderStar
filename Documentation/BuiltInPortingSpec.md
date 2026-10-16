@@ -15,6 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+ElderStar bilingual guides (2026-10-16):
+
+- [x] Add failing checks for English/Japanese Docs, Samples and Demo navigation, matching feature coverage, local media and package staging.
+- [x] Make README.md English and README_JA.md Japanese; provide corresponding sample/demo guides and preserve ElderStar-specific instructions and limits.
+- [x] Verify local links, rendered pages, package metadata/staging and source contracts; review the change. See BilingualGuides.md. Commit and main push follow the existing user authorization.
+
 ElderStar distribution packages (2026-10-16):
 
 - [x] Test a release-only staging layout that preserves runtime/editor bytes and GUIDs, includes offline documentation/samples, and excludes project/test/private assets.

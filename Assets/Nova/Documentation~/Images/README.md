@@ -1,33 +1,42 @@
-# 掲載画像について
+# Image Credits and Capture Conditions
 
-READMEの作例とInspector画像は、ElderStarで新たに撮影しています。
-本家READMEの画像・GIFをElderStarの動作画像として流用していません。
+[English](README.md) | [日本語](README_JA.md)
 
-## 作例
+The example effects and Inspector images were captured with ElderStar.
+Images and GIFs from the upstream README have not been reused as ElderStar screenshots.
 
-[NOVA Shaderのサンプル](https://github.com/CyberAgentGameEntertainment/NovaShader/tree/1c6b88729f91c852c164ef71a32cc2bce83a1892/Assets/Samples)
-（MITライセンス）を、ElderStarのBuilt-inシェーダーで描画しています。
-素材制作者は[@Ugokashiya](https://twitter.com/Ugokashiya)、原典はCyberAgent, Inc.です。
+## Example Effects
 
-| 画像 | 使用したPrefab |
+The MIT-licensed [NOVA Shader samples](https://github.com/CyberAgentGameEntertainment/NovaShader/tree/1c6b88729f91c852c164ef71a32cc2bce83a1892/Assets/Samples)
+are rendered using ElderStar's Built-in shaders.
+The effects were created by [@Ugokashiya](https://twitter.com/Ugokashiya) and published by CyberAgent, Inc.
+
+| Image | Source prefab |
 | --- | --- |
 | barrier.gif | pfb_eff_barrier01 |
 | ice.gif | pfb_eff_ice02 |
 | slash.gif | pfb_eff_slash01 |
 | heal.gif | pfb_eff_heal01 |
 
-Unity 2022.3.22f1、Windows / Direct3D 11、Gammaで撮影しました。
-固定したパーティクルの乱数と時刻でCameraをRenderTextureへ描画し、PNGの連続フレームをGIFにしています。
-GIFの色数・フレーム時間には形式上の制限があります。比較用の基準画像ではありません。
-背景・カメラ・照明は紹介用の撮影設定で、Bloomなどの後処理は使用していません。
-カメラの深度テクスチャを有効にし、反射には本家サンプルのCubemapを使用しています。
+Captured in Unity 2022.3.22f1 on Windows / Direct3D 11, with Gamma color space.
+A camera renders to a RenderTexture at fixed particle seeds and times; the PNG frames are then encoded as GIFs.
+GIF color and frame timing limits apply. These images are not visual regression baselines.
+The background, camera and lighting are presentation settings; no post-processing such as Bloom is applied.
+Camera depth is enabled, and reflections use the upstream sample's cubemap.
 
 ## Inspector
 
-実際のElderStarのInspector描画コードを撮影用EditorWindowで機能ごとに表示し、
-Unityのウィンドウをキャプチャしています。UIを描き直したモック画像ではありません。
-項目を見せるための設定例であり、すべての画像が初期値を表すわけではありません。
+The actual ElderStar Inspector drawing code is shown section by section in a capture EditorWindow,
+and the Unity window is captured. These are not redrawn UI mockups.
+The settings illustrate available controls; not every image represents the defaults.
 
-撮影スクリプトはリポジトリの[Scripts/Unity/ElderStarReadmeCapture.cs](https://github.com/smizuoch/ElderStar/blob/main/Scripts/Unity/ElderStarReadmeCapture.cs)、
-画像ごとの出典・取得方法・SHA-256は[captures.json](captures.json)に記録しています。
-元のライセンスは[LICENSE.md](../../LICENSE.md)を参照してください。
+The capture script is [Scripts/Unity/ElderStarReadmeCapture.cs](https://github.com/smizuoch/ElderStar/blob/main/Scripts/Unity/ElderStarReadmeCapture.cs).
+
+## Bundled Demo
+
+`Showcase.png` is the Built-in Showcase rendered after installing the actual `.unitypackage` in a clean Unity 2022.3.22f1 project.
+It is copied unchanged from the [distribution verification capture](https://github.com/smizuoch/ElderStar/blob/main/Documentation/Verification/Distribution20261016/assets2022.png).
+The scene retains its original NOVA title; the shaders are ElderStar's Built-in implementation.
+
+Sources, capture methods and SHA-256 hashes are recorded per image in [captures.json](captures.json).
+See [LICENSE.md](../../LICENSE.md) for the original license.

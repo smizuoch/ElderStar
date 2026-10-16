@@ -1,281 +1,280 @@
-# ElderStar: Built-in向け多機能パーティクルシェーダー
+# ElderStar: Multifunctional Particle Shaders for Built-in
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Unity](https://img.shields.io/badge/Unity-2022.3%2B-green.svg)](#requirements)
 [![Built-in](https://img.shields.io/badge/Render%20Pipeline-Built--in-blue.svg)](#requirements)
 
-**使い方・機能リファレンス**（このページ） | **[サンプル](#samples)** | **[互換性](#compatibility)** | **[Editor API](Documentation~/EditorAPI.md)**
+**Docs** ([English](README.md), [日本語](README_JA.md)) | **Samples** ([English](Documentation~/Samples/README.md), [日本語](Documentation~/Samples/README_JA.md)) | **Demo** ([English](Documentation~/Demo/README.md), [日本語](Documentation~/Demo/README_JA.md))
 
-**ElderStar**は、UnityのBuilt-in Render Pipelineで動作する、Particle System向けの多機能シェーダーです。
-[NOVA Shader](https://github.com/CyberAgentGameEntertainment/NovaShader) 3.6.0をベースに、NOVA用のエフェクトをBuilt-inプロジェクトやVRChatのPCアバターで使えるようにしています。
-
-<p align="center">
-  <img width="80%" src="Documentation~/Images/barrier.gif" alt="ElderStarで描画したNOVAサンプルのバリアエフェクト"><br>
-  <sub>バリア。NOVAのサンプル素材をElderStarで描画。</sub>
-</p>
-<p align="center">
-  <img width="80%" src="Documentation~/Images/ice.gif" alt="ElderStarで描画したNOVAサンプルの氷エフェクト"><br>
-  <sub>氷。サンプルエフェクト制作：<a href="https://twitter.com/Ugokashiya">@Ugokashiya</a>／Built-inで再撮影。</sub>
-</p>
-
-Flow Map、Flip Book、Dissolve、Fade、テクスチャ回転、リム、Emission、Distortionなど、エフェクト制作でよく使う機能を組み合わせられます。
-ライティングを受けるUber Lit、色をそのまま描くUber Unlit、uGUI用シェーダー、Custom Dataとの連携、最適化シェーダーの生成にも対応しています。
-
-**NOVAの標準シェーダーを参照するマテリアル・Prefabは、素材変換やシェーダーの付け替えなしで利用できます。**
-元のNOVA本体が同梱された`.unitypackage`も、[専用のインポートメニュー](#nova-assets)から元ファイルを選んで取り込めます。
+**ElderStar** is a collection of multifunctional Particle System shaders for Unity's Built-in Render Pipeline.
+Based on [NOVA Shader](https://github.com/CyberAgentGameEntertainment/NovaShader) 3.6.0, it lets you use NOVA effects in Built-in projects and on VRChat PC avatars.
 
 <p align="center">
-  <img width="49%" src="Documentation~/Images/slash.gif" alt="ElderStarで描画した斬撃エフェクト">
-  <img width="49%" src="Documentation~/Images/heal.gif" alt="ElderStarで描画した回復エフェクト"><br>
-  <sub>斬撃と回復。掲載画像・GIFはElderStarの実描画です。<a href="Documentation~/Images/README.md">撮影条件・素材クレジット</a></sub>
+  <img width="80%" src="Documentation~/Images/barrier.gif" alt="NOVA barrier sample rendered with ElderStar"><br>
+  <sub>Barrier. Original NOVA sample assets rendered with ElderStar.</sub>
+</p>
+<p align="center">
+  <img width="80%" src="Documentation~/Images/ice.gif" alt="NOVA ice sample rendered with ElderStar"><br>
+  <sub>Ice. Sample effects by <a href="https://twitter.com/Ugokashiya">@Ugokashiya</a>, captured again in Built-in.</sub>
 </p>
 
-パッケージID：`me.smizuoch.elderstar` · 開発・メンテナンス：[smizuoch](https://smizuoch.me)
+Combine Flow Maps, Flip Books, Dissolve, Fade, texture rotation, rim effects, Emission and Distortion to build particle effects.
+The package includes Uber Lit for lit effects, Uber Unlit for unlit effects, uGUI shaders, Custom Data integration and an optimized shader generator.
 
-## 目次
+**Materials and prefabs that reference NOVA's standard shaders can be used without converting assets or reassigning shaders.**
+If a `.unitypackage` bundles the original NOVA implementation, select the original file through the [dedicated import menu](#nova-assets).
+
+<p align="center">
+  <img width="49%" src="Documentation~/Images/slash.gif" alt="Slash effect rendered with ElderStar">
+  <img width="49%" src="Documentation~/Images/heal.gif" alt="Healing effect rendered with ElderStar"><br>
+  <sub>Slash and healing. Images and GIFs show actual ElderStar rendering. <a href="Documentation~/Images/README.md">Capture conditions and asset credits</a></sub>
+</p>
+
+Package ID: `me.smizuoch.elderstar` · Developed and maintained by [smizuoch](https://smizuoch.me)
+
+## Table of Contents
 
 <details>
-<summary>開く</summary>
+<summary>Expand</summary>
 
-- [セットアップ](#setup)
-- [NOVA用の素材をそのまま使う](#nova-assets)
-- [使い方](#usage)
-- [Uber Unlitシェーダー](#uber-unlit)
+- [Setup](#setup)
+- [Using NOVA assets directly](#nova-assets)
+- [Usage](#usage)
+- [Uber Unlit Shader](#uber-unlit)
   - Render Settings / Vertex Deformation / Base Map / Tint Color
   - Flow Map / Parallax Map / Color Correction / Alpha Transition / Emission / Transparency
-- [Uber Litシェーダー](#uber-lit)
-- [Distortionシェーダー](#distortion)
-- [uGUI用シェーダー](#ugui)
-- [影を落とす機能](#shadow-caster)
-- [Custom Vertex Streamsとの連携](#custom-data)
+- [Uber Lit Shader](#uber-lit)
+- [Distortion Shader](#distortion)
+- [uGUI shaders](#ugui)
+- [Casting shadows](#shadow-caster)
+- [Custom Vertex Streams integration](#custom-data)
 - [Mesh GPU Instancing](#gpu-instancing)
-- [Custom Vertex Streamsの自動設定](#fix-now)
-- [不要なパラメータ参照の削除](#unused-references)
-- [最適化シェーダー](#optimization)
-- [Built-in向けの補助機能](#builtin-helpers)
-- [互換性と動作確認](#compatibility)
+- [Automatic Custom Vertex Streams setup](#fix-now)
+- [Removing unused references](#unused-references)
+- [Optimized shaders](#optimization)
+- [Built-in helpers](#builtin-helpers)
+- [Compatibility and verification](#compatibility)
 - [Editor API](#editor-api)
-- [ライセンス](#license)
+- [License](#license)
 
 </details>
 
 <a id="setup"></a>
-## セットアップ
+## Setup
 
 <a id="requirements"></a>
-### 要件
+### Requirements
 
-- Unity **2022.3 LTS以降**。動作確認：2022.3.22f1 / 6000.3.23f1。
-- **Built-in Render Pipeline**。URP・HDRPの追加は不要です。
-- Shader Model **3.5**。Mesh GPU Instancingは**4.5**が必要です。
-- 検証環境はWindows / Direct3D 11・12。VRChatでは**PCアバター**を対象としています。
+- Unity **2022.3 LTS or later**. Verified with 2022.3.22f1 / 6000.3.23f1.
+- **Built-in Render Pipeline**. No URP or HDRP installation is required.
+- Shader Model **3.5**; **4.5** for Mesh GPU Instancing.
+- Verification covers Windows / Direct3D 11 and 12. VRChat support targets **PC avatars**.
 
-Mirror SamplingにはInline Sampler States、Texture2DArray・Texture3Dには対応GPUと対応テクスチャ形式が必要です。
-VRChatプロジェクトでは、VCC / ALCOMとVRChat SDKが指定するUnityバージョンを使用してください。
+Mirror Sampling requires Inline Sampler States. Texture2DArray and Texture3D require a compatible GPU and texture format.
+For VRChat projects, use the Unity version specified by VCC / ALCOM and the VRChat SDK.
 
-### インストール
+### Installation
 
-**`.unitypackage`で導入する場合**は、[GitHub Releases](https://github.com/smizuoch/ElderStar/releases)から`ElderStar-0.1.8.unitypackage`をダウンロードし、Unityで開いて`Import`します。
-本体・説明書・サンプルが`Assets/Nova`に入ります。VRCプロジェクトにもこの方法で導入できます。
+**To install the `.unitypackage`**, download `ElderStar-0.1.8.unitypackage` from [GitHub Releases](https://github.com/smizuoch/ElderStar/releases), open it in Unity and click `Import`.
+The implementation, documentation and samples are installed under `Assets/Nova`. This method also works for VRChat projects.
 
-**Package Managerで導入する場合**は、次のGit URLを使います。
+**To install with Package Manager**, use the following Git URL.
 
-1. `Window > Package Manager`を開きます。
-2. `+ > Add package from git URL...`を選びます。
-3. 次のURLを入力します。
+1. Open `Window > Package Manager`.
+2. Select `+ > Add package from git URL...`.
+3. Enter this URL:
 
 ```text
 https://github.com/smizuoch/ElderStar.git?path=/Assets/Nova
 ```
 
-リリースに添付した`me.smizuoch.elderstar-0.1.8.tgz`は、`+ > Add package from tarball...`から導入できます。
-`.unitypackage`とPackage Manager版は同じ本体なので、どちらか一方だけを導入してください。
+The release also provides `me.smizuoch.elderstar-0.1.8.tgz`, which you can install with `+ > Add package from tarball...`.
+The `.unitypackage` and Package Manager versions contain the same implementation; install one of them.
 
-特定の状態に固定する場合は、URL末尾に`#コミットSHA`を付けます。
-ローカルのソースを使う場合は`Add package from disk...`で`Assets/Nova/package.json`を選択できます。
+Append `#COMMIT_SHA` to the Git URL to pin a revision.
+For a local checkout, choose `Add package from disk...` and select `Assets/Nova/package.json`.
 
-プロジェクトのGraphics設定と各Quality設定のRender Pipeline Assetは`None`にしてください。
-元のNOVA本体とは同時に導入しないでください。素材参照を引き継ぐため、シェーダー名・GUID・API名を共有しています。
+Set the Render Pipeline Asset to `None` in Graphics settings and in each Quality level.
+Do not install ElderStar alongside the original NOVA implementation. They share shader names, GUIDs and API names to preserve asset references.
 
 <a id="nova-assets"></a>
-## NOVA用の素材をそのまま使う
+## Using NOVA Assets Directly
 
-NOVA 3.6.0の標準シェーダーを使用した素材は、元のマテリアル設定・テクスチャ・Prefab参照を引き継げます。
-たとえば`Fire001.unitypackage`のようなエフェクトは、次の手順で取り込みます。
+Assets using NOVA 3.6.0's standard shaders retain their material settings, textures and prefab references.
+To import an effect such as `Fire001.unitypackage`:
 
-1. ElderStarをインストールします。
-2. **`Assets > Import Package > ElderStar Effect...`**を選びます。
-3. ダウンロードした元の`.unitypackage`を選び、Unityの画面で`Import`します。
-4. 取り込んだPrefabをシーン、またはアバターの子に配置します。
+1. Install ElderStar.
+2. Select **`Assets > Import Package > ElderStar Effect...`**.
+3. Choose the original downloaded `.unitypackage` and click `Import` in Unity's dialog.
+4. Place the imported prefab in your scene or as a child of your avatar.
 
-このメニューは同梱された元のNOVA実装だけを除外し、素材ファイルを変更せずに取り込みます。
-変換済みのパッケージを別途作る必要はありません。
-NOVA本体が含まれていない素材は、Unityの通常のインポートでも取り込めます。
+This menu excludes the bundled original NOVA implementation and imports the effect assets without modifying them.
+You do not need to create a converted package. Assets that do not include the NOVA implementation can also use Unity's regular import flow.
 
-**元のNOVA本体を含むパッケージをダブルクリックで取り込む場合は、その本体フォルダーを選択から外してください。**
-URP専用スクリプトや独自シェーダーまで自動でBuilt-inに変換する機能ではありません。
-元の最適化シェーダーを同梱した素材は、ElderStarでの再生成が必要です。
+**If you double-click a package containing the original NOVA implementation, deselect that implementation's folders before importing.**
+The importer does not convert URP-only scripts or custom shaders to Built-in.
+Assets containing previously optimized shaders need those shaders regenerated with ElderStar.
 
 <a id="usage"></a>
-## 使い方
+## Usage
 
-### マテリアルを作成・アサインする
+### Create and assign a material
 
-`Create > Material`でマテリアルを作成し、Shader欄から用途に応じたシェーダーを選びます。
-既存のNOVA素材を扱いやすくするため、Shader欄の名前は`Nova/...`のままです。
+Create a material with `Create > Material`, then select a shader for your effect.
+Shader names remain `Nova/...` to keep existing NOVA assets usable.
 
-| シェーダー | 用途 |
+| Shader | Purpose |
 | --- | --- |
-| `Nova/Particles/UberUnlit` | 光の影響を受けない炎・光・魔法などのエフェクト |
-| `Nova/Particles/UberLit` | ライティングを受けるメッシュ・パーティクル |
-| `Nova/Particles/Distortion` | 熱波・衝撃波などの画面の歪み |
-| `Nova/UIParticles/UberUnlit` | uGUI向けのUnlitエフェクト |
-| `Nova/UIParticles/UberLit` | uGUI向けのLitエフェクト |
+| `Nova/Particles/UberUnlit` | Unlit fire, glow, magic and similar effects |
+| `Nova/Particles/UberLit` | Meshes and particles that receive lighting |
+| `Nova/Particles/Distortion` | Screen distortion, such as heat haze and shock waves |
+| `Nova/UIParticles/UberUnlit` | Unlit effects for uGUI |
+| `Nova/UIParticles/UberLit` | Lit effects for uGUI |
 
-Particle SystemのRendererモジュールにマテリアルを設定し、Inspectorでテクスチャや色を調整します。
-頂点ストリームの警告が出たら、マテリアルInspector下部の**Fix Now**で必要なストリームを設定してください。
+Assign the material in the Particle System's Renderer module, then adjust textures and colors in the Inspector.
+If a vertex stream warning appears, use **Fix Now** at the bottom of the material Inspector to configure the required streams.
 
-### 深度・歪みの設定
+### Depth and distortion setup
 
-**Distortionはカメラ用スクリプトを追加せずに動作します。**
-通常のUnityプロジェクトで歪みをカメラ全体で合成したい場合は、カメラに
-`ElderStar > Screen Space Distortion`を追加できます。URPのRenderer Featureは使いません。
+**Distortion works without adding a camera script.**
+In a regular Unity project, you can optionally add `ElderStar > Screen Space Distortion` to a camera for camera-wide composition.
+It does not use a URP Renderer Feature.
 
-**Soft Particles**にはカメラの深度テクスチャが必要です。
-通常のUnityでは`Camera.depthTextureMode |= DepthTextureMode.Depth`を設定するか、上記カメラコンポーネントを使用します。
-カメラとの距離でフェードする**Depth Fade**には、シーン深度テクスチャは不要です。
+**Soft Particles** require a camera depth texture.
+In regular Unity projects, set `Camera.depthTextureMode |= DepthTextureMode.Depth` or use the camera component above.
+**Depth Fade**, which fades by distance from the camera, does not require a scene depth texture.
 
-初回導入時には、本家と同じ光強度・色温度の設定がプロジェクト全体に適用されます。
-以後の手動変更は保持されます。自動設定を使わない場合は
-`Tools > ElderStar > Built-in > Automatic Initial Lighting Setup`をオフにできます。
+On first installation, the original light intensity and color temperature settings are applied project-wide.
+Subsequent manual changes are retained. To opt out of automatic setup, turn off
+`Tools > ElderStar > Built-in > Automatic Initial Lighting Setup`.
 
-### VRChatのPCアバターで使う
+### Use on VRChat PC avatars
 
-エフェクトのParticle SystemやMeshRendererをアバターに配置します。
-ElderStarのカメラ・Canvas補助コンポーネントをアバターに付ける必要はありません。
-アバターでは任意の実行時C#を使用できないため、シェーダーだけで動作する経路を使います。
-コンポーネントの範囲は[VRChat公式の一覧](https://creators.vrchat.com/avatars/whitelisted-avatar-components/whitelisted-avatar-components/)に従ってください。
+Place your effect's Particle System or MeshRenderer on the avatar.
+ElderStar's camera and Canvas helper components are not required on avatars.
+Avatars cannot run arbitrary runtime C#, so use the shader-only rendering path.
+Follow [VRChat's allowed component list](https://creators.vrchat.com/avatars/whitelisted-avatar-components/whitelisted-avatar-components/).
 
-Soft Particlesの効き方はワールドの深度テクスチャに依存します。
-閲覧者の[Safety設定](https://creators.vrchat.com/avatars/shader-fallback-system/)によって、カスタムシェーダーが置き換えられる場合もあります。
-SDKの検証と`Build & Test`で、使用するアバター・ワールド・鏡での表示を確認してください。
+Soft Particles depend on the world's depth texture.
+The viewer's [Safety settings](https://creators.vrchat.com/avatars/shader-fallback-system/) may replace custom shaders.
+Use SDK validation and `Build & Test` to check your avatar, intended worlds and mirrors.
 
 <a id="samples"></a>
-### サンプルを動かす
+### Run the sample
 
-Package ManagerのElderStarから**Built-in Showcase**をImportし、`NovaShowcase.unity`を開いて再生します。
-4種類のパーティクルと歪みを確認できます。
-`.unitypackage`版では`Assets/Nova/Samples/BuiltInShowcase/NovaShowcase.unity`を直接開きます。
-`Tools > ElderStar > Built-in > Create Showcase Scene`から、保存先を指定してシーンを作ることもできます。
+Import **Built-in Showcase** from ElderStar in Package Manager, open `NovaShowcase.unity` and press Play.
+It demonstrates four particle variants and distortion.
+With the `.unitypackage`, open `Assets/Nova/Samples/BuiltInShowcase/NovaShowcase.unity` directly.
+You can also choose `Tools > ElderStar > Built-in > Create Showcase Scene` and select a destination for a new scene.
 
-冒頭の作例は[本家のサンプル素材](https://github.com/CyberAgentGameEntertainment/NovaShader/tree/main/Assets/Samples)をElderStarで再撮影したもので、同梱Showcaseとは別です。
+The effects at the top of this page use [upstream sample assets](https://github.com/CyberAgentGameEntertainment/NovaShader/tree/main/Assets/Samples) captured with ElderStar. They are separate from the bundled Showcase.
 
 <a id="uber-unlit"></a>
 
-## Uber Unlitシェーダー
-Uber Unlitシェーダはライティングが反映されない多機能シェーダです。
-発光するエフェクトなど、ライティングが不要なパーティクルにはこのシェーダを使用します。
+## Uber Unlit Shader
+The Uber Unlit shader is a multifunctional shader with no lighting applied.
+Use this shader for particles that do not need lighting, such as glowing effects.
 
-Uber Unlitシェーダを使用するには、マテリアルに `Nova/Particles/UberUnlit` シェーダをアサインします。
-Inspectorから設定可能な各プロパティの説明は以下の通りです。
+To use this shader, assign the `Nova/Particles/UberUnlit` shader to your material. The following is the description of each property that can be set from the Inspector.
 
 #### Render Settings
-Render Settingsではマテリアルの描画方法を制御できます。
+The Render Settings control how the Material is rendered.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/RenderSettings.png" alt="ElderStar Inspector: RenderSettings"><br>
   <sub>Render Settings</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Render Type</b></td><td>
 <p>
-描画方法を以下の選択肢から指定できます。
+You can specify the type of rendering from the following options.
 </p>
 <p>
 <ul>
-<li>Opaque: 不透明描画</li>
-<li>Cutout: 不透明描画で、透明部分のピクセルを破棄する</li>
-<li>Transparent: 半透明描画（デフォルト）</li>
+<li>Opaque</li>
+<li>Cutout</li>
+<li>Transparent (Default)</li>
 </ul>
 </p>
 <p>
-Cutoutを選択した場合には、CutOffプロパティが表示されます。<br>
-Transparentを選択した場合には、Blend Modeプロパティが表示されます。
+If you select Cutout, the CutOff property will be displayed.
+When Transparent is selected, the Blend Mode property will be displayed.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>CutOff</b></td><td>
 <p>
-<b>Render TypeをCutoutに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Render Type is set to Cutout.</b>
 </p>
 <p>
-半透明部分を切り取る際の閾値を制御します。<br>
-この値が大きいほど、よりアルファ値が大きい部分まで切り取ります。
+Controls the threshold to clip semi-transparent areas.
+The higher this value is, the more alpha will be cropped.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Blend Mode</b></td><td>
 <p>
-<b>Render TypeをTransparentに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Render Type is set to Transparent.</b>
 </p>
 <p>
-色の合成方法を以下の選択肢から指定できます。
+You can specify the color blend method from the following options.
 </p>
 <p>
 <ul>
-<li>Alpha: アルファブレンディング（デフォルト）</li>
-<li>Additive: 加算</li>
-<li>Multiply: 乗算</li>
+<li>Alpha (Alpha Blending / Default)</li>
+<li>Average</li>
+<li>Multiply</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Render Face</b></td><td>
 <p>
-描画する面を以下の選択肢から指定できます。
+You can specify the rendering face from the following options.
 </p>
 <p>
 <ul>
-<li>Front: 前面のみ描画（デフォルト）</li>
-<li>Back: 背面のみ描画</li>
-<li>Both: 両面を描画</li>
+<li>Front (Default)</li>
+<li>Back</li>
+<li>Both</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Render Priority</b></td><td>
 <p>
-描画の優先度を指定できます。<br>
-Render Typeが同じ場合、Render Priorityが小さいものから先に描画されます。
+If the Render Type is the same, the one with the lower Render Priority will be drawn first.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Vertex Alpha Mode</b></td><td>
 <p>
-頂点カラーのアルファ値の用途を以下の選択肢から指定できます。
+You can specify how to use the alpha value of the vertex color from the following options.
 </p>
 <p>
 <ul>
-<li>Alpha: アルファ値として扱う（デフォルト）</li>
-<li>Transition Progress: Alpha Transition機能（後述）のProgressとして使う</li>
+<li>Alpha: Use as alpha value (Default).</li>
+<li>Transition Progress: Use as Progress in Alpha Transition function (see below).</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>ZWrite</b></td><td>
 <p>
-ZWriteを設定できます。
+You can set ZWrite value.
 </p>
 <p>
 <ul>
-<li>Auto: Render TypeがTransparentの時にはZWriteを無効に、それ以外の時にはZWriteを有効に設定する（デフォルト）</li>
-<li>Off: ZWriteを常に無効化する</li>
-<li>On: ZWriteを常に有効化する</li>
+<li>Auto: ZWrite is disabled when the Render Type is set to Transparent, and it is enabled when the Render Type is set to any other values.
+</li>
+<li>Off: ZWrite is always disabled.</li>
+<li>On: ZWrite is always enabled.</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>ZTest</b></td><td>
 <p>
-ZTestを設定できます。
+You can set ZTest value.
 </p>
 <p>
 <ul>
@@ -283,7 +282,7 @@ ZTestを設定できます。
 <li>Never</li>
 <li>Less</li>
 <li>Equal</li>
-<li>Less Equal（デフォルト）</li>
+<li>Less Equal (Default)</li>
 <li>Greater</li>
 <li>Not Equal</li>
 <li>Greater Equal</li>
@@ -295,439 +294,442 @@ ZTestを設定できます。
 </table>
 
 #### Vertex Deformation
-Vertex Deformationでは頂点の変形を制御できます。
+With Vertex Deformation, you can control the deformation of vertices.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/VertexDeformation.png" alt="ElderStar Inspector: VertexDeformation"><br>
   <sub>Vertex Deformation</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-頂点変形マップを設定します。頂点変形マップの仕様は以下の通りです。
+Sets the Vertex Deformation Map. The specifications are as follows.
 </p>
 <p>
 <ul>
-<li>指定された1個のテクスチャのチャンネルの値に基づいて、頂点をオブジェクト空間の法線方向に押し出します</li>
-<li>チャンネルの指定はChannelsプロパティで行えます</li>
-<li>テクスチャの値がゼロの部分は押し出されず、値が大きくなるほど外側に押し出されます</li>
+    <li>Push vertices in the normal direction of the object space based on the value of a single specified texture channel.</li>
+    <li>You can select a channel by Channels property.</li>
+    <li>Areas of the texture with a value of zero will not be pushed out, and areas with larger values will be pushed out more towards the exterior.</li>
 </ul>
-色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Note that you need to uncheck sRGB Color in the texture import setting because the pixels will be used as values, not colors.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Intensity</b></td><td>
 <p>
-頂点変形を適用する際の強度を設定します。
+Sets the Vertex Deformation intensity.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Base Value</b></td><td>
 <p>
-テクスチャの値に対してのオフセットです。<br>
-これよりも低い値は内側に、大きい値は外側に押し出されます。
+It is an offset applied to the values of the texture.<br>
+Values lower than this will be pushed inward, while larger values will be pushed outward.
 </p>
-</td></tr>
 </tbody>
 </table>
 
 #### Base Map
-Base Mapでは色のベースとなるテクスチャを制御できます。
+Base Map controls the base color texture and its settings.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/BaseMap.png" alt="ElderStar Inspector: BaseMap"><br>
   <sub>Base Map</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Mode</b></td><td>
 <p>
-ベースマップのモードを以下の選択肢から指定できます。
+You can specify the type of the Base Map from the following options.
 </p>
 <p>
 <ul>
-<li>Single Texture: 通常の2Dテクスチャ（デフォルト）</li>
-<li>Flip Book: Flip-Bookアニメーション</li>
-<li>Flip Book Blending: ブレンドありのFlip-Bookアニメーション</li>
+<li>Single Texture: Use 2D texture (Default).</li>
+<li>Flip Book: Use Flip-Book animation.</li>
+<li>Flip Book Blending: Use Flip-Book animation with interpolated frames.</li>
 </ul>
 </p>
 <p>
-選択したモードによってテクスチャの型が変わります。<br>
-なお、ElderStarではParticle SystemのTexture Sheet Animationを利用せず、代わりにFlip Bookを利用してください。<br>
+The required texture type will change depending on the mode you selected.<br>
+Use the shader's Flip Book feature instead of the Particle System's Texture Sheet Animation.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-ベースマップを設定します。
+Set the Base Map.
 </p>
 <p>
-ModeにFlip Bookを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>を設定する必要があります。<br>
-ModeにFlip Book Blendingを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>を設定する必要があります。
+If you specify Flip Book as the Mode, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>.
+And if you specify Flip Book Blending, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Channel</b></td><td>
 <p>
-Base Mapのどの色チャンネルを描画に使用するかを選択します。単一チャンネル（Red/Green/Blue）が選択された場合、選択されたチャンネル値がRGB成分に適用され、元のアルファチャンネルは保持されます。利用可能なオプション：
+Select which color channel from the Base Map to use for rendering. When a single channel is selected (Red/Green/Blue), the selected channel value is applied to RGB components while preserving the original alpha channel. Available options:
 </p>
 <p>
 <ul>
-<li>RGB: 全ての色チャンネルをそのまま使用（デフォルト）</li>
-<li>Red: 赤チャンネルをグレースケールに変換</li>
-<li>Green: 緑チャンネルをグレースケールに変換</li>
-<li>Blue: 青チャンネルをグレースケールに変換</li>
+<li>RGB: Use all color channels as-is (Default)</li>
+<li>Red: Convert red channel to grayscale</li>
+<li>Green: Convert green channel to grayscale</li>
+<li>Blue: Convert blue channel to grayscale</li>
 </ul>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-ベースマップの回転度合いを設定します。
+Set the amount of rotation of the Base Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-ベースマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Mirror Sampling</b></td><td>
 <p>
-チェックをつけるとテクスチャがミラーサンプリングされます。
+If true, mirrors the texture to create a repeating pattern.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Flip-Book Progress</b></td><td>
 <p>
-<b>ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-Flip-BookあるいはFlip-Book Blendingの進行度を設定します。
+The progress of the Flip-Book or Flip-Book Blending.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Random Row Selection</b></td><td>
 <p>
-<b>ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-UnityのTexture Sheet AnimationのRow Mode > Random機能と同等の機能です。有効にすると、各パーティクルがライフタイム中にランダムに1つの行を選択・維持してアニメーションを再生します。
+Equivalent to Unity's Texture Sheet Animation Row Mode > Random functionality. When enabled, each particle randomly selects and maintains one row throughout its lifetime for animation playback.
 </p>
 <p>
-ランダム値の入力にUnity Particle SystemのCustom Coordを使用します。まずRow Countをテクスチャシートの行数に合わせて設定し、その後任意のCustom Coordチャンネルを「Random Between Two Constants」モード（範囲：0からRow Count）で設定し割り当てます。
+Uses Unity Particle System's Custom Coord for random value input. First set Row Count to match the number of rows in your texture sheet, then configure any Custom Coord channel in "Random Between Two Constants" mode (range: 0 to Row Count) and assign it.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Row Count</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-テクスチャシートの行数を設定します（例：4×4のテクスチャシートの場合、Row Countを4に設定）。
+Set the number of rows in your texture sheet (e.g., for a 4×4 texture sheet, set Row Count to 4).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Random Coord</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-ランダム値の入力に使用するCustom Coordチャンネルを選択します。Unity Particle SystemのCustom Dataで「Random Between Two Constants」モードに設定したチャンネルと対応させます。
+Select the Custom Coord channel for random value input. This should correspond to the Custom Data channel configured in Unity Particle System with "Random Between Two Constants" mode.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Tone Mode</b></td><td>
 <p>
-輝度値に基づく色調調整のためのトーンマッピングを制御します。以下のオプションから選択します：
+Controls tone mapping for color adjustment based on luminance values. Select from the following options:
 </p>
 <p>
 <ul>
-<li><b>None:</b> トーンマッピングを適用しません（デフォルト）。</li>
-<li><b>Tritone:</b> Highlights、Midtones、Shadowsの3段階トーンマッピング。</li>
-<li><b>Pentone:</b> Highlights、Brights、Midtones、Darktones、Shadowsの5段階トーンマッピング。</li>
+<li><b>None:</b> No tone mapping applied (Default).</li>
+<li><b>Tritone:</b> Three-tone mapping with Highlights, Midtones, and Shadows control.</li>
+<li><b>Pentone:</b> Five-tone mapping with Highlights, Brights, Midtones, Darktones, and Shadows control.</li>
 </ul>
 </p>
 <p>
-境界値によって領域の閾値が決定され、設定された色にマッピングします。
-各境界間の色は線形補間され、滑らかなトーンマッピングが適用されます。
-なお、この線形補間はシェーダーで行われるため、プロジェクトの色空間を考慮してパラメータ設定を行う必要があることに注意してください。
+Boundary values determine the thresholds between regions, mapping them to the configured colors.
+Colors between each boundary are linearly interpolated, applying smooth tone mapping.
+Note that this linear interpolation is performed in the shader, so you need to consider your project's color space when setting parameters.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Tone Channel</b></td><td>
 <p>
-<b>Tone ModeがNoneでない場合に表示されます。</b>
+<b>This property is visible when Tone Mode is not None.</b>
 </p>
 <p>
-トーンマッピングの輝度計算に使用するカラーチャンネルを選択します。Red、Green、Blue、Alpha（デフォルト）から選択可能です。
+Selects which color channel to use for luminance calculation in tone mapping. Choose from Red, Green, Blue, or Alpha (default).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Highlights Color</b></td><td>
 <p>
-<b>Tone ModeがTritoneまたはPentoneの時に表示されます。</b>
+<b>This property is visible when Tone Mode is Tritone or Pentone.</b>
 </p>
 <p>
-ハイライト領域に適用される色を設定します。
+Sets the color applied to highlight regions.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Brights Color</b></td><td>
 <p>
-<b>Tone ModeがPentoneの時のみ表示されます。</b>
+<b>This property is visible only when Tone Mode is Pentone.</b>
 </p>
 <p>
-Brights領域（HighlightsとMidtonesの間）に適用される色を設定します。
+Sets the color applied to brights regions (between highlights and midtones).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Midtones Color</b></td><td>
 <p>
-<b>Tone ModeがTritoneまたはPentoneの時に表示されます。</b>
+<b>This property is visible when Tone Mode is Tritone or Pentone.</b>
 </p>
 <p>
-ミッドトーン領域に適用される色を設定します。
+Sets the color applied to midtone regions.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Darktones Color</b></td><td>
 <p>
-<b>Tone ModeがPentoneの時のみ表示されます。</b>
+<b>This property is visible only when Tone Mode is Pentone.</b>
 </p>
 <p>
-Darktones領域（MidtonesとShadowsの間）に適用される色を設定します。
+Sets the color applied to darktones regions (between midtones and shadows).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Shadows Color</b></td><td>
 <p>
-<b>Tone ModeがTritoneまたはPentoneの時に表示されます。</b>
+<b>This property is visible when Tone Mode is Tritone or Pentone.</b>
 </p>
 <p>
-シャドウ領域に適用される色を設定します。
+Sets the color applied to shadow regions.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Highlights</b></td><td>
 <p>
-<b>Tone ModeがTritoneまたはPentoneの時に表示されます。</b>
+<b>This property is visible when Tone Mode is Tritone or Pentone.</b>
 </p>
 <p>
-ハイライトの輝度境界値を設定します。
+Sets the luminance boundary value for highlights.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Brights</b></td><td>
 <p>
-<b>Tone ModeがPentoneの時のみ表示されます。</b>
+<b>This property is visible only when Tone Mode is Pentone.</b>
 </p>
 <p>
-MidtonesとHighlights間のBrights境界位置を制御します。
+Controls the position of the brights boundary between midtones and highlights.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Midtones</b></td><td>
 <p>
-<b>Tone ModeがTritoneまたはPentoneの時に表示されます。</b>
+<b>This property is visible when Tone Mode is Tritone or Pentone.</b>
 </p>
 <p>
-ShadowsとHighlights間の中間点位置を決定することで、トーン領域間のバランスを制御します。
+Controls the balance between tonal regions by determining the midpoint position between shadows and highlights.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Darktones</b></td><td>
 <p>
-<b>Tone ModeがPentoneの時のみ表示されます。</b>
+<b>This property is visible only when Tone Mode is Pentone.</b>
 </p>
 <p>
-ShadowsとMidtones間のDarktones境界位置を制御します。
+Controls the position of the darktones boundary between shadows and midtones.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Shadows</b></td><td>
 <p>
-<b>Tone ModeがTritoneまたはPentoneの時に表示されます。</b>
+<b>This property is visible when Tone Mode is Tritone or Pentone.</b>
 </p>
 <p>
-シャドウの輝度境界値を設定します。
+Sets the luminance boundary value for shadows.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Tint Color
-Tint Colorでは乗算色を指定できます。
+Tint Color controls the color to be multiplied.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/TintColor.png" alt="ElderStar Inspector: TintColor"><br>
   <sub>Tint Color</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Mode</b></td><td>
 <p>
-乗算色の適用範囲を以下の選択肢から指定できます。
+You can specify the area to apply the Tint Color from the following options.
 </p>
 <p>
 <ul>
-<li>None: なし（デフォルト）</li>
-<li>All: 全面に適用</li>
-<li>Rim: リムに適用</li>
+<li>None: Disable the Tint Color (Default).</li>
+<li>All: Apply to the entire surface.</li>
+<li>Rim: Apply to the rim.</li>
 </ul>
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Progress</b></td><td>
 <p>
-<b>ModeをRimに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Rim.</b>
 </p>
 <p>
-リムの範囲を設定します。<br>
-この値が大きくすると、よりエッジに近い部分だけが着色されます。
+The larger this value is, the more only the areas near the edges will be colored.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Sharpness</b></td><td>
 <p>
-<b>ModeをRimに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Rim.</b>
 </p>
 <p>
-この値が大きいほどリムのエッジが鋭くなります。
+The larger this value is, the sharper the edge of the rim will be.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Inverse</b></td><td>
 <p>
-<b>ModeをRimに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Rim.</b>
 </p>
 <p>
-リムの範囲を逆転させます。
+If checked, reverse the range of the rim.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Color Mode</b></td><td>
 <p>
-乗算色の指定方法を以下の選択肢から指定できます。
+You can specify how you set the Tint Color.
 </p>
 <p>
 <ul>
-<li>Single Color: 単色（デフォルト）</li>
-<li>Single Texture: テクスチャで指定</li>
-<li>Flip Book: フリップブックアニメーション</li>
-<li>Flip Book Blending: フリップブックアニメーション（補間あり）</li>
+<li>Single Color: Single Color (Default).</li>
+<li>Single Texture: Specified by the texture.</li>
+<li>Flip Book: Use Flip-Book animation.</li>
+<li>Flip Book Blending: Use Flip-Book animation with interpolated frames.</li>
 </ul>
 </p>
 <p>
-選択したモードによって必要なテクスチャタイプが変わります。
+The required texture type will change depending on the mode you selected.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Color</b></td><td>
 <p>
-<b>Color ModeをSingle Colorに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Color Mode is set to Single Color.</b>
 </p>
 <p>
-乗算色を指定します。
+The color to be multiplied.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Texture</b></td><td>
 <p>
-<b>Color ModeをSingle Texture、Flip Book、あるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Color Mode is set to Single Texture, Flip Book, or Flip Book Blending.</b>
 </p>
 <p>
-乗算色を表すテクスチャを設定します。
+The texture whose color will be multiplied.
 </p>
 <p>
-Color ModeをFlip Bookに設定した場合は<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>を設定する必要があります。
-Flip Book Blendingに設定した場合は<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>を設定する必要があります。
+If you specify Flip Book as the Color Mode, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>.
+And if you specify Flip Book Blending, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-<b>Color ModeをSingle Texture、Flip Book、あるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Color Mode is set to Single Texture, Flip Book, or Flip Book Blending.</b>
 </p>
 <p>
-ティントマップの回転度合いを設定します。
+Set the amount of rotation of the Tint Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-ティントマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Flip-Book Progress</b></td><td>
 <p>
-<b>Color ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Color Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-フリップブックまたはフリップブックブレンディングの進行度合いです。
+The progress of the Flip-Book or Flip-Book Blending.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Blend Rate</b></td><td>
 <p>
-乗算色の適用率です。
+The color multiplication factor.
+If this value is zero, the color will not be applied; if it is one, the color will be multiplied as is.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Random Row Selection</b></td><td>
 <p>
-<b>Color ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Color Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-UnityのTexture Sheet AnimationのRow Mode > Random機能と同等の機能です。有効にすると、各パーティクルがライフタイム中にランダムに1つの行を選択・維持してアニメーションを再生します。
+Equivalent to Unity's Texture Sheet Animation Row Mode > Random functionality. When enabled, each particle randomly selects and maintains one row throughout its lifetime for animation playback.
 </p>
 <p>
-ランダム値の入力にUnity Particle SystemのCustom Coordを使用します。まずRow Countをテクスチャシートの行数に合わせて設定し、その後任意のCustom Coordチャンネルを「Random Between Two Constants」モード（範囲：0からRow Count）で設定し割り当てます。
+Uses Unity Particle System's Custom Coord for random value input. First set Row Count to match the number of rows in your texture sheet, then configure any Custom Coord channel in "Random Between Two Constants" mode (range: 0 to Row Count) and assign it.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Row Count</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-テクスチャシートの行数を設定します（例：4×4のテクスチャシートの場合、Row Countを4に設定）。
+Set the number of rows in your texture sheet (e.g., for a 4×4 texture sheet, set Row Count to 4).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Random Coord</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-ランダム値の入力に使用するCustom Coordチャンネルを選択します。Unity Particle SystemのCustom Dataで「Random Between Two Constants」モードに設定したチャンネルと対応させます。
+Select the Custom Coord channel for random value input. This should correspond to the Custom Data channel configured in Unity Particle System with "Random Between Two Constants" mode.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Flow Map
-Flow Mapを使うとベースマップを指定した方向に歪ませることができます。
+You can use the Flow Map to distort the Base Map to the specified directions.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/FlowMap.png" alt="ElderStar Inspector: FlowMap"><br>
   <sub>Flow Map</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-フローマップを設定します。フローマップの仕様は以下の通りです。
+Sets the Flow Map. The specifications are as follows.
 </p>
 <p>
 <ul>
-<li>指定された2個のチャンネルのカラーの値に基づいて、サンプリングするUV値をずらします</li>
-<li>チャンネルの指定はChannelsプロパティのXとYで行えます</li>
-<li>値は0.5を基準として、小さいほどUV値がマイナス方向に、大きいほどプラス方向にずれます</li>
+    <li>Shifts the UV values of the Base Map based on the texture color channels.</li>
+    <li>The color channels used is determined by the X value and Y value of the Channels properties.</li>
+    <li>The smaller the value from 0.5, the more the UV value shifts in the negative direction, and vice versa.</li>
 </ul>
-色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Note that you need to uncheck sRGB Color in the texture import setting because the pixels will be used as values, not colors.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-フローマップの回転度合いを設定します。
+Set the amount of rotation of the Flow Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-フローマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Intensity</b></td><td>
 <p>
-フローマップを適用する際の強度を設定します。
+Sets the Flow Map intensity.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Targets</b></td><td>
 <p>
-フローマップを適用する対象を設定します（複数選択可能）。
+Set the targets to which the flow map will be applied (multiple selections are possible).
 
 * Base Map
 * Tint Map
@@ -739,7 +741,7 @@ Flow Mapを使うとベースマップを指定した方向に歪ませること
 </table>
 
 #### Parallax Map
-Parallax Mapを使うと視差効果が出せます
+Parallax Map can create a parallax effect.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/ParallaxMap.png" alt="ElderStar Inspector: ParallaxMap"><br>
@@ -748,129 +750,131 @@ Parallax Mapを使うと視差効果が出せます
 
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Mode</b></td><td>
 <p>
-視差マップのモードを以下の選択肢から指定できます。
+Specifies the mode of the parallax map from the following options:
 </p>
 <p>
 <ul>
-<li>Single Texture: 通常の2Dテクスチャ（デフォルト）</li>
-<li>Flip Book: Flip-Bookアニメーション</li>
-<li>Flip Book Blending: ブレンドありのFlip-Bookアニメーション</li>
+<li>Single Texture: Regular 2D texture (default)</li>
+<li>Flip Book: Flip-Book animation</li>
+<li>Flip Book Blending: Flip-Book animation with blending</li>
 </ul>
 </p>
 <p>
-選択したモードによってテクスチャの型が変わります。
+The texture type changes depending on the selected mode.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-視差マップを設定します。<br>
+Sets the parallax map.<br>
 </p>
 <p>
-ModeにFlip Bookを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>を設定する必要があります。<br>
-ModeにFlip Book Blendingを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>を設定する必要があります。<br>
+If Flip Book is selected in Mode, a <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a> needs to be set.<br>
+If Flip Book Blending is selected in Mode, a <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a> needs to be set.<br>
 </p>
-視差マップの仕様は以下の通りです。
+The specifications of the parallax map are as follows:
 <p>
 <ul>
-<li>指定されたチャンネルのカラーの値に基づいて、サーフェスの凹み具合を変えます</li>
-<li>値は0が元の状態で、1に近いほど凹み具合が上がります</li>
+<li>Changes the surface's concavity based on the color value of the specified channel</li>
+<li>The value of 0 is the original state, and the closer it gets to 1, the more concave it becomes</li>
 </ul>
-色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Since a texture is used as a value, not a color, be sure to uncheck the sRGB Color checkbox in the texture settings.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Flip-Book Progress</b></td><td>
 <p>
-<b>ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-フリップブックまたはフリップブックブレンディングの進行度合いです。
+The progress of the Flip-Book or Flip-Book Blending.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Random Row Selection</b></td><td>
 <p>
-<b>ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-UnityのTexture Sheet AnimationのRow Mode > Random機能と同等の機能です。有効にすると、各パーティクルがライフタイム中にランダムに1つの行を選択・維持してアニメーションを再生します。
+Equivalent to Unity's Texture Sheet Animation Row Mode > Random functionality. When enabled, each particle randomly selects and maintains one row throughout its lifetime for animation playback.
 </p>
 <p>
-ランダム値の入力にUnity Particle SystemのCustom Coordを使用します。まずRow Countをテクスチャシートの行数に合わせて設定し、その後任意のCustom Coordチャンネルを「Random Between Two Constants」モード（範囲：0からRow Count）で設定し割り当てます。
+Uses Unity Particle System's Custom Coord for random value input. First set Row Count to match the number of rows in your texture sheet, then configure any Custom Coord channel in "Random Between Two Constants" mode (range: 0 to Row Count) and assign it.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Row Count</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-テクスチャシートの行数を設定します（例：4×4のテクスチャシートの場合、Row Countを4に設定）。
+Set the number of rows in your texture sheet (e.g., for a 4×4 texture sheet, set Row Count to 4).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Random Coord</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-ランダム値の入力に使用するCustom Coordチャンネルを選択します。Unity Particle SystemのCustom Dataで「Random Between Two Constants」モードに設定したチャンネルと対応させます。
+Select the Custom Coord channel for random value input. This should correspond to the Custom Data channel configured in Unity Particle System with "Random Between Two Constants" mode.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Strength</b></td><td>
 <p>
-視差マップを適用する際の強度を設定します。
+Sets the strength of the parallax map when applied.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Targets</b></td><td>
 <p>
-視差マップを適用する対象を設定します（複数選択可能）。
-
-* Base Map
-* Tint Map
-* Emission Map
+Sets the targets to apply the parallax map (multiple selection possible).
+<ul>
+<li>Base Map</li>
+<li>Tint Map</li>
+<li>Emission Map</li>
+</ul>
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Color Correction
-Color Correctionはここまでの色を補正します。
+Color Correction correct the colors up to this point.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/ColorCorrection.png" alt="ElderStar Inspector: ColorCorrection"><br>
   <sub>Color Correction</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Mode</b></td><td>
 <p>
-色調補正のモードを以下の選択肢から指定できます。
+You can specify how to correct the colors.
 </p>
 <p>
 <ul>
-<li>None: 色調補正なし（デフォルト）</li>
-<li>Greyscale: グレースケール化</li>
-<li>Gradient Map: グラデーションマップを使って補正</li>
+<li>None: Disable the Color Correction (Default).</li>
+<li>Greyscale: Chage the colors to greyscale.</li>
+<li>Gradient Map: Use the gradient map.</li>
 </ul>
 </p>
 </td></tr>
 <tr><td><td colspan=2><b>Texture</b></td><td>
 <p>
-<b>ModeをGradient Mapに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Gradient.</b>
 </p>
 <p>
-グラデーションマップを設定します。グラデーションマップの仕様は以下の通りです。
+Sets the Gradient Map. The specifications are as follows.
 <ul>
-<li>ここまでの色の輝度をグラデーションマップの色に置き換えます</li>
-<li>輝度に応じてグラデーションマップをサンプリングする際のU値を変えます</li>
-<li>輝度が最大の場合にグラデーションマップの右端がサンプリングされます</li>
-<li>従って横方向にグラデーションがかかったテクスチャを使う必要があります</li>
+<li>Replace the luminance with the colors of the gradient map.</li>
+<li>Change the U value for sampling the gradient map according to luminance.</li>
+<li>When luminance is at maximum, the right edge of the gradient map is sampled.</li>
+<li>Therefore, we need to use a texture with a horizontal gradient.</li>
 </ul>
 </p>
 </td></tr>
@@ -878,436 +882,441 @@ Color Correctionはここまでの色を補正します。
 </table>
 
 #### Alpha Transition
-Alpha Transitionは徐々に消えていく表現に使用します。
+Alpha Transition controls the alpha value using a texture.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/AlphaTransition.png" alt="ElderStar Inspector: AlphaTransition"><br>
   <sub>Alpha Transition</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Mode</b></td><td>
 <p>
-アルファトランジションのモードを以下の選択肢から指定できます。
+You can specify Alpha Transition Mode from the following options.
 </p>
 <p>
 <ul>
-<li>None: なし（デフォルト）</li>
-<li>Fade: 薄くなって消えていくモード</li>
-<li>Dissolve: 削れて消えていくモード</li>
+<li>None: Disable the Alpha Transition (Default).</li>
+<li>Fade: Transition using the fade texture.</li>
+<li>Dissolve: Transition using the dissolve texture.</li>
 </ul>
 </p>
 </td></tr>
 <td colspan=3><b>Map Mode</b></td><td>
 <p>
-アルファトランジションマップのモードを以下の選択肢から指定できます。
+You can specify the type of the Alpha Transition Map from the following options.
 </p>
 <p>
 <ul>
-<li>Single Texture: 通常の2Dテクスチャ（デフォルト）</li>
-<li>Flip Book: Flip-Bookアニメーション</li>
-<li>Flip Book Blending: ブレンドありのFlip-Bookアニメーション</li>
+<li>Single Texture: Use 2D texture (Default).</li>
+<li>Flip Book: Use Flip-Book animation.</li>
+<li>Flip Book Blending: Use Flip-Book animation with interpolated frames.</li>
 </ul>
 </p>
 <p>
-選択したモードによってテクスチャの型が変わります。
+The required texture type will change depending on the mode you selected.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-アルファトランジションマップを設定します。アルファトランジションマップの仕様は以下の通りです。
+Sets the Alpha Transition Map. The specifications are as follows.
 <ul>
-<li>指定された1個のカラーチャンネルの値に基づいてアルファ値を変更します</li>
-<li>チャンネルの指定はChannlesプロパティで行えます</li>
-<li>値が小さい部分ほど消えやすく、大きい部分ほど最後まで残ります</li>
+    <li>Changes the alpha value based on the texture color channel.</li>
+    <li>The color channels used is determined by the X value of the Channels properties.</li>
+    <li>The smaller the R value, the easier it is to disappear, and vice versa.</li>
 </ul>
 </p>
 <p>
-ModeにFlip Bookを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>を設定する必要があります。<br>
-ModeにFlip Book Blendingを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>を設定する必要があります。
+If you specify Flip Book as the Mode, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>.
+And if you specify Flip Book Blending, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>.
 </p>
 <p>
-また色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Note that you need to uncheck sRGB Color in the texture import setting because the pixels will be used as values, not colors.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-アルファトランジションマップの回転度合いを設定します。
+Set the amount of rotation of the Alpha Transition Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-アルファトランジションマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Flip-Book Progress</b></td><td>
 <p>
-<b>Map ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Map Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-Flip-BookあるいはFlip-Book Blendingの進行度を設定します。
+Sets the progress of Flip-Book or Flip-Book Blending.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Random Row Selection</b></td><td>
 <p>
-<b>Map ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Map Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-UnityのTexture Sheet AnimationのRow Mode > Random機能と同等の機能です。有効にすると、各パーティクルがライフタイム中にランダムに1つの行を選択・維持してアニメーションを再生します。
+Equivalent to Unity's Texture Sheet Animation Row Mode > Random functionality. When enabled, each particle randomly selects and maintains one row throughout its lifetime for animation playback.
 </p>
 <p>
-ランダム値の入力にUnity Particle SystemのCustom Coordを使用します。まずRow Countをテクスチャシートの行数に合わせて設定し、その後任意のCustom Coordチャンネルを「Random Between Two Constants」モード（範囲：0からRow Count）で設定し割り当てます。
+Uses Unity Particle System's Custom Coord for random value input. First set Row Count to match the number of rows in your texture sheet, then configure any Custom Coord channel in "Random Between Two Constants" mode (range: 0 to Row Count) and assign it.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Row Count</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-テクスチャシートの行数を設定します（例：4×4のテクスチャシートの場合、Row Countを4に設定）。
+Set the number of rows in your texture sheet (e.g., for a 4×4 texture sheet, set Row Count to 4).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Random Coord</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-ランダム値の入力に使用するCustom Coordチャンネルを選択します。Unity Particle SystemのCustom Dataで「Random Between Two Constants」モードに設定したチャンネルと対応させます。
+Select the Custom Coord channel for random value input. This should correspond to the Custom Data channel configured in Unity Particle System with "Random Between Two Constants" mode.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Transition Progress</b></td><td>
 <p>
-トランジションの進行度を設定します。
+Sets the progress of Transition.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>2nd Texture Blend Mode</b></td><td>
 <p>
-2枚目のテクスチャの合成方法を以下の選択肢から指定できます。
+You can specify how to composite the second texture from the following options.
 </p>
 <p>
 <ul>
-<li>None: 利用しない（デフォルト）</li>
-<li>Average: 平均。2つのテクスチャの平均値を参照します。</li>
-<li>Multiply: 乗算</li>
+<li>None: Don't use The second texture (Default).</li>
+<li>Additive: Referring to the average of two textures.</li>
+<li>Multiply</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>2nd Texture Map Mode</b></td><td>
 <p>
-<b>2nd Texture Blend ModeをAverageあるいはMultiplyに設定した時のみ表示されます。</b>
+<b>This property is visible only when 2nd Texture Blend Mode is set to Average or Multiply.</b>
 </p>
 <p>
-2枚目のアルファトランジションマップのMap Modeを1枚目のテクスチャとは独立して指定できます。以下の選択肢から指定できます。
+You can specify the Map Mode of the second Alpha Transition Map independently from the first texture. The following options are available.
 </p>
 <p>
 <ul>
-<li>Single Texture: 通常の2Dテクスチャ（デフォルト）</li>
-<li>Flip Book: Flip-Bookアニメーション</li>
-<li>Flip Book Blending: ブレンドありのFlip-Bookアニメーション</li>
+<li>Single Texture: Use 2D texture (Default).</li>
+<li>Flip Book: Use Flip-Book animation.</li>
+<li>Flip Book Blending: Use Flip-Book animation with interpolated frames.</li>
 </ul>
 </p>
 <p>
-選択したモードによってテクスチャの型が変わります。
+The required texture type will change depending on the mode you selected.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>2nd Texture Rotation</b></td><td>
 <p>
-<b>2nd Texture Blend ModeをAverageあるいはMultiplyに設定した時のみ表示されます。</b>
+<b>This property is visible only when 2nd Texture Blend Mode is set to Average or Multiply.</b>
 </p>
 <p>
-2枚目のアルファトランジションマップの回転度合いを設定します。
+Set the amount of rotation of the second Alpha Transition Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-2枚目のアルファトランジションマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Edge Sharpness</b></td><td>
 <p>
-<b>ModeをDissolveに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Dissolve.</b>
 </p>
 <p>
-エッジの鋭さを設定します。
+Sets the sharpness of the edge.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Emission
-Emissionは発光する表現のために使用します。
+The Emission control how the particles are glowing.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/Emission.png" alt="ElderStar Inspector: Emission"><br>
   <sub>Emission</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Mode</b></td><td>
 <p>
-エミッションのモードを以下の選択肢から指定できます。
+You can specify the area to be glowed.
 </p>
 <p>
 <ul>
-<li>None: なし（デフォルト）</li>
-<li>All: 全面をエミッションさせます</li>
-<li>By Texture: エミッションさせる範囲をテクスチャにより指定します</li>
-<li>Edge: エッジ（アルファ値が0より大きく1より小さい部分）をエミッションさせます</li>
+<li>None: Disable the Emission (Default).</li>
+<li>All: The entire surface will glow.</li>
+<li>By Texture: The area specified by the texture will glow.</li>
+<li>Edge: Edges (areas where alpha is greater than 0 and less than 1) will glow.</li>
 </ul>
 </p>
 </td></tr>
 <td colspan=3><b>Map Mode</b></td><td>
 <p>
-<b>ModeをBy Textureに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to By Texture.</b>
 </p>
 <p>
-エミッションマップのモードを以下の選択肢から指定できます。
+You can specify the Mode of the Emission Map from the following options.
 </p>
 <p>
 <ul>
-<li>Single Texture: 通常の2Dテクスチャ（デフォルト）</li>
-<li>Flip Book: Flip-Bookアニメーション</li>
-<li>Flip Book Blending: ブレンドありのFlip-Bookアニメーション</li>
+<li>Single Texture: Use 2D texture (Default).</li>
+<li>Flip Book: Use Flip-Book animation.</li>
+<li>Flip Book Blending: Use Flip-Book animation with interpolated frames.</li>
 </ul>
 </p>
 <p>
-選択したモードによってテクスチャの型が変わります。
+The required texture type will change depending on the mode you selected.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-<b>ModeをBy Textureに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to By Texture.</b>
 </p>
 <p>
-エミッションマップを設定します。エミッションマップの仕様は以下の通りです。
+Sets the Emission Map. The specifications are as follows.
 <ul>
-<li>指定された1個のチャンネルのカラーの値に基づいてエミッションのしやすさ変更します</li>
-<li>チャンネルの指定はChannelsプロパティで行えます。</li>
-<li>値が大きいほどエミッションしやすくなります</li>
+    <li>The larger the texture color channels value, the more likely it is to glow.</li>
+    <li>The color channels used is determined by the X value of the Channels property.</li>
 </ul>
 </p>
 <p>
-ModeにFlip Bookを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>を設定する必要があります。<br>
-ModeにFlip Book Blendingを指定した場合には、<a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>を設定する必要があります。
+If you specify Flip Book as the Mode, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture2DArray.html">Texture2DArray</a>.
+And if you specify Flip Book Blending, you need to set <a href="https://docs.unity3d.com/2020.3/Documentation/Manual/class-Texture3D.html">Texture3D</a>.
 </p>
 <p>
-また色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Note that you need to uncheck sRGB Color in the texture import setting because the pixels will be used as values, not colors.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-<b>ModeをBy Textureに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to By Texture.</b>
 </p>
 <p>
-エミッションマップの回転度合いを設定します。
+Set the amount of rotation of the Emission Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-エミッションマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Flip-Book Progress</b></td><td>
 <p>
-<b>ModeをBy Textureに設定し、Map ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to By Texture and the Map Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-Flip-BookあるいはFlip-Book Blendingの進行度を設定します。
+Sets the progress of Flip-Book or Flip-Book Blending.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Random Row Selection</b></td><td>
 <p>
-<b>ModeをBy Textureに設定し、Map ModeをFlip BookあるいはFlip Book Blendingに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to By Texture and the Map Mode is set to Flip Book or Flip Book Blending.</b>
 </p>
 <p>
-UnityのTexture Sheet AnimationのRow Mode > Random機能と同等の機能です。有効にすると、各パーティクルがライフタイム中にランダムに1つの行を選択・維持してアニメーションを再生します。
+Equivalent to Unity's Texture Sheet Animation Row Mode > Random functionality. When enabled, each particle randomly selects and maintains one row throughout its lifetime for animation playback.
 </p>
 <p>
-ランダム値の入力にUnity Particle SystemのCustom Coordを使用します。まずRow Countをテクスチャシートの行数に合わせて設定し、その後任意のCustom Coordチャンネルを「Random Between Two Constants」モード（範囲：0からRow Count）で設定し割り当てます。
+Uses Unity Particle System's Custom Coord for random value input. First set Row Count to match the number of rows in your texture sheet, then configure any Custom Coord channel in "Random Between Two Constants" mode (range: 0 to Row Count) and assign it.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Row Count</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-テクスチャシートの行数を設定します（例：4×4のテクスチャシートの場合、Row Countを4に設定）。
+Set the number of rows in your texture sheet (e.g., for a 4×4 texture sheet, set Row Count to 4).
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Random Coord</b></td><td>
 <p>
-<b>Random Row Selectionが有効な時のみ表示されます。</b>
+<b>This property is visible only when Random Row Selection is enabled.</b>
 </p>
 <p>
-ランダム値の入力に使用するCustom Coordチャンネルを選択します。Unity Particle SystemのCustom Dataで「Random Between Two Constants」モードに設定したチャンネルと対応させます。
+Select the Custom Coord channel for random value input. This should correspond to the Custom Data channel configured in Unity Particle System with "Random Between Two Constants" mode.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Color Type</b></td><td>
 <p>
-エミッションの色を以下の選択肢から指定できます。
+You can specify the type of the emission color from the following options.
 <ul>
-<li>Color: 指定した単色をエミッション色として使用します</li>
-<li>Base Color: ここまでのRGB値をエミッション色として使用します</li>
-<li>Gradient Map: グラデーションマップを使ってエミッション色を指定します</li>
+<li>Color: Use the specified single color as the emission color.</li>
+<li>Base Color: Use the RGB values up to this point as the emission color.</li>
+<li>Gradient Map: Use a gradient map to specify the emission color.</li>
 </ul>
-Gradient MapはModeをBy TextureかEdgeに設定した時のみ選択可能です。
+Gradient Map can only be selected when Mode is set to By Texture or Edge.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Color</b></td><td>
 <p>
-<b>Color TypeをColorに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Color Type is set to Color.</b>
 </p>
 <p>
-エミッションの色をHDRカラーで指定します。
+Sets the emission color as HDR color.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Keep Edge Transparency</b></td><td>
 <p>
-<b>ModeをEdgeに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Edge.</b>
 </p>
 <p>
-チェックをつけると、エッジが透過しなくなります。
+If checked, the edges will not be transparent.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Gradient Map</b></td><td>
 <p>
-<b>Color TypeをGradient Mapに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Color Type is set to Gradient Map.</b>
 </p>
 <p>
-グラデーションマップを設定します。グラデーションマップの仕様は以下の通りです。
+Sets the Gradient Map. The specifications are as follows.
 <ul>
-<li>ModeがBy Textureの場合: エミッションマップのR値をグラデーションマップのU値としてサンプリングします</li>
-<li>ModeがEdgeの場合: アルファ値をグラデーションマップのU値としてサンプリングします</li>
-<li>横方向にグラデーションがかかったテクスチャを使う必要があります</li>
+<li>When Mode is By Texture: Sampling the R value of the Emission Map as the U value of the Gradient Map.</li>
+<li>When Mode is Edge: Sample alpha values as U values of the Gradient Map.</li>
+<li>You need to use a texture with a horizontal gradient as the Gradient Map.</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Intensity</b></td><td>
 <p>
-エミッションの強さを設定します。
+Sets the intensity of the emission.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Transparency
-Transparencyは透明度を調整できます。
+Control the transparency in various ways.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/Transparency.png" alt="ElderStar Inspector: Transparency"><br>
   <sub>Transparency</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Rim</b></td><td>
 <p>
-チェックをつけるとリムを透過できます。
+If checked, the rim will be transparent.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Progress</b></td><td>
 <p>
-透過の進行度合いを設定します。
+Sets the progress of transparency.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Sharpness</b></td><td>
 <p>
-この値が大きいほど透過領域のエッジが鋭くなります。
+The larger this value is, the sharper the edge will be.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Inverse</b></td><td>
 <p>
-透過範囲を逆転させます。
+Inverse the transparency area.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Luminance</b></td><td>
 <p>
-チェックをつけると輝度が小さい部分を透過させます。
+If checked, areas with low brightness will be transparent.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Progress</b></td><td>
 <p>
-透過の進行度合いを設定します。
+Sets the progress of transparency.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Sharpness</b></td><td>
 <p>
-この値が大きいほど透過領域のエッジが鋭くなります。
+The larger this value is, the sharper the edge will be.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Inverse</b></td><td>
 <p>
-透過範囲を逆転させます。
+Inverse the transparency area.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Soft Particles</b></td><td>
 <p>
-チェックをつけるとソフトパーティクルを有効にします。<br>
-Soft Particlesにはカメラの深度テクスチャが必要です。VRChatではワールド側の設定に依存します。
+If checked, soft particles will be enabled.
+This feature requires a camera depth texture. On VRChat avatars, availability depends on the world.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Intensity</b></td><td>
 <p>
-この値が大きいほど、透過する範囲が大きくなります。
+The larger this value, the larger the transparent area.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Depth Fade</b></td><td>
 <p>
-カメラに近い部分と遠い部分を透過させます。<br>
-カメラとの距離を使用するため、シーン深度テクスチャは不要です。
+Makes the areas near and far from the camera transparent.
+This feature uses distance from the camera and does not require a scene depth texture.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Distance</b></td><td>
 <p>
-透過する範囲を設定します。<br>
-カメラから見てNearより近い部分、Farより遠い部分が透過されます。
+Set the transparency range.
+The area closer than Near and farther than Far from the camera will be transparent.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Width</b></td><td>
 <p>
-透過し始めてから完全に透過するまでの距離です。
+The distance from the beginning of transparency to the end of complete transparency.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 <a id="uber-lit"></a>
-## Uber Litシェーダー
-Uber LitシェーダーはNOVAのBRDFを使用し、Built-inのライト・影・環境光を反映する多機能シェーダーです。メッシュエフェクトなどのライティングの影響を受けたいパーティクルにはこのシェーダーを使用します。
+## Uber Lit Shader
+The Uber Lit shader is a multifunctional shader with lighting applied. Use this shader for particles that need lighting, such as mesh effects.
+This shader uses NOVA's PBR material controls with Built-in lights, shadows and probes.
 
-Uber Litシェーダーを使用するには、マテリアルに`Nova/Particles/UberLit`シェーダーをアサインします。
+To use this shader, assign the `Nova/Particles/UberLit` shader to your material.
+This shader is based on the Uber Unlit shader with additional processing and properties.
 
-Uber LitシェーダーはUber Unlitシェーダーにライティングのための処理とプロパティを追加したシェーダーです。<br>
-追加されたプロパティの説明は以下の通りです。<br>
+The description of the added properties is as follows.
+
 
 
 #### Render Settings
-Render Settingsにはライティング用のプロパティが追加されています。
+The following lighting properties are added to Render Settings.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/LitSettings.png" alt="ElderStar Inspector: LitSettings"><br>
-  <sub>Render Settings</sub>
+  <sub>Lit Settings</sub>
 </p>
+
 
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Work Flow Mode</b></td><td>
 <p>
-PBRライティングのワークフローを指定できます。<br>
+You can specify the mode of PBR workflow from the following options.<br>
 </p>
 <p>
 <ul>
@@ -1315,120 +1324,120 @@ PBRライティングのワークフローを指定できます。<br>
 <li>Metallic</li>
 </ul>
 </p>
-なお、ワークフローに関する詳細は下記のURLを参照してください。
-https://docs.unity3d.com/ja/2018.4/Manual/StandardShaderMetallicVsSpecular.html
-https://docs.unity3d.com/ja/2018.4/Manual/StandardShaderMaterialParameterSpecular.html
-https://docs.unity3d.com/ja/2018.4/Manual/StandardShaderMaterialParameterMetallic.html
+For more information on workflow, please refer to the following URL
+https://docs.unity3d.com/2018.4/Documentation/Manual/StandardShaderMetallicVsSpecular.html
+https://docs.unity3d.com/2018.4/Documentation/Manual/StandardShaderMaterialParameterSpecular.html
+https://docs.unity3d.com/2018.4/Documentation/Manual/StandardShaderMaterialParameterMetallic.html
 <tr><td colspan="3"><b>Receive Shadows</b></td><td>
 <p>
-チェックをつけるとライトによる影を受けます。影を落とす設定はShadow Casterで行います。<br>
+Enables receiving shadows from Built-in lights. Configure shadows on the light and in Quality settings.<br>
 </p>
 <tr><td colspan="3"><b>Specular Highlights</b></td><td>
 <p>
-チェックをつけるとスペキュラハイライトが有効になります。<br>
+If checking the box, it will be enabled specular highlighting.<br>
 </p>
 <tr><td colspan="3"><b>Environment Reflections</b></td><td>
 <p>
-チェックをつけるとReflection ProbeやSkyboxによる環境光の影響を受けるようになります。<br>
-環境光の影響に関する詳細は下記URLの「Environment Reflection」を参照してください。<br>
-https://docs.unity3d.com/ja/2018.4/Manual/GlobalIllumination.html
+If checking the box, it will be affected ambient light from the Reflection Probe and Skybox.<br>
+For more information on the effects of ambient light, please refer to "Environment Reflection" at the following URL.<br>
+https://docs.unity3d.com/2018.4/Documentation/Manual/GlobalIllumination.html
 </p>
 </tbody>
 </table>
 
 #### Surface Maps
-ライティングのために必要なサーフェイスに関する各種情報の設定が追加されています。
+Several surface properties have been added for lighting.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/SurfaceMaps.png" alt="ElderStar Inspector: SurfaceMaps"><br>
   <sub>Surface Maps</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Normal Map</b></td><td>
 <p>
-法線マップを設定します。法線マップの仕様は以下の通りです。<br>
+Set up the normal map.The specifications of the normal map are as follows.<br>
 <ul>
-<li>設定できる法線マップはタンジェントスペース法線マップ</li>
-<li>マップが指定されていない場合は頂点法線が使用される</li>
-<li>法線のスケール値を指定できる。1.0で等倍となる</li>
+<li>The only normal maps that can be set up are those for tangent space.</li>
+<li>If normal map isn't specified, vertex normals are used</li>
+<li>The normal scale value can be specified. The default scale is 1.0.</li>
 </ul>
-法線マップの詳細については下記のURLを参照してください。<br>
-https://docs.unity3d.com/ja/2021.3/Manual/StandardShaderMaterialParameterNormalMap.html
+For more infomation of the normal map
+Please refer to the following URL for details on the normal map.<br>
+https://docs.unity3d.com/2021.3/Documentation/Manual/StandardShaderMaterialParameterNormalMap.html
 </p>
 <tr><td colspan="3"><b>Metallic Map</b></td><td>
-<b>Work Flow ModeにMetallicを設定すると表示されます。</b>
+<b>It is displayed when the Work Flow Mode is set to Metallic.</b>
 
-メタリックマップを設定します。メタリックマップの仕様は以下の通りです。<br>
+Set up the metallic map.The specifications of the metallic map are as follows.<br>
 <ul>
-<li>メタリックマップが設定されていない場合は、metallicプロパティの値が一律の金属度として使用される</li>
-<li>メタリックマップが設定されている場合は、metallicプロパティが金属度の乗算値として使用される</li>
-<li>Channelsで金属度が格納されているチャンネルを指定できる。デフォルトはRチャンネル</li>
+<li>If the metallic map isn't set, the value of the metallic property will be used as the uniform metallicity.
+<li>If the metallic map is set、the value of the metallic property will be used as multiplier value.</li>
+<li>The Channels property allows specifying the channel where the metallic value is stored. Default is R channel.</li>
 </ul>
-メタリックマップの詳細については下記のURLを参照してください。<br>
-https://docs.unity3d.com/ja/2018.4/Manual/StandardShaderMaterialParameterMetallic.html
+Please refer to the following URL for details on the metallic map.<br>
+https://docs.unity3d.com/2018.4/Documentation/Manual/StandardShaderMaterialParameterMetallic.html
 </ul>
 
 <tr><td colspan="3"><b>Specular Map</b></td><td>
-<b>Work Flow ModeにSpecularを設定すると表示されます。</b>
+<b>It is displayed when the Work Flow Mode is set to Specular.</b>
 
-スペキュラマップを設定します。スペキュラマップの仕様は以下の通りです。<br>
+Set up the specular map. The specifications of the specular map are as follows.<br>
 <ul>
-<li>スペキュラマップが設定されていない場合は、Specularプロパティのカラーの値が一律のスペキュラカラーとして使用される</li>
-<li>スペキュラマップが設定されている場合は、Specularプロパティのカラーの値が乗算カラーとして使用される</li>
+<li>If the specular map isn't set, the color of specular property will be used as the uniform specular color.</li>
+<li>If the specular map is set, the color of specular property will be used as the multiplier color.</li>
 </ul>
-スペキュラマップの詳細については下記のURLを参照してください。<br>
-https://docs.unity3d.com/ja/2018.4/Manual/StandardShaderMaterialParameterSpecular.html
+Please refer to the following URL for details on the specular map.<br>
+https://docs.unity3d.com/2018.4/Documentation/Manual/StandardShaderMaterialParameterSpecular.html
 </ul>
 
 <tr><td colspan="3"><b>Smoothness Map</b></td><td>
-スムースネスマップを設定します。スムースネスマップの仕様は以下の通りです。<br>
+Set up the smoothness map. The specifications of the smoothness map are as follows.<br>
 <br>
 <ul>
-<li>スムースネスマップが設定されていない場合は、Smoothnessプロパティの値が一律の滑らかさとして使用される</li>
-<li>スムースネスマップが設定されている場合は、Smoothnessプロパティの値が乗算値として使用される</li>
-<li>Channelsで滑らかさが格納されているチャンネルを指定できる。デフォルトはαチャンネル</li>
+<li>If the smoothness map isn't set, the value of the smoothness property will be used as the uniform smoothess.</li>
+<li>If the smoothness map is set, the value of the smoothness property will be used as the multiplier value.</li>
+<li>The Channels property allows specifying the channel where the smoothness value is stored. Default is α channel.</li>
 </ul>
 </tbody>
 </table>
 
 <a id="distortion"></a>
-## Distortionシェーダー
-Distortionは画面に対して歪み効果をかけるためのシェーダです。
-熱波など、歪み効果が必要なエフェクトにはこのシェーダを使用します。
+## Distortion Shader
+Using the Distortion shader, you can apply distortion effects to the screen, such as heat waves.
 
-Distortionシェーダを使用するには、マテリアルに `Nova/Particles/Distortion` シェーダをアサインします。
-Inspectorから設定可能な各プロパティの説明は以下の通りです。
+To use this shader, assign the `Nova/Particles/Distortion` shader to your material. The following is the descriptions of each property that can be set from the Inspector.
 
 #### Render Settings
-Render Settingsではマテリアルの描画方法を制御できます。
+The Render Settings control how the Material is rendered.
 
 
 
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Render Face</b></td><td>
 <p>
-描画する面を以下の選択肢から指定できます。
+You can specify the rendering face from the following options.
 </p>
 <p>
 <ul>
-<li>Front: 前面のみ描画（デフォルト）</li>
-<li>Back: 背面のみ描画</li>
-<li>Both: 両面を描画</li>
+<li>Front (Default)</li>
+<li>Back</li>
+<li>Both</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>ZTest</b></td><td>
 <p>
-ZTestを設定できます。
+You can set ZTest value.
 </p>
 <p>
 <ul>
@@ -1436,7 +1445,7 @@ ZTestを設定できます。
 <li>Never</li>
 <li>Less</li>
 <li>Equal</li>
-<li>Less Equal（デフォルト）</li>
+<li>Less Equal (Default)</li>
 <li>Greater</li>
 <li>Not Equal</li>
 <li>Greater Equal</li>
@@ -1448,387 +1457,390 @@ ZTestを設定できます。
 </table>
 
 #### Distortion
-Distortionでは歪ませ方を設定できます。
+Distortion controls how it is distorted.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/Distortion.png" alt="ElderStar Inspector: Distortion"><br>
   <sub>Distortion</sub>
 </p>
 
+
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-ディストーションマップを設定します。ディストーションマップの仕様は以下の通りです。
+Sets the Distortion Map. The specifications are as follows.
 </p>
 <p>
 <ul>
-<li>指定された2個のチャンネルのカラーの値に基づいて画面を歪ませます</li>
-<li>チャンネルの指定はChannelsプロパティのXとYで行います</li>
-<li>値は0.5を基準値として、基準値から離れるほど強く歪みます</li>
+    <li>Distorts the screen based on the texture color channels.</li>
+    <li>The color channels used is determined by the X value of the Channels Property.</li>
+    <li>0.5 is the reference value, and the further away from the reference value, the stronger the distortion.</li>
 </ul>
-色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Note that you need to uncheck sRGB Color in the texture import setting because the pixels will be used as values, not colors.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Intensity Mode</b></td><td>
 <p>
-歪み強度の制御方法を指定します。
+Specifies how distortion intensity is controlled.
 </p>
 <p>
 <ul>
-<li>Single: X/Y共通の単一値で強度を制御します（デフォルト）。</li>
-<li>XY: X軸とY軸で個別に強度を制御します。</li>
+<li>Single: Use a single intensity value for both X and Y (Default).</li>
+<li>XY: Use separate intensity values for X and Y axes.</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan=3><b>Intensity</b></td><td>
 <p>
-<b>Intensity Mode が Single の場合にのみ表示されます。</b>
+<b>This property is visible only when Intensity Mode is set to Single.</b>
 </p>
 <p>
-歪みの強さを設定します。
+Sets the distortion intensity.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Intensity X / Intensity Y</b></td><td>
 <p>
-<b>Intensity Mode が XY の場合にのみ表示されます。</b>
+<b>These properties are visible only when Intensity Mode is set to XY.</b>
 </p>
 <p>
-各軸の歪み強度を個別に設定します。
+Sets the distortion intensity for each axis independently.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-ディストーションマップの回転度合いを設定します。
+Set the amount of rotation of the Distortion Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-ディストーションマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Mirror Sampling</b></td><td>
 <p>
-チェックをつけるとテクスチャがミラーサンプリングされます。
+If true, mirrors the texture to create a repeating pattern.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Use As Normal Map</b></td><td>
 <p>
-チェックをつけるとTexture TypeをNormal Mapとみなし、Unpackしてサンプリングされます。<br>
-また、Textureには正規化されたNormal Mapを指定してください。そうでない場合はプラットフォームよって描画結果が変わる可能性があります。
+If true, the Texture Type is treated as a Normal Map and will be unpacked for sampling.<br>
+Additionally, please specify a normalized Normal Map for the Texture. Otherwise, the rendering results may vary depending on the platform.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Flow Mapping
-Flow Mapを使うとディストーションマップを指定した方向に歪ませることができます。
+You can use the Flow Map to distort the Distortion Map to the specified directions.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/DistortionFlow.png" alt="ElderStar Inspector: DistortionFlow"><br>
-  <sub>Flow Map</sub>
+  <sub>Distortion Flow</sub>
 </p>
+
 
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-フローマップを設定します。フローマップの仕様は以下の通りです。
+Sets the Flow Map. The specifications are as follows.
 </p>
 <p>
 <ul>
-<li>指定された2個のチャンネルのカラーの値に基づいて、サンプリングするUV値をずらします</li>
-<li>チャンネルの指定は、ChannlesプロパティのXとYで行えます</li>
-<li>値は0.5を基準として、小さいほどUV値がマイナス方向に、大きいほどプラス方向にずれます</li>
+    <li>Shifts the UV values of the Distortion Map based on the texture color channels.</li>
+    <li>The texture color channels used is determined by the X value of the Channels property.</li>
+    <li>The smaller the value from 0.5, the more the UV value shifts in the negative direction, and vice versa.</li>
 </ul>
-色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Note that you need to uncheck sRGB Color in the texture import setting because the pixels will be used as values, not colors.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-フローマップの回転度合いを設定します。
+Set the amount of rotation of the Flow Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-フローマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan=3><b>Intensity</b></td><td>
 <p>
-フローマップを適用する際の強度を設定します。
+Sets the Flow Map intensity.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Alpha Transition
-Alpha Transitionは徐々に消えていく表現に使用します。
+Alpha Transition controls the alpha value using a texture.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/DistortionAlpha.png" alt="ElderStar Inspector: DistortionAlpha"><br>
-  <sub>Alpha Transition</sub>
+  <sub>Distortion Alpha</sub>
 </p>
+
 
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Mode</b></td><td>
 <p>
-アルファトランジションのモードを以下の選択肢から指定できます。
+You can specify Alpha Transition Mode from the following options.
 </p>
 <p>
 <ul>
-<li>None: なし（デフォルト）</li>
-<li>Fade: 薄くなって消えていくモード</li>
-<li>Dissolve: 削れて消えていくモード</li>
+<li>None: Don't use the Alpha Transition (Default).</li>
+<li>Fade: Transition using the fade texture.</li>
+<li>Dissolve: Transition using the dissolve texture.</li>
 </ul>
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Texture</b></td><td>
 <p>
-アルファトランジションマップを設定します。アルファトランジションマップの仕様は以下の通りです。
+Sets the Alpha Transition Map. The specifications are as follows.
 <ul>
-<li>指定された1個のチャンネルのカラーの値に基づいてアルファ値を変更します</li>
-<li>チャンネルの指定は、ChannlesプロパティのXで行えます</li>
-<li>R値が小さい部分ほど消えやすく、大きい部分ほど最後まで残ります</li>
+    <li>Changes the alpha value based on the texture color channel.</li>
+    <li>The color channels used is determined by the X value of the Channels property.</li>
+    <li>The smaller the R value, the easier it is to disappear, and vice versa.</li>
 </ul>
 </p>
 <p>
-色ではなく値としてテクスチャを使うので、テクスチャ設定のsRGB Colorのチェックを外す必要がある点に注意してください。
+Note that you need to uncheck sRGB Color in the texture import setting because the pixels will be used as values, not colors.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Rotation</b></td><td>
 <p>
-アルファトランジションマップの回転度合いを設定します。
+Set the amount of rotation of the Alpha Transition Map.
 </p>
 </td></tr>
 <tr><td></td><td colspan=2><b>Offset</b></td><td>
 <p>
-アルファトランジションマップを回転する際の中心座標のオフセットです。
+Shifts the center coordinate of rotation.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Progress</b></td><td>
 <p>
-トランジションの進行度を設定します。
+Sets the progress of Transition.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Edge Sharpness</b></td><td>
 <p>
-<b>ModeをDissolveに設定した時のみ表示されます。</b>
+<b>This property is visible only when the Mode is set to Dissolve.</b>
 </p>
 <p>
-エッジの鋭さを設定します。
+Sets the sharpness of the edge.
 </p>
 </td></tr>
 </tbody>
 </table>
 
 #### Transparency
-Transparencyは透明度を調整できます。
+Control the transparency in various ways.
 
 <p align="center">
   <img width="70%" src="Documentation~/Images/DistortionTransparency.png" alt="ElderStar Inspector: DistortionTransparency"><br>
-  <sub>Transparency</sub>
+  <sub>Distortion Transparency</sub>
 </p>
+
 
 <table width="100%">
 <thead>
-<tr><td colspan="3"><b>プロパティ名</b></td><td><b>説明</b></td></tr>
+<tr><td colspan="3"><b>Property Name</b></td><td><b>Description</b></td></tr>
 </thead>
 <tbody>
 <tr><td colspan="3"><b>Rim</b></td><td>
 <p>
-チェックをつけるとリムを透過できます。
+If checked, the rim will be transparent.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Progress</b></td><td>
 <p>
-透過の進行度合いを設定します。
+Sets the progress of transparency.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Sharpness</b></td><td>
 <p>
-この値が大きいほど透過領域のエッジが鋭くなります。
+The larger this value is, the sharper the edge will be.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Inverse</b></td><td>
 <p>
-透過範囲を逆転させます。
+Inverse the transparency area.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Luminance</b></td><td>
 <p>
-チェックをつけると輝度が小さい部分を透過させます。
+If checked, areas with low brightness will be transparent.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Progress</b></td><td>
 <p>
-透過の進行度合いを設定します。
+Sets the progress of transparency.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Sharpness</b></td><td>
 <p>
-この値が大きいほど透過領域のエッジが鋭くなります。
+The larger this value is, the sharper the edge will be.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Inverse</b></td><td>
 <p>
-透過範囲を逆転させます。
+Inverse the transparency area.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Soft Particles</b></td><td>
 <p>
-チェックをつけるとソフトパーティクルを有効にします。<br>
-Soft Particlesにはカメラの深度テクスチャが必要です。VRChatではワールド側の設定に依存します。
+If checked, soft particles will be enabled.
+This feature requires a camera depth texture. On VRChat avatars, availability depends on the world.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Intensity</b></td><td>
 <p>
-この値が大きいほど、透過する範囲が大きくなります。
+The larger this value, the larger the transparent area.
 </p>
 </td></tr>
 <tr><td colspan="3"><b>Depth Fade</b></td><td>
 <p>
-カメラに近い部分と遠い部分を透過させます。<br>
-カメラとの距離を使用するため、シーン深度テクスチャは不要です。
+Makes the areas near and far from the camera transparent.
+This feature uses distance from the camera and does not require a scene depth texture.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Distance</b></td><td>
 <p>
-透過する範囲を設定します。<br>
-カメラから見てNearより近い部分、Farより遠い部分が透過されます。
+Set the transparency range.
+The area closer than Near and farther than Far from the camera will be transparent.
 </p>
 </td></tr>
 <tr><td></td><td colspan="2"><b>Width</b></td><td>
 <p>
-透過し始めてから完全に透過するまでの距離です。
+The distance from the beginning of transparency to the end of complete transparency.
 </p>
 </td></tr>
 </tbody>
 </table>
 
-
 <a id="ugui"></a>
-## Uber Unlit/Litシェーダー（uGUI）
+## Uber Unlit/Lit Shaders for uGUI
 
-uGUI用には`Nova/UIParticles/UberUnlit`と`Nova/UIParticles/UberLit`を使用します。
-マテリアルの設定は通常のUber Unlit/Litと共通で、Mask・RectMask2D・CanvasGroupに対応します。
-Particle SystemをCanvas上に描画する仕組み自体は、別途用意してください。
+Use `Nova/UIParticles/UberUnlit` and `Nova/UIParticles/UberLit` for uGUI.
+Their material settings match the regular Uber Unlit/Lit shaders, with support for Mask, RectMask2D and CanvasGroup.
+You need a separate mechanism to draw a Particle System on a Canvas.
 
-Custom Dataを利用する場合は、Canvasの`Additional Shader Channels`に`TexCoord1`と`TexCoord2`を追加します。
-uGUIではz・w成分が保持されないため、Custom Coordにはx・yを使ってください。LitではNormal・Tangentも必要です。
+For Custom Data, enable `TexCoord1` and `TexCoord2` in the Canvas's `Additional Shader Channels`.
+Use the x and y components of Custom Coord because uGUI does not retain z and w. Lit also needs Normal and Tangent.
 
-Canvas上の追加ライトには、任意の**`ElderStar > Canvas Lighting`**コンポーネントを利用できます。
-`Collect Scene Lights`でライトを登録すると、Directional・Point・Spotから寄与の大きいライトを選び、1パスで評価します。
-既定は4灯、最大8灯。元のマテリアルを変更せず、マスクや描画順を維持します。
+The optional **`ElderStar > Canvas Lighting`** component adds lights to a Canvas.
+Use `Collect Scene Lights` to register lights. It selects the most influential Directional, Point and Spot lights and evaluates them in one pass.
+The default limit is 4 lights, with a maximum of 8. Source materials, masking and draw order are preserved.
 
 <p align="center">
-  <img width="70%" src="Documentation~/Images/CanvasLighting.png" alt="ElderStarのCanvas Lighting Inspector"><br>
-  <sub>Canvas Lighting。通常のUnityシーン向けの任意機能です。</sub>
+  <img width="70%" src="Documentation~/Images/CanvasLighting.png" alt="ElderStar Canvas Lighting Inspector"><br>
+  <sub>Canvas Lighting. An optional helper for regular Unity scenes.</sub>
 </p>
 
-このライト一覧には影・Cookieは含まれません。[設定と制限](Documentation~/CanvasLighting.md)を参照してください。
-VRChatアバターでは実Canvasやこの補助スクリプトを使わず、許可されたメッシュ／パーティクルの描画経路を使います。
+This light list does not include shadows or cookies. See [setup and limitations](Documentation~/CanvasLighting.md).
+For VRChat avatars, use the allowed mesh and particle rendering paths instead of a real Canvas or this helper script.
 
 <a id="shadow-caster"></a>
-## 影を落とす機能について
+## Casting Shadows
 
-Particle Uber Unlit/Litの**Shadow Caster**を有効にすると、エフェクトから影を落とせます。
-Renderer側のCast Shadows、Light側のShadowsも設定してください。
+Enable **Shadow Caster** on Particle Uber Unlit/Lit to let an effect cast shadows.
+Also configure Cast Shadows on the Renderer and Shadows on the Light.
 
 <p align="center">
-  <img width="70%" src="Documentation~/Images/ShadowCaster.png" alt="ElderStarのShadow Caster設定"><br>
+  <img width="70%" src="Documentation~/Images/ShadowCaster.png" alt="ElderStar Shadow Caster settings"><br>
   <sub>Shadow Caster</sub>
 </p>
 
-| プロパティ | 説明 |
+| Property | Description |
 | --- | --- |
-| Enable | ShadowCasterパスを有効にします。 |
-| Apply Vertex Deformation | 頂点変形を影にも反映します。 |
-| Alpha Test Enable / Cutoff | アルファ値による影の切り抜き。色の描画とは別のしきい値です。 |
-| Alpha Affected By | Tint Color、Flow Map、Alpha Transition Map、Transparency Luminanceのどれを影のアルファに反映するか選びます。 |
+| Enable | Enables the ShadowCaster pass. |
+| Apply Vertex Deformation | Applies vertex deformation to the shadow as well. |
+| Alpha Test Enable / Cutoff | Clips the shadow by alpha, using a threshold separate from the color pass. |
+| Alpha Affected By | Selects which of Tint Color, Flow Map, Alpha Transition Map and Transparency Luminance affect shadow alpha. |
 
-影の解像度・Bias・CascadeはBuilt-inのLight / Quality設定に従います。
+Shadow resolution, bias and cascades follow Built-in Light / Quality settings.
 
 <a id="custom-data"></a>
-## Custom Vertex Streamsとの連携
+## Custom Vertex Streams Integration
 
-Particle SystemのCustom Dataを使うと、粒ごとにマテリアルの値を変えたり、寿命に合わせてアニメーションさせたりできます。
-通常のパーティクルとTrailの頂点ストリームに対応しています。以下はテクスチャ回転の例です。
+Particle System Custom Data can vary material values per particle and animate them over each particle's lifetime.
+Both regular particle and trail streams are supported. The following example animates texture rotation.
 
-### Custom Dataを設定する
+### Configure Custom Data
 
-Particle Systemの`Custom Data`モジュールを有効にし、`Custom1`をVectorに設定します。
-X成分に、寿命の開始時に0、終了時に1となるカーブを設定します。
+Enable the Particle System's `Custom Data` module and set `Custom1` to Vector.
+Set the X curve to start at 0 and end at 1 over the particle's lifetime.
 
-### Custom Vertex Streamsを設定する
+### Configure Custom Vertex Streams
 
-Rendererの`Custom Vertex Streams`を有効にします。
-Position・Normal・Color・UVに加え、**UV2**で`TEXCOORD0.zw`を埋めてからCustom1を配置し、
-一覧の表示で`Custom1.x`が`TEXCOORD1.x`に割り当てられていることを確認します。
-構成は描画モードによって変わるため、[Fix Now](#fix-now)を使うのが簡単です。
+Enable `Custom Vertex Streams` in the Renderer.
+Alongside Position, Normal, Color and UV, add **UV2** to fill `TEXCOORD0.zw` before Custom1.
+Check the stream list to confirm that `Custom1.x` is assigned to `TEXCOORD1.x`.
+The layout depends on the render mode; [Fix Now](#fix-now) is the easiest way to configure it.
 
-### マテリアルのプロパティを設定する
+### Configure the material
 
-Base Mapの`Rotation`右側にあるCustom Coordから**COORD 1X**を選びます。
-以後は各パーティクルのCustom1.xが回転量を駆動します。
-同様にProgress、Intensity、UV Offsetなど、Custom Coord欄があるプロパティを制御できます。
+Select **COORD 1X** from the Custom Coord selector beside Base Map's `Rotation`.
+Each particle's Custom1.x now drives its rotation.
+Other properties with a Custom Coord selector, including Progress, Intensity and UV Offset, work the same way.
 
-Flip BookでRandom Row Selectionを使用する場合は、Row Countに行数を設定し、
-別のCustom Data成分を`Random Between Two Constants`の0〜Row Countに設定してRandom Coordへ割り当てます。
+For Flip Book's Random Row Selection, set Row Count to the number of rows.
+Configure another Custom Data component as `Random Between Two Constants` from 0 to Row Count, and assign it to Random Coord.
 
 <a id="gpu-instancing"></a>
-## Mesh GPU Instancingを使う
+## Using Mesh GPU Instancing
 
-Particle SystemのRendererで`Render Mode = Mesh`にし、`Enable Mesh GPU Instancing`を有効にします。
-マテリアル側のGPU Instancingも有効にしてください。Shader Model 4.5対応環境が必要です。
+In the Particle System Renderer, set `Render Mode = Mesh` and enable `Enable Mesh GPU Instancing`.
+Enable GPU Instancing on the material too. Shader Model 4.5 support is required.
 
-Custom Vertex Streamsは、`INSTANCED1.xyzw`と`INSTANCED2.xyzw`を過不足なく埋める構成にします。
-Custom1・Custom2を使用する一般的な構成はFix Nowで設定できます。独自ストリームを使う場合は、割り当て表示を確認してください。
+Custom Vertex Streams must fill `INSTANCED1.xyzw` and `INSTANCED2.xyzw` completely.
+Fix Now configures a typical layout using Custom1 and Custom2. Check the displayed assignments when using custom layouts.
 
-詳細は[UnityのParticle System GPU Instancing](https://docs.unity3d.com/2022.3/Documentation/Manual/PartSysInstancing.html)を参照してください。
+See [Unity's Particle System GPU Instancing documentation](https://docs.unity3d.com/2022.3/Documentation/Manual/PartSysInstancing.html).
 
 <a id="fix-now"></a>
-## Custom Vertex Streamsを自動的に設定する
+## Automatic Custom Vertex Streams Setup
 
-マテリアルが必要とする頂点ストリームとRendererの設定が異なる場合、Inspector下部に警告と**Fix Now**が表示されます。
-クリックすると、そのマテリアルを使うRendererに必要な標準構成が設定されます。
-通常のマテリアルとTrail Materialの両方を確認するため、手動でストリームを組む前にこの機能を利用してください。
+If a Renderer's streams differ from those required by its material, a warning and **Fix Now** appear at the bottom of the Inspector.
+Click it to configure the required standard layout on Renderers using that material.
+Both the regular material and Trail Material are checked. Try this before configuring the streams manually.
 
 <a id="unused-references"></a>
-## 不要なパラメータ参照を削除する
+## Removing Unused References
 
-Single Textureに切り替えたあとも、使わないTexture2DArrayなどへの参照が残ることがあります。
-不要な参照はビルドに含まれる素材を増やす原因になります。
+After switching to Single Texture, a material can still reference an unused Texture2DArray or another texture.
+These references can cause unnecessary assets to be included in a build.
 
-Projectビューで対象マテリアルを選び、**`Tools > ElderStar > RemoveUnusedReferences`**を実行します。
-削除された参照はConsoleに表示されます。再び別のモードで使う予定があるテクスチャは、設定を戻す際に再指定してください。
+Select the materials in the Project window and run **`Tools > ElderStar > RemoveUnusedReferences`**.
+Removed references are listed in the Console. Reassign a texture if you later switch back to a mode that needs it.
 
 <a id="optimization"></a>
-## 最適化シェーダーの利用によるメモリ使用量の削減
+## Reducing Memory Usage with Optimized Shaders
 
-Uberシェーダーは多くのキーワードとパスを持ちます。
-使用するRender Typeと必要なパスを絞ったシェーダーを生成し、マテリアルを差し替えることで、不要なバリアントを減らせます。
-削減量は使用する機能・プラットフォーム・ビルド設定に依存します。
+Uber shaders contain many keywords and passes.
+Generate shaders limited to the Render Type and passes you need, then replace material shaders to reduce unnecessary variants.
+Savings depend on the features, platform and build settings in use.
 
-| API | 説明 |
+| API | Description |
 | --- | --- |
-| `OptimizedShaderGenerator.Generate(outputFolderPath)` | Particle Uber Lit/Unlitの最適化シェーダーを生成します。 |
-| `OptimizedShaderReplacer.Replace(settings)` | 指定フォルダー内のマテリアルを対応する最適化シェーダーへ差し替えます。 |
+| `OptimizedShaderGenerator.Generate(outputFolderPath)` | Generates optimized Particle Uber Lit/Unlit shaders. |
+| `OptimizedShaderReplacer.Replace(settings)` | Replaces materials in the specified folder with matching optimized shaders. |
 
-### 生成と適用
+### Generate and apply
 
-生成と適用には次のEditor APIを使用します。先に生成し、その後でマテリアルを差し替えます。
-スクリプトは`Editor`フォルダーに置き、対象フォルダーを指定してからメニューを実行してください。
+Use the following Editor APIs, generating shaders before replacing material references.
+Place the script in an `Editor` folder and set the target folders before running the menu.
 
 ```csharp
 using Nova.Editor.Core.Scripts.Optimizer;
@@ -1851,62 +1863,61 @@ public static class EffectShaderOptimization
 }
 ```
 
-生成先・対象フォルダーは実際のプロジェクトに合わせてください。
-Built-inではカメラ深度の生成にもShadowCasterが使われるため、影を表示しない場合でも必要なことがあります。
-DepthNormalsの出力を使う場合は、そのパスも残してください。UI・Distortionはこの生成対象に含まれません。
-詳細は[Editor APIリファレンス](Documentation~/EditorAPI.md)を参照してください。
+Adjust the output and target folders to your project.
+Built-in also uses ShadowCaster for camera depth generation, so that pass may be needed even when you do not display shadows.
+Keep DepthNormals if you use its output. UI and Distortion shaders are not included in this generator.
+See the [Editor API reference](Documentation~/EditorAPI.md) for details.
 
 <a id="builtin-helpers"></a>
-## Built-in向けの補助機能
+## Built-in Helpers
 
-通常のUnityプロジェクトでは、必要に応じて次の機能を追加できます。
-いずれもVRChatアバターの基本的な描画には不要です。
+Regular Unity projects can optionally use the following helpers.
+None is required for basic rendering on VRChat avatars.
 
-| 機能 | 用途 |
+| Feature | Purpose |
 | --- | --- |
-| [Screen Space Distortion](Documentation~/BuiltInRenderingAPI.md) | モノラルカメラで歪みをまとめて合成。Camera・CommandBuffer・RenderTextureを使うAPIもあります。 |
-| [Canvas Lighting](Documentation~/CanvasLighting.md) | 通常のCanvasに最大8灯を1パスで反映。 |
-| [DepthNormals](Documentation~/DepthNormals.md) | NOVAオブジェクトの法線・有効領域を専用テクスチャへ出力。世界全体の深度法線テクスチャは上書きしません。 |
-| [Ambient Lighting](Documentation~/AmbientLighting.md) | ローカルのLight Probeと全体の環境反射用の環境光を分離して渡します。 |
-| [LPPV・Rendering Diagnostics](Documentation~/ProbeVolumesAndDiagnostics.md) | 空間的な間接光、Albedo・法線・深度・光など8種類のEditor表示。 |
+| [Screen Space Distortion](Documentation~/BuiltInRenderingAPI.md) | Composes distortion for a mono camera. Also exposes Camera, CommandBuffer and RenderTexture APIs. |
+| [Canvas Lighting](Documentation~/CanvasLighting.md) | Evaluates up to 8 lights in a single pass on regular Canvases. |
+| [DepthNormals](Documentation~/DepthNormals.md) | Outputs NOVA objects' normals and coverage to a dedicated texture, leaving the world's depth-normal texture intact. |
+| [Ambient Lighting](Documentation~/AmbientLighting.md) | Supplies local Light Probe lighting separately from the ambient input used for global environment reflections. |
+| [LPPV and Rendering Diagnostics](Documentation~/ProbeVolumesAndDiagnostics.md) | Spatial indirect lighting and 8 Editor views, including albedo, normals, depth and lighting. |
 
 <a id="compatibility"></a>
-## 互換性と動作確認
+## Compatibility and Verification
 
-NOVA 3.6.0の標準シェーダー名・素材プロパティ・GUID・公開Editor APIを維持しています。
-一般的なマテリアル操作とエフェクト制作の流れは本家と共通です。
-描画基盤がBuilt-inになるため、次の点には違いがあります。
+NOVA 3.6.0's standard shader names, material properties, GUIDs and public Editor APIs are preserved.
+Material editing and effect authoring follow the original workflow.
+Using Built-in introduces the following differences.
 
-| 項目 | ElderStarでの扱い |
+| Area | ElderStar behavior |
 | --- | --- |
-| ライト・影・環境光 | Built-inのライト・Shadow・Probeを使用します。同じ素材でもシーン側の入力により見た目が変わります。 |
-| 歪みの重なり | シェーダー単独では各面から背景を参照します。複数の非ゼロの歪みをURPと同じ方法で累積するわけではありません。通常Unityにはカメラ合成の選択肢があります。 |
-| Soft Particles | カメラの深度テクスチャが必要です。VRChatアバターからワールドの深度設定を強制できません。 |
-| 透明物の描画順 | 同じ深度・同じソート条件では順序が変わる場合があります。必要な場合はRendererのSorting Orderを明示します。 |
-| Forward+ / APV | Built-inの追加ライト・LPPVで対応します。URPのタイル処理やAPVデータ形式の互換実装ではありません。 |
-| URP専用C# API | Renderer Feature・RenderGraphなどを呼ぶコードにはBuilt-in用の書き換えが必要です。素材の直接読み込みとは別の範囲です。 |
+| Lights, shadows and ambient lighting | Uses Built-in lights, shadows and probes. Scene inputs can change the appearance of the same material. |
+| Overlapping distortion | The shader-only path samples the background per surface. It does not accumulate multiple nonzero distortions in the same way as URP. Regular Unity projects can use camera composition. |
+| Soft Particles | Requires a camera depth texture. A VRChat avatar cannot force the world's depth settings. |
+| Transparent draw order | Ordering may differ when depth and sorting conditions are equal. Set Renderer Sorting Order explicitly when needed. |
+| Forward+ / APV | Uses Built-in additional lights and LPPV as substitutes. This is not a compatible implementation of URP tiling or the APV data format. |
+| URP-only C# APIs | Code using Renderer Features, RenderGraph and similar APIs needs a Built-in implementation. This is separate from importing material assets directly. |
 
-Unity 2022.3 / Unity 6でEditor・描画・画像比較・パッケージ導入を検証しています。
-VRChat PCのSDKビルドとAAO既定設定での最適化後の描画も検証していますが、すべてのアバター・ワールド・GPUでの一致を保証するものではありません。
-実機PCVRと最新変更を反映した実クライアントでの確認は継続項目です。
+Editor behavior, rendering, image comparisons and package installation have been checked in Unity 2022.3 and Unity 6.
+VRChat PC SDK builds and rendering after AAO optimization with default settings have also been tested. This does not guarantee identical results for every avatar, world or GPU.
+Physical PCVR testing and in-client checks incorporating the latest changes remain ongoing verification items.
 
-詳しい条件と機能別の対応状況は[互換性表](Documentation~/Compatibility.md)、
-検証の記録は[リポジトリの検証ドキュメント](https://github.com/smizuoch/ElderStar/blob/main/Documentation/Verification.md)を参照してください。
+See the [compatibility matrix](Documentation~/Compatibility.md) for feature-specific conditions and the [repository verification documentation](https://github.com/smizuoch/ElderStar/blob/main/Documentation/Verification.md) for recorded results.
 
 <a id="editor-api"></a>
-## Editor APIリファレンス
+## Editor API Reference
 
-[RendererErrorHandler・OptimizedShaderGenerator・OptimizedShaderReplacer](Documentation~/EditorAPI.md)の使い方をまとめています。
-既存コードとの互換性のため、名前空間は`Nova.Editor.Core.Scripts`などの元の名前を維持しています。
+The [Editor API guide](Documentation~/EditorAPI.md) covers RendererErrorHandler, OptimizedShaderGenerator and OptimizedShaderReplacer.
+Namespaces such as `Nova.Editor.Core.Scripts` retain their original names for compatibility with existing code.
 
 <a id="license"></a>
-## ライセンス
+## License
 
-ElderStarは[MITライセンス](LICENSE.md)で提供します。
-NOVA Shaderを基にした独立したBuilt-in移植であり、CyberAgent公式の製品ではありません。
+ElderStar is available under the [MIT License](LICENSE.md).
+It is an independent Built-in port of NOVA Shader and is not an official CyberAgent product.
 
-シェーダー・Editor・機能リファレンスの原典：
+Original shaders, Editor code and feature reference:
 [NOVA Shader / CyberAgent, Inc.](https://github.com/CyberAgentGameEntertainment/NovaShader)
-（Copyright 2021 CyberAgent, Inc.）。本READMEの機能表・説明は同プロジェクトのMITライセンスのドキュメントを基に調整しています。
-作例素材のクレジットと再撮影条件は[画像について](Documentation~/Images/README.md)に記載しています。
-素材を別途導入する場合は、その素材のライセンスにも従ってください。
+(Copyright 2021 CyberAgent, Inc.). The feature tables and explanations in this README are adapted from that project's MIT-licensed documentation.
+See [image credits and capture conditions](Documentation~/Images/README.md) for the example assets.
+When importing other assets, also follow their respective licenses.

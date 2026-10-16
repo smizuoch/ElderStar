@@ -5,8 +5,8 @@ from pathlib import Path
 import shutil
 
 ALLOWED = {"Documentation~", "Editor", "Runtime", "Samples~", "CHANGELOG.md",
-           "LICENSE.md", "package.json", "README.md", "Editor.meta", "Runtime.meta",
-           "CHANGELOG.md.meta", "LICENSE.md.meta", "package.json.meta", "README.md.meta"}
+           "LICENSE.md", "package.json", "README.md", "README_JA.md", "Editor.meta", "Runtime.meta",
+           "CHANGELOG.md.meta", "LICENSE.md.meta", "package.json.meta", "README.md.meta", "README_JA.md.meta"}
 
 
 def stage(repo, output, mode):
