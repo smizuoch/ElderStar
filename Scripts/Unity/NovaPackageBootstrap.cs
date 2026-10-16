@@ -8,7 +8,7 @@ using UnityEngine;
 public static class NovaPackageBootstrap
 {
     private static PackRequest pack;
-    private static AddRequest add;
+    private static AddAndRemoveRequest add;
     private static double deadline;
     private const string Pending = "NovaPackageBootstrap.PendingSource";
 
@@ -22,7 +22,8 @@ public static class NovaPackageBootstrap
     private static void Add(string source)
     {
         SessionState.SetString(Pending, source);
-        add = Client.Add(source);
+        var remove = OptionalArgument("-novaRemovePackage");
+        add = Client.AddAndRemove(new[] { source }, string.IsNullOrEmpty(remove) ? Array.Empty<string>() : new[] { remove });
         BeginPolling();
     }
 
@@ -52,12 +53,14 @@ public static class NovaPackageBootstrap
             if (pack.Status != StatusCode.Success) { Finish(false, pack.Error.message); return; }
             Debug.Log("NOVA package archive: " + pack.Result.tarballPath);
             SessionState.SetString(Pending, "file:" + pack.Result.tarballPath);
-            add = Client.Add("file:" + pack.Result.tarballPath);
+            var remove = OptionalArgument("-novaRemovePackage");
+            add = Client.AddAndRemove(new[] { "file:" + pack.Result.tarballPath },
+                string.IsNullOrEmpty(remove) ? Array.Empty<string>() : new[] { remove });
             pack = null;
         }
         if (add == null || !add.IsCompleted) return;
         Finish(add.Status == StatusCode.Success,
-            add.Status == StatusCode.Success ? "Installed " + add.Result.packageId : add.Error.message);
+            add.Status == StatusCode.Success ? "Package installation completed." : add.Error.message);
     }
 
     private static void Finish(bool success, string message)
@@ -70,9 +73,13 @@ public static class NovaPackageBootstrap
 
     private static string Argument(string name)
     {
+        return OptionalArgument(name) ?? throw new ArgumentException("Missing argument " + name);
+    }
+
+    private static string OptionalArgument(string name)
+    {
         var args = Environment.GetCommandLineArgs();
         var index = Array.IndexOf(args, name);
-        if (index < 0 || index + 1 >= args.Length) throw new ArgumentException("Missing argument " + name);
-        return args[index + 1];
+        return index < 0 || index + 1 >= args.Length ? null : args[index + 1];
     }
 }

@@ -15,6 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+ElderStar package identity (2026-10-16):
+
+- [x] Require `me.smizuoch.elderstar` and author `smizuoch`; keep original asset GUIDs, shader names and API contracts.
+- [x] Verify package import, retained asset references and generated includes on Unity 2022/6. This is pre-distribution: present the new identity directly, without public old-ID upgrade instructions.
+- [x] Run package/Editor checks, record results, review and commit/merge/push the tested identity change.
+
 ElderStar display naming (2026-10-16):
 
 - [x] Test the package display name, tool/component menu roots and window titles while preserving original shader and public API contracts.

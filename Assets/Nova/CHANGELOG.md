@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.1.8
 
-- Use ElderStar for the package display name, tool/component menu roots and tool-window titles. Keep package ID, source paths, GUIDs, shader names, public APIs and rendering unchanged.
+- Set the package ID to `me.smizuoch.elderstar` and the maintainer to smizuoch (`smizuoch.me`).
+- Use ElderStar for the package display name, tool/component menu roots and tool-window titles. Keep source paths, GUIDs, shader names, public APIs and rendering unchanged.
 
 ## 0.1.7
 

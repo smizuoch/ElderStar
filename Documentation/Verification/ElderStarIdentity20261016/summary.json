@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-16",
+  "package_id": "me.smizuoch.elderstar",
+  "display_name": "ElderStar",
+  "version": "0.1.8",
+  "maintainer": "smizuoch",
+  "maintainer_url": "https://smizuoch.me",
+  "base_commit": "c81b3e5a7bdf4d33ea74bed91473f80db0e872de",
+  "unity": [
+    {
+      "editor": "2022.3.22f1",
+      "suite": "editor",
+      "total": 507,
+      "passed": 507,
+      "failed": 0,
+      "xml": "Documentation/Verification/ElderStarIdentity20261016/editor-2022.3.22f1.xml.gz",
+      "xml_sha256": "ac8862a5ae6b9ed74936c3ec30aaf6d5e0a833757a4c08d23cf0dfc99afcbaf4",
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "production_shader_warnings": 0,
+      "synthetic_test_shader_warnings": 24
+    },
+    {
+      "editor": "2022.3.22f1",
+      "suite": "package",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "xml": "Documentation/Verification/ElderStarIdentity20261016/package-2022.3.22f1.xml.gz",
+      "xml_sha256": "07dbf7278187cfb94f130baca39fdf00ebd9aa7f0a670ad772b2d3eac5ddaec4",
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "production_shader_warnings": 0,
+      "synthetic_test_shader_warnings": 0
+    },
+    {
+      "editor": "6000.3.23f1",
+      "suite": "editor",
+      "total": 507,
+      "passed": 507,
+      "failed": 0,
+      "xml": "Documentation/Verification/ElderStarIdentity20261016/editor-6000.3.23f1.xml.gz",
+      "xml_sha256": "dbcad9cd003e4aa155ed03c88bc4b9420262499f09802d3bc3a02210fa5e1fe8",
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "production_shader_warnings": 0,
+      "synthetic_test_shader_warnings": 24
+    },
+    {
+      "editor": "6000.3.23f1",
+      "suite": "package",
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "xml": "Documentation/Verification/ElderStarIdentity20261016/package-6000.3.23f1.xml.gz",
+      "xml_sha256": "572164f4036edbf9bf19e30176cc9466897752c6dbe3232fb1759947906736dc",
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "production_shader_warnings": 0,
+      "synthetic_test_shader_warnings": 0
+    }
+  ],
+  "python": {
+    "parity": 24,
+    "documentation": 4
+  },
+  "retained_materials_per_editor": 7,
+  "retained_optimized_shader_guids_per_editor": 48,
+  "test_package_sha256": "acdc361a940bb6cf8cbb0ea0fee8d4cccab3e0333060dcfa8702da9a82bbcfa7",
+  "test_package_source_meta_files_matching_final": 227,
+  "archive_scope": "Test artifact only, not a published release. Public old-ID instructions were removed after capture at user request; compiled source, manifest and asset identities are unchanged.",
+  "fixture_correction": "Initial raw Material fixtures had deferred normal Inspector keyword/blend initialization. Final fixtures are initialized by the previous Inspector and verified stable after an old-ID reload before ID replacement; final checks flush SaveAssets and compare exact bytes. Original image baselines are unchanged.",
+  "environment_notes": "Initial package-cache refreshes produced transient CS2001 entries; old generated includes produced expected errors before regeneration. Duplicate previously imported samples were preserved outside Assets in the disposable fixtures. Final package runs contain zero C#/shader errors, shader warnings and GUID conflicts.",
+  "scope": "No rendering/runtime or public API changes. No new SDK upload, GPU timing or VRChat-client acceptance claimed."
+}

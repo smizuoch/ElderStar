@@ -1,7 +1,6 @@
 # ElderStar
 
-ElderStar is the display name of NovaShaderBuilt-in. Package ID, shader names,
-GUIDs and public APIs remain unchanged for existing materials and projects.
+Package ID: `me.smizuoch.elderstar` · Maintainer: [smizuoch](https://smizuoch.me).
 
 A Built-in Render Pipeline port of [CyberAgent NOVA Shader](https://github.com/CyberAgentGameEntertainment/NovaShader) 3.6.0.
 The six original shader names, material properties and custom editor APIs are retained.

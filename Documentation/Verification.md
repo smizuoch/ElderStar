@@ -57,7 +57,8 @@ camera/particle/UI rendering checks. Golden images are not rewritten by these co
 It checks external/tarball package import, all six original shader names, compilation
 of all 48 optimizer outputs, package-relative include paths, and native Package
 Manager sample import with resolved materials and five particle systems. All three
-tests must pass. Pass
+tests in `NovaInstalledPackageTests` must pass. Use that class as `-testFilter`
+for a fresh installation. Pass
 `-novaRequireCache` when testing a tarball to require a Library/PackageCache path.
 
 `Scripts/Unity/NovaPackageBootstrap.cs` can be copied to that project's Assets/Editor.
