@@ -1,0 +1,19 @@
+{
+  "version": "0.1.8",
+  "package_id": "me.smizuoch.elderstar",
+  "artifacts": {
+    "ElderStar-0.1.8.unitypackage": {
+      "bytes": 5247977,
+      "sha256": "a0189f6ba242759dadc995d5279bcb11909bdd6ccb3c6143806f81c100717328"
+    },
+    "me.smizuoch.elderstar-0.1.8.tgz": {
+      "bytes": 5045202,
+      "sha256": "91dc4c6105522eb8b026eaf3a0ff31c9da9c977b76aeda5875e5c29b9d04b0a5"
+    }
+  },
+  "upm_files_byte_identical": 279,
+  "unitypackage_asset_paths": 170,
+  "production_files_byte_identical": 100,
+  "production_guids_preserved": 100,
+  "unity_reserialized_metas": 0
+}

@@ -15,6 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+ElderStar distribution packages (2026-10-16):
+
+- [x] Test a release-only staging layout that preserves runtime/editor bytes and GUIDs, includes offline documentation/samples, and excludes project/test/private assets.
+- [x] Build `.unitypackage` and UPM `.tgz` artifacts; import the actual artifacts in clean Built-in projects and verify shaders, samples and rendering.
+- [x] Record checksums and installation instructions, review/commit the release tooling, and attach the verified files to a GitHub release within the authorized visibility. User selected a private repository release; see Distribution.md.
+
 ElderStar README and own captures (2026-10-16):
 
 - [x] Match the upstream introduction/authoring-reference structure, with current ElderStar installation, unchanged-material import and honest Built-in/VRChat limits.
