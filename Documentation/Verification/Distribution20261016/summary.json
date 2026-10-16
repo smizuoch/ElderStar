@@ -1,0 +1,68 @@
+{
+  "package": "me.smizuoch.elderstar",
+  "version": "0.1.8",
+  "date": "2026-10-16",
+  "graphics_api": "Direct3D11",
+  "final_tests": [
+    {
+      "unity": "2022.3.22f1",
+      "format": "unitypackage",
+      "passed": 4,
+      "failed": 0,
+      "shader_errors": 0,
+      "csharp_compile_errors": 0,
+      "optimized_shaders": 48,
+      "result": "assets2022.xml.gz",
+      "screenshot": "assets2022.png",
+      "screenshot_sha256": "7750d6bc9d96ab3a117c01b329ba8606203ac5bb5321c2a15b145ec0896789c3"
+    },
+    {
+      "unity": "6000.3.23f1",
+      "format": "unitypackage",
+      "passed": 4,
+      "failed": 0,
+      "shader_errors": 0,
+      "csharp_compile_errors": 0,
+      "optimized_shaders": 48,
+      "result": "assets6.xml.gz",
+      "screenshot": "assets6.png",
+      "screenshot_sha256": "7750d6bc9d96ab3a117c01b329ba8606203ac5bb5321c2a15b145ec0896789c3"
+    },
+    {
+      "unity": "2022.3.22f1",
+      "format": "tgz",
+      "passed": 4,
+      "failed": 0,
+      "shader_errors": 0,
+      "csharp_compile_errors": 0,
+      "optimized_shaders": 48,
+      "result": "upm2022.xml.gz",
+      "screenshot": "upm2022.png",
+      "screenshot_sha256": "7750d6bc9d96ab3a117c01b329ba8606203ac5bb5321c2a15b145ec0896789c3"
+    },
+    {
+      "unity": "6000.3.23f1",
+      "format": "tgz",
+      "passed": 4,
+      "failed": 0,
+      "shader_errors": 0,
+      "csharp_compile_errors": 0,
+      "optimized_shaders": 48,
+      "result": "upm6.xml.gz",
+      "screenshot": "upm6.png",
+      "screenshot_sha256": "7750d6bc9d96ab3a117c01b329ba8606203ac5bb5321c2a15b145ec0896789c3"
+    }
+  ],
+  "python": {
+    "distribution": 4,
+    "documentation": 8,
+    "parity": 24
+  },
+  "notes": [
+    "First test harness compile failed because PackageInfo needed an explicit namespace alias; fixed before all final runs.",
+    "First export was rejected by byte comparison because Unity upgraded .cginc and minimal .meta files. Final export restores reviewed production bytes while imports are paused.",
+    "Unity 2022 logged eight CS2001 messages referencing the previous UPM cache during the tarball switch; the test run recovered. A fresh Editor restart and rerun passed without C# or shader errors.",
+    "Unity licensing/Android-tool initialization messages and a package-directory watcher overflow were observed; final compilation, shader diagnostics and all integration assertions passed.",
+    "SDK/AAO, performance and physical PCVR were not rerun for this distribution-only change."
+  ]
+}

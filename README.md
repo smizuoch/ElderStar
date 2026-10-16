@@ -75,6 +75,11 @@ VRChatプロジェクトでは、VCC / ALCOMとVRChat SDKが指定するUnityバ
 
 ### インストール
 
+**`.unitypackage`で導入する場合**は、[GitHub Releases](https://github.com/smizuoch/ElderStar/releases)から`ElderStar-0.1.8.unitypackage`をダウンロードし、Unityで開いて`Import`します。
+本体・説明書・サンプルが`Assets/Nova`に入ります。VRCプロジェクトにもこの方法で導入できます。
+
+**Package Managerで導入する場合**は、次のGit URLを使います。
+
 1. `Window > Package Manager`を開きます。
 2. `+ > Add package from git URL...`を選びます。
 3. 次のURLを入力します。
@@ -82,6 +87,9 @@ VRChatプロジェクトでは、VCC / ALCOMとVRChat SDKが指定するUnityバ
 ```text
 https://github.com/smizuoch/ElderStar.git?path=/Assets/Nova
 ```
+
+リリースに添付した`me.smizuoch.elderstar-0.1.8.tgz`は、`+ > Add package from tarball...`から導入できます。
+`.unitypackage`とPackage Manager版は同じ本体なので、どちらか一方だけを導入してください。
 
 特定の状態に固定する場合は、URL末尾に`#コミットSHA`を付けます。
 ローカルのソースを使う場合は`Add package from disk...`で`Assets/Nova/package.json`を選択できます。
@@ -157,6 +165,7 @@ SDKの検証と`Build & Test`で、使用するアバター・ワールド・鏡
 
 Package ManagerのElderStarから**Built-in Showcase**をImportし、`NovaShowcase.unity`を開いて再生します。
 4種類のパーティクルと歪みを確認できます。
+`.unitypackage`版では`Assets/Nova/Samples/BuiltInShowcase/NovaShowcase.unity`を直接開きます。
 `Tools > ElderStar > Built-in > Create Showcase Scene`から、保存先を指定してシーンを作ることもできます。
 
 冒頭の作例は[本家のサンプル素材](https://github.com/CyberAgentGameEntertainment/NovaShader/tree/main/Assets/Samples)をElderStarで再撮影したもので、同梱Showcaseとは別です。
