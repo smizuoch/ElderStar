@@ -13,12 +13,12 @@ namespace Nova.Editor.Core.Scripts
 {
     public static class BuiltInShowcase
     {
-        [MenuItem("Tools/NOVA/Built-in/Create Showcase Scene")]
+        [MenuItem("Tools/ElderStar/Built-in/Create Showcase Scene")]
         public static void CreateFromMenu()
         {
             // Unity's additive scene API requires untitled scenes to have a path first.
             if (!EditorSceneManager.EnsureUntitledSceneHasBeenSaved("Save the untitled scene before creating a NOVA sample.")) return;
-            var path = EditorUtility.SaveFilePanelInProject("Create NOVA showcase", "NovaShowcase", "unity", "Choose a new scene path.");
+            var path = EditorUtility.SaveFilePanelInProject("Create ElderStar showcase", "NovaShowcase", "unity", "Choose a new scene path.");
             if (string.IsNullOrEmpty(path)) return;
             try
             {

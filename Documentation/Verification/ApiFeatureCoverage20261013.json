@@ -3871,7 +3871,7 @@
       "feature": "Custom editors",
       "status": "Exact",
       "evidence": "525 public/protected declarations, 14 original Inspector/helper source contracts, real OnGUI, multi-edit and Undo/Redo tests",
-      "reason_or_fallback": "Original class names, labels, CustomEditor declarations, foldout icons and saved preferences remain. Batch GUI tests cover Layout/Repaint and property edits; native mouse input has not been automated."
+      "reason_or_fallback": "Original class names, Inspector labels, CustomEditor declarations, foldout icons and saved preferences remain. Package display name, tool/component menu roots and tool-window titles use ElderStar by request; shader names and API identifiers are unchanged. Batch GUI tests cover Layout/Repaint and property edits; native mouse input has not been automated."
     },
     {
       "feature": "Material setup",
@@ -4147,7 +4147,7 @@
       "feature": "Debug display",
       "status": "Approximate",
       "evidence": "32 GPU view assertions and two actual diagnostic-variant AssetBundle stripping tests",
-      "reason_or_fallback": "Editor views cover albedo, world normals/tangents, eye depth, fog, direct/indirect light and additional count. Scoped global state restores after rendering; Player/bundle builds strip dedicated variants. This is not the URP debug API. Use Tools/NOVA/Rendering Diagnostics."
+      "reason_or_fallback": "Editor views cover albedo, world normals/tangents, eye depth, fog, direct/indirect light and additional count. Scoped global state restores after rendering; Player/bundle builds strip dedicated variants. This is not the URP debug API. Use Tools/ElderStar/Rendering Diagnostics."
     },
     {
       "feature": "UI stencil and ColorMask",

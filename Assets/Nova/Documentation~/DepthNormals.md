@@ -5,7 +5,7 @@ retains/removes it according to `OptionalShaderPass.DepthNormals`, including
 normal-map texture-mode variants on opaque materials. Original shader names and
 legacy Built-in aliases remain usable.
 
-For ordinary Built-in Unity cameras, add **NOVA / Depth Normals** and register
+For ordinary Built-in Unity cameras, add **ElderStar / Depth Normals** and register
 renderers with `RegisterRenderer`, or collect them once through the component's
 context menu. Runtime-created renderers use `RegisterRenderer` /
 `UnregisterRenderer`; the render loop does not search the scene.

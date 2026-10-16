@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-16",
+  "scope": "Display names only; no rendering, material, API, package ID or asset identity changes.",
+  "base_commit": "787636e387ce8a8196d42909d59742053c131554",
+  "unity": [
+    {
+      "editor": "2022.3.22f1",
+      "phase": "red",
+      "result": "Failed(Child)",
+      "total": 10,
+      "passed": 3,
+      "failed": 7,
+      "xml": "Documentation/Verification/ElderStarDisplay20261016/red-2022.3.22f1.xml.gz",
+      "xml_sha256": "e599637f9832b354c52cf971e7e79d436a08791303ecb1191cd19f9ee4e02a11"
+    },
+    {
+      "editor": "2022.3.22f1",
+      "phase": "green",
+      "result": "Passed",
+      "total": 507,
+      "passed": 507,
+      "failed": 0,
+      "xml": "Documentation/Verification/ElderStarDisplay20261016/green-2022.3.22f1.xml.gz",
+      "xml_sha256": "e814895232ffc65858ae535e86299d3018f5d77e29aa2430cb09a8edb40a8253",
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "production_shader_warnings": 0,
+      "synthetic_diagnostic_strip_fixture_warnings": 24
+    },
+    {
+      "editor": "6000.3.23f1",
+      "phase": "green",
+      "result": "Passed",
+      "total": 507,
+      "passed": 507,
+      "failed": 0,
+      "xml": "Documentation/Verification/ElderStarDisplay20261016/green-6000.3.23f1.xml.gz",
+      "xml_sha256": "1440d60ac39dbd6e13ca7dd20aeec99529c248c7d7ec626b10354c3d4f9a6e3a",
+      "csharp_errors": 0,
+      "shader_errors": 0,
+      "production_shader_warnings": 0,
+      "synthetic_diagnostic_strip_fixture_warnings": 24
+    }
+  ],
+  "python": {
+    "parity": 24,
+    "documentation": 4
+  },
+  "sdk_gpu_rerun": false,
+  "prior_sdk_source_check": "Frozen 0.1.7 source hashes checked after reversing only the explicitly listed menu/window/dialog display literals. Previous SDK and GPU observations are not new measurements.",
+  "remaining": "Previous VRChat-client/physical-PCVR acceptance and compatibility limits remain open."
+}

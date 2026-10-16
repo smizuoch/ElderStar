@@ -1,6 +1,6 @@
 # Optional Canvas lighting
 
-Add **NOVA / Canvas Lighting** to an ordinary Unity Canvas using `Nova/UIParticles/UberLit`. Use **Collect Scene Lights** in the Inspector to capture light references at authoring time. Runtime-created lights can use `RegisterLight(Light)` / `UnregisterLight(Light)`; there is no per-frame scene search.
+Add **ElderStar / Canvas Lighting** to an ordinary Unity Canvas using `Nova/UIParticles/UberLit`. Use **Collect Scene Lights** in the Inspector to capture light references at authoring time. Runtime-created lights can use `RegisterLight(Light)` / `UnregisterLight(Light)`; there is no per-frame scene search.
 
 The selected list supplies all direct lighting for those Graphics, including the directional key light, to avoid adding the same main light twice. The default limit is four lights per Graphic; `MaximumLights` is clamped to 0–8. The provider filters disabled/inactive lights, range, spot direction and culling layers, and chooses the largest estimated contributions using each Graphic's bounds. The Inspector shows the largest omitted count. Directional, Point and Spot use NOVA's BRDF and URP-style distance/spot attenuation in one color pass. Shadows and light cookies are deliberately not sampled by this optional list.
 

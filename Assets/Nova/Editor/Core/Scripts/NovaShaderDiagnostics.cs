@@ -41,8 +41,8 @@ namespace Nova.Editor.Core.Scripts
     {
         private NovaDebugView view;
         private readonly Stack<KeyValuePair<Camera, NovaShaderDiagnostics.Scope>> scopes = new Stack<KeyValuePair<Camera, NovaShaderDiagnostics.Scope>>();
-        [MenuItem("Tools/NOVA/Rendering Diagnostics")]
-        private static void Open() { GetWindow<NovaShaderDiagnosticsWindow>("NOVA Diagnostics"); }
+        [MenuItem("Tools/ElderStar/Rendering Diagnostics")]
+        private static void Open() { GetWindow<NovaShaderDiagnosticsWindow>("ElderStar Diagnostics"); }
         private void OnEnable() { Camera.onPreRender += BeforeCamera; Camera.onPostRender += AfterCamera; EditorApplication.update += RecoverInterruptedRender; }
         private void OnDisable()
         {

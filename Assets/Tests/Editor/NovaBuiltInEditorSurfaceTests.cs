@@ -17,6 +17,60 @@ public sealed class NovaBuiltInEditorSurfaceTests
     };
 
     [Test]
+    public void ElderStarMenusRetainAllCommandsAndMatchingValidators()
+    {
+        var menus = TypeCache.GetMethodsWithAttribute<MenuItem>()
+            .Where(method => method.DeclaringType.Assembly.GetName().Name == "Nova.Editor")
+            .SelectMany(method => method.GetCustomAttributes<MenuItem>()).ToArray();
+        var commands = menus.Where(menu => !menu.validate).Select(menu => menu.menuItem).ToArray();
+        Assert.That(commands, Is.EquivalentTo(new[]
+        {
+            "Tools/ElderStar/RemoveUnusedReferences",
+            "Tools/ElderStar/Built-in/Create Showcase Scene",
+            "Assets/Import Package/ElderStar Effect...",
+            "Tools/ElderStar/Built-in/Import Effect Package...",
+            "Tools/ElderStar/Built-in/Material Migration",
+            "Tools/ElderStar/Built-in/Match Original Lighting Settings",
+            "Tools/ElderStar/Built-in/Automatic Initial Lighting Setup",
+            "Tools/ElderStar/Rendering Diagnostics",
+        }));
+        Assert.That(menus.Where(menu => menu.validate).Select(menu => menu.menuItem), Is.EquivalentTo(new[]
+        {
+            "Tools/ElderStar/Built-in/Match Original Lighting Settings",
+            "Tools/ElderStar/Built-in/Automatic Initial Lighting Setup",
+        }));
+    }
+
+    [TestCase("Nova.Runtime.Core.Scripts.ScreenSpaceDistortion", "ElderStar/Screen Space Distortion")]
+    [TestCase("Nova.Runtime.Core.Scripts.NovaDepthNormals", "ElderStar/Depth Normals")]
+    [TestCase("Nova.Runtime.Core.Scripts.NovaAmbientLighting", "ElderStar/Global Ambient Lighting")]
+    [TestCase("Nova.Runtime.UI.NovaCanvasLighting", "ElderStar/Canvas Lighting")]
+    public void ComponentMenusUseElderStarWithoutRenamingTypes(string typeName, string menu)
+    {
+        var type = FindType(typeName);
+        Assert.That(type, Is.Not.Null, typeName);
+        Assert.That(type.GetCustomAttribute<AddComponentMenu>().componentMenu, Is.EqualTo(menu));
+    }
+
+    [TestCase("Tools/ElderStar/Built-in/Material Migration", "Nova.Editor.Core.Scripts.BuiltInMaterialMigrationWindow", "ElderStar Migration")]
+    [TestCase("Tools/ElderStar/Rendering Diagnostics", "Nova.Editor.Core.Scripts.NovaShaderDiagnosticsWindow", "ElderStar Diagnostics")]
+    public void ElderStarMenuOpensOriginalWindowType(string menu, string typeName, string title)
+    {
+        var type = FindType(typeName);
+        Assert.That(type, Is.Not.Null, typeName);
+        try
+        {
+            Assert.That(EditorApplication.ExecuteMenuItem(menu), Is.True, menu);
+            var window = Resources.FindObjectsOfTypeAll(type).OfType<EditorWindow>().Single();
+            Assert.That(window.titleContent.text, Is.EqualTo(title));
+        }
+        finally
+        {
+            foreach (var window in Resources.FindObjectsOfTypeAll(type).OfType<EditorWindow>()) window.Close();
+        }
+    }
+
+    [Test]
     public void CustomEditorClassesExposeMaterialSetupSurfaceWithoutUrpReferences()
     {
         foreach (var typeName in GuiTypeNames)

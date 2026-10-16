@@ -6,7 +6,7 @@ namespace Nova.Runtime.Core.Scripts
 {
     /// <summary>Built-in camera image effect replacing NOVA's URP renderer feature.</summary>
     [ExecuteAlways, DisallowMultipleComponent, RequireComponent(typeof(Camera))]
-    [AddComponentMenu("NOVA/Screen Space Distortion")]
+    [AddComponentMenu("ElderStar/Screen Space Distortion")]
     [ImageEffectAllowedInSceneView]
     public sealed class ScreenSpaceDistortion : MonoBehaviour
     {

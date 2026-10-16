@@ -145,8 +145,8 @@ namespace Nova.Editor.Core.Scripts
         private Vector2 scroll;
         private string message;
 
-        [MenuItem("Tools/NOVA/Built-in/Material Migration")]
-        public static void Open() { GetWindow<BuiltInMaterialMigrationWindow>("NOVA Migration"); }
+        [MenuItem("Tools/ElderStar/Built-in/Material Migration")]
+        public static void Open() { GetWindow<BuiltInMaterialMigrationWindow>("ElderStar Migration"); }
 
         private void OnGUI()
         {

@@ -43,7 +43,7 @@
       "feature": "Custom editors",
       "status": "Exact",
       "evidence": "525 public/protected declarations, 14 original Inspector/helper source contracts, real OnGUI, multi-edit and Undo/Redo tests",
-      "reason_or_fallback": "Original class names, labels, CustomEditor declarations, foldout icons and saved preferences remain. Batch GUI tests cover Layout/Repaint and property edits; native mouse input has not been automated."
+      "reason_or_fallback": "Original class names, Inspector labels, CustomEditor declarations, foldout icons and saved preferences remain. Package display name, tool/component menu roots and tool-window titles use ElderStar by request; shader names and API identifiers are unchanged. Batch GUI tests cover Layout/Repaint and property edits; native mouse input has not been automated."
     },
     {
       "feature": "Material setup",
@@ -319,7 +319,7 @@
       "feature": "Debug display",
       "status": "Approximate",
       "evidence": "32 GPU view assertions and two actual diagnostic-variant AssetBundle stripping tests",
-      "reason_or_fallback": "Editor views cover albedo, world normals/tangents, eye depth, fog, direct/indirect light and additional count. Scoped global state restores after rendering; Player/bundle builds strip dedicated variants. This is not the URP debug API. Use Tools/NOVA/Rendering Diagnostics."
+      "reason_or_fallback": "Editor views cover albedo, world normals/tangents, eye depth, fog, direct/indirect light and additional count. Scoped global state restores after rendering; Player/bundle builds strip dedicated variants. This is not the URP debug API. Use Tools/ElderStar/Rendering Diagnostics."
     },
     {
       "feature": "UI stencil and ColorMask",
@@ -1062,16 +1062,16 @@
     "Assets/Nova/Runtime/Core/Scripts/BuiltInDistortionPass.cs": "131c2b2c537654740c00acac4c8ef183e11f379182bdd1e4565a793d4e818f4d",
     "Assets/Nova/Runtime/Core/Scripts/DistortedUvBufferPass.cs": "cf9f87cfbb91ad0ca3bf17c5c3756bd1c9a8901060aad0ac7833cce80c68bebe",
     "Assets/Nova/Runtime/Core/Scripts/DistortionContextItem.cs": "0d4642dd144dfabd839e05c932755cd314bff3247f91061e75e6a39c1ce24ad5",
-    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "d447e496d8a132b5c5273f8bc1a9cc85a05246ee3945a2e965580aad729d9f0e",
+    "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "27d07a7f750bda6b70a81d548fb3492d652d069023137539d7ad15e440808ca5",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesApplyDistortion.shader": "5ae85d64ef38ce3ab1e7a5bc253bfbf40174bdb650656ed4a1298d396c9a7f63",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesDistortion.shader": "08330070e32f81ec44ed94aaa117d0a2a1499b0fff529b60c53bc22ab775805f",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesUberLit.shader": "bdad30eac8e4c040839152f8739641d3a4ce3bddb35ee725851b2a125077b281",
     "Assets/Nova/Runtime/Core/Shaders/ParticlesUberUnlit.shader": "b0050df5fc1ec5366a80ad78b8dd69650d88221d50bc8a522817e81aa358d173",
     "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberLit.shader": "8e6e11d719255bac73d8430083975b15d63e2049d9d60208915edcf631c9b8f3",
     "Assets/Nova/Runtime/Core/Shaders/UIParticlesUberUnlit.shader": "5324ee2f9ab19cc26949780a8254b2c642f519c09746355be07f036c5d479abc",
-    "Assets/Nova/package.json": "8826c71c6be19013009ca16fc082663eb6c4ffa2b2b581ff6cc116f635dda58d",
+    "Assets/Nova/package.json": "0012c8843c18edd915eb45a0194460bd85a532acc371e5f4691189f5082fc7b3",
     "Assets/Tests/Editor/Reference/EditorContract.json": "7b1857d640116db327f73324e4b20e8697249840458243697e3bc0b339fbea03",
-    "Documentation/BuiltInCompatibilityMatrix.md": "4aa63b5218c28cb1e3a01a99152cc1b22fbc9fe1d6fe4fb74ba25e92729863c5",
+    "Documentation/BuiltInCompatibilityMatrix.md": "5342d053b3cb5a9f78ccb7120aef172da393f95e2139153b92c1b7c0c58b5391",
     "Documentation/Validation/AssetCorpus/unity2022-gamma.json": "7abef19ac771bbc34fe335ee4d11e886c1d6c33c174f202440e0ff5e0225ed10",
     "Documentation/Validation/AssetCorpus/unity2022-linear.json": "4ad69b38b7463499003747425845d3bd75353069ed2ccb2d01a082de4a2779c2",
     "Documentation/Validation/AssetCorpus/unity6-gamma.json": "d271ba4a901d6e9a83409c9e9fbd48b7506cf6331b4642ab7ab35b1141836b0d",
@@ -1084,7 +1084,7 @@
     "Documentation/Verification/AmbientParity20261014/interpolation2022-linear.json": "63ac4d55e23428dc307f1a79aee70eb6716711ba0f1ee6d9e3773b07e936eb4c",
     "Documentation/Verification/AmbientParity20261014/interpolation6-gamma.json": "67cb365d546c984924b864aa2101b8a2a271e7020615aab69af40227130d1b8d",
     "Documentation/Verification/AmbientParity20261014/interpolation6-linear.json": "19fc49c032b1ccc1ed34902af952047adecec4357d10a6ad8a740f485fa3e3b1",
-    "Documentation/Verification/ApiFeatureCoverage20261013.json": "5c404ae444a6cfe65341a2f55b2450e2701d33770a32442a5dfe1671f725e130",
+    "Documentation/Verification/ApiFeatureCoverage20261013.json": "af459449ccba5dbac27606e5fc02885128616dff6c001fdffd8641e3d93102ef",
     "Documentation/Verification/Randomized20261013/2022-api-observations.json": "4e99391ca56fb5eb4fd71900147ffe7494ebbc9ebadc6eb1ebd1c2a8c6a0e6dc",
     "Documentation/Verification/Randomized20261013/2022-gamma-disabled-metrics.json": "f60cf29269350eec914287a612546d755392c4f18a5ff3fdb8ef6c3a9c9c4d9e",
     "Documentation/Verification/Randomized20261013/2022-gamma-green-metrics.json": "bf7e86a1f038775e9d77c4ab7fd689d5d71c086bbd3c85949baccad53843cd35",

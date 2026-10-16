@@ -14,7 +14,7 @@ no migration, shader reassignment, keyword setup or reserialization when they
 reference those shaders. Material values and prefab/texture references stay intact.
 
 For effect `.unitypackage` files such as **Fire001.unitypackage**, choose
-**Assets > Import Package > NOVA Effect...** (also available under **Tools > NOVA >
+**Assets > Import Package > ElderStar Effect...** (also available under **Tools > ElderStar >
 Built-in > Import Effect Package...**), select the original downloaded file, and
 click **Import** in Unity's normal selection dialog. Drag its prefab into a scene.
 There is no conversion step and no replacement package for the user to prepare.
@@ -46,7 +46,7 @@ reuse the canonical passes and original property declarations. Existing material
 files continue rendering without a conversion. Their Shader field displays
 `Hidden/Nova/LegacyBuiltIn/...`; newly imported original effects use the original
 `Nova/...` names. To normalize old aliases before using tools that identify shader
-names, optionally use **Tools > NOVA > Built-in > Material Migration**: choose an
+names, optionally use **Tools > ElderStar > Built-in > Material Migration**: choose an
 Assets folder, Preview, then Apply. This now maps old Built-in GUIDs to the original
 canonical GUIDs. Original NOVA materials are skipped because they already work.
 
@@ -66,7 +66,7 @@ must be placed after the background. This queue difference is necessary because
 Built-in has no URP renderer feature to schedule the effect separately.
 
 For the accumulated, camera-wide distortion approximation in ordinary projects,
-add **NOVA > Screen Space Distortion** to a mono game camera. It enables depth and
+add **ElderStar > Screen Space Distortion** to a mono game camera. It enables depth and
 suppresses the shader-only surface pass while compositing. Put it before other image
 effects. Camera layers and opaque depth participation still apply.
 
@@ -98,7 +98,7 @@ materials. The settings persist into standalone builds. The setup runs again
 after changing color space, but does not overwrite later manual edits or Undo
 on ordinary reloads. It does not change the project's color space itself.
 
-The project-local **Tools > NOVA > Built-in > Automatic Initial Lighting Setup**
+The project-local **Tools > ElderStar > Built-in > Automatic Initial Lighting Setup**
 checkbox opts out; the state lives in `ProjectSettings/NovaBuiltInSettings.asset`
 and can be versioned with the project. **Match Original Lighting Settings**
 remains an explicit, undoable reapply action. No material conversion is involved.
