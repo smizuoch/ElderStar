@@ -12,6 +12,13 @@ CustomEditor declarations, 14 Inspector/utility source token digests, and the tw
 foldout icons with their original import settings. Whitespace inside UI strings
 is preserved. Run `python3 Tests/Parity/test_original_contract.py` to check them.
 
+The requested ElderStar display branding (2026-10-16) is the sole menu-label
+exception: the cleanup tool's `MenuItem` root is reversed before comparing its
+entire source to the frozen original digest. New Editor tests check the renamed
+commands and window titles. The 0.1.7 SDK source check similarly reverses the
+explicit tool labels and four `AddComponentMenu` labels before checking its frozen source hashes; it is
+not a new SDK upload or rendering measurement. All other bytes remain checked.
+
 `Assets/Tests/Editor/Reference/EditorContract.json` was exported by
 `NovaEditorContract.Export` in an isolated original-NOVA Unity 6 project. It records
 525 public/protected declarations, including signatures, constants and enum values.

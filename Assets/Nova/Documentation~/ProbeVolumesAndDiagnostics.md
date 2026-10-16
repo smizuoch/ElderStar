@@ -22,7 +22,7 @@ buffer tests are not an APV importer or a light-baking test.
 
 ## Diagnostics
 
-Open **Tools / NOVA / Rendering Diagnostics** for Scene View modes: Albedo,
+Open **Tools / ElderStar / Rendering Diagnostics** for Scene View modes: Albedo,
 world Normal, world Tangent, linear eye Depth / far clip, Fog visibility,
 Direct light, Indirect light and Additional light count / 8. The Canvas count is
 its complete selected direct-light list; MeshRenderer counts contributing

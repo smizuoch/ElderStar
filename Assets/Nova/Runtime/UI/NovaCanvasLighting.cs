@@ -5,7 +5,7 @@ namespace Nova.Runtime.UI
 {
     /// <summary>Opt-in lighting for a native Canvas. Not a VRChat avatar component.</summary>
     [ExecuteAlways, DisallowMultipleComponent, RequireComponent(typeof(Canvas))]
-    [AddComponentMenu("NOVA/Canvas Lighting")]
+    [AddComponentMenu("ElderStar/Canvas Lighting")]
     public sealed class NovaCanvasLighting : MonoBehaviour
     {
         [SerializeField, Range(0, 8)] private int maximumLights = 4;

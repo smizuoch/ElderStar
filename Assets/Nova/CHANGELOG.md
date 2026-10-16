@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Use ElderStar for the package display name, tool/component menu roots and tool-window titles. Keep package ID, source paths, GUIDs, shader names, public APIs and rendering unchanged.
+
 ## 0.1.7
 
 - Match original projected soft-particle and depth-fade math, including oblique/orthographic cameras and signed/small parameters. Keep legacy generated helper signatures.

@@ -7,7 +7,7 @@ namespace Nova.Runtime.Core.Scripts
     /// <summary>Optional Built-in camera binding for original NOVA's global glossy
     /// ambient probe. Local diffuse probes remain supplied by the renderer.</summary>
     [ExecuteAlways, DisallowMultipleComponent, RequireComponent(typeof(Camera))]
-    [AddComponentMenu("NOVA/Global Ambient Lighting")]
+    [AddComponentMenu("ElderStar/Global Ambient Lighting")]
     public sealed class NovaAmbientLighting : MonoBehaviour
     {
         private static readonly int GlobalAmbient = Shader.PropertyToID("_NovaGlobalGlossyAmbient");

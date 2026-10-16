@@ -28,7 +28,7 @@ and Linear. They do not guarantee every world, probe setup or graphics backend.
 
 ## Separate global glossy probe (0.1.7)
 
-Add **NOVA / Global Ambient Lighting** (`NovaAmbientLighting`) to each ordinary
+Add **ElderStar / Global Ambient Lighting** (`NovaAmbientLighting`) to each ordinary
 Built-in camera that needs original NOVA's independent global glossy environment
 color. It reads `RenderSettings.ambientProbe` DC and reflection intensity before
 rendering and applies the original active-color-space conversion. Renderer SH and

@@ -1,4 +1,7 @@
-# NOVA Shader Built-in
+# ElderStar
+
+ElderStar is the display name of NovaShaderBuilt-in. Package ID, shader names,
+GUIDs and public APIs remain unchanged for existing materials and projects.
 
 Independent Built-in Render Pipeline port of CyberAgent NOVA Shader 3.6.0, under
 the MIT license. Requires Unity 2022.3 or later and a Built-in project. No URP,
@@ -8,7 +11,7 @@ Remove original NOVA before installation: shader names and public editor classes
 deliberately match. Clear the Render Pipeline Asset in Graphics and all Quality levels.
 
 Import **Built-in Showcase** in Package Manager, open `NovaShowcase.unity` and press
-Play. Alternatively use **Tools > NOVA > Built-in > Create Showcase Scene**.
+Play. Alternatively use **Tools > ElderStar > Built-in > Create Showcase Scene**.
 
 Select `Nova/Particles/UberUnlit`, `Nova/Particles/UberLit`,
 `Nova/UIParticles/UberUnlit`, `Nova/UIParticles/UberLit` or
@@ -18,13 +21,13 @@ inspectors configure keywords and particle vertex streams.
 Soft particles need a camera depth texture. Distance-based depth fade uses eye
 distance and does not need scene depth. Distortion works without a camera component
 using a named GrabPass, including on PC VRChat avatars. For an ordinary mono
-project, **NOVA > Screen Space Distortion** optionally provides the accumulated
+project, **ElderStar > Screen Space Distortion** optionally provides the accumulated
 camera compositor and enables camera depth automatically. See the documented
 differences for overlapping distortion, scene depth and stereo validation.
 
 Original NOVA shader GUIDs resolve directly; material conversion is unnecessary.
 For effect packages that bundle original NOVA source, use **Assets > Import Package >
-NOVA Effect...**, select the original unitypackage and click Import. This retains
+ElderStar Effect...**, select the original unitypackage and click Import. This retains
 the effect assets unchanged and omits conflicting bundled NOVA dependencies.
 Ordinary Unity import requires deselecting those bundled dependencies manually.
 Previous Built-in GUIDs remain usable through hidden shader aliases. See
@@ -35,7 +38,7 @@ Version 0.1.6 restores glossy ambient with reflection maps disabled and corrects
 dark-probe and Gamma/HDR handling; see [ambient lighting](Documentation~/AmbientLighting.md).
 First import and color-space changes automatically match original intensity/color-
 temperature defaults for all project lights. Later manual edits survive reloads.
-Use **Tools > NOVA > Built-in > Automatic Initial Lighting Setup** to opt out,
+Use **Tools > ElderStar > Built-in > Automatic Initial Lighting Setup** to opt out,
 or **Match Original Lighting Settings** to reapply with Undo support.
 
 Optional normal-Unity helpers add [Canvas lighting](Documentation~/CanvasLighting.md),

@@ -24,11 +24,11 @@ namespace Nova.Editor.Core.Scripts
             internal string ImportPath;
         }
 
-        [MenuItem("Assets/Import Package/NOVA Effect...", false, 21)]
-        [MenuItem("Tools/NOVA/Built-in/Import Effect Package...")]
+        [MenuItem("Assets/Import Package/ElderStar Effect...", false, 21)]
+        [MenuItem("Tools/ElderStar/Built-in/Import Effect Package...")]
         public static void Open()
         {
-            var path = EditorUtility.OpenFilePanel("Import NOVA effect", "", "unitypackage");
+            var path = EditorUtility.OpenFilePanel("Import ElderStar effect", "", "unitypackage");
             if (string.IsNullOrEmpty(path)) return;
             try { Import(Preview(path), true); }
             catch (Exception error) { Debug.LogException(error); }

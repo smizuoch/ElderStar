@@ -6,9 +6,9 @@ namespace Nova.Editor.Core.Scripts
 {
     public static class BuiltInLightingSettings
     {
-        private const string Menu = "Tools/NOVA/Built-in/Match Original Lighting Settings";
+        private const string Menu = "Tools/ElderStar/Built-in/Match Original Lighting Settings";
 
-        private const string AutomaticMenu = "Tools/NOVA/Built-in/Automatic Initial Lighting Setup";
+        private const string AutomaticMenu = "Tools/ElderStar/Built-in/Automatic Initial Lighting Setup";
 
         [InitializeOnLoadMethod]
         private static void ScheduleInitialSetup()

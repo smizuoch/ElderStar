@@ -15,6 +15,12 @@ The original package is `jp.co.cyberagent.nova` version `3.6.0` for Unity `2022.
 
 ## Current TODO
 
+ElderStar display naming (2026-10-16):
+
+- [x] Test the package display name, tool/component menu roots and window titles while preserving original shader and public API contracts.
+- [x] Rename only user-facing entry points to ElderStar; retain package ID, paths, GUIDs, namespaces, settings and shader names. Update current usage instructions.
+- [x] Run focused Editor tests and original-contract checks on both supported editors; review and commit the display-only change.
+
 Soft particles / ambient / SDK acceptance (2026-10-15):
 
 - [x] Reproduce original soft-particle projected-depth and signed/small-intensity differences; fix and retain generated-helper compatibility.

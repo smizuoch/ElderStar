@@ -12,7 +12,7 @@ namespace Nova.Editor.Foundation.Scripts
 {
     public static class UnusedReferencesRemover
     {
-        [MenuItem("Tools/NOVA Shader/RemoveUnusedReferences")]
+        [MenuItem("Tools/ElderStar/RemoveUnusedReferences")]
         private static void RemoveUnusedReferences()
         {
             Debug.Log("[NOVA] Start remove unused references.");

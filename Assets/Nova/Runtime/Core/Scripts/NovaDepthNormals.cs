@@ -7,7 +7,7 @@ namespace Nova.Runtime.Core.Scripts
     /// <summary>Optional NOVA-only world normals (RGB encoded 0..1) and coverage (A).
     /// Does not replace the camera's depth or depth-normal texture.</summary>
     [ExecuteAlways, DisallowMultipleComponent, RequireComponent(typeof(Camera))]
-    [AddComponentMenu("NOVA/Depth Normals")]
+    [AddComponentMenu("ElderStar/Depth Normals")]
     public sealed class NovaDepthNormals : MonoBehaviour
     {
         [SerializeField] private List<Renderer> renderers = new List<Renderer>();

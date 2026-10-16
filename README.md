@@ -1,4 +1,7 @@
-# NovaShaderBuilt-in
+# ElderStar
+
+ElderStar is the display name of NovaShaderBuilt-in. Package ID, shader names,
+GUIDs and public APIs remain unchanged for existing materials and projects.
 
 A Built-in Render Pipeline port of [CyberAgent NOVA Shader](https://github.com/CyberAgentGameEntertainment/NovaShader) 3.6.0.
 The six original shader names, material properties and custom editor APIs are retained.
@@ -28,7 +31,7 @@ the camera to compare. The UI variants are demonstrated on particle meshes;
 Canvas `Mask` and `RectMask2D` behavior is covered separately by rendering tests.
 
 For an editable scene generated in a folder of your choice, use
-**Tools > NOVA > Built-in > Create Showcase Scene**. Save an untitled scene first
+**Tools > ElderStar > Built-in > Create Showcase Scene**. Save an untitled scene first
 when Unity prompts. Generation keeps the active scene and refuses to overwrite
 existing scenes or sample assets.
 
@@ -47,12 +50,12 @@ Use the NOVA Inspector to configure material keywords and particle vertex stream
 Enable a camera's `DepthTextureMode.Depth` for soft particles. Distance-based depth
 fade does not need scene depth. Distortion uses a named GrabPass automatically,
 so PC VRChat avatars need no NOVA camera component. For ordinary mono projects,
-**NOVA > Screen Space Distortion** optionally provides the accumulated camera
+**ElderStar > Screen Space Distortion** optionally provides the accumulated camera
 compositor and enables depth. Put that component before other image effects.
 
 Original NOVA materials now work without conversion: all six original shader GUIDs
 are preserved. For an effect package such as **Fire001.unitypackage**, use
-**Assets > Import Package > NOVA Effect...**, select the original file, Import,
+**Assets > Import Package > ElderStar Effect...**, select the original file, Import,
 and drag the prefab into a scene. The importer omits bundled original NOVA source
 and keeps effect assets unchanged. With ordinary Unity import, deselect that
 bundled source folder to avoid importing conflicting URP code. See
@@ -61,7 +64,7 @@ bundled source folder to avoid importing conflicting URP code. See
 
 On first import (and after changing color space), NOVA automatically matches the
 original light intensity/color-temperature settings for the entire project.
-Later manual lighting edits survive reloads. The project-local **Tools > NOVA >
+Later manual lighting edits survive reloads. The project-local **Tools > ElderStar >
 Built-in > Automatic Initial Lighting Setup** toggle disables this behavior;
 **Match Original Lighting Settings** remains available with Undo support.
 

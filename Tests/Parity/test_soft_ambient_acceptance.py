@@ -23,7 +23,7 @@ class SoftAmbientAcceptanceTests(unittest.TestCase):
             for path in row["evidence"]:
                 self.assertTrue((ROOT / path).is_file(), path)
 
-    def test_sdk_aao_and_shader_hashes_are_current(self):
+    def test_sdk_aao_sources_match_except_documented_display_labels(self):
         data = json.loads((FOLDER / "sdk-aao.json").read_text(encoding="utf8"))
         self.assertEqual(data["package"], "0.1.7")
         for row in data["reports"]:
@@ -34,8 +34,36 @@ class SoftAmbientAcceptanceTests(unittest.TestCase):
         self.assertEqual({r["aaoEnabled"] for r in data["reports"]}, {False, True})
         self.assertTrue(data["pairs"])
         self.assertTrue(all(r["passed"] for r in data["pairs"]))
+        menu_labels = {
+            "Assets/Nova/Runtime/Core/Scripts/ScreenSpaceDistortion.cs": "Screen Space Distortion",
+            "Assets/Nova/Runtime/Core/Scripts/NovaDepthNormals.cs": "Depth Normals",
+            "Assets/Nova/Runtime/Core/Scripts/NovaAmbientLighting.cs": "Global Ambient Lighting",
+            "Assets/Nova/Runtime/UI/NovaCanvasLighting.cs": "Canvas Lighting",
+        }
+        editor_labels = {
+            "BuiltInShowcase.cs": ["Tools/NOVA/Built-in/Create Showcase Scene", "Create NOVA showcase"],
+            "BuiltInEffectPackageImporter.cs": ["Assets/Import Package/NOVA Effect...", "Tools/NOVA/Built-in/Import Effect Package...", "Import NOVA effect"],
+            "BuiltInMaterialMigration.cs": ["Tools/NOVA/Built-in/Material Migration", "NOVA Migration"],
+            "BuiltInLightingSettings.cs": ["Tools/NOVA/Built-in/Match Original Lighting Settings", "Tools/NOVA/Built-in/Automatic Initial Lighting Setup"],
+            "NovaShaderDiagnostics.cs": ["Tools/NOVA/Rendering Diagnostics", "NOVA Diagnostics"],
+        }
+        display_labels = {
+            "Assets/Nova/Editor/Core/Scripts/" + filename:
+                [('"' + label + '"', '"' + label.replace("NOVA", "ElderStar") + '"') for label in labels]
+            for filename, labels in editor_labels.items()
+        }
+        display_labels["Assets/Nova/Editor/Foundation/Scripts/UnusedReferencesRemover.cs"] = [
+            ('[MenuItem("Tools/NOVA Shader/RemoveUnusedReferences")]', '[MenuItem("Tools/ElderStar/RemoveUnusedReferences")]')]
+        display_labels.update({path: [(f'[AddComponentMenu("NOVA/{label}")]', f'[AddComponentMenu("ElderStar/{label}")]')]
+                               for path, label in menu_labels.items()})
         for path, digest in data["runtime_sha256"].items():
-            self.assertEqual(hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), digest, path)
+            source = (ROOT / path).read_bytes()
+            # The 0.1.7 SDK evidence remains frozen. Reverse only these approved
+            # display literals; any other source change must still fail.
+            for original, renamed in display_labels.get(path, []):
+                self.assertEqual(source.count(renamed.encode()), 1, path)
+                source = source.replace(renamed.encode(), original.encode())
+            self.assertEqual(hashlib.sha256(source).hexdigest(), digest, path)
 
     def test_hidden_cost_measurement_recomputes_without_relaxing_gate(self):
         sys.path.insert(0, str(ROOT / "Tests/Performance"))

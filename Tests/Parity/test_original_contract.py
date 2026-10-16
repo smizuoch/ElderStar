@@ -17,6 +17,11 @@ def tokens(source):
 
 
 class OriginalContractTests(unittest.TestCase):
+    def test_elderstar_display_name_preserves_package_identity(self):
+        manifest = json.loads((PACKAGE / "package.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["displayName"], "ElderStar")
+        self.assertEqual(manifest["name"], "jp.co.cyberagent.nova.builtin")
+
     def test_every_property_keeps_attributes_label_type_range_default_and_order(self):
         for name, contract in SNAPSHOT["shaders"].items():
             with self.subTest(shader=name):
@@ -30,6 +35,12 @@ class OriginalContractTests(unittest.TestCase):
         for relative, expected in SNAPSHOT["editor_source_contracts"].items():
             with self.subTest(file=relative):
                 source = (PACKAGE / relative).read_text(encoding="utf-8-sig")
+                if relative == "Editor/Foundation/Scripts/UnusedReferencesRemover.cs":
+                    # User-authorized display-only exception. Keep the frozen original
+                    # contract and verify the entire implementation after undoing this one label.
+                    renamed = '[MenuItem("Tools/ElderStar/RemoveUnusedReferences")]'
+                    self.assertEqual(source.count(renamed), 1)
+                    source = source.replace(renamed, '[MenuItem("Tools/NOVA Shader/RemoveUnusedReferences")]')
                 self.assertEqual(hashlib.sha256(tokens(source).encode()).hexdigest(), expected)
 
     def test_icons_and_import_settings_match_the_original_assets(self):
